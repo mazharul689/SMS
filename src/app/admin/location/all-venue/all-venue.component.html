@@ -1,0 +1,97 @@
+<section class="content">
+    <div class="container-fluid">
+      <!-- <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style pb-0">
+              <li class="breadcrumb-item">
+                <h4 class="page-title mb-0">All Venue</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i> Home</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Venue</a>
+              </li>
+              <li class="breadcrumb-item active">All</li>
+            </ul>
+          </div>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="row">
+            <div class="col-12">
+              <ul class="header-buttons float-end d-inline-flex mb-0">
+                <li>
+                  <div class="icon-button-demo">
+                    <button mat-mini-fab color="primary" (click)="addNew()">
+                      <mat-icon class="col-white">add</mat-icon>
+                    </button>
+                  </div>
+                </li>
+                <li>
+                  <div class="icon-button-demo">
+                    <button mat-mini-fab color="primary" (click)="refresh()">
+                      <mat-icon class="col-white">refresh
+                      </mat-icon>
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="body">
+              <div class="table-responsive location">
+                <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                  <ng-container matColumnDef="venueCode">
+                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                      <mat-form-field class="filter" floatLabel="never">
+                        <mat-label style="color: white; font-size: 15px;">Venue Code</mat-label>
+                        <input matInput [formControl]="venueCodeFilter">
+                      </mat-form-field>
+                    </mat-header-cell>
+                    <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                      {{row.venuecode}}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="venueName">
+                    <mat-header-cell class="pr-0" *matHeaderCellDef>
+                      <div class="searchcolumn">
+                        <mat-form-field class="filter" floatLabel="never">
+                          <mat-label style="color: white; font-size: 15px;">Vanue Name</mat-label>
+                          <input matInput [formControl]="venueNameFilter">
+                        </mat-form-field>
+                      </div>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      {{row.venuename}}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="actions">
+                    <mat-header-cell class="pr-0" *matHeaderCellDef style="font-size: 13px;">
+                      <mat-label style="color: white; font-size: 15px;">Actions</mat-label></mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                      <button mat-icon-button class="btn-tbl-edit" title="Edit Info"
+                        (click)="editVenue(row.venueid)">
+                        <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                      </button>
+                    </mat-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                    [style.cursor]="'pointer'" matRipple>
+                  </mat-row>
+                </mat-table>
+                <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                  [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  

@@ -1,0 +1,44 @@
+<div class="addContainer" style="width: 850px;">
+  <div class="modalHeader m-0 p-0">
+    <h3>Class Schedule</h3>
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <div class="courseDialog">
+      <div class="row m-0">
+        <div class="body table-responsive courseDialog">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th class="unit">Unit</th>
+                <th class="dateTime">Start Date</th>
+                <th class="dateTime">End Date</th>
+                <th class="dateTime">Start Time</th>
+                <th class="dateTime">End Time</th>
+                <th class="days">Days</th>
+                <th class="trainer">Trainer</th>
+                <th class="assessor">Assessor</th>
+              </tr>
+            </thead>
+            <p class="m-auto text-center" *ngIf="classSetup[0].error">{{classSetup[0].error_msg}} </p>
+            <tbody *ngIf="classSetup?.length > 0">
+              <tr *ngFor="let setupInfo of classSetup">
+                <td class="unit">{{setupInfo.unitName}}</td>
+                <td class="dateTime">{{setupInfo.startDate | date }}</td>
+                <td class="dateTime">{{setupInfo.endDate | date }}</td>
+                <td class="dateTime">{{setupInfo.startTime}}</td>
+                <td class="dateTime">{{setupInfo.endTime}}</td>
+                <td class="days">{{setupInfo.dayOfWeekId}}</td>
+                <td class="trainer">{{setupInfo.teacherId}}</td>
+                <td class="assessor">{{setupInfo.assessorId}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

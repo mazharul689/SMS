@@ -1,0 +1,53 @@
+<div class="addContainer" style="width: 850px;">
+  <div class="modalHeader m-0 p-0">
+    <h3>Set Time</h3>
+
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <form [formGroup]="HFormGroup1">
+            <div class="row">
+              <div formArrayName="timeArray"
+                *ngFor="let item of HFormGroup1.get('timeArray')['controls']; let i = index;  let last = last">
+                <div class="row" [formGroupName]="i">
+                  <div class="col-5">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>Start Time</mat-label>
+                      <input matTimepicker formControlName="startTime" id="timepicker-example" mode="12h">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-5">
+                    <mat-form-field class="example-full-width">
+                      <mat-label>End Time</mat-label>
+                      <input matTimepicker formControlName="endTime" id="timepicker-example" mode="12h">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-1" style="padding-top: 7px;">
+                    <button type="button" mat-mini-fab color="accent"
+                      aria-label="Example icon button with a plus one icon" (click)="addRows()">
+                      <mat-icon>plus_one</mat-icon>
+                    </button>
+                  </div>
+                  <div class="col-1" style="padding-top:7px;">
+                    <button type="button" mat-mini-fab color="warn"
+                      aria-label="Example icon button with a plus one icon" (click)="removeRows(i)">
+                      <mat-icon>exposure_neg_1</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div>
+            <button mat-raised-button color="primary" (click)="dateTimeUpdate()">Done</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

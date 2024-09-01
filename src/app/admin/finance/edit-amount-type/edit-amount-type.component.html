@@ -1,0 +1,52 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Edit Amount Type</h2>
+
+          </div>
+          <div class="body">
+            <form class="register-form m-4" [formGroup]="HFormGroup1" (ngSubmit)="onAmountTypeUpdate()">
+              <div class="row">
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Amount Type</mat-label>
+                    <input matInput formControlName="amountType" required>
+                    <mat-icon matSuffix>label</mat-icon>
+                    <mat-error *ngIf="HFormGroup1.get('amountType').hasError('required')">
+                      Please Enter Amount Type
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3" style="padding-top: 20px;">
+                  <section class="example-section">
+                    <label class="example col-xl-2 col-lg-3 col-md-3 col-sm-4">Is Active?</label>
+                    <mat-radio-group class="col-xl-10 col-lg-9 col-md-9 col-sm-8"
+                      formControlName="isactive">
+                      <mat-radio-button
+                        class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                        value="Y">Yes</mat-radio-button>
+                      <mat-radio-button
+                        class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                        value="N">No</mat-radio-button>
+                    </mat-radio-group>
+                  </section>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <div class="example-button-row">
+                    <button class="btn-space" [disabled]="!HFormGroup1.valid " mat-raised-button
+                      color="primary">update</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

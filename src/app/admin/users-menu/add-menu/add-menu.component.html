@@ -1,0 +1,112 @@
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Add Menu</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i>Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Menu</a>
+                        </li>
+                        <li class="breadcrumb-item active">Add</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix newStudent">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Add Menu</h2>
+                    </div>
+                    <div class="body">
+                        <div class="container">
+                            <!-- <div class="row">
+                                    <div *ngIf="requiredError.isError" class="alert alert-danger col-6 m-auto" id="closebtn">
+                                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                    <strong>Warning!</strong> {{ requiredError.errorMessage }}
+                                    </div>
+                                </div> -->
+                            <form [formGroup]="HFormGroup">
+                                <div class="courseInfo">
+                                    <div class="row">
+                                        <span class="section-heading"><i class='fas fa-bars'></i>Menu</span>
+                                    </div>
+                                    <!-- <span class="section-heading"><i class='fas fa-bars'></i>Unit Information</span> -->
+                                    <div class="section-content">
+                                        <div class="row">
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                                <mat-form-field class="example-full-width mb-3">
+                                                    <mat-label>Menu Name</mat-label>
+                                                    <input matInput formControlName="menuName" type="text" required>
+                                                    <mat-error *ngIf="HFormGroup.get('menuName').hasError('required')">
+                                                        Menu name is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                                <mat-form-field class="example-full-width mb-3">
+                                                    <mat-label>URL</mat-label>
+                                                    <input matInput formControlName="url" type="text" required>
+                                                    <mat-error *ngIf="HFormGroup.get('url').hasError('required')">
+                                                        URL is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                                <mat-form-field class="example-full-width mb-3">
+                                                    <mat-label>Parent Id</mat-label> 
+                                                    <input matInput formControlName="parentId" type="text">
+                                                    <!-- <mat-error *ngIf="HFormGroup.get('parentId').hasError('required')">
+                                                        Parent Id is required
+                                                    </mat-error> -->
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                                <section class="example-section">
+                                                    <label class="example col-xl-5 col-lg-5 col-md-5 col-sm-5 asterisk">Is
+                                                        Display?</label>
+                                                    <mat-radio-group class="col-xl-8 col-lg-8 col-md-8 col-sm-8"
+                                                        formControlName="isdisplay">
+                                                        <mat-radio-button
+                                                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                                            value=1>Yes</mat-radio-button>
+                                                        <mat-radio-button
+                                                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                                            value=0>No</mat-radio-button>
+                                                    </mat-radio-group>
+                                                </section>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                                <mat-form-field class="example-full-width mb-3">
+                                                    <mat-label>Menu Rank</mat-label>
+                                                    <input matInput formControlName="menuRank" type="number" required>
+                                                    <mat-error *ngIf="HFormGroup.get('menuRank').hasError('required')">
+                                                        Menu rank is required
+                                                    </mat-error>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button mat-raised-button color="primary" (click)="createMenu()">Add Menu</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

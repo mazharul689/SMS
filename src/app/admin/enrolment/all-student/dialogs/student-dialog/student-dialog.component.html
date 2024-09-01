@@ -1,0 +1,214 @@
+<div class="addContainer" style="width: 850px;">
+    <div class="modalHeader m-0 p-0">
+        <h3>General Information</h3>
+
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <div class="student-dia">
+            <div class="row mx-0">
+                <div class="col-6">
+                    <div class="row info">
+                        <div class="col-3">
+                            <strong>Title</strong>
+                            <p class="text-muted">{{studentInfo?.title}}</p>
+                        </div>
+                        <div class="col-6">
+                            <strong>Full Name</strong>
+                            <p class="text-muted">{{studentInfo?.firstname}} {{studentInfo?.middlename}} {{studentInfo?.lastname}}</p>
+                        </div>
+                        <div class="col-3">
+                            <strong>Gender</strong>
+                            <p class="text-muted">{{studentInfo?.gender}}</p>
+                        </div>
+
+                    </div>
+                    <div class="row info">
+                        <div class="col-6">
+                            <strong>Email</strong>
+                            <p class="text-muted">{{studentInfo?.email}}</p>
+                        </div>
+                        <div class="col-6">
+                            <strong>Alter Email</strong>
+                            <p class="text-muted">{{studentInfo?.altemail}}</p>
+                        </div>
+                    </div>
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Date of Birth</strong>
+                            <p class="text-muted">{{studentInfo?.dob}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Country of Birth</strong>
+                            <p class="text-muted">{{studentInfo?.countryname}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Nationality</strong>
+                            <p class="text-muted">{{studentInfo?.nationalityname}}</p>
+                        </div>
+                    </div>
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Home Phone</strong>
+                            <p class="text-muted">{{studentInfo?.telhome}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Work Phone</strong>
+                            <p class="text-muted">{{studentInfo?.telwork}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Mobile Phone</strong>
+                            <p class="text-muted">{{studentInfo?.mobile}}</p>
+                        </div>
+                    </div>
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Visa Number</strong>
+                            <p class="text-muted">{{studentInfo?.visano}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Visa Status</strong>
+                            <p class="text-muted">{{studentInfo?.visastatusname}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Expire Date</strong>
+                            <p class="text-muted">{{studentInfo?.visaexpdate}}</p>
+                        </div>
+                        <div class="col-6">
+                            <strong>Passport Number</strong>
+                            <p class="text-muted">{{studentInfo?.passportno}}</p>
+                        </div>
+                        <div class="col-6">
+                            <strong>Expire Date</strong>
+                            <p class="text-muted">{{studentInfo?.passportexpdate}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Home Language</strong>
+                            <p class="text-muted">{{studentInfo?.languagename}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>English Spoken Status</strong>
+                            <p class="text-muted">{{studentInfo?.employmentstatusname}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Employment Status</strong>
+                            <p class="text-muted">{{studentInfo?.employmentstatusname}}</p>
+                        </div>
+                    </div>
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Indigenous Status</strong>
+                            <p class="text-muted">{{studentInfo?.indigenousstatusname}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>School Type</strong>
+                            <p class="text-muted">{{studentInfo?.schooltypename}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Completed School Level</strong>
+                            <p class="text-muted">{{studentInfo?.schoollevelname}}</p>
+                        </div>
+                    </div>
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Prior Educational Achievement Flag</strong>
+                            <p class="text-muted">{{studentInfo?.prioreducationalachievementflag}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Disability</strong>
+                            <p class="text-muted">{{studentInfo?.disabilityname}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Survey Contact Status</strong>
+                            <p class="text-muted">{{studentInfo?.surveycontactstatusname}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mx-0">
+                <div class="col-6">
+                    <h5>Current Address</h5>
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Flat / Unit Details</strong>
+                            <p class="text-muted">{{studentInfo?.flatUnitDetails}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Street Number</strong>
+                            <p class="text-muted">{{studentInfo?.streetNumber}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Street Name</strong>
+                            <p class="text-muted">{{studentInfo?.streetName}}</p>
+                        </div>
+                    </div>
+                    <div class="row info">
+                        <div class="col-12">
+                            <strong>Building / Property Name</strong>
+                            <p class="text-muted">{{studentInfo?.buildingName}}</p>
+                        </div>
+                    </div>
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Suburb</strong>
+                            <p class="text-muted">{{studentInfo?.suburb}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>State</strong>
+                            <p class="text-muted">{{studentInfo?.stateName}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Postcode</strong>
+                            <p class="text-muted">{{studentInfo?.postCode}}</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="col-6">
+                    <h5>Postal Address</h5>
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Flat / Unit Details</strong>
+                            <p class="text-muted">{{studentpostal.flatUnitDetails}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Street Number</strong>
+                            <p class="text-muted">{{studentpostal.streetNumber}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Street Name</strong>
+                            <p class="text-muted">{{studentpostal.streetName}}</p>
+                        </div>
+                    </div>
+                    <div class="row info">
+                        <div class="col-12">
+                            <strong>Building / Property Name</strong>
+                            <p class="text-muted">{{studentpostal.buildingName}}</p>
+                        </div>
+                    </div>
+                    <div class="row info">
+                        <div class="col-4">
+                            <strong>Suburb</strong>
+                            <p class="text-muted">{{studentpostal.suburb}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>State</strong>
+                            <p class="text-muted">{{studentpostal.stateName}}</p>
+                        </div>
+                        <div class="col-4">
+                            <strong>Postcode</strong>
+                            <p class="text-muted">{{studentpostal.postCode}}</p>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+
+        </div>
+    </div>
+</div>

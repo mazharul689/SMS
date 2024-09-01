@@ -1,0 +1,244 @@
+<section class="content">
+    <div class="container-fluid">
+        <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Student Attendance</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Edit Attendace</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="body">
+                            <div class="table-responsive courseIntake">
+                                <div class="materialTableHeader">
+                                    <div class="row m-auto">
+                                        <div class="col-12">
+                                            <form [formGroup]="HFormGroup1" (ngSubmit)="onSearch()">
+                                                <div class="search row">
+                                                    <div class="col-sm-11">
+                                                        <mat-form-field class="example-full-width mr-5">
+                                                            <mat-label>Select Class Date</mat-label>
+                                                            <mat-select formControlName="classDate">
+                                                                <mat-option *ngFor="let courseIntake of classDates"
+                                                                    [value]="courseIntake.classDate">
+                                                                    {{ courseIntake.classDate | date:'fullDate' }}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="col-sm-1" style="text-align: center;">
+                                                        <button mat-mini-fab color="primary">
+                                                            <i class="fa fa-search"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix editStudent" *ngIf="this.flag">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Edit Attendance</h2>
+                    </div>
+                    <div class="body">
+                        <!-- <div class="row">
+                            <div *ngIf="error.isError" class="alert alert-danger col-3 m-auto"
+                                [ngStyle]="{'display': (error.isError == true) ? 'block' : 'none'}">
+                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                <strong>Warning!</strong> {{ error.errorMessage }}
+                            </div>
+                        </div> -->
+                        <form [formGroup]="HFormGroup2">
+                            <div class="mt-3">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="card">
+                                        <div class="body table-responsive trainingAct">
+                                            <div class="table table-striped">
+                                                <div class="table-head row">
+                                                    <div class="head-col-clientId1">
+                                                        <mat-label style="color: white; font-size: 15px;">Client Id</mat-label>
+                                                    </div>
+                                                    <div class="head-col-fullName">
+                                                        <mat-label style="color: white; font-size: 15px;">Student Name</mat-label>
+                                                    </div>
+                                                    <div class="head-col-classDate"> 
+                                                        <mat-form-field class="example-full-width mb-2">
+                                                            <mat-label>Class Date</mat-label>
+                                                            <input matInput [matDatepicker]="thSdPicker"
+                                                                (ngModelChange)="cDateChange($event)"
+                                                                [(ngModel)]="clDate"
+                                                                [ngModelOptions]="{standalone: true}">
+                                                            <mat-datepicker-toggle matSuffix [for]="thSdPicker">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #thSdPicker>
+                                                            </mat-datepicker>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    
+                                                    <div class="head-col-attendance">
+                                                        <mat-label style="color: white; font-size: 15px; display: flex; justify-content: center; align-items: center; padding-right: 20px;">Attendance</mat-label>
+                                                        <mat-radio-group style="color: white; display: flex; justify-content: center; align-items: center;">
+                                                            <mat-radio-button value="P" (change)="AttendanceBulkSet($event)"><label style="color: white;">Present</label></mat-radio-button>
+                                                            <mat-radio-button value="A" (change)="AttendanceBulkSet($event)"><label style="color: white;">Absent</label></mat-radio-button>
+                                                        </mat-radio-group>
+                                                    </div>
+
+                                                </div>
+                                                <div formArrayName="FirstRows">
+                                                    <div *ngFor="let row of HFormGroup2.get('FirstRows')['controls']; let i=index">
+                                                        <div class="table-body row" [formGroupName]="i">
+                                                            <div class="body-col-clientId1">
+                                                                <mat-label>{{row.get('clientId').value}}</mat-label>
+                                                            </div>
+                                                            <div class="body-col-fullName">
+                                                                <mat-label>{{row.get('fullName').value}}</mat-label>
+                                                            </div>
+                                                            <div class="body-col-classDate">
+                                                                <mat-form-field class="example-full-width mb-2">
+                                                                    <mat-label>Class Date</mat-label>
+                                                                    <input matInput [matDatepicker]="sDpicker"
+                                                                        formControlName="classDate" [value]="clDate">
+                                                                    <mat-datepicker-toggle matSuffix [for]="sDpicker">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #sDpicker>
+                                                                    </mat-datepicker>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="body-col-attendance">
+                                                                <mat-radio-group formControlName="attendanceStatusId">
+                                                                    <mat-radio-button value="P" [checked]="this.HFormGroup2.value.studentAttendanceId == 'P'">Present</mat-radio-button>
+                                                                    <mat-radio-button value="A" [checked]="this.HFormGroup2.value.studentAttendanceId == 'A'">Absent</mat-radio-button>
+                                                                </mat-radio-group>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button mat-raised-button class="msr-5" color="primary"
+                                    (click)="onUpdateAttendance()">Update</button>
+                            </div>
+                        </form>
+                        <!-- <form [formGroup]="HFormGroup1" (ngSubmit)="onSaveAttendance()">
+                            <div class="table-responsive selectedCourse">
+                                <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                                    <ng-container matColumnDef="clientId1">
+                                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                                            <mat-label>client Id</mat-label>
+                                        </mat-header-cell>
+                                        <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                                            {{row.clientId}}
+                                        </mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="fullName">
+                                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                            <mat-label>Full Name</mat-label>
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row">
+                                            {{row.firstName}} {{row.middleName}} {{row.lastName}}
+                                        </mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="classDate">
+                                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                            <mat-form-field class="example-full-width mb-2">
+                                                <mat-label>Class Date</mat-label>
+                                                <input matInput [matDatepicker]="thSdPicker"
+                                                    (ngModelChange)="cDateChange($event)"
+                                                    [(ngModel)]="clDate"
+                                                    [ngModelOptions]="{standalone: true}">
+                                                <mat-datepicker-toggle matSuffix [for]="thSdPicker">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #thSdPicker>
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                                            <mat-form-field class="example-full-width mb-2">
+                                                <mat-label>Class Date</mat-label>
+                                                <input matInput [matDatepicker]="sDpicker"
+                                                [formControl]="classDate" [value]="clDate">
+                                                <mat-datepicker-toggle matSuffix [for]="sDpicker">
+                                                </mat-datepicker-toggle>
+                                                <mat-datepicker #sDpicker>
+                                                </mat-datepicker>
+                                            </mat-form-field>
+                                        </mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="attendance">
+                                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                            <section class="example-section">
+                                                <div class="row">
+                                                  <label class="example-margin col-sm-12">attendance</label>
+                                                  <div class="col-sm-12">
+                                                    <input type="radio" id="attendanceId" name="attendance" value="P"
+                                                      [(ngModel)]="bulkAttendanceFlag" [ngModelOptions]="{standalone: true}"
+                                                      (change)="AttendanceBulkSet()">
+                                                    <label>Present</label>
+                                                    <input type="radio" id="attendanceId" name="attendance" value="A"
+                                                      [(ngModel)]="bulkAttendanceFlag" [ngModelOptions]="{standalone: true}"
+                                                      (change)="AttendanceBulkSet()">
+                                                    <label>Absent</label>
+                                                  </div>
+                                                </div>
+                                              </section>
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row;" class="pr-0">
+                                            <section class="example-section">
+                                                <div class="row">
+                                                  <div class="col-sm-12">
+                                                    <input type="radio" id="attendanceId{{row.rowID}}" name="attendance{{row.rowID}}"
+                                                      value="P" [attr.data-rowid]="row.rowID" 
+                                                      (change)="AttendanceRowChange($event)">
+                                                      <label>Present</label>
+                                                      <input type="radio" id="attendanceId{{row.rowID}}" name="attendance{{row.rowID}}"
+                                                      value="A" [attr.data-rowid]="row.rowID"
+                                                      (change)="AttendanceRowChange($event)">
+                                                      <label>Absent</label>
+                                                  </div>
+                                                </div>
+                                              </section>
+                                        </mat-cell>
+                                    </ng-container>
+                                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                    <mat-row class="table-row"
+                                        *matRowDef="let row;let i=index; columns: displayedColumns;"
+                                        [style.cursor]="'pointer'" matRipple>
+                                    </mat-row>
+                                </mat-table>
+                                <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0"
+                                    [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                            </div>
+                        </form> -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

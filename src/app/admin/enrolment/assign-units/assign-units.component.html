@@ -1,0 +1,187 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix editCourseIntake">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Assign Units</h2>
+          </div>
+          <div class="body">
+            <!-- <div class="row">
+              <div *ngIf="errorsReqEn.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ errorsReqEn.errorMessage }}
+              </div>
+            </div> -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mx-auto my-4 text-end" >
+              <button type="button" style="margin-bottom: 20px;" mat-raised-button color="primary" (click)="addMoreUnits()">
+                Add More Units
+              </button>
+            </div>
+            <form [formGroup]="HFormGroup1" (ngSubmit)="onAddTrainingActivity()">
+              <div class="mt-4">
+                <div class="newCourseUnit">
+                  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" formArrayName="Rows">
+                    <ng-container matColumnDef="rowID">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                        </mat-checkbox>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="unitCode">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Unit
+                          Code</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <span class="ml-2">{{row.unitCode}}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="unitName">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Unit
+                          Name</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <input matInput type="text" name="" id="" value="{{row.unitId}}" formControlName="unitId"
+                          hidden>
+                        {{row.unitName}}
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="unitType">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <section class="example-section">
+                          <div class="row">
+                            <mat-label style="color: white; font-size: 15px;">Unit
+                              Type</mat-label>
+                            <!-- <div class="col-sm-12">
+                              <div class="group">
+                                <input type="radio" id="unitTypeId" name="unit" value="C" [(ngModel)]="bulkUnitType"
+                                  [ngModelOptions]="{standalone: true}" (change)="UnitBulkSet()"> <label>Core</label>
+                                <input type="radio" id="unitTypeId" name="unit" value="E" [(ngModel)]="bulkUnitType"
+                                  [ngModelOptions]="{standalone: true}" (change)="UnitBulkSet()">
+                                <label>Elective</label>
+                              </div>
+                            </div> -->
+                          </div>
+                        </section>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <section class="example-section unitsRadio">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <div class="col-sm-12">
+                                <div class="group">
+                                  <input type="radio" id="unitTypeId{{row.rowID}}" name="unittype{{row.rowID}}"
+                                    value="C" [attr.data-rowid]="row.rowID" [checked]="row.unitType == 'C'"
+                                    (change)="UnitRowChange($event)">
+                                  <label class="pr-3">Core</label>
+                                  <input type="radio" id="unitTypeId{{row.rowID}}" name="unittype{{row.rowID}}"
+                                    value="E" [attr.data-rowid]="row.rowID" [checked]="row.unitType == 'E'"
+                                    (change)="UnitRowChange($event)">
+                                  <label>Elective</label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </section>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="vetFlag">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <section class="example-section">
+                          <div class="row">
+                            <mat-label style="color: white; font-size: 15px;">VET
+                              Flag</mat-label>
+                            <!-- <div class="col-sm-12">
+                              <input type="radio" id="vetFlagId" name="vetFlag" value="Y" [(ngModel)]="bulkVetFlag"
+                                [ngModelOptions]="{standalone: true}" (change)="vetFlagBulkSet()">
+                              <label>Yes</label>
+                              <input type="radio" id="vetFlagId" name="vetFlag" value="N" [(ngModel)]="bulkVetFlag"
+                                [ngModelOptions]="{standalone: true}" (change)="vetFlagBulkSet()">
+                              <label>No</label>
+                            </div> -->
+                          </div>
+                        </section>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <section class="example-section">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <input type="radio" id="vetFlagId{{row.rowID}}" name="vettlag{{row.rowID}}" value="Y"
+                                [attr.data-rowid]="row.rowID" [checked]="row.vetFlag == 'Y'"
+                                (change)="vetFlagRowChange($event)">
+                              <label>Yes</label>
+                              <input type="radio" id="vetFlagId{{row.rowID}}" name="vettlag{{row.rowID}}" value="N"
+                                [attr.data-rowid]="row.rowID" [checked]="row.vetFlag == 'N'"
+                                (change)="vetFlagRowChange($event)">
+                              <label>No</label>
+                            </div>
+                          </div>
+                        </section>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="AVETMISS">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <section class="example-section">
+                          <div class="row">
+                            <mat-label style="color: white; font-size: 15px;">Avetmiss
+                              Report</mat-label>
+                            <!-- <div class="col-sm-12">
+                              <input type="radio" id="AVETMISSId" name="AVETMISS " value="Y"
+                                [(ngModel)]="bulkAVETMISS" [ngModelOptions]="{standalone: true}"
+                                (change)="AVETMISSBulkSet()">
+                              <label>Yes</label>
+                              <input type="radio" id="AVETMISSId" name="AVETMISS " value="N"
+                                [(ngModel)]="bulkAVETMISS" [ngModelOptions]="{standalone: true}"
+                                (change)="AVETMISSBulkSet()">
+                              <label>No</label>
+                            </div> -->
+                          </div>
+                        </section>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <section class="example-section">
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <input type="radio" id="AVETMISSId{{row.rowID}}" name="AVETMISS {{row.rowID}}" value="Y"
+                                [attr.data-rowid]="row.rowID" [checked]="row.AVETMISS  == 'Y'"
+                                (change)="AVETMISSRowChange($event)">
+                                <label>Yes</label>
+                                <input type="radio" id="AVETMISSId{{row.rowID}}" name="AVETMISS {{row.rowID}}"
+                                value="N" [attr.data-rowid]="row.rowID" [checked]="row.AVETMISS  == 'N'"
+                                (change)="AVETMISSRowChange($event)">
+                                <label>No</label>
+                            </div>
+                          </div>
+                        </section>
+                      </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                      [style.cursor]="'pointer'" matRipple>
+                    </mat-row>
+                  </mat-table>
+                  <mat-paginator #Tpaginator [length]="dataSource.filteredData.length" [pageIndex]="0"
+                    [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+                </div>
+              </div>
+              <div>
+                <button mat-raised-button color="primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

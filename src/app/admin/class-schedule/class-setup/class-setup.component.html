@@ -1,0 +1,429 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix editCourseIntake">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Class Set Up</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div *ngIf="dateValidate1.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ dateValidate1.errorMessage }}
+              </div>
+            </div>
+            <div class="row">
+              <div *ngIf="requiredError2.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ requiredError2.errorMessage }}
+              </div>
+            </div>
+            <div class="row">
+              <div *ngIf="timeValidator.isError" class="alert alert-danger col-5 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ timeValidator.errorMessage }}
+              </div>
+            </div>
+            <form [formGroup]="HFormGroup1" (ngSubmit)="onClassSetupUpdate()">
+              <ng-template matStepLabel>Class Schedule</ng-template>
+              <div class="mt-4">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <mat-form-field class="example-full-width mb-3">
+                      <mat-label>Class Name</mat-label>
+                      <input matInput formControlName="className" required readonly>
+                      <mat-error *ngIf="HFormGroup1.get('className').hasError('required')"> Batch
+                        Name is required </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <!--code here-->
+                <div class="newCourseUnit">
+                  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" formArrayName="classArray1">
+                    <ng-container matColumnDef="csrowID">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()" disabled>
+                        </mat-checkbox> -->
+                        <mat-checkbox [checked]="true"disabled>
+                        </mat-checkbox>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <!-- <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)" disabled>
+                        </mat-checkbox> -->
+                        <mat-checkbox [checked]="true" disabled>
+                        </mat-checkbox>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csunit">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Units</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <span class="ml-2">{{row.unitCode}} - {{ row.unitName }}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csdayweek">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef style="padding-bottom: 20px;">
+                        <div class="row" style="margin-bottom: -30px !important">
+                          <div class="col-sm-12">
+                            <span style="padding-left: 56px;">Day/Week</span>
+                          </div>
+                          <div class="col-sm-12">
+                            <section class="example-section">
+                              <mat-radio-group class="col-sm-12" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="bulkDayWeek" (change)="sDayWeek()">
+                                <mat-radio-button
+                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                  value="D">Day</mat-radio-button>
+                                <mat-radio-button
+                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                  value="W">Week</mat-radio-button>
+                              </mat-radio-group>
+                            </section>
+                          </div>
+                        </div>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <section class="example-section">
+                          <mat-radio-group class="col-lg-9.5 col-md-9.5 col-sm-9.5" formControlName="unitDurationType"
+                            (ngModelChange)="sSingleDuration(row,$event)">
+                            <mat-radio-button
+                              class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                              value="D">Day</mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                              value="W">Week</mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csduration">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-form-field class="example-full-width mb-3" style="width: 50px;">
+                          <mat-label>Duration</mat-label>
+                          <input matInput type="number" (ngModelChange)="sDuration($event)" [(ngModel)]="duration"
+                            [ngModelOptions]="{standalone: true}">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <mat-form-field class="example-full-width mb-3" style="width: 50px;">
+                          <mat-label>Duration</mat-label>
+                          <input matInput type="number" formControlName="unitDuration" value="duration"
+                            (ngModelChange)="sSingleDuration(row,$event)">
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csstartDate">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>Start Date</mat-label>
+                          <input matInput [matDatepicker]="sDpicker" formControlName="startDate"
+                            (ngModelChange)="sSingleDuration(row,$event)" [ngModelOptions]="{standalone: true}">
+                          <mat-datepicker-toggle matSuffix [for]="sDpicker">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #sDpicker></mat-datepicker>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="csendDate">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">End Date</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>End Date</mat-label>
+                          <input matInput [matDatepicker]="eDpicker" formControlName="endDate" [min]="startdate"
+                            (ngModelChange)="sDateChangeNxt(row.csrowID,$event)">
+                          <mat-datepicker-toggle matSuffix [for]="eDpicker">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #eDpicker></mat-datepicker>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csdayTime">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef [ngClass]="{'selected-value': bDayWeek}">
+                        <mat-form-field class="example-full-width mb-3" style="width: 120px;">
+                          <mat-label>Class Time Table</mat-label>
+                          <mat-select (ngModelChange)="dayWeekChange($event)" [(ngModel)]="bDayWeek"
+                            [ngModelOptions]="{standalone: true}">
+                            <mat-option *ngFor=" let daytime of dayTime" [value]="daytime.classtimetablenameid">
+                              {{ daytime.timetablename}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 120px;">
+                          <mat-label>Class Time Table</mat-label>
+                          <mat-select formControlName="classTimeTableNameId">
+                            <mat-option *ngFor="let daytime of dayTime" [value]="daytime.classtimetablenameid">
+                              {{daytime.timetablename}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="cstrainer">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef [ngClass]="{'selected-value': bTrainer}">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>Trainer</mat-label>
+                          <mat-select (ngModelChange)="trainerChange($event)" [(ngModel)]="bTrainer"
+                            [ngModelOptions]="{standalone: true}">
+                            <mat-option *ngFor=" let position of positions" [value]="position.staffid">
+                              {{ position.fullname}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>Trainer</mat-label>
+                          <mat-select formControlName="teacherId">
+                            <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                              {{position.fullname}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csassessor">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef [ngClass]="{'selected-value': bAssessor}">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>Assessor</mat-label>
+                          <mat-select (ngModelChange)="assessorChange($event)" [(ngModel)]="bAssessor"
+                            [ngModelOptions]="{standalone: true}">
+                            <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                              {{position.fullname}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>Assessor</mat-label>
+                          <mat-select formControlName="assessorId">
+                            <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                              {{position.fullname}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                      [style.cursor]="'pointer'" matRipple>
+                    </mat-row>
+                  </mat-table>
+                  <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="100"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </div>
+                <div class="row" *ngIf="infiniteFlag==false">
+                  <div class="icon-button-demo">
+                    <button mat-mini-fab color="primary" type="button" (click)="infiniteRollClass()">
+                      <mat-icon class="col-white">add</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="infiniteFlag==true">
+                <div class="newCourseUnit">
+                  <mat-table #table [dataSource]="dataSource1" matSort class="mat-cell" formArrayName="classArray2">
+                    <ng-container matColumnDef="csrowID">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle1() : null"
+                          [checked]="selection1.hasValue() && isAllSelected1()"
+                          [indeterminate]="selection1.hasValue() && !isAllSelected1()">
+                        </mat-checkbox>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection1.toggle(row) : null" [checked]="selection1.isSelected(row)">
+                        </mat-checkbox>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csunit">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Units</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <span class="ml-2">{{row.unitCode}} - {{ row.unitName }}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csdayweek">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef style="padding-bottom: 20px;">
+                        <div class="row" style="margin-bottom: -30px !important">
+                          <div class="col-sm-12">
+                            <span style="padding-left: 56px;">Day/Week</span>
+                          </div>
+                          <div class="col-sm-12">
+                            <section class="example-section">
+                              <mat-radio-group class="col-sm-12" [ngModelOptions]="{standalone: true}"
+                                [(ngModel)]="bulkDayWeek1" (change)="sDayWeek1()">
+                                <mat-radio-button
+                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                  value="D">Day</mat-radio-button>
+                                <mat-radio-button
+                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                  value="W">Week</mat-radio-button>
+                              </mat-radio-group>
+                            </section>
+                          </div>
+                        </div>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <section class="example-section">
+                          <mat-radio-group class="col-lg-9.5 col-md-9.5 col-sm-9.5" formControlName="unitDurationType"
+                            (ngModelChange)="sSingleDuration1(row,$event)">
+                            <mat-radio-button
+                              class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                              value="D">Day</mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                              value="W">Week</mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csduration">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-form-field class="example-full-width mb-3" style="width: 50px;">
+                          <mat-label>Duration</mat-label>
+                          <input matInput type="number" (ngModelChange)="sDuration1($event)" [(ngModel)]="duration"
+                            [ngModelOptions]="{standalone: true}">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <mat-form-field class="example-full-width mb-3" style="width: 110px;">
+                          <mat-label>Duration</mat-label>
+                          <input matInput type="number" formControlName="unitDuration" value="duration"
+                            (ngModelChange)="sSingleDuration1(row,$event)">
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csstartDate">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>Start Date</mat-label>
+                          <input matInput [matDatepicker]="sDpicker" formControlName="startDate"
+                            (ngModelChange)="sSingleDuration1(row,$event)" [ngModelOptions]="{standalone: true}">
+                          <mat-datepicker-toggle matSuffix [for]="sDpicker">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #sDpicker></mat-datepicker>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="csendDate">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">End Date</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>End Date</mat-label>
+                          <input matInput [matDatepicker]="eDpicker" formControlName="endDate" [min]="startdate"
+                            (ngModelChange)="sDateChangeNxt1(row.csrowID,$event)">
+                          <mat-datepicker-toggle matSuffix [for]="eDpicker">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #eDpicker></mat-datepicker>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csdayTime">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef [ngClass]="{'selected-value': bDayWeek}">
+                        <mat-form-field class="example-full-width mb-3" style="width: 120px;">
+                          <mat-label>Class Time Table</mat-label>
+                          <mat-select (ngModelChange)="dayWeekChange1($event)" [(ngModel)]="bDayWeek"
+                            [ngModelOptions]="{standalone: true}">
+                            <mat-option *ngFor=" let daytime of dayTime" [value]="daytime.classtimetablenameid">
+                              {{ daytime.timetablename}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 120px;">
+                          <mat-label>Class Time Table</mat-label>
+                          <mat-select formControlName="classTimeTableNameId">
+                            <mat-option *ngFor="let daytime of dayTime" [value]="daytime.classtimetablenameid">
+                              {{daytime.timetablename}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="cstrainer">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef [ngClass]="{'selected-value': bTrainer}">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>Trainer</mat-label>
+                          <mat-select (ngModelChange)="trainerChange1($event)" [(ngModel)]="bTrainer"
+                            [ngModelOptions]="{standalone: true}">
+                            <mat-option *ngFor=" let position of positions" [value]="position.staffid">
+                              {{ position.fullname}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 120px;">
+                          <mat-label>Trainer</mat-label>
+                          <mat-select formControlName="teacherId">
+                            <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                              {{position.fullname}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="csassessor">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef [ngClass]="{'selected-value': bAssessor}">
+                        <mat-form-field class="example-full-width mb-3" style="width: 100px;">
+                          <mat-label>Assessor</mat-label>
+                          <mat-select (ngModelChange)="assessorChange1($event)" [(ngModel)]="bAssessor"
+                            [ngModelOptions]="{standalone: true}">
+                            <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                              {{position.fullname}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 120px;">
+                          <mat-label>Assessor</mat-label>
+                          <mat-select formControlName="assessorId">
+                            <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                              {{position.fullname}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                    <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                      [style.cursor]="'pointer'" matRipple>
+                    </mat-row>
+                  </mat-table>
+                  <mat-paginator #tableTwoPaginator [length]="dataSource1.filteredData.length" [pageIndex]="0" [pageSize]="100"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <button mat-raised-button color="primary" style="justify-content: right;">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

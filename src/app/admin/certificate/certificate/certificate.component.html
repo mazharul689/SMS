@@ -1,0 +1,225 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Certificate</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/certificate/all-student">
+                                <i class="fas fa-home"></i>All Student</a>
+                        </li>
+                        <li class="breadcrumb-item active">Certificate</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+    <div class="row clearfix editStudent">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Certificate</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div *ngIf="error.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtntr">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ error.errorMessage }}
+              </div>
+            </div>
+            <div class="row">
+              <div *ngIf="usiError.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtntr">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ usiError.errorMessage }}
+              </div>
+            </div>
+            <div class="row">
+              <div *ngIf="errorsReqEn.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtntr">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ errorsReqEn.errorMessage }}
+              </div>
+            </div>
+            <div class="row">
+              <div *ngIf="errorsReq.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtntr">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ errorsReq.errorMessage }}
+              </div>
+            </div>
+            <div class="row">
+              <div *ngIf="dateValidate1.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ dateValidate1.errorMessage }}
+              </div>
+            </div>
+            <form [formGroup]="HFormGroup1">
+              <ng-template matStepLabel>Certificate</ng-template>
+              <div class="container">
+                <div class="row">
+                  <span class="section-heading"><i class='fas fa-bars'></i> Students
+                    Information</span>
+                </div>
+                <div class="section-content">
+                  <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                      <span>Student's Name:&emsp;{{this.name}}</span>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                      <span>Course Name:&emsp;{{this.courseName}}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <span class="section-heading"><i class='fas fa-bars'></i> Certificate
+                    Type</span>
+                </div>
+                <div class="section-content">
+                  <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
+                      <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Certificate
+                        Type</label>
+                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="certificateType">
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="C">Certificate</mat-radio-button>
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="S">Statement of Attainment</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
+                      <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">RTO
+                        Type</label>
+                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="rtoType">
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="L">Local</mat-radio-button>
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="C">CRICOS</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Issue Number</mat-label>
+                        <input matInput formControlName="certificateIssueNumber" required>
+                        <mat-error *ngIf="HFormGroup1.get('certificateIssueNumber').hasError('maxlength')">
+                          Maximum length is 25 characters
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-64 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Completion Date</mat-label>
+                        <input matInput [matDatepicker]="basicDatepicker1" formControlName="completionDate"
+                          (ngModelChange)="compareTwoDates1()" max="{{getCurrentDate()}}" required>
+                        <mat-datepicker-toggle matSuffix [for]="basicDatepicker1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #basicDatepicker1></mat-datepicker>
+                        <mat-error *ngIf="HFormGroup1.get('completionDate').hasError('required')">
+                          Please select completion date
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Issue Date</mat-label>
+                        <input matInput [matDatepicker]="basicDatepicker2" formControlName="certificateIssueDate"
+                          (ngModelChange)="compareTwoDates1()" [readonly]="HFormGroup1.value.Issuedflag == 'N'"
+                          max="{{getCurrentDate()}}" required>
+                        <mat-datepicker-toggle matSuffix [for]="basicDatepicker2">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #basicDatepicker2
+                          [disabled]="HFormGroup1.value.Issuedflag == 'N'"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                </div>
+                <div [ngClass]="HFormGroup1.get('certificateType').value == 'S' ? 'd-block' : 'd-none'">
+                  <div class="row">
+                    <span class="section-heading"><i class='fas fa-bars'></i>Outcome</span>
+                  </div>
+                  <div class="section-content">
+                    <div class="newCourseUnit">
+                      <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                        <ng-container matColumnDef="rowID">
+                          <mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                              [checked]="selection.hasValue() && isAllSelected()"
+                              [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="units">
+                          <mat-header-cell *matHeaderCellDef style="min-height: unset;">
+                            <mat-label>Units</mat-label>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.unitcode}}
+                            - {{row.unitname}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="outcomeNational">
+                          <mat-header-cell *matHeaderCellDef>
+                            <mat-label>Outcome National</mat-label>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" data-toggle="tooltip"
+                            data-placement="right">{{row.outcomenationalname}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="stDate">
+                          <mat-header-cell *matHeaderCellDef>
+                            <mat-label>Start Date</mat-label>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.startdate}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="enDate">
+                          <mat-header-cell *matHeaderCellDef>
+                            <mat-label>End Date</mat-label>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.enddate}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="hours">
+                          <mat-header-cell *matHeaderCellDef style="text-align: center;">
+                            <mat-label>Hours Attended</mat-label>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                            style="justify-content:center;">{{row.hoursattended}}
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"> </mat-header-row>
+                        <mat-row class="table-row" [class.focus]="highlighter === i" tabindex="1"
+                          *matRowDef="let row;let i=index; columns: displayedColumns;" [style.cursor]="'pointer'"
+                          matRipple>
+                        </mat-row>
+                      </mat-table>
+                      <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
+                        [pageSizeOptions]="[5, 10, 25, 100]">
+                      </mat-paginator>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <button mat-raised-button (click)="getCertificate()" color="primary" class="msr-4"
+                    [disabled]="disabled">Save</button>
+                  <!-- <button mat-raised-button (click)="previewCertificate()" style="background-color: #009688; color: white;" >Certificate Template Generator</button> -->
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

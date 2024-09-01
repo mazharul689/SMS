@@ -1,0 +1,201 @@
+import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/core/service/auth.service';
+import { Role } from 'src/app/core/models/role';
+import { MatProgressButtonOptions } from 'mat-progress-buttons';
+import { ShareService } from '../../core/service/share.service'
+import { first } from 'rxjs/operators';
+import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { HttpClient } from '@angular/common/http';
+import { ApiService } from 'src/app/api/api.service';
+
+export interface Login {
+  username: string | null;
+  password: string;
+}
+@Component({
+  selector: 'app-signin',
+  templateUrl: './signin.component.html',
+  styleUrls: ['./signin.component.scss'],
+})
+export class SigninComponent implements OnInit {
+  authForm: FormGroup;
+  submitted = false;
+  error = '';
+  hide = true;
+  message: string = "";
+  logo: string
+  img: string
+  loading = false
+  // appVar = 'SMS.2.7'
+  session_expired = false
+  // appVar = 'EDWSMS.0.5'
+  // appVar = 'KINGSMS.0.5'
+  // appVar = 'IIETSMS.0.5'
+  // appVar = 'MIESMS.0.5'
+  getVar
+  userInfo: any;
+  roles: any;
+  allRoleMenu: any;
+  // model: Login = { username: "admin@admin.com", password: "12345678" }                                //Demo 5000
+  // model: Login = { username: "edwardbusinesscollege@gmail.com", password: "CI6IkpXVCJ9.eyJmcmV" }     //Edward 5001
+  // model: Login = { username: "myqbvet@gmail.com", password: "eyJhbGciO" }                             //Kingsway 5002
+  // model: Login = { username: "", password: "" }                                                       //IIET 5003
+  // model: Login = { username: "mastersedu2022@gmail.com", password: "OiJIUzI1Ni" }                     //MIE 5004
+  constructor(
+    private formBuilder: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private authService: AuthService,
+    private http: HttpClient,
+    private shared: ShareService,
+    private spinner: NgxSpinnerService,
+    private apiService: ApiService,
+
+  ) { }
+
+  spinnerButtonOptions: MatProgressButtonOptions = {
+    active: false,
+    text: 'Login',
+    spinnerSize: 18,
+    raised: true,
+    stroked: false,
+    buttonColor: 'primary',
+    spinnerColor: 'accent',
+    fullWidth: false,
+    disabled: false,
+    mode: 'indeterminate',
+    buttonIcon: {
+      fontIcon: 'login',
+    },
+  };
+
+  ngOnInit() {
+    this.shared.clientLogo.subscribe((image) => (this.img = image))
+    if (JSON.parse(localStorage.getItem('currentUser'))) {
+      this.router.navigate(['/admin/dashboard/main'])
+      this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
+      this.authService.storeUserData(this.userInfo.token)
+    }
+    else {
+      this.session_expired = true
+    }
+    // this.getVar = JSON.parse(window.localStorage.getItem('appVar'))
+    // if (!window.localStorage.getItem('appVar') || this.getVar != this.appVar) {
+    //   window.localStorage.clear()
+    //   window.localStorage.setItem("appVar", JSON.stringify(this.appVar))
+    // }
+    // else {
+    //   this.getVar = JSON.parse(window.localStorage.getItem('appVar'))
+    //   // console.log('appVar', this.getVar)
+    // }
+
+    this.authForm = this.formBuilder.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+    this.shared.messageSource.subscribe((message) => (this.message = message))
+    this.shared.logoSouce.subscribe((logo) => (this.logo = logo))
+  }
+  get f() {
+    return this.authForm.controls;
+  }
+  // adminSet() {
+  //   this.authForm.get('username').setValue('admin@school.org');
+  //   this.authForm.get('password').setValue('admin@123');
+  // }
+  // teacherSet() {
+  //   this.authForm.get('username').setValue('teacher@school.org');
+  //   this.authForm.get('password').setValue('teacher@123');
+  // }
+  // studentSet() {
+  //   this.authForm.get('username').setValue('student@school.org');
+  //   this.authForm.get('password').setValue('student@123');
+  // }
+  onSubmit(event) {
+
+
+    this.submitted = true;
+    this.spinnerButtonOptions.active = true;
+    this.error = '';
+    if (this.authForm.invalid) {
+      this.error = 'Username or password not correct!';
+      this.spinnerButtonOptions.active = false;
+      this.loading = false;
+      // return;
+    }
+    this.loading = true;
+    this.spinner.show();
+    // Make login request here
+
+    this.authService
+      .login(this.f.username.value, this.f.password.value)
+      .pipe(first())
+      .subscribe({
+        next: (data) => {
+          // console.log('data', data)
+          let token
+          if (!data.status) {
+            this.apiService.getAPI('getrolemenu').subscribe((data1) => {
+              this.allRoleMenu = data1
+              window.localStorage.setItem('allRoleMenu', JSON.stringify(this.allRoleMenu));
+            })
+            this.apiService.getAPI('getroles').subscribe((data2) => {
+              this.roles = data2['data']
+              for (let i in this.roles) {
+                if (this.roles[i].roleid == data.roleid) {
+                  data.role = this.roles[i].rolename
+                }
+              }
+              localStorage.setItem('currentUser', JSON.stringify(data));
+              window.location.reload();
+              if (window.localStorage.getItem('currentUser')) {
+                this.router.navigate(['/admin/dashboard/main'])
+                token = data.access_token
+                this.authService.storeUserData(token)
+              }
+            })
+
+          }
+          else {
+            this.error = data.message
+            this.spinnerButtonOptions.active = false;
+            this.loading = false;
+            this.spinner.hide();
+          }
+
+        },
+        // error: (error) => {
+        //   console.log('error', error.Status)
+
+        //   this.error = error
+        //   if (error.status === 401) {
+        //     alert("Incorrect username or password.");
+        //     this.loading = false;
+        //   } else {
+        //     alert("ok")
+        //     event.preventDefault()
+
+        //     this.loading = false;
+        //   }
+        // },
+      });
+    // this.authService.login(this.f.username.value, this.f.password.value).subscribe((data) => {
+    //   let token
+    //   this.router.navigate(['/admin/dashboard/main'])
+    //   token = data.access_token
+    //   // console.log('userdata', token)
+    //   this.authService.storeUserData(token)
+    // },
+    //   error => {
+    //     this.submitted = false;
+
+    //     this.error = error;
+    //     this.spinnerButtonOptions.active = false;
+    //     this.loading = false;
+    //   });
+  }
+}

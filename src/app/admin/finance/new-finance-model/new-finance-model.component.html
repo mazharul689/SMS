@@ -1,0 +1,76 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>New Finance Model</h2>
+
+          </div>
+          <div class="body">
+            <form class="register-form m-4" [formGroup]="HFormGroup1" (ngSubmit)="onFinanceModelSubmit()">
+              <div class="row">
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Finance Model Name</mat-label>
+                    <input matInput formControlName="financeModelName" required>
+                    <mat-icon matSuffix>label</mat-icon>
+                    <mat-error *ngIf="HFormGroup1.get('financeModelName').hasError('required')">
+                      Please Enter Finance Model Name
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Course</mat-label>
+                    <mat-select formControlName="courseId" required>
+                      <mat-option *ngFor="let course of courses" [value]="course.courseid">
+                        {{ course.coursecode }} - {{ course.coursename }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="HFormGroup1.get('courseId').hasError('required')">
+                      Course is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Tution Fee</mat-label>
+                    <input matInput formControlName="tutionFee" required>
+                    <mat-icon matSuffix>monetization_on</mat-icon>
+                    <mat-error *ngIf="HFormGroup1.get('tutionFee').hasError('required')">
+                      Please Enter Tution Fee
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Tution Type</mat-label>
+                    <mat-select formControlName="tutionTypeId" required>
+                      <mat-option *ngFor="let tutionType of tutionType" [value]="tutionType.tutiontypeid">
+                        {{ tutionType.tutiontype }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="HFormGroup1.get('tutionTypeId').hasError('required')">
+                      Tution Type is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <div class="example-button-row">
+                    <button class="btn-space" [disabled]="!HFormGroup1.valid " mat-raised-button
+                      color="primary">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

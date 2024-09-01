@@ -1,0 +1,184 @@
+<section class="content">
+    <div class="container-fluid">
+        <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Outcome</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/outcome/all-student">
+                                <i class="fas fa-home"></i>All Student</a>
+                        </li>
+                        <li class="breadcrumb-item active">Training Activity</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <div class="row clearfix editStudent">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Outcome</h2>
+                    </div>
+                    <div class="body">
+                        <div class="row">
+                            <div *ngIf="error.isError" class="alert alert-danger col-3 m-auto"
+                                [ngStyle]="{'display': (error.isError == true) ? 'block' : 'none'}">
+                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                <strong>Warning!</strong> {{ error.errorMessage }}
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                                    <div *ngIf="errorAll.isAllerror"
+                                        class="col-6 alert alert-danger m-auto text-center">
+                                        <span class="closebtn"
+                                            onclick="this.parentElement.style.display='none';">&times;</span>
+                                        <strong>Warning!</strong> {{errorAll.errorMsg}}
+                                    </div>
+                                </div> -->
+                        <form [formGroup]="HFormGroup1">
+                            <ng-template matStepLabel>Training Activity</ng-template>
+                            <div class="mt-4">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <div class="card">
+                                        <div class="body table-responsive trainingAct">
+                                            <div class="table table-striped">
+                                                <div class="table-head row">
+                                                    <div class="head-col-unit">
+                                                        <mat-checkbox aria-label="Select All" checked="checked">
+                                                            Units
+                                                        </mat-checkbox>
+                                                    </div>
+                                                    <div class="head-col-outc">
+                                                        <mat-form-field class="example-full-width mb-3">
+                                                            <mat-label>Outcome National</mat-label>
+                                                            <mat-select [(ngModel)]="outcome"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                (ngModelChange)="outComeChange($event)">
+                                                                <mat-option *ngFor="let outNational of outcomenational"
+                                                                    [value]="outNational.outcomenationalid">
+                                                                    {{ outNational.outcomenationalcode }} - {{
+                                                                    outNational.outcomenationalname }}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="head-col-date">
+                                                        <mat-form-field class="example-full-width mb-3">
+                                                            <mat-label>Start Date</mat-label>
+                                                            <input matInput [matDatepicker]="thSdPicker"
+                                                                (ngModelChange)="sDateChange($event)"
+                                                                [(ngModel)]="stDate"
+                                                                [ngModelOptions]="{standalone: true}">
+                                                            <mat-datepicker-toggle matSuffix [for]="thSdPicker">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #thSdPicker>
+                                                            </mat-datepicker>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="head-col-date">
+                                                        <mat-form-field class="example-full-width mb-3">
+                                                            <mat-label>End Date</mat-label>
+                                                            <input matInput [matDatepicker]="thEdPicker"
+                                                                (ngModelChange)="eDateChange($event)"
+                                                                [(ngModel)]="enDate"
+                                                                [ngModelOptions]="{standalone: true}" [min]="stDate">
+                                                            <mat-datepicker-toggle matSuffix [for]="thEdPicker">
+                                                            </mat-datepicker-toggle>
+                                                            <mat-datepicker #thEdPicker>
+                                                            </mat-datepicker>
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <!-- <div class="head-col-hr">
+                                                        <mat-form-field class="example-full-width mb-3">
+                                                            <mat-label>Hours Attended</mat-label>
+                                                            <input matInput type="number"
+                                                                (ngModelChange)="hourChange($event)" [(ngModel)]="hour"
+                                                                [ngModelOptions]="{standalone: true}">
+                                                        </mat-form-field>
+                                                    </div> -->
+                                                </div>
+                                                <div formArrayName="trainingArray">
+                                                    <div
+                                                        *ngFor="let row of HFormGroup1.get('trainingArray')['controls']; let i=index">
+                                                        <div class="table-body row" [formGroupName]="i">
+                                                            <!-- <input type="text" name="" [attr.data-id]="row.classSetupId" hidden> -->
+                                                            <div class="body-col-unit">
+                                                                <mat-checkbox (click)="$event.stopPropagation()"
+                                                                    (change)="$event ? toggle(row, $event) : null"
+                                                                    formControlName="statusCheck">
+                                                                    {{row.get('unitCode').value}} -
+                                                                    {{row.get('unitName').value }}
+                                                                </mat-checkbox>
+                                                            </div>
+                                                            <div class="body-col-outc">
+                                                                <mat-form-field class="example-full-width mb-3">
+                                                                    <mat-label>Outcome National</mat-label>
+                                                                    <mat-select formControlName="outcomeNationalId"
+                                                                        [value]="outcome">
+                                                                        <mat-option
+                                                                            *ngFor="let outNational of outcomenational"
+                                                                            [value]="outNational.outcomenationalid">
+                                                                            {{ outNational.outcomenationalcode
+                                                                            }} - {{
+                                                                            outNational.outcomenationalname }}
+                                                                        </mat-option>
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="body-col-date">
+                                                                <mat-form-field class="example-full-width mb-3">
+                                                                    <mat-label>Start Date</mat-label>
+                                                                    <input matInput [matDatepicker]="sDpicker"
+                                                                        formControlName="startDate" [value]="stDate">
+                                                                    <mat-datepicker-toggle matSuffix [for]="sDpicker">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #sDpicker>
+                                                                    </mat-datepicker>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="body-col-date">
+                                                                <mat-form-field class="example-full-width mb-3">
+                                                                    <mat-label>End Date</mat-label>
+                                                                    <input matInput [matDatepicker]="eDpicker"
+                                                                        formControlName="endDate" [value]="endDate"
+                                                                        (ngModelChange)="compareTwoDates()">
+                                                                    <mat-datepicker-toggle matSuffix [for]="eDpicker">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #eDpicker>
+                                                                    </mat-datepicker>
+                                                                    <mat-error *ngIf="error.isError">{{
+                                                                        error.errorMessage }}</mat-error>
+                                                                </mat-form-field>
+                                                                <!-- <span *ngIf="error.isError">{{ error.errorMessage }}</span> -->
+                                                            </div>
+                                                            <!-- <div class="body-col-hr">
+                                                                <mat-form-field class="example-full-width mb-3">
+                                                                    <mat-label>Hours Attended</mat-label>
+                                                                    <input matInput formControlName="hoursAttended"
+                                                                        type="number" [value]="hour">
+                                                                </mat-form-field>
+                                                            </div> -->
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button mat-raised-button class="msr-5" color="primary"
+                                    (click)="onTrainingUpdate()">Update</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

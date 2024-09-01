@@ -1,0 +1,81 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix newStudent">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>New Email Template</h2>
+          </div>
+          <div class="body">
+            <div class="container">
+              <!-- <div class="row">
+                    <div *ngIf="dateValidate1.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                      <strong>Warning!</strong> {{ dateValidate1.errorMessage }}
+                    </div>
+                  </div> -->
+              <div class="row">
+                <span class="section-heading"><i class='fas fa-bars'></i>
+                  E-mail Template
+                </span>
+              </div>
+              <form [formGroup]="HFormGroup1">
+                <div class="section-content">
+                  <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3" style="padding: 20px">
+                      <span class="asterisk">Email Template Name</span>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                      <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-label>Email Subject Name</mat-label>
+                        <input matInput formControlName="emailTemplateName">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3" style="padding: 20px">
+                      <span class="asterisk">Subject</span>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
+                      <mat-form-field appearance="outline" style="width: 100%">
+                        <mat-label>Email Subject</mat-label>
+                        <input matInput formControlName="emailSubject">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                      <div class="form-group has-feedback"
+                        [ngClass]="{ 'has-error': Editor.invalid && Editor.touched }">
+                        <div style="text-align: center !important;">
+                          <div *ngFor="let item of templateParameter; let j = index; let last = last"
+                            style="display: inline-block;">
+                            <button mat-stroked-button color="accent" draggable="true" id="j"
+                              (dragstart)="drag($event, item.templateparameterid)"
+                              style="color: rgb(0, 0, 0); border-radius: 50px;" class="msr-3">
+                              {{ item.templateparametertitle }}
+                            </button>
+                          </div>
+                        </div>
+                        <div style="margin-top: 20px;"></div>
+                        <ckeditor formControlName="emailBody" [editor]="Editor" (ready)="onReady($event)" required
+                          (paste)="onPaste($event)" (drop)="onDrop($event)" (change)="onChange($event)">
+                        </ckeditor>
+                        <div *ngIf="Editor.invalid && Editor.touched" class="help-block">
+                          Required field.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <button mat-raised-button type="button" color="primary" (click)="send()">Save</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

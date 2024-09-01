@@ -1,0 +1,603 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Edit Course Intake Date</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Courses</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Course Intake Date</a>
+            </li>
+            <li class="breadcrumb-item active">Edit</li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
+    <div class="row clearfix editCourseIntake">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Edit Course Intake Date</h2>
+          </div>
+          <div class="body">
+            <!-- <mat-horizontal-stepper (selectionChange)="selectionChange($event)" #stepper>
+              <mat-step label="1" [stepControl]="HFormGroup1"> -->
+                <div class="row">
+                  <div *ngIf="requiredError1.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ requiredError1.errorMessage }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div *ngIf="requiredError2.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ requiredError1.errorMessage }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div *ngIf="dateValidate1.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ dateValidate1.errorMessage }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div *ngIf="duplCourseIntakeErr" class="alert alert-danger col-4 m-auto" id="closebtn">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ duplCourseIntakeErrMsg }}
+                  </div>
+                </div>
+                <form [formGroup]="HFormGroup1" (ngSubmit)="onCourseIntakeUpdate()">
+                  <ng-template matStepLabel>
+                    <!-- <span [ngClass]="this.stepLabel == '1' ? 'highlight' : 'nonHighlight'">
+                      Course Intake
+                    </span> -->
+                  </ng-template>
+                  <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Class Name</mat-label>
+                        <input matInput formControlName="className" type="text" required [readonly]="editable">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Course</mat-label>
+                        <mat-select formControlName="courseId" (change)="unitsByCourses()" required>
+                          <mat-option *ngFor="let course of courses" [value]="course.courseid" [disabled]="editable">
+                            {{ course.coursecode }} - {{ course.coursename }}
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="HFormGroup1.get('courseId').hasError('required')">
+                          Course is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Start Date</mat-label>
+                        <input matInput [matDatepicker]="basicDatepicker1" formControlName="startDate" required
+                          [readonly]="editable">
+                        <mat-datepicker-toggle matSuffix [for]="basicDatepicker1"></mat-datepicker-toggle>
+                        <mat-datepicker #basicDatepicker1 [disabled]="editable"></mat-datepicker>
+                        <mat-error *ngIf="HFormGroup1.get('startDate').hasError('required')">
+                          Please select start date
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 mb-2" style="padding-top: 10px">
+                      <section class="example-section mb-4">
+                        <label class="example col-md-5 col-sm-5">Course Duration Type</label>
+                        <mat-radio-group class="col-md-7 col-sm-7" formControlName="courseDurationType">
+                          <mat-radio-button
+                            class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                            value="W">Week</mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                            value="D">Day</mat-radio-button>
+                        </mat-radio-group>
+                      </section>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-3 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Course Duration</mat-label>
+                        <input matInput formControlName="courseDuration" type="number" (ngModelChange)="setEndDate($event)" required>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>End Date</mat-label>
+                        <input matInput [matDatepicker]="basicDatepicker2" formControlName="endDate"
+                          (ngModelChange)="compareTwoDates1()" required [readonly]="editable">
+                        <mat-datepicker-toggle matSuffix [for]="basicDatepicker2"></mat-datepicker-toggle>
+                        <mat-datepicker #basicDatepicker2 [disabled]="editable"></mat-datepicker>
+                        <mat-error *ngIf="HFormGroup1.get('endDate').hasError('required') || dateValidate1.isError">
+                          Please select end date
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Venue Room</mat-label>
+                        <mat-select formControlName="venueroomId" (change)="unitsByCourses()" required>
+                          <mat-option *ngFor="let venue of venueroom" [value]="venue.venueroomid" [disabled]="editable">
+                            {{ venue.venuename }}<span *ngIf="venue.roomNumber"> - {{ venue.roomnumber }}</span>
+                          </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="HFormGroup1.get('venueroomId').hasError('required')">
+                          Venue Room is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <section class="row example-section mb-4">
+                        <label class="example col-lg-3 col-md-4 col-sm-5">Publish</label>
+                        <mat-radio-group class="col-lg-9 col-md-8 col-sm-7" formControlName="publish"
+                          [disabled]="editable">
+                          <mat-radio-button
+                            class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block-block d-lg-inline-block"
+                            value="Y">
+                            Yes
+                          </mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="N">
+                            No
+                          </mat-radio-button>
+                        </mat-radio-group>
+                      </section>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>International Fee</mat-label>
+                        <input matInput formControlName="internationTutionFees" type="number" [readonly]="editable">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Domestic Fee</mat-label>
+                        <input matInput formControlName="domesticTutionFees" type="number" [readonly]="editable">
+                      </mat-form-field>
+                    </div>
+                  </div>
+                  <div>
+                    <button mat-raised-button class="msr-4" [disabled]="editable"
+                      (click)="edit(); onCourseIntakeUpdate()" color="primary">Update</button>
+                    <button mat-raised-button color="primary" (click)="edit()" type="button">Edit</button>
+                  </div>
+                </form>
+              <!-- </mat-step> -->
+              <!-- <mat-step label="2" [stepControl]="HFormGroup2">
+                <form [formGroup]="HFormGroup2" (ngSubmit)="onUnitUpdate(stepper)">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '2' ? 'highlight' : 'nonHighlight'">
+                      Units
+                    </span>
+                  </ng-template>
+                  <div class="newCourseUnit">
+                    <mat-table #table [dataSource]="dataSource1" matSort class="mat-cell" formArrayName="unitRows">
+                      <ng-container matColumnDef="rowID">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                          <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                          </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                          <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                          </mat-checkbox>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="unitCode">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                          <mat-label>Unit Code</mat-label>
+                        </mat-header-cell>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                          <span class="ml-2">{{row.unitcode}}</span>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="unitName">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          Unit Name
+                        </mat-header-cell>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                          <span class="ml-2">{{row.unitname}}</span>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="unitType">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <label style="font-weight: 500;">Unit Type</label>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                          <section class="example-section unitsRadio">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="group">
+                                  <input type="radio" id="unittypeid{{row.rowID}}" name="unittype{{row.rowID}}"
+                                    value="C" [attr.data-rowid]="row.rowID" [checked]="row.unittype == 'C'"
+                                    (change)="UnitRowChange($event)">
+                                  <label class="pr-3">Core</label>
+                                  <input type="radio" id="unittypeid{{row.rowID}}" name="unittype{{row.rowID}}"
+                                    value="E" [attr.data-rowid]="row.rowID" [checked]="row.unittype == 'E'"
+                                    (change)="UnitRowChange($event)">
+                                  <label>Elective</label>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="vetFlag">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <label style="font-weight: 500;">VET Flag</label>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                          <section class="example-section">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <input type="radio" id="vetflagid{{row.rowID}}" name="vetflag{{row.rowID}}" value="Y"
+                                  [attr.data-rowid]="row.rowID" [checked]="row.vetflag == 'Y'"
+                                  (change)="vetFlagRowChange($event)">
+                                <label>Yes</label>
+                                <input type="radio" id="vetflagid{{row.rowID}}" name="vetflag{{row.rowID}}" value="N"
+                                  [attr.data-rowid]="row.rowID" [checked]="row.vetflag == 'N'"
+                                  (change)="vetFlagRowChange($event)">
+                                <label>No</label>
+                              </div>
+                            </div>
+                          </section>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="AVETMISS">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <label style="font-weight: 500;">Avetmiss Report</label>
+                        </mat-header-cell>
+
+                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                          <section class="example-section">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <input type="radio" id="avetmissid{{row.rowID}}" name="avetmiss{{row.rowID}}"
+                                  value="Y" [attr.data-rowid]="row.rowID" [checked]="setAVETMISSVal[row.rowID] == 'Y'"
+                                  (change)="AVETMISSRowChange($event)">
+                                  <label>Yes</label>
+                                  <input type="radio" id="avetmissid{{row.rowID}}" name="avetmiss{{row.rowID}}"
+                                  value="N" [attr.data-rowid]="row.rowID" [checked]="setAVETMISSVal[row.rowID] == 'N'"
+                                  (change)="AVETMISSRowChange($event)">
+                                  <label>No</label>
+                              </div>
+                            </div>
+                          </section>
+                        </mat-cell>
+                      </ng-container>
+
+                      <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                      <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns1;"
+                        [style.cursor]="'pointer'" matRipple>
+                      </mat-row>
+                    </mat-table>
+                    <div class="row" >
+                      <mat-paginator #tableTwoPaginator [length]="dataSource1.filteredData.length" [pageIndex]="0"
+                        [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    </div>
+
+                  </div>
+                  <div *ngIf="this.mode == 'EDIT'">
+                    <button mat-raised-button [disabled]="editable" class="msr-4" color="primary">Next</button>
+                    <button mat-raised-button (click)="edit()" type="button" color="primary">Edit</button>
+                  </div>
+                  <div *ngIf="this.mode == 'ADD'">
+                    <button mat-raised-button color="primary">Next</button>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step label="3" [stepControl]="HFormGroup3">
+                <div class="row">
+                  <div *ngIf="requiredError2.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ requiredError2.errorMessage }}
+                  </div>
+                </div>
+                <form [formGroup]="HFormGroup3" (ngSubmit)="onConfirmationUpdate()">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '3' ? 'highlight' : 'nonHighlight'">
+                      Confirmation
+                    </span>
+                  </ng-template>
+                  <div class="mt-4">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Class Name</mat-label>
+                          <input matInput formControlName="className" required readonly>
+                          <mat-error *ngIf="HFormGroup3.get('className').hasError('required')">
+                            Class Name is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="card">
+                        <div class="body table-responsive unitArray">
+                          <div class="table table-striped">
+                            <div class="table-head row">
+                              <div class="head-col-unit">
+                                <mat-checkbox aria-label="Select All" checked="checked"
+                                  (change)="$event ? toggleAll($event) : null">
+                                  Unit Code
+                                </mat-checkbox>
+                              </div>
+                              <div class="head-col-unitName">
+                                <span style="color: #fff">Unit Name</span>
+                              </div>
+                              <div class="head-col-unitType">
+                                <span style="color: #fff">Unit Type</span>
+                              </div>
+                              <div class="head-col-vetFlag">
+                                <span style="color: #fff">Vet Flag</span>
+                              </div>
+                              <div class="head-col-AVETMISS">
+                                <span style="color: #fff">Avetmiss</span>
+                              </div>
+
+                            </div>
+                            <div formArrayName="Rows">
+                              <div *ngFor="let row of HFormGroup3.get('Rows')['controls']; let i=index">
+                                <div class="table-body row" [formGroupName]="i">
+                                  <div class="body-col-unit">
+                                    <mat-checkbox (click)="$event.stopPropagation()" checked="checked">
+                                      {{row.get('unitcode').value}}
+                                    </mat-checkbox>
+                                  </div>
+                                  <div class="body-col-unitName">
+                                    <span>{{row.get('unitname').value}}</span>
+                                  </div>
+                                  <div class="body-col-unitType" *ngIf="row.get('unittype').value == 'C'">
+                                    <span>&nbsp;&nbsp;</span>
+                                    <span>Core</span>
+                                  </div>
+                                  <div class="body-col-unitType" *ngIf="row.get('unittype').value == 'E'">
+                                    <span>&nbsp;&nbsp;</span>
+                                    <span>Elective</span>
+                                  </div>
+                                  <div class="body-col-vetFlag" *ngIf="row.get('vetflag').value == 'Y'">
+                                    <span>&nbsp;&nbsp;</span>
+                                    <span>Yes</span>
+                                  </div>
+                                  <div class="body-col-vetFlag" *ngIf="row.get('vetflag').value == 'N'">
+                                    <span>&nbsp;&nbsp;</span>
+                                    <span>No</span>
+                                  </div>
+                                  <div class="body-col-AVETMISS" *ngIf="row.get('avetmiss').value == 'Y'">
+                                    <span>&nbsp;&nbsp;</span>
+                                    <span>Yes</span>
+                                  </div>
+                                  <div class="body-col-AVETMISS" *ngIf="row.get('avetmiss').value == 'N'">
+                                    <span>&nbsp;&nbsp;</span>
+                                    <span>No</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div *ngIf="this.mode == 'EDIT'">
+                      <button mat-raised-button [disabled]="editable" class="msr-4" color="primary">Update Class Set
+                        Up</button>
+                      <button mat-raised-button type="button" (click)="edit()" color="primary">Edit</button>
+                    </div>
+                    <div *ngIf="this.mode == 'ADD'">
+                      <button mat-raised-button color="primary">Confirm Class Set Up</button>
+                    </div>
+                  </div>
+                </form>
+              </mat-step> -->
+              <!-- <mat-step [stepControl]="HFormGroup4">
+                    <div class="row">
+                        <div *ngIf="dateValidate2.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                            <strong>Warning!</strong> {{ dateValidate2.errorMessage }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div *ngIf="requiredError2.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                            <strong>Warning!</strong> {{ requiredError2.errorMessage }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div *ngIf="timeValidator.isError" class="alert alert-danger col-5 m-auto" id="closebtn">
+                            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                            <strong>Warning!</strong> {{ timeValidator.errorMessage }}
+                        </div>
+                    </div>
+                    <form [formGroup]="HFormGroup4" (ngSubmit)="onClassSetupUpdate()">
+                        <ng-template matStepLabel>Class Schedule</ng-template>
+                        <div class="mt-4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <mat-form-field class="example-full-width mb-3">
+                                        <mat-label>Class Name</mat-label>
+                                        <input matInput formControlName="className" required>
+                                        <mat-error *ngIf="HFormGroup4.get('className').hasError('required')"> Class Name is required </mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="card">
+                                    <div class="body table-responsive classSetup">
+                                        <div class="table table-striped">
+                                            <div class="table-head row">
+                                                <div class="head-col-units">
+                                                    <mat-checkbox aria-label="Select All" checked="checked" (change)="$event ? toggleAll($event) : null">
+                                                        Units
+                                                    </mat-checkbox>
+                                                </div>
+                                                <div class="head-col-date">
+                                                    <mat-form-field class="example-full-width mb-3">
+                                                        <mat-label>Start Date</mat-label>
+                                                        <input matInput [matDatepicker]="thSdPicker" [(ngModel)]="bSdate"
+                                                        (ngModelChange)="sDateChange($event)" [ngModelOptions]="{standalone: true}">
+                                                        <mat-datepicker-toggle matSuffix [for]="thSdPicker"></mat-datepicker-toggle>
+                                                        <mat-datepicker #thSdPicker></mat-datepicker>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="head-col-date">
+                                                    <mat-form-field class="example-full-width mb-3">
+                                                        <mat-label>End Date</mat-label>
+                                                        <input matInput [matDatepicker]="thEdPicker" [(ngModel)]="bEdate" [min]="bSdate"
+                                                        (ngModelChange)="eDateChange($event)" [ngModelOptions]="{standalone: true}">
+                                                        <mat-datepicker-toggle matSuffix [for]="thEdPicker"></mat-datepicker-toggle>
+                                                        <mat-datepicker #thEdPicker></mat-datepicker>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="head-col-time">
+                                                    <mat-form-field>
+                                                        <mat-label>Start Time</mat-label>
+                                                        <input matTimepicker [(ngModel)]="bStime" [ngModelOptions]="{standalone: true}"
+                                                        id="timepicker-example" mode="12h" (timeChange)="sTimeChangeHandler($event)">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="head-col-time">
+                                                    <mat-form-field>
+                                                        <mat-label>End Time</mat-label>
+                                                        <input matTimepicker [(ngModel)]="bEtime" [ngModelOptions]="{standalone: true}"
+                                                        id="timepicker-example" mode="12h" (timeChange)="eTimeChangeHandler($event)"
+                                                        [minDate]="bStime">
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="head-col-days">
+                                                    <mat-form-field class="example-full-width  mb-3">
+                                                        <mat-label>Days</mat-label>
+                                                        <mat-select (ngModelChange)="daysChange($event)" [(ngModel)]="bDays" [ngModelOptions]="{standalone: true}" multiple>
+                                                            <mat-option *ngFor="let day of daysOfWeek" [value]="day.dayOfWeekId">
+                                                                {{ day.dayOfWeek }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="head-col-tr">
+                                                    <mat-form-field class="example-full-width mb-3">
+                                                        <mat-label>Trainer</mat-label>
+                                                        <mat-select (ngModelChange)="trainerChange($event)" [(ngModel)]="bTrainer" [ngModelOptions]="{standalone: true}">
+                                                            <mat-option *ngFor="let staff of staffs" [value]="staff.staffId">
+                                                                {{ staff.firstName }} - {{ staff.lastName }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                                <div class="head-col-assr">
+                                                    <mat-form-field class="example-full-width mb-3">
+                                                        <mat-label>Assessor</mat-label>
+                                                        <mat-select (ngModelChange)="assessorChange($event)" [(ngModel)]="bAssessor" [ngModelOptions]="{standalone: true}">
+                                                            <mat-option *ngFor="let staff of staffs" [value]="staff.staffId">
+                                                                {{ staff.firstName }} - {{ staff.lastName }}
+                                                            </mat-option>
+                                                        </mat-select>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                            <div formArrayName="classArray">
+                                                <div *ngFor="let row of HFormGroup4.get('classArray')['controls']; let i=index">
+                                                    <div class="table-body row" [formGroupName]="i">
+                                                        <div class="body-col-units" *ngIf="selectedCourseID">
+                                                            <mat-checkbox (click)="$event.stopPropagation()" checked="checked" (change)="$event ? toggle(row, $event) : null" formControlName="statusCheck">
+                                                                {{ row.get('unitName').value }}
+                                                            </mat-checkbox>
+                                                        </div>
+                                                        <div class="body-col-date">
+                                                            <mat-form-field class="example-full-width mb-3">
+                                                                <mat-label>Start Date</mat-label>
+                                                                <input matInput [matDatepicker]="sDpicker" formControlName="startDate">
+                                                                <mat-datepicker-toggle matSuffix [for]="sDpicker"></mat-datepicker-toggle>
+                                                                <mat-datepicker #sDpicker></mat-datepicker>
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="body-col-date">
+                                                            <mat-form-field class="example-full-width mb-3">
+                                                                <mat-label>End Date</mat-label>
+                                                                <input matInput [matDatepicker]="eDpicker" formControlName="endDate"
+                                                                (ngModelChange)="compareTwoDates2()">
+                                                                <mat-datepicker-toggle matSuffix [for]="eDpicker"></mat-datepicker-toggle>
+                                                                <mat-datepicker #eDpicker></mat-datepicker>
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="body-col-time">
+                                                            <mat-form-field>
+                                                                <mat-label>Start Time</mat-label>
+                                                                <input matTimepicker formControlName="startTime" id="timepicker-example"
+                                                                mode="12h">
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="body-col-time">
+                                                            <mat-form-field>
+                                                                <mat-label>End Time</mat-label>
+                                                                <input matTimepicker formControlName="endTime" id="timepicker-example"
+                                                                mode="12h" (ngModelChange)="compareTwoTimes()">
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="body-col-days">
+                                                            <mat-form-field class="example-full-width  mb-3">
+                                                                <mat-label>Days</mat-label>
+                                                                <mat-select formControlName="dayOfWeekId" multiple>
+                                                                    <mat-option *ngFor="let day of daysOfWeek" [value]="day.dayOfWeekId">
+                                                                        {{ day.dayOfWeek }}
+                                                                    </mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="body-col-tr">
+                                                            <mat-form-field class="example-full-width mb-3">
+                                                                <mat-label>Trainer</mat-label>
+                                                                <mat-select formControlName="teacherId">
+                                                                    <mat-option *ngFor="let staff of staffs" [value]="staff.staffId">
+                                                                        {{ staff.firstName }} - {{ staff.lastName }}
+                                                                    </mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                        </div>
+                                                        <div class="body-col-assr">
+                                                            <mat-form-field class="example-full-width mb-3">
+                                                                <mat-label>Assessor</mat-label>
+                                                                <mat-select formControlName="assessorId">
+                                                                    <mat-option *ngFor="let staff of staffs" [value]="staff.staffId">
+                                                                        {{ staff.firstName }} - {{ staff.lastName }}
+                                                                    </mat-option>
+                                                                </mat-select>
+                                                            </mat-form-field>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button mat-raised-button matStepperPrevious color="warn" class="msr-5">Back</button>
+                            <button mat-raised-button matStepperNext color="primary">Next</button>
+                        </div>
+                    </form>
+                </mat-step> -->
+            <!-- </mat-horizontal-stepper> -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

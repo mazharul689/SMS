@@ -1,0 +1,205 @@
+<section class="content">
+    <div class="container-fluid">
+        <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">New Venue</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i>Location</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Venue</a>
+                        </li>
+                        <li class="breadcrumb-item active">New</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <div class="row clearfix newStudent">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>New Venue</h2>
+                    </div>
+                    <div class="body">
+                        <div class="container">
+                            <div class="row">
+                                <div *ngIf="requiredError.isError" class="alert alert-danger col-6 m-auto"
+                                    id="closebtn">
+                                    <span class="closebtn"
+                                        onclick="this.parentElement.style.display='none';">&times;</span>
+                                    <strong>Warning!</strong> {{ requiredError.errorMessage }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div *ngIf="dateValidate.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                                    <span class="closebtn"
+                                        onclick="this.parentElement.style.display='none';">&times;</span>
+                                    <strong>Warning!</strong> {{ dateValidate.errorMessage }}
+                                </div>
+                            </div>
+                            <form [formGroup]="HFormGroup1">
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>Venue Code</mat-label>
+                                            <input matInput formControlName="venueCode" type="text" required>
+                                            <mat-error *ngIf="HFormGroup1.get('venueCode').hasError('required')">
+                                                Venue Code is required
+                                            </mat-error>
+                                            <mat-error *ngIf="HFormGroup1.get('venueCode').hasError('maxlength')">
+                                                Maximum length is 10
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>Venue Name</mat-label>
+                                            <input matInput formControlName="venueName" type="text" required>
+                                            <mat-error *ngIf="HFormGroup1.get('venueName').hasError('required')">
+                                                Venue Name is required
+                                            </mat-error>
+                                            <mat-error *ngIf="HFormGroup1.get('venueName').hasError('maxlength')">
+                                                Maximum length is 100
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>Training Organization</mat-label>
+                                            <mat-select formControlName="trainingOrgId" required>
+                                                <mat-option *ngFor="let trainOrg of trainingOrgs"
+                                                    [value]="trainOrg.trainingorgid">
+                                                    {{trainOrg.trainingorgname}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="HFormGroup1.get('trainingOrgId').hasError('required')">
+                                                Training Organization is required
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>Contact No</mat-label>
+                                            <input matInput formControlName="contactNo" type="text" required>
+                                            <mat-error *ngIf="HFormGroup1.get('contactNo').hasError('required')">
+                                                Contact No is required
+                                            </mat-error>
+                                            <mat-error *ngIf="HFormGroup1.get('contactNo').hasError('maxlength')">
+                                                Maximum length is 100
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width">
+                                            <mat-label>Address</mat-label>
+                                            <textarea matInput formControlName="address1" rows="1" required></textarea>
+                                            <mat-error *ngIf="HFormGroup1.get('address1').hasError('required')">
+                                                Address is required
+                                            </mat-error>
+                                            <mat-error *ngIf="HFormGroup1.get('address1').hasError('maxlength')">
+                                                Maximum length is 30
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>Country</mat-label>
+                                            <mat-select formControlName="countryId" required>
+                                                <mat-option *ngFor="let country of countries"
+                                                    [value]="country.countryid">
+                                                    {{country.countryname}}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="HFormGroup1.get('countryId').hasError('required')">
+                                                Country Unit is required
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>State</mat-label>
+                                            <mat-select formControlName="stateId" required>
+                                                <mat-option *ngFor="let state of states" [value]="state.stateid">
+                                                    {{state.statecode}} - {{ state.statename }}
+                                                </mat-option>
+                                            </mat-select>
+                                            <mat-error *ngIf="HFormGroup1.get('stateId').hasError('required')">
+                                                State is required
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>Suburb</mat-label>
+                                            <input matInput formControlName="suburb" type="text">
+                                            <mat-error *ngIf="HFormGroup1.get('suburb').hasError('maxlength')">
+                                                Maximum length is 20
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>Postcode</mat-label>
+                                            <input matInput formControlName="postCode" type="number" required>
+                                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('required')">
+                                                Postcode is required
+                                            </mat-error>
+                                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('max')">
+                                                Maximum length is 4 characters
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>ABN</mat-label>
+                                            <input matInput formControlName="ABN" type="text">
+                                            <mat-error *ngIf="HFormGroup1.get('ABN').hasError('maxlength')">
+                                                Maximum length is 100
+                                            </mat-error>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>Venue Effective Start Date</mat-label>
+                                            <input matInput [matDatepicker]="basicDatepicker1"
+                                                formControlName="effectiveDateFrom" (ngModelChange)="compareTwoDates()">
+                                            <mat-datepicker-toggle matSuffix [for]="basicDatepicker1">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #basicDatepicker1></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 mb-2">
+                                        <mat-form-field class="example-full-width mb-3">
+                                            <mat-label>Venue Effective End Date</mat-label>
+                                            <input matInput [matDatepicker]="basicDatepicker2"
+                                                formControlName="effectiveDateTo" (ngModelChange)="compareTwoDates()">
+                                            <mat-datepicker-toggle matSuffix [for]="basicDatepicker2">
+                                            </mat-datepicker-toggle>
+                                            <mat-datepicker #basicDatepicker2></mat-datepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button mat-raised-button color="primary" (click)="onVenueSubmit()">Add</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

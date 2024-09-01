@@ -1,0 +1,98 @@
+<section class="content">
+    <div class="container-fluid">
+        <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">New User</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i>Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">User</a>
+                        </li>
+                        <li class="breadcrumb-item active">New</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <div class="row clearfix newStudent">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>New User</h2>
+                    </div>
+                    <div class="body">
+                        <div class="container">
+                            <!-- <div class="row">
+                                    <div *ngIf="requiredError.isError" class="alert alert-danger col-6 m-auto" id="closebtn">
+                                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                    <strong>Warning!</strong> {{ requiredError.errorMessage }}
+                                    </div>
+                                </div> -->
+                            <form [formGroup]="HFormGroup1">
+                                <div class="courseInfo">
+                                    <div class="row">
+                                        <span class="section-heading"><i class='fas fa-bars'></i> User
+                                            Information</span>
+                                    </div>
+                                    <!-- <span class="section-heading"><i class='fas fa-bars'></i>Unit Information</span> -->
+                                    <div class="section-content">
+                                        <div class="row">
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                                <mat-form-field class="example-full-width mb-3">
+                                                    <mat-label>Role Name</mat-label>
+                                                    <mat-select formControlName="roleId">
+                                                        <mat-option *ngFor="let role of roles" [value]="role.roleid">
+                                                          {{role.rolename }}
+                                                        </mat-option>
+                                                      </mat-select>
+                                                    <!-- <input matInput formControlName="roleId" type="text" required> -->
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                                <mat-form-field class="example-full-width mb-3">
+                                                    <mat-label>Email</mat-label>
+                                                    <input matInput formControlName="email" type="text" required>
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                                <mat-form-field class="example-full-width mb-3">
+                                                    <mat-label>User Password</mat-label>
+                                                    <input matInput formControlName="userpassword" type="text" required>
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                                                <section class="example-section">
+                                                    <label class="example col-xl-5 col-lg-5 col-md-5 col-sm-5" >Is
+                                                        Active?</label>
+                                                    <mat-radio-group class="col-xl-8 col-lg-8 col-md-8 col-sm-8"
+                                                        formControlName="isactive">
+                                                        <mat-radio-button
+                                                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                                            value="Y">Yes</mat-radio-button>
+                                                        <mat-radio-button
+                                                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                                            value="N">No</mat-radio-button>
+                                                    </mat-radio-group>
+                                                </section>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button mat-raised-button color="primary" (click)="updateUser()">update User</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

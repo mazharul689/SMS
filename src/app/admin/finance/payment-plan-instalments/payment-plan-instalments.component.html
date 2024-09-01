@@ -1,0 +1,89 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="header">
+            <h2>All Installment of "{{ this.paymentPlanName }}"</h2>
+          </div>
+          <div class="body">
+            <div class="table-responsive units">
+              <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                <ng-container matColumnDef="paymentplaninstalmentorder">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Instalment Order</mat-label>
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.paymentplaninstalmentorder}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="itemname">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Item Name</mat-label>
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.itemname}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="paymentplaninstalmentrules">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Rule Type</mat-label>
+                  </mat-header-cell>
+                  <!-- <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.itemname}}
+                  </mat-cell> -->
+                  <mat-cell *matCellDef="let row; let i=index" class="pr-0">
+                    <table *ngIf="row.rulearray.Rows[0].amount != null">
+                      <tr *ngFor="let item of row.rulearray.Rows; let j = index; let last = last">
+                        <td *ngIf="item.paymentPlanInstalmentRuleCondition.length > 0">{{ item.ruletype }} ({{ item.paymentPlanInstalmentRuleCondition }})</td>
+                        <td *ngIf="item.paymentPlanInstalmentRuleCondition.length == 0">{{ item.ruletype }}</td>
+                      </tr>
+                    </table>
+                    <!-- <span *ngIf="row.rulearray.Rows[0].amount == null">No rule is set yet!</span> -->
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="paymentplaninstalmentamount">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Amount</mat-label>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index" class="pr-0">
+                    <table *ngIf="row.rulearray.Rows[0].amount != null">
+                      <tr *ngFor="let item of row.rulearray.Rows; let j = index; let last = last">
+                        <td>${{ item.amount }}</td>
+                      </tr>
+                    </table>
+                    <!-- <span *ngIf="row.rulearray.Rows[0].amount == null">$000</span> -->
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="paymentplaninstalmentduedate">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Payment Plan Due Date</mat-label>
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.paymentplaninstalmentduedate | date:'mediumDate'}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="paymentplaninstalmentactions">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Actions</mat-label></mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button class="btn-tbl-edit" title="Add/Edit Payment Plan Instalment Rule"
+                      (click)="addRule(this.paymentPlanId,row.paymentplaninstalmentid )">
+                      <mat-icon aria-label="Add" class="col-white">add</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                  [style.cursor]="'pointer'" matRipple>
+                </mat-row>
+              </mat-table>
+              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

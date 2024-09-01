@@ -1,0 +1,66 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix newStudent">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Add Email</h2>
+          </div>
+          <div class="body">
+            <div class="container">
+              <form [formGroup]="HFormGroup">
+                <div class="courseInfo">
+                  <div class="row">
+                    <span class="section-heading"><i class='fas fa-bars'></i>Email</span>
+                  </div>
+                  <div class="section-content">
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Email Address</mat-label>
+                          <input matInput formControlName="from_email_address" type="text" required>
+                          <mat-error *ngIf="HFormGroup.get('from_email_address').hasError('required')">
+                            Email name is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Email App Key</mat-label>
+                          <input matInput formControlName="from_email_appkey" type="text" required>
+                          <mat-error *ngIf="HFormGroup.get('from_email_appkey').hasError('required')">
+                            Email app key is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <section class="example-section">
+                          <label class="example col-xl-5 col-lg-5 col-md-5 col-sm-5 asterisk">Is
+                            Active?</label>
+                          <mat-radio-group class="col-xl-8 col-lg-8 col-md-8 col-sm-8" formControlName="isactive">
+                            <mat-radio-button
+                              class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                              value='Y'>Yes</mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                              value='N'>No</mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </div>
+                    </div>
+
+                    <div>
+                      <button mat-raised-button color="primary" (click)="onSubmitEmail()">Add Email</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

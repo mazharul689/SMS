@@ -1,0 +1,362 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Edit Course</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Courses</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Course</a>
+            </li>
+            <li class="breadcrumb-item active">Edit</li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Edit Course</h2>
+          </div>
+          <div class="body">
+            <div class="container">
+              <div class="row">
+                <div *ngIf="requiredError.isError" class="alert alert-danger col-6 m-auto" id="closebtn">
+                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  <strong>Warning!</strong> {{ requiredError.errorMessage }}
+                </div>
+              </div>
+              <div class="row">
+                <div *ngIf="dateValidate.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  <strong>Warning!</strong> {{ dateValidate.errorMessage }}
+                </div>
+              </div>
+              <form [formGroup]="HFormGroup1" (ngSubmit)="onCourseUpdate()">
+                <div class="courseInfo">
+                  <div class="row">
+                    <span class="section-heading" ><i class='fas fa-bars'></i> Course Information</span>
+                  </div>
+                  <!-- <span class="section-heading"><i class='fas fa-bars'></i>Course Information</span> -->
+                  <div class="section-content">
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <section class="example-section">
+                          <label class="example col-md-3 col-sm-5">Module Delivery</label>
+                          <mat-radio-group class="col-md-9 col-sm-7" formControlName="moduleDelivery">
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="Y">
+                              Yes
+                            </mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="N">
+                              No
+                            </mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </div>
+                      <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <section class="example-section">
+                          <label class="example col-md-3 col-sm-2">Is Superseded</label>
+                          <div class="col-sm-10">
+                            <mat-checkbox aria-label="Select All" checked="checked"></mat-checkbox>
+                          </div>
+                        </section>
+                      </div> -->
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>National Code</mat-label>
+                          <input matInput formControlName="nationalCode" type="text">
+                          <mat-error *ngIf="HFormGroup1.get('nationalCode').hasError('maxlength')">
+                            Maximum length is 100
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Cricos Code</mat-label>
+                          <input matInput formControlName="cricosCode" type="text">
+                          <mat-error *ngIf="HFormGroup1.get('cricosCode').hasError('maxlength')">
+                            Maximum length is 10
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Course Code</mat-label>
+                          <input matInput formControlName="courseCode" type="text"
+                            oninput="this.value = this.value.toUpperCase()" required>
+                          <mat-error *ngIf="HFormGroup1.get('courseCode').hasError('required')">
+                            Course Code is required
+                          </mat-error>
+                          <mat-error *ngIf="HFormGroup1.get('courseCode').hasError('pattern')">
+                            Course Code conatins no space
+                          </mat-error>
+                          <mat-error *ngIf="HFormGroup1.get('courseCode').hasError('maxlength')">
+                            Maximum length is 10
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Course Name</mat-label>
+                          <input matInput formControlName="courseName" type="text" required>
+                          <mat-error *ngIf="HFormGroup1.get('courseName').hasError('required')">
+                            Course Name is required
+                          </mat-error>
+                          <mat-error *ngIf="HFormGroup1.get('courseName').hasError('maxlength')">
+                            Maximum length is 100
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Duration</mat-label>
+                          <input matInput formControlName="duration" type="number" required>
+                          <mat-error *ngIf="HFormGroup1.get('duration').hasError('required')">
+                            Duration is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Duration Unit</mat-label>
+                          <mat-select formControlName="durationUnit">
+                            <mat-option value="day">Day</mat-option>
+                            <mat-option value="week">Week</mat-option>
+                            <mat-option value="month">Month</mat-option>
+                            <mat-option value="year">Year</mat-option>
+                          </mat-select>
+                          <mat-error *ngIf="HFormGroup1.get('durationUnit').hasError('required')">
+                            Duration Unit is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Maximum Weekly Study (hours)</mat-label>
+                          <input matInput formControlName="maximumWeeklyStudy" type="text">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Major</mat-label>
+                          <input matInput formControlName="major" type="text">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>International Tution Fee</mat-label>
+                          <input matInput formControlName="internationTutionFees" type="text">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Domestic Tution Fee</mat-label>
+                          <input matInput formControlName="domesticTutionFees" type="text">
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+                <div class="specificInfo">
+                  <div class="row">
+                    <span class="section-heading" ><i class='fas fa-bars'></i> Specific Information</span>
+                  </div>
+                  <!-- <span class="section-heading"><i class='fas fa-bars'></i>Specific Information</span> -->
+                  <div class="section-content">
+                    <div class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <section class="example-section">
+                          <label class="example col-md-2 col-sm-5">Has Work Placement</label>
+                          <mat-radio-group class="col-md-10 col-sm-7" formControlName="hasWorkPlacement">
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="Y">
+                              Yes
+                            </mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="N">
+                              No
+                            </mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <section class="example-section">
+                          <label class="example col-md-2 col-sm-5">Course Level</label>
+                          <mat-radio-group class="col-md-10 col-sm-7" formControlName="courseLevel">
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="Y">
+                              Yes
+                            </mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="N">
+                              No
+                            </mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <section class="example-section">
+                          <label class="example col-md-2 col-sm-5">Flexible Timetable</label>
+                          <mat-radio-group class="col-md-10 col-sm-7" formControlName="flexibleTimetable">
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="Y">
+                              Yes
+                            </mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="N">
+                              No
+                            </mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <section class="example-section">
+                          <label class="example col-md-2 col-sm-5">Activated Now</label>
+                          <mat-radio-group class="col-md-10 col-sm-7" formControlName="activatedNow">
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="Y">
+                              Yes
+                            </mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="N">
+                              No
+                            </mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="avetmissInfo">
+                  <div class="row">
+                    <span class="section-heading" ><i class='fas fa-bars'></i> Avetmiss Information</span>
+                  </div>
+                  <!-- <span class="section-heading"><i class='fas fa-bars'></i>Avetmiss Information</span> -->
+                  <div class="section-content">
+                    <div class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Course Recognition</mat-label>
+                          <mat-select formControlName="avetmissCourseRecognitionId">
+                            <mat-option *ngFor="let courseRec of courseRecognition"
+                              [value]="courseRec.avetmissCourseRecognitionId">
+                              {{ courseRec.avetmissCourseRecognitionDesc }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Level of Education</mat-label>
+                          <mat-select formControlName="avetmissLevelOfEducationId">
+                            <mat-option *ngFor="let levelEdu of levelOfEducation"
+                              [value]="levelEdu.avetmissLevelOfEducationId">
+                              {{ levelEdu.avetmissLevelOfEducationDesc }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Field of Education</mat-label>
+                          <mat-select formControlName="avetmissFieldOfEducationId">
+                            <mat-option *ngFor="let fieldEdu of fieldOfEducation"
+                              [value]="fieldEdu.avetmissfieldOfEducationId">
+                              {{ fieldEdu.Descriptions }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>ANZSCO Code</mat-label>
+                          <mat-select formControlName="avetmissANZSCOId">
+                            <mat-option *ngFor="let anzsco of anzscos" [value]="anzsco.avetmissANZSCOId">
+                              {{ anzsco.avetmissANZSCOCode }} - {{ anzsco.Descriptions }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Total Nominal Hours</mat-label>
+                          <input matInput formControlName="avetmissTotalNominalHours" type="number">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-label>AVETMISS Report</mat-label>
+                        <mat-checkbox aria-label="Select All" checked="checked" formControlName="AVETMISS ">
+                          VET Flag
+                        </mat-checkbox>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="Desc">
+                  <div class="row">
+                    <span class="section-heading" ><i class='fas fa-bars'></i> Course Description</span>
+                  </div>
+                  <!-- <span class="section-heading"><i class='fas fa-bars'></i>Course Description</span> -->
+                  <div class="section-content">
+                    <div class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width">
+                          <textarea matInput formControlName="courseDescriptin"></textarea>
+                          <mat-error *ngIf="HFormGroup1.get('courseDescriptin').hasError('maxlength')">
+                            Maximum length is 500
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <button mat-raised-button color="primary">Update</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

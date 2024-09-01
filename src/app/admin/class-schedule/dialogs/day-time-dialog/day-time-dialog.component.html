@@ -1,0 +1,153 @@
+<div class="addContainer" style="width: 850px;">
+  <div class="modalHeader m-0 p-0">
+    <h3>Set Day and Time</h3>
+
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <!-- <form [formGroup]="HFormGroup1">
+                        <div class="body table-responsive classSetup">
+                            <div class="table table-striped">
+                                <div class="table-head row">
+                                    <div class="head-col-dialogdays">
+                                        <mat-checkbox aria-label="Select All" checked="checked">
+                                            Days
+                                        </mat-checkbox>
+                                    </div>
+                                    <div class="head-col-dialogtime">
+                                        <mat-form-field>
+                                            <mat-label>Start Time</mat-label>
+                                            <input matTimepicker [(ngModel)]="bStime"
+                                                [ngModelOptions]="{standalone: true}" id="timepicker-example" mode="12h"
+                                                (timeChange)="sTimeChangeHandler($event)">
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="head-col-dialogtime">
+                                        <mat-form-field>
+                                            <mat-label>End Time</mat-label>
+                                            <input matTimepicker [(ngModel)]="bEtime"
+                                                [ngModelOptions]="{standalone: true}" id="timepicker-example" mode="12h"
+                                                (timeChange)="eTimeChangeHandler($event)" [minDate]="bStime">
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                                <div formArrayName="timeArray" *ngIf="this.timeArray.length > 0">
+                                    <div *ngFor="let row of HFormGroup1.get('timeArray')['controls']; let i=index">
+                                        <div class="table-body row" [formGroupName]="i">
+                                            <div class="body-col-dialogdays">
+                                                <mat-checkbox aria-label="Select All" (click)="$event.stopPropagation()"
+                                                    checked="checked">
+                                                    {{ row.controls['dayofweek'].value }}
+                                                </mat-checkbox>
+                                            </div>
+                                            <div class="body-col-dialogtime">
+                                                <mat-form-field>
+                                                    <mat-label>Start Time</mat-label>
+                                                    <input matTimepicker formControlName="startTime"
+                                                        id="timepicker-example" mode="12h">
+                                                </mat-form-field>
+                                            </div>
+                                            <div class="body-col-dialogtime">
+                                                <mat-form-field>
+                                                    <mat-label>End Time</mat-label>
+                                                    <input matTimepicker formControlName="endTime"
+                                                        id="timepicker-example" mode="12h"
+                                                        (ngModelChange)="compareTwoTimes()">
+                                                </mat-form-field>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form> -->
+
+          <form [formGroup]="HFormGroup1">
+            <!-- <div class="row">
+              <div class="col-sm-12">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Class Time Table Name</mat-label>
+                  <input matInput formControlName="classTimetableName" required>
+                  <mat-error *ngIf="HFormGroup1.get('classTimetableName').hasError('required')"> Class Time Table is required </mat-error>
+                </mat-form-field>
+              </div>
+            </div> -->
+            <div class="all_Student">
+              <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" formArrayName="tempArray">
+                <ng-container matColumnDef="dialogRowID">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-checkbox class="white-checkbox" (change)="$event ? masterToggle() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()">
+                      <mat-label style="color: white; font-size: 15px;">Day</mat-label>
+                    </mat-checkbox>
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)" style="color: white;">
+                      <mat-label>{{row.dayOfWeek}}</mat-label>
+                    </mat-checkbox>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="sttime">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef style="font-size: 13px !important">
+                    <label style="color: white; font-size: 15px;">Set Time</label>
+                    <!-- <mat-form-field class="filter" style="width: 110px;">
+                      <mat-label style="color: white; font-size: 15px;">Start Time</mat-label>
+                      <input matTimepicker [(ngModel)]="bStime" [ngModelOptions]="{standalone: true}"
+                        id="timepicker-example" mode="12h" (timeChange)="sTimeChangeHandler($event)"
+                        class="white-cursor" style="color: white;">
+                    </mat-form-field> -->
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                    <!-- <mat-form-field class="filter" style="width: 110px;">
+                      <input matTimepicker formControlName="startTime" id="timepicker-example" mode="12h">
+                    </mat-form-field> -->
+                    <button mat-raised-button color="primary" (click)="setTime(i)">Set Time</button>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="entime">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef style="font-size: 13px !important">
+                    <label style="color: white; font-size: 15px;">Start Time - End Time</label>
+                    <!-- <mat-form-field class="filter" style="width: 110px">
+                      <mat-label style="color: white; font-size: 15px;">End Time</mat-label>
+                      <input matTimepicker [(ngModel)]="bEtime" [ngModelOptions]="{standalone: true}"
+                        id="timepicker-example" mode="12h" (timeChange)="eTimeChangeHandler($event)" [minDate]="bStime"
+                        class="white-cursor" style="color: white;">
+                    </mat-form-field> -->
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                    <!-- <mat-form-field class="filter" style="width: 110px">
+                      <input matTimepicker formControlName="endTime" id="timepicker-example" mode="12h"
+                        (ngModelChange)="compareTwoTimes()" style="color: black;">
+                    </mat-form-field> -->
+                    <label *ngIf="!row.Rows">Time has not been set yet</label>
+                    <table *ngIf="row.Rows">
+                      <tr *ngFor="let item of row.Rows; let j = index; let last = last">
+                        <td>{{ item.startTime }} - {{ item.endTime }}</td>
+                      </tr>
+                    </table>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                  [style.cursor]="'pointer'" matRipple>
+                </mat-row>
+              </mat-table>
+              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+          </form>
+          <div>
+            <button mat-raised-button color="primary" (click)="dateTimeUpdate()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

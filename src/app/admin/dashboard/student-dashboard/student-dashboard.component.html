@@ -1,0 +1,571 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix newStudent">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Student Details</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>Student's Name</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{this.fullName}}</span>
+              </div>
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>Email</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{this.email}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>Date of Birth</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span *ngIf="this.dob == 0">:&emsp;Loading...</span>
+                <span *ngIf="this.dob != 0">:&emsp;{{this.dob | date:'dd/MM/yyyy'}}</span>
+              </div>
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>Phone</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{this.phone}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>USI</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{this.usi}}</span>
+              </div>
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>USI Status</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{this.status}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>Invoiced Due Amount</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{ this.invoicedDueAmount }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>Total Amount Paid</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{ this.totalAmountPaid }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>Total Fee</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{ this.totalFee }}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 20px;">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      Personal Information
+                    </mat-expansion-panel-header>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Student's Name</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.fullName}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Email</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.email}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Alternate Email</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.student.altEmail}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Mobile</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.phone}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Country of Birth</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.cob}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Gender</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.student.gender}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>USI</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.student.usino}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>USI Status</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.status}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Prior EA</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.student.prioreducationalachievementflag}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Disability</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.student.disability}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Street Number</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.student.streetnumber}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Street Name</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.student.streetname}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Postcode</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.student.postcode}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student && this.student.stateid != null">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>State</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.getAll[0].State[this.student.stateid -
+                          1].statename}}</span>
+                      </div>
+                    </div>
+                    <div class="row" *ngIf="this.student">
+                      <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2">
+                        <span><strong>Suburb</strong></span>
+                      </div>
+                      <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
+                        <span>:&emsp;{{this.student.suburb}}</span>
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 20px;">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      Documents ({{this.documentCount}})
+                    </mat-expansion-panel-header>
+                    <div class="row" *ngIf="this.error">
+                      <span><strong>{{this.error}}</strong></span>
+                    </div>
+                    <div class="table-responsive courseIntake">
+                      <div class="materialTableHeader">
+                        <div class="row m-auto">
+                          <div class="text-end">
+                            <ul class="header-buttons">
+                              <li>
+                                <div class="icon-button-demo">
+                                  <button mat-mini-fab color="primary" (click)="addDocument()">
+                                    <mat-icon class="col-white">add</mat-icon>
+                                  </button>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <mat-table #table [dataSource]="dataSource5" matSort class="mat-cell">
+                        <ng-container matColumnDef="docName">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">Document
+                              Name</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.documentname}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="fileName">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">File
+                              Name</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.filename}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="docActions">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">Actions</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            <span>
+                              <button type="button" mat-icon-button color="primary" (click)="downloadDocument(row)">
+                                <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i>
+                              </button>
+                            </span>
+                            <button mat-icon-button class="btn-tbl-edit" title="Exclude the Document"
+                                  (click)="deleteStudentDocument(row)">
+                                  <mat-icon aria-label="Delete" style="color: red;">delete</mat-icon>
+                                </button>
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns4"></mat-header-row>
+                        <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns4;"
+                          [style.cursor]="'pointer'" matRipple>
+                        </mat-row>
+                      </mat-table>
+                      <mat-paginator #tableFivePaginator [length]="dataSource5.filteredData.length" [pageIndex]="0"
+                        [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 20px;">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      Certificate ({{this.certificateCount}})
+                    </mat-expansion-panel-header>
+                    <div class="row" *ngIf="certificateCount < 1">
+                      <span><strong>{{this.errorCertificate}}</strong></span>
+                    </div>
+                    <div class="row" *ngIf="certificateCount > 0">
+                      <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                        *ngFor="let certificate of certificates">
+                        <span>
+                          {{certificate.rowID}}.
+                          <button type="button" mat-icon-button color="primary"
+                            (click)="downloadCertificate(certificate.certificateLink)">
+                            <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i>
+                          </button>
+                          {{certificate.certificate}}
+                        </span>
+                      </div>
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12" style="padding-bottom: 20px;">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      Enrolled Courses ({{this.courseLength}})
+                    </mat-expansion-panel-header>
+                    <div class="table-responsive courseIntake">
+                      <div class="materialTableHeader">
+                        <div class="row m-auto">
+                          <div class="text-end">
+                            <ul class="header-buttons">
+                              <li>
+                                <div class="icon-button-demo">
+                                  <button mat-mini-fab color="primary" (click)="addEnrCourse()">
+                                    <mat-icon class="col-white">add</mat-icon>
+                                  </button>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                      <mat-table #table [dataSource]="dataSource1" matSort class="mat-cell">
+                        <ng-container matColumnDef="dashboardCourseName">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">Course</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.coursecode}} - {{row.coursename}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="dashboardSTD">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">Start
+                              Date</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.startdate | date }}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="dashboardEND">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">End
+                              Date</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.enddate | date }}
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                          [ngClass]="{'highlight': i == highlighter}" [style.cursor]="'pointer'" matRipple
+                          (click)="getUnits(row)">
+                        </mat-row>
+                      </mat-table>
+                      <mat-paginator #tableTwoPaginator [length]="dataSource1.filteredData.length" [pageIndex]="0"
+                        [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+                <!-- <div *ngIf="this.unitFlag" class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                                    <mat-expansion-panel>
+                                        <mat-expansion-panel-header>
+                                            Units of course "{{this.courseName}}" ({{this.unitLength}})
+                                        </mat-expansion-panel-header>
+                                        <div class="table-responsive courseIntake">
+                                            <mat-table #table [dataSource]="dataSource3" matSort class="mat-cell">
+                                                <ng-container matColumnDef="dashboardUnit">
+                                                    <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                        <mat-label
+                                                            style="color: white; font-size:15px;">Unit</mat-label></mat-header-cell>
+                                                    <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip"
+                                                        data-placement="right">
+                                                        {{row.unitcode}} - {{row.unitname}}
+                                                    </mat-cell>
+                                                </ng-container>
+                                                <ng-container matColumnDef="dashboardUnitType">
+                                                    <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                        <mat-label style="color: white; font-size:15px;">Unit
+                                                            Type</mat-label></mat-header-cell>
+                                                    <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip"
+                                                        data-placement="right">
+                                                        {{row.unittype}}
+                                                    </mat-cell>
+                                                </ng-container>
+                                                <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                                                <mat-row class="table-row"
+                                                    *matRowDef="let row;let i=index; columns: displayedColumns1;"
+                                                    [style.cursor]="'pointer'" matRipple>
+                                                </mat-row>
+                                            </mat-table>
+                                            <mat-paginator #tableOnePaginator [length]="dataSource3.filteredData.length"
+                                                [pageIndex]="0" [pageSize]="5"
+                                                [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                                        </div>
+                                    </mat-expansion-panel>
+                                </div> -->
+                <div *ngIf="this.unitFlag" class="col-xl-12 col-lg-12 col-md-12 col-sm-12"
+                  style="padding-bottom: 20px;">
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      Unit of course "{{this.courseName}}" ({{this.unitLength}})
+                    </mat-expansion-panel-header>
+                    <div class="table-responsive courseIntake">
+                      <mat-table #table [dataSource]="dataSource3" matSort class="mat-cell">
+                        <ng-container matColumnDef="dashboardUnits">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">Unit</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.unitcode}} - {{row.unitname}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="outcomeNational">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">Outcome
+                              National</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.outcomenationalname}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="outcomeSTD">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">Start
+                              Date</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.startdate | date:'mediumDate'}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="outcomeEND">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">End
+                              Date</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.enddate | date:'mediumDate'}}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="hours">
+                          <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size:15px;">Hours</mat-label></mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                            {{row.hoursattended}}
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns3"></mat-header-row>
+                        <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns3;"
+                          [style.cursor]="'pointer'" matRipple>
+                        </mat-row>
+                      </mat-table>
+                      <mat-paginator #tableOnePaginator [length]="dataSource3.filteredData.length" [pageIndex]="0"
+                        [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                    </div>
+                  </mat-expansion-panel>
+                </div>
+
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header>
+                    Communications ({{this.messageLength}})
+                  </mat-expansion-panel-header>
+                  <div class="table-responsive courseIntake">
+                    <div class="materialTableHeader">
+                      <div class="row m-auto">
+                        <div class="text-end">
+                          <ul class="header-buttons">
+                            <li>
+                              <div class="icon-button-demo">
+                                <button mat-mini-fab color="primary" (click)="newMessage()">
+                                  <mat-icon class="col-white">add</mat-icon>
+                                </button>
+                              </div>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <mat-table #table [dataSource]="dataSource2" MatSort class="mat-cell">
+                      <ng-container matColumnDef="type">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef><mat-label
+                            style="color: white; font-size:15px;">Type</mat-label></mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                          {{row.type}}
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="subject">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size:15px;">Subject</mat-label></mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                          {{row.subject}}
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="message">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size:15px;">Message</mat-label>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip">
+                          <!-- <div *ngIf="shouldShowSeeMoreButton(row.msg, row.rowID, this.flag[i])">
+                                                        <span *ngIf="!this.flag[i]">
+                                                            {{row.msg}}
+                                                        </span>
+                                                        <span *ngIf="this.flag[i]">
+                                                            {{this.shortMsg}}
+                                                        </span>
+                                                    </div> -->
+                          <span *ngIf="row.msg > 50 || !expandedRows[i]">{{row.shortMsg}}</span>
+                          <span *ngIf="row.msg < 50 || expandedRows[i]">{{row.msg}}</span>
+                          <button mat-icon-button class="see-more-button" (click)="toggleExpanded(i)">
+                            {{expandedRows[i] ? '' : 'See more'}}
+                          </button>
+                          <!-- <a href="#" *ngIf="shouldShowSeeMoreButton(row.msg)" (click)="toggleExpanded(i)" i18n>Read More</a>
+                                                    <a href="#" *ngIf="!shouldShowSeeMoreButton(row.msg)" (click)="toggleExpanded(i)" i18n>Read Less</a> -->
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="attachments">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <mat-label
+                            style="color: white; font-size:15px; padding-left: 12px;">Attachment</mat-label></mat-header-cell>
+                        <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
+                          <!-- <span *ngIf="row.email_attachment"
+                                                        style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                                        <button type="button" mat-icon-button color="primary"
+                                                            (click)="download(row.email_attachment)">
+                                                            <i class="fa fa-download"></i>
+                                                        </button>
+                                                        {{row.fileName}}<br>
+                                                    </span> -->
+                          <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            *ngIf="row.attachment">
+                            <span *ngFor="let url of row.attachment; let i = index">
+                              <button type="button" mat-icon-button color="primary" (click)="download(row.attachment)">
+                                <i class="fa fa-download"></i>
+                              </button>
+                              {{url}}<br>
+                            </span>
+                          </div>
+
+                          <!-- </div> -->
+                          <!-- {{row.attachmentUrl}} -->
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="date">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size:15px;">Date</mat-label></mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                          {{row.date}}
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="actions1">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size:15px;">Action</mat-label></mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                          <button mat-icon-button class="btn-tbl-edit" title="view detailed message"
+                            (click)="viewMail(row)">
+                            <mat-icon aria-label="Edit" class="col-white">description</mat-icon>
+                          </button>
+                        </mat-cell>
+                      </ng-container>
+                      <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+                      <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns2;"
+                        [style.cursor]="'pointer'" matRipple>
+                      </mat-row>
+                    </mat-table>
+                    <mat-paginator #tableThreePaginator [length]="dataSource2.filteredData.length" [pageIndex]="0"
+                      [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+                    </mat-paginator>
+                  </div>
+                </mat-expansion-panel>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

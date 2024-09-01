@@ -1,0 +1,473 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Dashboard</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item active">Dashboard</li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
+    <div class="row">
+      <div class="col-lg-4 col-sm-6">
+        <div class="info-box7 l-bg-purple order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20">Total Student</h6>
+            <h2 class="text-end"><i class="fas fa-users pull-left"></i><span>{{this.totalStudent}}</span></h2>
+            <!-- <p class="m-b-0">18% Higher Then Last Month</p> -->
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-lg-3 col-sm-6">
+        <div class="info-box7 l-bg-blue order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20">Total Course</h6>
+            <h2 class="text-end"><i class="fas fa-book-open pull-left"></i><span>{{this.totalCourse}}</span></h2> -->
+            <!-- <p class="m-b-0">21% Higher Then Last Month</p> -->
+          <!-- </div>
+        </div>
+      </div> -->
+      <div class="col-lg-4 col-sm-6">
+        <div class="info-box7 l-bg-green order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20">Total Units</h6>
+            <h2 class="text-end"><i class="fa fa-book pull-left"></i><span>{{this.totalUnits}}</span></h2>
+            <!-- <p class="m-b-0">37% Higher Then Last Month</p> -->
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-6">
+        <div class="info-box7 l-bg-orange order-info-box7">
+          <div class="info-box7-block">
+            <h6 class="m-b-20">Certificates</h6>
+            <h2 class="text-end"><i class="	fas fa-graduation-cap pull-left"></i><span>00</span></h2>
+            <!-- <p class="m-b-0">10% Higher Then Last Month</p> -->
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="row clearfix">
+      <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12">
+        <div class="plain-card">
+          <div class="card-inner">
+            <h6 class="tx-primary m-b-15">New Admission Report</h6>
+            <div class="row mb-2">
+              <div class="col-4">
+                <label class="font-14">Today</label>
+                <h5>105<i class="material-icons col-green">trending_up</i></h5>
+              </div>
+              <div class="col-4">
+                <label class="font-14">This Week</label>
+                <h5>425<i class="material-icons col-orange">trending_down</i></h5>
+              </div>
+              <div class="col-4">
+                <label class="font-14">This Month</label>
+                <h5>867<i class="material-icons col-green">trending_up</i></h5>
+              </div>
+            </div>
+            <div class="progress shadow-style mb-2 mt-3">
+              <div class="progress-bar l-bg-green width-per-70" role="progressbar" aria-valuenow="70" aria-valuemin="0"
+                aria-valuemax="100">70%</div>
+            </div>
+          </div>
+        </div>
+        <div class="plain-card mt-4">
+          <div class="card-inner">
+            <h6 class="tx-primary m-b-15">Fees Collection Report</h6>
+            <div class="row mb-2">
+              <div class="col-4">
+                <label class="font-14">Today</label>
+                <h5>$107<i class="material-icons col-orange">trending_down</i></h5>
+              </div>
+              <div class="col-4">
+                <label class="font-14">This Week</label>
+                <h5>$268<i class="material-icons col-green">trending_up</i></h5>
+              </div>
+              <div class="col-4">
+                <label class="font-14">This Month</label>
+                <h5>$847<i class="material-icons col-orange">trending_down</i></h5>
+              </div>
+            </div>
+            <div class="progress shadow-style mb-2 mt-3">
+              <div class="progress-bar l-bg-red width-per-50" role="progressbar" aria-valuenow="50" aria-valuemin="0"
+                aria-valuemax="100">50%</div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    <!-- area chart -->
+    <!-- <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Teacher Performance</h2>
+            <button mat-button [matMenuTriggerFor]="menu" class="header-dropdown">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Action</button>
+              <button mat-menu-item>Another action</button>
+              <button mat-menu-item>Something else here</button>
+            </mat-menu>
+          </div>
+          <div class="body">
+            <apx-chart [series]="lineChartOptions.series" [chart]="lineChartOptions.chart"
+              [xaxis]="lineChartOptions.xaxis" [stroke]="lineChartOptions.stroke" [colors]="lineChartOptions.colors"
+              [dataLabels]="lineChartOptions.dataLabels" [legend]="lineChartOptions.legend"
+              [tooltip]="lineChartOptions.tooltip" [markers]="lineChartOptions.markers" [grid]="lineChartOptions.grid"
+              [yaxis]="lineChartOptions.yaxis">
+            </apx-chart>
+          </div>
+        </div>
+      </div> -->
+    <!-- area chart -->
+    <!-- </div> -->
+    <!-- <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom: 30px">
+        <mat-expansion-panel [expanded]="panelExpanded">
+          <mat-expansion-panel-header>
+            All Course Intake Date ({{this.totalCourse}})
+          </mat-expansion-panel-header>
+          <div class="body">
+            <div class="courseIntake">
+              <mat-table #table [dataSource]="dataSource1" matSort class="mat-cell">
+                <ng-container matColumnDef="courseCode">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-form-field class="filter" floatLabel="never" style="width: 130px;">
+                      <mat-label style="color: white; font-size: 15px;">Course Code</mat-label>
+                      <input matInput [formControl]="courseCodeFilter" class="white-cursor">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                    <span [style.color]="i == highlighter ? 'white' : ''">{{row.coursecode}}</span>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="courseName">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-form-field class="filter" floatLabel="never">
+                      <mat-label style="color: white; font-size: 15px;">Course Name</mat-label>
+                      <input matInput [formControl]="courseNameFilter" class="white-cursor">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                    <span [style.color]="i == highlighter ? 'white' : ''">{{row.coursename}}</span>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="startDate">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-form-field class="filter" floatLabel="never" style="width: 130px;">
+                      <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>
+                      <input matInput [formControl]="startDateFilter" class="white-cursor" >
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                    <span [style.color]="i == highlighter ? 'white' : ''">{{row.startdate}}</span>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="endDate">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-form-field class="filter" floatLabel="never" style="width: 130px;">
+                      <mat-label style="color: white; font-size: 15px;">End Date</mat-label>
+                      <input matInput [formControl]="endDateFilter" class="white-cursor">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                    <span [style.color]="i == highlighter ? 'white' : ''">{{row.enddate}}</span>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Actions</mat-label>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button class="btn-tbl-edit" title="Edit course Intake Date"
+                      (click)="editCourseIntake(row.courseintakedateid)">
+                      <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button class="btn-tbl-edit" title="Class Schedule"
+                      (click)="classSchedule(row.courseintakedateid)">
+                      <mat-icon aria-label="Edit" class="col-white">schedule</mat-icon>
+                    </button>
+                    <button mat-icon-button class="btn-tbl-edit" title="New Student Enrollment"
+                      (click)="newStudentEnrollment(row.courseintakedateid)">
+                      <mat-icon aria-label="Edit" class="col-white">person_add</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                  [ngClass]="{'highlight': i == highlighter}" [style.cursor]="'pointer'" matRipple
+                  (click)="statuscheck(row, i)">
+                </mat-row>
+              </mat-table>
+              <mat-paginator #paginator [length]="dataSource1.filteredData.length" [pageIndex]="0" [pageSize]="5"
+                [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </div>
+    </div> -->
+    <div class="row clearfix">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <mat-expansion-panel [expanded]="panelExpanded">
+          <mat-expansion-panel-header>
+            All Students ({{this.totalStudent}})
+          </mat-expansion-panel-header>
+          <div class="body">
+            <div class="courseIntake">
+              <mat-table #table [dataSource]="dataSource" matSort #tableTwoSort="matSort" class="mat-cell">
+                <ng-container matColumnDef="bulkClientId">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef style="font-size: 13px !important;">
+                    <mat-form-field class="filter" floatLabel="never" style="width: 95px;">
+                      <mat-label style="color: white; font-size: 15px;">Client Id</mat-label>
+                      <input matInput [formControl]="clientIdFilter" class="white-cursor">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index">
+                    <span class="ml-2">{{row.clientid}}</span>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="bulkName">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef style="font-size: 13px !important;">
+                    <mat-form-field class="filter" floatLabel="never" style="width: 140px;">
+                      <mat-label style="color: white; font-size: 15px;">Name</mat-label>
+                      <input matInput [formControl]="nameFilter" class="white-cursor">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index">
+                    <span class="ml-2">{{row.firstname}}</span>
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="bulkEmail">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef style="font-size: 13px !important;">
+                    <mat-form-field class="filter" floatLabel="never" style="width: 140px;">
+                      <mat-label style="color: white; font-size: 15px;">E-mail</mat-label>
+                      <input matInput [formControl]="emailFilter" class="white-cursor">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index">
+                    <div class="row">
+                      <span>{{row.email}}</span>
+                    </div>
+                  </mat-cell>
+                </ng-container>
+                <!-- <ng-container matColumnDef="bulkCourse">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef style="font-size: 13px !important;">
+                    <mat-form-field class="filter" floatLabel="never" style="width: 297px;">
+                      <mat-label style="color: white; font-size: 15px;">Course</mat-label>
+                      <input matInput [formControl]="courseFilter" class="white-cursor">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index">
+                    <div class="row">
+                      <span>{{row.course}}</span>
+                    </div>
+                  </mat-cell>
+                </ng-container> -->
+                <!-- <ng-container matColumnDef="bulkStDate">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-form-field class="filter" floatLabel="never" style="width: 120px;">
+                      <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>
+                      <input matInput [formControl]="startDate1Filter" class="white-cursor">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index">
+                    <section class="example-section">
+                      <div class="row">
+                        <span>{{row.startdate}}</span>
+                      </div>
+                    </section>
+                  </mat-cell>
+                </ng-container> -->
+                <!-- <ng-container matColumnDef="bulkStDate">
+                  <mat-header-cell *matHeaderCellDef style="font-size: 13px !important;">
+                      <mat-label style="color: white; font-size: 15px;">Status
+                        Date</mat-label>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip" data-placement="right"
+                    title="click to view general info"> {{row.studentenrolmentdate
+                    }}
+                  </mat-cell>
+                </ng-container> -->
+                <ng-container matColumnDef="bulkEnDate">
+                  <mat-header-cell *matHeaderCellDef style="font-size: 13px !important;">
+
+                    <mat-label style="color: white; font-size: 15px;">Status</mat-label>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip" data-placement="right"
+                    title="click to view general info"> {{ row.applicationstatusname }}
+                  </mat-cell>
+                </ng-container>
+                <!-- <ng-container matColumnDef="bulkEnDate">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-form-field class="filter" floatLabel="never" style="width: 120px;">
+                      <mat-label style="color: white; font-size: 15px;">End Date</mat-label>
+                      <input matInput [formControl]="endDate1Filter" class="white-cursor">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index" class="pr-0">
+                    <section class="example-section">
+                      <div class="row">
+                        <span>{{row.enddate}}</span>
+                      </div>
+                    </section>
+                  </mat-cell>
+                </ng-container> -->
+
+                <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns1;"
+                  [style.cursor]="'pointer'" matRipple (click)="studentDashboard(row.studentid,row.studentenrolmentid)">
+                </mat-row>
+              </mat-table>
+              <mat-paginator #tableTwoPaginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
+                [pageSizeOptions]="[5, 10, 25, 100]">
+              </mat-paginator>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <!-- </div> -->
+      </div>
+    </div>
+    <!-- <div class="row">
+      <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+        <div class="card">
+          <div class="header">
+            <h2>Parents Review</h2>
+            <button mat-button [matMenuTriggerFor]="menu" class="header-dropdown">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Action</button>
+              <button mat-menu-item>Another action</button>
+              <button mat-menu-item>Something else here</button>
+            </mat-menu>
+          </div>
+          <div class="body">
+            <div class="review-block">
+              <div class="row">
+                <div class="review-img">
+                  <img src="assets/images/user/user1.jpg" alt="">
+                </div>
+                <div class="col">
+                  <h6 class="m-b-5">Alis Smith
+                    <span class="float-end m-r-10 text-muted"> a week ago</span>
+                  </h6>
+                  <i class="material-icons">star</i>
+                  <i class="material-icons">star</i>
+                  <i class="material-icons">star</i>
+                  <i class="material-icons">star_half</i>
+                  <i class="material-icons">star_border</i>
+                  <p class="m-t-15 m-b-15 text-muted">Lorem ipsum dolor sit amet, consectetur
+                    adipiscing elit. Etiam vel rutrum ex, at
+                    ornare mi. In quis scelerisque dui, eget rhoncus orci. Fusce et sodales
+                    ipsum.
+                    Nam id nunc euismod, aliquet arcu quis, mattis nisi.</p>
+                  <button mat-icon-button class="m-r-10 col-blue">
+                    <mat-icon>thumb_up</mat-icon>
+                  </button>
+                  <button mat-icon-button class="m-r-10 col-red">
+                    <mat-icon>thumb_down</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <div class="review-img">
+                  <img src="assets/images/user/user2.jpg" alt="">
+                </div>
+                <div class="col">
+                  <h6 class="m-b-5">John Dio
+                    <span class="float-end m-r-10 text-muted"> a week ago</span>
+                  </h6>
+                  <i class="material-icons">star</i>
+                  <i class="material-icons">star_half</i>
+                  <i class="material-icons">star_border</i>
+                  <i class="material-icons">star_border</i>
+                  <i class="material-icons">star_border</i>
+                  <p class="m-t-15 m-b-15 text-muted">Nam quis ligula est. Nunc sed risus non
+                    turpis tristique tempor. Ut sollicitudin
+                    faucibus magna nec gravida. Suspendisse ullamcorper justo vel porta
+                    imperdiet.
+                    Nunc nec ipsum vel augue placerat faucibus. </p>
+                  <button mat-icon-button class="m-r-10 col-blue">
+                    <mat-icon>thumb_up</mat-icon>
+                  </button>
+                  <button mat-icon-button class="m-r-10 col-red">
+                    <mat-icon>thumb_down</mat-icon>
+                  </button>
+                </div>
+              </div>
+              <div class="text-center  m-b-5">
+                <button mat-stroked-button color="primary">View all Customer Reviews</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+        <div class="card">
+          <div class="header">
+            <h2>Latest Posts</h2>
+            <button mat-button [matMenuTriggerFor]="menu" class="header-dropdown">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item>Action</button>
+              <button mat-menu-item>Another action</button>
+              <button mat-menu-item>Something else here</button>
+            </mat-menu>
+          </div>
+          <div class="body">
+            <div class="card-block">
+              <div class="row m-b-20">
+                <div class="col-auto p-r-0">
+                  <img src="assets/images/posts/post1.jpg" alt="user image" class="latest-posts-img">
+                </div>
+                <div class="col">
+                  <h6>About Something</h6>
+                  <p class="text-muted m-b-5">
+                    <i class="fa fa-play-circle-o"></i> Video | 10 minutes ago
+                  </p>
+                  <p class="text-muted ">Lorem Ipsum is simply dummy text of the.</p>
+                </div>
+              </div>
+              <div class="row m-b-20">
+                <div class="col-auto p-r-0">
+                  <img src="assets/images/posts/post2.jpg" alt="user image" class="latest-posts-img">
+                </div>
+                <div class="col">
+                  <h6>Relationship</h6>
+                  <p class="text-muted m-b-5">
+                    <i class="fa fa-play-circle-o"></i> Video | 24 minutes ago
+                  </p>
+                  <p class="text-muted ">Lorem Ipsum is simply dummy text of the.</p>
+                </div>
+              </div>
+              <div class="row m-b-20">
+                <div class="col-auto p-r-0">
+                  <img src="assets/images/posts/post3.jpg" alt="user image" class="latest-posts-img">
+                </div>
+                <div class="col">
+                  <h6>Human body</h6>
+                  <p class="text-muted m-b-5">
+                    <i class="fa fa-play-circle-o"></i> Video | 53 minutes ago
+                  </p>
+                  <p class="text-muted ">Lorem Ipsum is simply dummy text of the.</p>
+                </div>
+              </div>
+              <div class="text-center">
+                <button mat-stroked-button color="primary">View More</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</section>

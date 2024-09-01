@@ -1,0 +1,157 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix editStudent">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Edit Class Setup</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div *ngIf="error.isError" class="alert alert-danger col-3 m-auto"
+                [ngStyle]="{'display': (error.isError == true) ? 'block' : 'none'}">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ error.errorMessage }}
+              </div>
+            </div>
+            <form [formGroup]="HFormGroup1">
+              <div class="table-responsive selectedCourse">
+                <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                  <ng-container matColumnDef="addRowId">
+                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                      <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                      </mat-checkbox>
+                    </mat-header-cell>
+                    <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index">
+                      <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)">
+                      </mat-checkbox>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="addUnitCodeName">
+                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef style="font-size: 13px !important;">
+                      <mat-form-field class="filter" floatLabel="never" style=" width: 525px">
+                        <mat-label style="color: white; font-size: 15px;">Units</mat-label>
+                        <input matInput [formControl]="unitFilter" class="white-cursor">
+                      </mat-form-field>
+                    </mat-header-cell>
+                    <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                      {{row.addUnitCodeName}}
+                    </mat-cell>
+                  </ng-container>
+                  <!-- <ng-container matColumnDef="addOutcomeNational">
+                    <mat-header-cell class="pr-0" *matHeaderCellDef>
+                      <mat-label>Outcome national</mat-label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      {{row.addOutcomeNational}}
+                    </mat-cell>
+                  </ng-container> -->
+                  <ng-container matColumnDef="addStartDate">
+                    <mat-header-cell class="pr-0" *matHeaderCellDef>
+                      <mat-label>Start Date</mat-label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      {{row.addStartDate | date:'dd/MM/yyyy'}}
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="addEndDate">
+                    <mat-header-cell class="pr-0" *matHeaderCellDef>
+                      <mat-label>End Date</mat-label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                      {{row.addEndDate | date:'dd/MM/yyyy'}}
+                    </mat-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                    [style.cursor]="'pointer'" matRipple>
+                  </mat-row>
+                </mat-table>
+                <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
+                  [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>-- Course Intake Date --</mat-label>
+                    <mat-select formControlName="courseIntakeDateId" (ngModelChange)="getcouseintakedateid($event)"
+                      required>
+                      <mat-option *ngFor="let course of allCourseIntake" [value]="course.courseintakedateid">
+                        {{ course.coursecode }} - {{ course.coursename }} -- Start Date: {{ course.startdate |
+                        date:'dd/MM/yyyy' }} -- End Date: {{ course.enddate | date:'dd/MM/yyyy' }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="table-responsive selectedCourse" *ngIf="this.getUnitsFromClasssetup">
+                <ng-container formArrayName="secondTrainingArray">
+                  <mat-table #table [dataSource]="HFormGroup1.get('secondTrainingArray').value" matSort class="mat-cell">
+                    <ng-container matColumnDef="add1RowId">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <!-- <mat-checkbox (change)="$event ? masterToggle1() : null"
+                          [checked]="selection1.hasValue() && isAllSelected1()"
+                          [indeterminate]="selection1.hasValue() && !isAllSelected1()">
+                        </mat-checkbox> -->
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index">
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection1.toggle(row) : null"
+                          [checked]="selection1.isSelected(row)">
+                        </mat-checkbox>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="add1UnitCodeName">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label>Units</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                        {{row.fullUnitName}}
+                      </mat-cell>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="add1OutcomeNational">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label>Outcome national</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row">
+                        {{row.addOutcomeNational}}
+                      </mat-cell>
+                    </ng-container> -->
+                    <ng-container matColumnDef="add1StartDate">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label>Start Date</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row">
+                        {{row.startDate | date:'dd/MM/yyyy'}}
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="add1EndDate">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label>End Date</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row">
+                        {{row.endDate | date:'dd/MM/yyyy'}}
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                    <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns1;"
+                      [style.cursor]="'pointer'" matRipple>
+                    </mat-row>
+                  </mat-table>
+                  <!-- <mat-paginator #tableTwoPaginator [length]="dataSource1.filteredData.length" [pageIndex]="0"
+                  [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator> -->
+                </ng-container>
+              </div>
+              <div>
+                <button mat-raised-button class="msr-5" color="primary"
+                    (click)="onAdditionalOutcomeSubmit()">Update</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

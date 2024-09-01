@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>USI VERIFICATION</h1>
+<div mat-dialog-content>
+  <textarea matInput cdkTextareaAutosize disabled>{{usiDetails}}</textarea>
+  <!-- {{usiDetails}} -->
+</div>
+<!-- <mat-error *ngIf="usiDetails==null">
+  Data not matched.
+</mat-error> -->
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" >Ok</button>
+</div>

@@ -1,0 +1,36 @@
+<div class="addContainer" style="width: 850px;">
+  <div class="modalHeader m-0 p-0">
+    <h3>Infinite Rolling Class Start Date</h3>
+
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <!-- <div mat-dialog-content> -->
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <form [formGroup]="HFormGroup1">
+            <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Start Date</mat-label>
+                  <input matInput [matDatepicker]="iRCDDatepicker" formControlName="startDate" required>
+                  <mat-datepicker-toggle matSuffix [for]="iRCDDatepicker">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #iRCDDatepicker></mat-datepicker>
+                  <mat-error *ngIf="HFormGroup1.get('startDate').hasError('required')">
+                    Please select start date
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </form>
+          <div>
+            <button mat-raised-button color="primary" (click)="setRollingClassStartDate()">Next</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- </div> -->
+</div>

@@ -1,0 +1,187 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style pb-0">
+            <li class="breadcrumb-item">
+              <h4 class="page-title mb-0">All Courses</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Courses</a>
+            </li>
+            <li class="breadcrumb-item active">All</li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+          <div class="col-12">
+            <ul class="header-buttons float-end d-inline-flex mb-0">
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="addNew()">
+                    <mat-icon class="col-white">add</mat-icon>
+                  </button>
+                </div>
+              </li>
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="refresh()">
+                    <mat-icon class="col-white">refresh
+                    </mat-icon>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="body all-course">
+            <mat-sidenav-container class="task-container">
+              <mat-sidenav #sidenav [mode]="mode.value" position="end">
+                <div class="data-container">
+                  <div class="header">
+                    <h2 class="header-title">Course Units</h2>
+                    <div class="header-close m-l-0">
+                      <div class="icon-button-demo">
+                        <button mat-mini-fab color="primary" (click)="addCourseUnit(this.courseId)">
+                          <mat-icon class="col-white">add</mat-icon>
+                        </button>
+                      </div>
+                      <button mat-icon-button (click)="closeSlider(sidenav)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row m-0">
+                    <div class="body table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th class="unitCode">Unit Code</th>
+                            <th class="unitName">Unit Name</th>
+                            <th class="action">Actions</th>
+                          </tr>
+                        </thead>
+                        <p class="m-auto text-center" *ngIf="courseUnits">{{courseUnits.msg}}</p>
+                        <tbody *ngIf="courseUnits?.length >= 0 && courseUnits && courseUnits?.length">
+                          <tr *ngFor="let courseUn of courseUnits">
+                            <td class="unitCode">{{courseUn.unitcode}}</td>
+                            <td class="unitName">{{courseUn.unitname}}</td>
+                            <td class="action">
+                              <button mat-icon-button class="edit" (click)="editCourseUnit(courseUn.courseid)"
+                                aria-label="Example icon button with a vertical three dot icon">
+                                <mat-icon class="col-white">edit</mat-icon>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </mat-sidenav>
+              <mat-sidenav-content>
+                <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3">
+                      <mat-label style="color: rgb(10, 9, 9); font-size: 17px;">Course Code</mat-label>
+                      <input matInput [formControl]="courseCode" (ngModelChange)="courseCodeChange($event)"
+                        oninput="this.value = this.value.toUpperCase()">
+                    </mat-form-field>
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2 text-center">
+                    <button type='button' mat-raised-button color="primary"
+                      style="padding-top: 10px; padding-bottom: 10px;" (click)="addCourseFromTrainingGov()">Course from
+                      taining.gov.au</button>
+                  </div>
+                </div>
+                <div class="table-responsive courses">
+                  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                    <ng-container matColumnDef="courseCode">
+                      <mat-header-cell *matHeaderCellDef>
+                        <div class="searchcolumn">
+                          <mat-form-field class="filter" floatLabel="never">
+                            <mat-label style="color: white; font-size: 15px;">Course Code</mat-label>
+                            <input matInput [formControl]="courseCodeFilter" class="white-cursor">
+                          </mat-form-field>
+                        </div>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
+                        data-placement="right" title="click to view course info">{{row.coursecode}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="courseName">
+                      <mat-header-cell *matHeaderCellDef>
+                        <mat-form-field class="filter" floatLabel="never">
+                          <mat-label style="color: white; font-size: 15px;">Course Name</mat-label>
+                          <input matInput [formControl]="courseNameFilter" class="white-cursor">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
+                        data-placement="right" title="click to view course info"> {{row.coursename}}
+                      </mat-cell>
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="actions">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Actions</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                        <button mat-icon-button class="btn-tbl-edit" title="Edit Info"
+                          (click)="editCourrse(row.courseid)">
+                          <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                        </button>
+                        <button mat-icon-button class="btn-tbl-edit" title="Show Units"
+                          (click)="taskClick(i, row.courseid, sidenav)">
+                          <span class="material-icons-outlined" style="
+                          font-size: 19px;
+                          color: white;
+                      ">fact_check</span>
+                        </button>
+                        <button mat-icon-button class="btn-tbl-edit" title="Edit Units"
+                          (click)="editCourseUnit(row.courseid)">
+                          <span class="material-icons" style="
+                          font-size: 19px;
+                          color: white;
+                      ">edit_document</span>
+                        </button>
+                        <button mat-icon-button class="btn-tbl-edit" title="Bulk Set Hours"
+                          (click)="setBulkHours(row.courseid)">
+                          <span class="material-icons" style="
+                          font-size: 19px;
+                          color: white;
+                      ">hourglass_full</span>
+                        </button>
+                        <button mat-icon-button class="btn-tbl-edit" title="New Courese Intake Date"
+                          (click)="newCourseIntake(row.courseid)">
+                          <mat-icon aria-label="Add" class="col-white" style="
+                        font-size: 19px;
+                        color: white;
+                    ">add</mat-icon>
+                        </button>
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"> </mat-header-row>
+                    <mat-row class="table-row" [class.focus]="highlighter === i" tabindex="1"
+                      *matRowDef="let row;let i=index; columns: displayedColumns;" [style.cursor]="'pointer'"
+                      matRipple></mat-row>
+                  </mat-table>
+                  <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </div>
+              </mat-sidenav-content>
+            </mat-sidenav-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

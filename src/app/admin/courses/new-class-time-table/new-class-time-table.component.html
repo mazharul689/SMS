@@ -1,0 +1,99 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix editCourseIntake">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>New Class Time Table</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div *ngIf="errorsReq.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ errorsReq.errorMessage }}
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div *ngIf="requiredError2.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ requiredError2.errorMessage }}
+              </div>
+            </div> -->
+            <!-- <div class="row">
+              <div *ngIf="timeValidator.isError" class="alert alert-danger col-5 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ timeValidator.errorMessage }}
+              </div>
+            </div> -->
+            <form [formGroup]="HFormGroup1">
+              <ng-template matStepLabel>Class Time Table</ng-template>
+              <div class="mt-4">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <mat-form-field class="example-full-width mb-3">
+                      <mat-label>Time Table Name</mat-label>
+                      <input matInput formControlName="timeTableName" required>
+                      <mat-error *ngIf="HFormGroup1.get('timeTableName').hasError('required')">Time Table
+                        Name is required </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <!--code here-->
+                <div class="newCourseUnit">
+                  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" formArrayName="tempArray">
+                    <ng-container matColumnDef="dialogRowID">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-checkbox class="white-checkbox" (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+                          <mat-label style="color: white; font-size: 15px;">Day</mat-label>
+                        </mat-checkbox>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+                          style="color: white;">
+                          <mat-label>{{row.dayOfWeek}}</mat-label>
+                        </mat-checkbox>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="sttime">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef style="font-size: 13px !important">
+                        <label style="color: white; font-size: 15px;">Set Time</label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <button mat-raised-button color="primary" (click)="setTime(i)">Set Time</button>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="entime">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef style="font-size: 13px !important">
+                        <label style="color: white; font-size: 15px;">Start Time - End Time</label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <label *ngIf="!row.Rows">Time has not been set yet</label>
+                        <table *ngIf="row.Rows">
+                          <tr *ngFor="let item of row.Rows; let j = index; let last = last">
+                            <td>{{ item.startTime }} - {{ item.endTime }}</td>
+                          </tr>
+                        </table>
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                      [style.cursor]="'pointer'" matRipple>
+                    </mat-row>
+                  </mat-table>
+                  <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="100"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </div>
+                <div >
+                  <button mat-raised-button color="primary" (click)="dateTimeUpdate()">Save</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

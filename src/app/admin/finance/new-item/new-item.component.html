@@ -1,0 +1,49 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>New Item</h2>
+
+          </div>
+          <div class="body">
+            <form class="register-form m-4" [formGroup]="HFormGroup1" (ngSubmit)="onAddItem()">
+              <div class="row">
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Item Name</mat-label>
+                    <input matInput formControlName="itemName" required>
+                    <mat-icon matSuffix>label</mat-icon>
+                    <mat-error *ngIf="HFormGroup1.get('itemName').hasError('required')">
+                      Please Enter Item Name
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Default Amount</mat-label>
+                    <input matInput formControlName="defaultAmount" required>
+                    <mat-icon matSuffix>monetization_on</mat-icon>
+                    <mat-error *ngIf="HFormGroup1.get('defaultAmount').hasError('required')">
+                      Please Enter Default Ammount
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <div class="example-button-row">
+                    <button class="btn-space" [disabled]="!HFormGroup1.valid " mat-raised-button
+                      color="primary">Submit</button>
+                    <!-- <button mat-raised-button color="warn" tabindex="-1">Cancel</button> -->
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

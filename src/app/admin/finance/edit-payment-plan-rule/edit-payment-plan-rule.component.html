@@ -1,0 +1,102 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Edit Payment Plan Rule</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div *ngIf="errors.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ errors.errorMessage }}
+              </div>
+            </div>
+            <form class="register-form m-4" [formGroup]="HFormGroup1" (ngSubmit)="onPaymentPlanRuleUpdate()">
+              <div class="row">
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Amount Type</mat-label>
+                    <mat-select formControlName="amountTypeId" required>
+                      <mat-option *ngFor="let amountType of amountTypes" [value]="amountType.amounttypeid">
+                        {{ amountType.amounttype }}
+                      </mat-option>
+                    </mat-select>
+                    <!-- <mat-error *ngIf="HFormGroup1.get('amountType').hasError('required')">
+                      Course is required
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Amount</mat-label>
+                    <input matInput formControlName="amount" required>
+
+                    <!-- <mat-icon matSuffix>monetization_on</mat-icon> -->
+                    <!-- <mat-error *ngIf="HFormGroup1.get('financeModelName').hasError('required')">
+                      Please Enter Finance Model Name
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+
+              </div>
+              <div class="row">
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Rule Type</mat-label>
+                    <mat-select formControlName="ruleTypeId" (ngModelChange)="getRuleTypeId($event)"  required>
+                      <mat-option *ngFor="let ruleType of ruleTypes" [value]="ruleType.ruletypeid" >
+                        {{ ruleType.ruletype }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Payment Plan Rule Order</mat-label>
+                    <input matInput formControlName="paymentPlanRuleOrder" required>
+                    <!-- <mat-icon matSuffix>label</mat-icon> -->
+                    <!-- <mat-error *ngIf="HFormGroup1.get('tutionFee').hasError('required')">
+                      Please Enter Tution Fee
+                    </mat-error> -->
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3" *ngIf="this.isNumberCheck == 'Y'">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Total Number</mat-label>
+                    <input matInput formControlName="totalNumber" required>
+                  </mat-form-field>
+                </div>
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3" style="padding-top: 20px;">
+                  <section class="example-section">
+                    <label class="example col-xl-2 col-lg-3 col-md-3 col-sm-4">Is Active?</label>
+                    <mat-radio-group class="col-xl-10 col-lg-9 col-md-9 col-sm-8"
+                      formControlName="isactive">
+                      <mat-radio-button
+                        class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                        value="Y">Yes</mat-radio-button>
+                      <mat-radio-button
+                        class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                        value="N">No</mat-radio-button>
+                    </mat-radio-group>
+                  </section>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <div class="example-button-row">
+                    <button class="btn-space" [disabled]="!HFormGroup1.valid " mat-raised-button
+                      color="primary">Submit</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

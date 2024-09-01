@@ -1,0 +1,49 @@
+<section class="content">
+    <div class="container-fluid">
+        <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Class Schedule</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i>Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Calender</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <div class="row clearfix editCourseIntake">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>Calender</h2>
+                    </div>
+                    <div class="body">
+                        <div class="Container">
+                            <div class="navigator">
+                              <daypilot-navigator [config]="configNavigator" [events]="events" [(date)]="date" (dateChange)="changeDate($event)" #navigator></daypilot-navigator>
+                            </div>
+                            <div class="content">
+                              <div class="buttons">
+                              <button class="calenderbutton" (click)="viewDay()" [class]="this.configNavigator.selectMode == 'Day' ? 'selected' : ''">Day</button>
+                              <button class="calenderbutton" (click)="viewWeek()" [class]="this.configNavigator.selectMode == 'Week' ? 'selected' : ''">Week</button>
+                              <button class="calenderbutton" (click)="viewMonth()" [class]="this.configNavigator.selectMode == 'Month' ? 'selected' : ''">Month</button>
+                              </div>
+                      
+                              <daypilot-calendar [config]="configDay" [events]="events" #day></daypilot-calendar>
+                              <daypilot-calendar [config]="configWeek" [events]="events" #week></daypilot-calendar>
+                              <daypilot-month [config]="configMonth" [events]="events" #month></daypilot-month>
+                            </div>
+                          </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

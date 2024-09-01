@@ -1,0 +1,241 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Certificate</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                            <i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Certificate</a>
+                        </li>
+                        <li class="breadcrumb-item active">All Students</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="card">
+          <div class="body allStudent">
+            <mat-sidenav-container class="task-container">
+              <mat-sidenav #sidenav [mode]="mode.value" position="end">
+                <div class="data-container">
+                  <div class="header">
+                    <h2 class="header-title">Enrolled Courses</h2>
+                    <div class="header-close m-l-0">
+                      <div class="icon-button-demo">
+                        <button mat-mini-fab color="primary" (click)="addEnrCourse(studentId)">
+                          <mat-icon class="col-white">add</mat-icon>
+                        </button>
+                      </div>
+                      <button mat-icon-button (click)="closeSlider(sidenav)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row m-0">
+                    <div class="body table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th class="course">Course Name</th>
+                            <th class="sDate">Start Date</th>
+                            <th class="eDate">End Date</th>
+                            <th class="action">Actions</th>
+                          </tr>
+                        </thead>
+                        <p class="m-auto text-center" *ngIf="enrolledCourses">{{enrolledCourses.msg}}</p>
+                        <tbody *ngIf="enrolledCourses?.length >= 0 && enrolledCourses && enrolledCourses?.length">
+                          <tr *ngFor="let course of enrolledCourses">
+                            <td class="course">{{course.coursename}}</td>
+                            <td class="sDate">{{course.startdate}}</td>
+                            <td class="eDate">{{course.enddate}}</td>
+                            <td class="action">
+                              <button mat-icon-button class="edit" (click)="editEnrCourse(course.studentid)"
+                                aria-label="Example icon button with a vertical three dot icon">
+                                <mat-icon class="col-white">edit</mat-icon>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </mat-sidenav>
+              <mat-sidenav-content>
+                <div class="table-responsive all_Student">
+                  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                    <ng-container matColumnDef="clientId2">
+                      <mat-header-cell *matHeaderCellDef style="min-height: unset;" style="font-size: 13px !important">
+                        <div class="searchcolumn">
+                          <mat-form-field class="filter" floatLabel="never" style=" width: 70px">
+                            <mat-label style="color: white; font-size: 15px;">Client Id</mat-label>
+                            <input matInput [formControl]="clientId2Filter" class="white-cursor">
+                          </mat-form-field>
+                        </div>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
+                        data-placement="right" title="click to view general info">{{row.clientid}}</mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                      <mat-header-cell *matHeaderCellDef style="font-size: 13px !important">
+                        <mat-form-field class="filter" floatLabel="never" style=" width: 95px">
+                          <mat-label style="color: white; font-size: 15px;">Name</mat-label>
+                          <input matInput [formControl]="nameFilter" class="white-cursor">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
+                        data-placement="right" title="click to view general info">
+                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.firstname}}
+                          {{row.lastname}}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="lastName">
+                                            <mat-header-cell *matHeaderCellDef>
+                                                <mat-form-field class="filter" floatLabel="never">
+                                                    <mat-label style="color: white; font-size: 15px;">Last Name</mat-label>
+                                                    <input matInput [formControl]="lastNameFilter">
+                                                </mat-form-field>
+                                            </mat-header-cell>
+                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" title="click to view general info"> {{row.lastName}}
+                                            </mat-cell>
+                                        </ng-container> -->
+                    <ng-container matColumnDef="email2">
+                      <mat-header-cell *matHeaderCellDef style="font-size: 13px !important">
+                        <mat-form-field class="filter" floatLabel="never" style=" width: 120px">
+                          <mat-label style="color: white; font-size: 15px;">Email</mat-label>
+                          <input matInput [formControl]="email2Filter" class="white-cursor">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
+                        data-placement="right" title="click to view general info">
+                        <span
+                          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.email}}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="course">
+                      <mat-header-cell *matHeaderCellDef style="font-size: 13px !important">
+                        <mat-form-field class="filter" floatLabel="never">
+                          <mat-label style="color: white; font-size: 15px;">Course</mat-label>
+                          <input matInput [formControl]="courseFilter" class="white-cursor">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
+                        data-placement="right" title="click to view general info">
+                        <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.coursecode}}
+                          - {{row.coursename}}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="courseName">
+                                            <mat-header-cell *matHeaderCellDef>
+                                                <mat-form-field class="filter" floatLabel="never">
+                                                    <mat-label style="color: white; font-size: 15px;">Course Name</mat-label>
+                                                    <input matInput [formControl]="courseNameFilter">
+                                                </mat-form-field>
+                                            </mat-header-cell>
+                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" title="click to view general info"> {{row.courseName}}
+                                            </mat-cell>
+                                        </ng-container> -->
+                    <ng-container matColumnDef="startDate2">
+                      <mat-header-cell *matHeaderCellDef style="font-size: 13px !important">
+                        <mat-form-field class="filter" floatLabel="never" style=" width: 80px">
+                          <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>
+                          <input matInput [formControl]="startDateFilter" class="white-cursor">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
+                        data-placement="right" title="click to view general info"> {{row.startDate}}
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate2">
+                      <mat-header-cell *matHeaderCellDef style="font-size: 13px !important">
+                        <mat-form-field class="filter" floatLabel="never" style=" width: 70px">
+                          <mat-label style="color: white; font-size: 15px;">End Date</mat-label>
+                          <input matInput [formControl]="endDateFilter" class="white-cursor">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
+                        data-placement="right" title="click to view general info"> {{row.endDate}}
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="certificateType">
+                      <mat-header-cell *matHeaderCellDef style="font-size: 13px !important">
+                        <mat-form-field floatLabel="never" style=" width: 60px">
+                          <mat-label style="color: white; font-size: 15px;">Type</mat-label>
+                          <input matInput [formControl]="certificateType" readonly="true" class="white-cursor">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
+                        data-placement="right" title="click to view general info">
+                        <label *ngIf="row.certificatetype == 'C'">Certificate</label>
+                        <label *ngIf="row.certificatetype == 'S'">Statement</label>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="certificate">
+                      <mat-header-cell *matHeaderCellDef style="text-align: center;" style="font-size: 13px !important">
+                        <mat-form-field floatLabel="never">
+                          <mat-label style="color: white; font-size: 15px;">Certificate</mat-label>
+                          <input matInput [formControl]="certificate" readonly="true" class="white-cursor">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" style="text-align: center">
+                        <span *ngIf="row.certificateFlag == true"
+                          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                          <button type="button" mat-icon-button color="primary"
+                            (click)="downloadCertificate(row)">
+                            <mat-icon style="color: blue;">cloud_download</mat-icon>
+                            <!-- <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i> -->
+                          </button>
+                          Download Certificate
+                        </span>
+                        <span *ngIf="row.attainmentFlag == true"
+                          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                          <button type="button" mat-icon-button color="primary"
+                            (click)="downloadAttainment(row.studentenrolmentid)">
+                            <mat-icon style="color: blue;">cloud_download</mat-icon>
+                            <!-- <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i> -->
+                          </button>
+                          Download Attainment
+                        </span>
+                        <!-- </div> -->
+                      </mat-cell>
+                    </ng-container>
+
+                    <ng-container matColumnDef="actions2">
+                      <mat-header-cell *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Actions</mat-label>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index;">
+                        <button mat-icon-button class="btn-tbl-edit" title="Edit Info"
+                          (click)="editStudent(row.studentenrolmentid)">
+                          <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                        </button>
+                        <button mat-icon-button class="btn-tbl-edit" title="Delete Certificate"
+                          (click)="deleteCertificate(row.studentenrolmentid)">
+                          <mat-icon aria-label="Delete" style="color: red;">delete</mat-icon>
+                        </button>
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"> </mat-header-row>
+                    <mat-row class="table-row" [class.focus]="highlighter === i" tabindex="1"
+                      *matRowDef="let row;let i=index; columns: displayedColumns;" [style.cursor]="'pointer'"
+                      matRipple></mat-row>
+                  </mat-table>
+                  <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </div>
+              </mat-sidenav-content>
+            </mat-sidenav-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

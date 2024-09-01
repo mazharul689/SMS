@@ -1,0 +1,163 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ul class="breadcrumb breadcrumb-style ">
+            <li class="breadcrumb-item">
+              <h4 class="page-title">Edit Unit</h4>
+            </li>
+            <li class="breadcrumb-item bcrumb-1">
+              <a routerLink="/admin/dashboard/main">
+                <i class="fas fa-home"></i>Units</a>
+            </li>
+            <li class="breadcrumb-item bcrumb-2">
+              <a href="#" onClick="return false;">Units</a>
+            </li>
+            <li class="breadcrumb-item active">Edit</li>
+          </ul>
+        </div>
+      </div>
+    </div> -->
+    <div class="row clearfix newStudent">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Edit Unit</h2>
+          </div>
+          <div class="body">
+            <div class="container">
+              <div class="row">
+                <div *ngIf="requiredError.isError" class="alert alert-danger col-6 m-auto" id="closebtn">
+                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  <strong>Warning!</strong> {{ requiredError.errorMessage }}
+                </div>
+              </div>
+              <div class="row">
+                <div *ngIf="duplicateUniterr" class="alert alert-danger col-4 m-auto" id="closebtn">
+                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  <strong>Warning!</strong> {{ duplicateUnitErrMsg }}
+                </div>
+              </div>
+              <form [formGroup]="HFormGroup1">
+                <div class="courseInfo">
+                  <div class="row">
+                    <span class="section-heading" ><i class='fas fa-bars'></i> Unit Information</span>
+                  </div>
+                  <!-- <span class="section-heading"><i class='fas fa-bars'></i>Unit Information</span> -->
+                  <div class="section-content">
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Unit Code</mat-label>
+                          <input matInput formControlName="unitCode" type="text" readonly>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Vet Unit Code</mat-label>
+                          <input matInput formControlName="vetUnitCode" type="text" required>
+                          <mat-error *ngIf="HFormGroup1.get('vetUnitCode').hasError('required')">
+                            Vet unit code is required
+                          </mat-error>
+                          <mat-error *ngIf="HFormGroup1.get('vetUnitCode').hasError('maxlength')">
+                            Maximum length is 100
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Unit Name</mat-label>
+                          <input matInput formControlName="unitName" type="text" required>
+                          <mat-error *ngIf="HFormGroup1.get('unitName').hasError('required')">
+                            Unit Code is required
+                          </mat-error>
+                          <mat-error *ngIf="HFormGroup1.get('unitName').hasError('maxlength')">
+                            Maximum length is 100
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <section class="example-section">
+                        <label class="example col-md-2 col-sm-5">Delivery Mode</label>
+                        <mat-radio-group class="col-md-10 col-sm-7" formControlName="deliveryMode">
+                          <mat-radio-button
+                            class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                            value="I">
+                            Internal Only
+                          </mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                            value="E">
+                            External Only
+                          </mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                            value="W">
+                            Workplace-based Only
+                          </mat-radio-button>
+                        </mat-radio-group>
+                      </section>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Scheduled Nominal Hours</mat-label>
+                          <input matInput formControlName="scheduledNominalHours" type="number" required>
+                          <mat-error *ngIf="HFormGroup1.get('scheduledNominalHours').hasError('required')">
+                            Scheduled nominal hours is required
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Tution Fee</mat-label>
+                          <input matInput formControlName="tuitionFee" type="number">
+                        </mat-form-field>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <mat-form-field class="example-full-width mb-3">
+                          <mat-label>Field of Education</mat-label>
+                          <mat-select formControlName="fieldofEducationId">
+                            <mat-option *ngFor="let fieldEdu of fieldofEdu" [value]="fieldEdu.fieldOfEducationId">
+                              {{ fieldEdu.fieldOfEducationCode }} - {{ fieldEdu.Descriptions }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                        <section class="example-section">
+                          <label class="example col-md-2 col-sm-5 mb-0">Vet Flag</label>
+                          <mat-radio-group class="col-md-10 col-sm-7 mb-0" formControlName="vetFlag">
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="Y">
+                              Yes
+                            </mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="N">
+                              No
+                            </mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="d-inline-flex">
+                  <div class="mx-2">
+                    <button mat-raised-button color="primary" (click)="onUnitUpdate()">Update</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

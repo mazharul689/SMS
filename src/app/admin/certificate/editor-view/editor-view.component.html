@@ -1,0 +1,73 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix newStudent">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Certificate Preview</h2>
+          </div>
+          <div class="body" [hidden]="process">
+            <mat-stepper [linear]="isLinear" #stepper>
+              <mat-step [stepControl]="HFormGroup1">
+                <form [formGroup]="HFormGroup1" (ngSubmit)="editorSubmit(stepper)">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '1' ? 'highlight' : 'nonHighlight'">
+                      Editor View
+                    </span>
+                  </ng-template>
+                  <div class="example-boundary" style="text-align: center;" id="content" #content>
+                    <!-- <div class="image" cdkDragBoundary=".example-boundary" cdkDrag>
+                      <img src="/assets/images/certificate/KingswayLogo.png"alt="Kingsway-Logo" border="0" style="width: 124px;">
+                    </div> -->
+                    <div class="rtoLabel" cdkDragBoundary=".example-boundary" cdkDrag>
+                      RTO Code: 40993
+                    </div>
+                    <div class="certifyLabel" cdkDragBoundary=".example-boundary" cdkDrag>
+                      This is to Certify That
+                    </div>
+                    <div class="studentNameLabel" cdkDragBoundary=".example-boundary" cdkDrag>
+                      this.studentname
+                    </div>
+                    <div class="requirementLabel" cdkDragBoundary=".example-boundary" cdkDrag>
+                      Has fulfilled the requirements
+                    </div>
+                    <div class="dateLabel" cdkDragBoundary=".example-boundary" cdkDrag>
+                      Date: this.date
+                    </div>
+                    <div class="certificateNoLabel" cdkDragBoundary=".example-boundary" cdkDrag>
+                      Certificate No: this.certificateNo
+                    </div>
+                    <div class="qualificationLogo" cdkDragBoundary=".example-boundary" cdkDrag>
+                      <img src="/assets/images/certificate/australianQualificationsFramework.png" alt="Australian Qualification Framework"/>
+                    </div>
+                  </div>
+                  <div class="example-boundary" style="text-align: center;" id="content" #content>
+                  </div>
+                  <div>
+                    <button mat-raised-button color="primary">Next</button>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step [stepControl]="HFormGroup2">
+                <form [formGroup]="HFormGroup2" (ngSubmit)="onCertificateDownload(stepper)">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '2' ? 'highlight' : 'nonHighlight'">
+                      Certificate View
+                    </span>
+                  </ng-template>
+                  <div class="enrolInfo">
+                      <div [innerHTML]="this.HFormGroup1.value.editor" style="text-align: center;"></div>
+                  </div>
+                  <div>
+                    <button mat-raised-button color="primary">Download</button>
+                  </div>
+                </form>
+              </mat-step>
+
+            </mat-stepper>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

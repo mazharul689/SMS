@@ -1,0 +1,83 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix editCourseIntake">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Assign in Class</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div *ngIf="errorsReqEn.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ errorsReqEn.errorMessage }}
+              </div>
+            </div>
+            <form [formGroup]="HFormGroup1" (ngSubmit)="onEditTrainingActivity()">
+              <div class="mt-4">
+                <div class="newCourseUnit">
+                  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" formArrayName="trainingArray">
+                    <ng-container matColumnDef="rowID">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                        </mat-checkbox>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="CAunitCode">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Unit Code</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <span class="ml-2">{{row.unitCode}}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="CAunitName">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Unit Name</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <span class="ml-2">{{row.unitName}}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="CAstartDate">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <span class="ml-2">{{row.startDate}}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="CAendDate">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">End Date</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <span class="ml-2">{{row.endDate}}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                      [style.cursor]="'pointer'" matRipple>
+                    </mat-row>
+                  </mat-table>
+                  <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="100"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </div>
+              </div>
+              <div>
+                <button mat-raised-button color="primary">Update</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

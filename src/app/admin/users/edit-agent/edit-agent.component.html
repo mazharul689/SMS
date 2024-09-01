@@ -1,0 +1,197 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix editCourseIntake">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Edit Agent</h2>
+          </div>
+          <div class="body">
+            <mat-horizontal-stepper (selectionChange)="selectionChange($event)" #stepper>
+              <mat-step label="1" [stepControl]="HFormGroup1">
+                <form [formGroup]="HFormGroup1">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '1' ? 'highlight' : 'nonHighlight'">
+                      Agent's Personal Information
+                    </span>
+                  </ng-template>
+                  <div class="courseInfo">
+                    <div class="row">
+                      <span class="section-heading"><i class='fas fa-bars'></i> Agent
+                        Information</span>
+                    </div>
+                    <div class="section-content">
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Agency Name</mat-label>
+                            <input matInput formControlName="agencyName" type="text" required [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Contact Person</mat-label>
+                            <input matInput formControlName="contactPerson" type="text"  required [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Telephone</mat-label>
+                            <input matInput formControlName="telephone" type="number"  [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Mobile</mat-label>
+                            <input matInput formControlName="mobile" type="number" [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Contact Email</mat-label>
+                            <input matInput formControlName="contactEmail" type="text" required [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Accounts Email</mat-label>
+                            <input matInput formControlName="accountsEmail" type="text" required [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>ABN</mat-label>
+                            <input matInput formControlName="ABN" type="text" required [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Web URL</mat-label>
+                            <input matInput formControlName="webURL" type="text" [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Start Date</mat-label>
+                            <input matInput [matDatepicker]="basicDatepicker" formControlName="startDate" [readonly]="editable">
+                            <mat-datepicker-toggle matSuffix [for]="basicDatepicker">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #basicDatepicker [disabled]="editable"></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>End Date</mat-label>
+                            <input matInput [matDatepicker]="basicDatepicker1" formControlName="endDate" >
+                            <mat-datepicker-toggle matSuffix [for]="basicDatepicker1">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #basicDatepicker1 [disabled]="editable"></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Agent Commission Type</mat-label>
+                            <mat-select formControlName="amountTypeId">
+                              <mat-option *ngFor="let amount of allAmounts" [value]="amount.amounttypeid" [disabled]="editable">
+                                {{ amount.amounttype }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Agent Commission</mat-label>
+                            <input matInput formControlName="agentCommission" type="number"  [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <section class="example-section">
+                            <label class="example col-xl-5 col-lg-5 col-md-5 col-sm-5">GST</label>
+                            <mat-radio-group class="col-xl-8 col-lg-8 col-md-8 col-sm-8" formControlName="gst">
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="Y" [disabled]="editable">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="N" [disabled]="editable">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <section class="example-section">
+                            <label class="example col-xl-5 col-lg-5 col-md-5 col-sm-5">Is
+                              Active?</label>
+                            <mat-radio-group class="col-xl-8 col-lg-8 col-md-8 col-sm-8" formControlName="isActive">
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="Y" [disabled]="editable">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="N" [disabled]="editable">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                      </div>
+                      <div>
+                        <button mat-raised-button color="primary" class="msr-5" [disabled]="editable" (click)="updateAgent();firstEdit()">Save</button>
+                        <button type="button" mat-raised-button color="warn" (click)="firstEdit()">Edit</button>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step label="2" [stepControl]="HFormGroup2">
+                <form [formGroup]="HFormGroup2" >
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '2' ? 'highlight' : 'nonHighlight'">
+                      Agent's Document
+                    </span>
+                  </ng-template>
+                  <div class="row">
+                    <div formArrayName="docRows"
+                      *ngFor="let item of HFormGroup2.get('docRows')['controls']; let i = index;  let last = last">
+                      <div class="row" [formGroupName]="i">
+                        <div class="col-5">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Document Name</mat-label>
+                            <input matInput formControlName="agentDocumentName" [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4">
+                          <mat-form-field class="example-full-width">
+                            <ngx-mat-file-input formControlName="doc" placeholder="Choose File"
+                              (change)="fileChangeEvent($event.target.files, i)" [disabled]="editable">
+                            </ngx-mat-file-input>
+                            <mat-icon matSuffix [style.cursor]="'pointer'">cloud_upload</mat-icon>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-1" *ngIf="last">
+                          <button type="button" mat-mini-fab color="accent"
+                            aria-label="Example icon button with a plus one icon" (click)="addDocs()" [disabled]="editable">
+                            <mat-icon>plus_one</mat-icon>
+                          </button>
+                        </div>
+                        <div class="col-1">
+                          <button *ngIf="i > 0" type="button" mat-mini-fab color="warn"
+                            aria-label="Example icon button with a plus one icon" (click)="removeDocs(i)" [disabled]="editable">
+                            <mat-icon>exposure_neg_1</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button mat-raised-button color="primary" class="msr-5" (click)="onDocumentUpdate();firstEdit()" [disabled]="editable">Save</button>
+                    <button type="button" mat-raised-button color="warn" (click)="firstEdit()">Edit</button>
+                  </div>
+                </form>
+              </mat-step>
+            </mat-horizontal-stepper>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,213 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Student Attendance</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main"><i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Attendace</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <div class="card">
+            <div class="body">
+              <div class="table-responsive courses">
+                <div class="materialTableHeader">
+                  <div class="row m-auto">
+                    <div class="col-12">
+                      <form [formGroup]="HFormGroup1" (ngSubmit)="onSearch()">
+                        <div class="search row">
+                          <div class="col-sm-11">
+                            <mat-form-field class="example-full-width mr-5; black">
+                              <mat-label style="color: black;">Select Course</mat-label>
+                              <mat-select formControlName="courseIntakeDateId">
+                                <mat-option *ngFor="let courseIntake of allCourses"
+                                  [value]="courseIntake.courseintakedateid">
+                                  {{ courseIntake.coursecode }} - {{
+                                  courseIntake.coursename }} [
+                                  {{ courseIntake.startdate | date:'mediumDate' }} -
+                                  {{ courseIntake.enddate | date:'mediumDate' }} ] - Class Name:{{
+                                  courseIntake.classname }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-1" style="text-align: center;">
+                            <button mat-mini-fab color="primary">
+                              <i class="fa fa-search"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <div class="body all-course">
+
+                  <mat-sidenav-container class="task-container">
+                    <mat-sidenav #sidenav [mode]="mode.value" position="end">
+                      <div class="data-container">
+                        <div class="header">
+                          <h2 class="header-title">{{ timetablename }}</h2>
+                          <div class="header-close m-l-0">
+                            <button mat-icon-button (click)="closeSlider(sidenav)">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="row m-0">
+                          <div class="body table-responsive">
+                            <!-- <table class="table table-striped">
+                              <thead>
+                                <tr>
+                                  <th class="dayofweek">Day Of Week</th>
+                                  <th class="sttime">Start Time - End Time</th>
+                                  <th class="entime">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody *ngIf="timeTable?.length >= 0 && timeTable && timeTable?.length">
+                                <tr *ngFor="let tt of timeTable">
+                                  <th class="dayofweek" >{{tt.timearray.dayOfWeek}}</th>
+                                  <td class="endtime" >
+                                    <div *ngFor="let item of tt.timearray.Rows; let j = index; let last = last">
+                                      <label>{{ item.startTime }} - {{ item.endTime }}</label>
+                                    </div>
+                                  </td>
+                                  <td class="action">
+                                    <div *ngFor="let item of tt.timearray.Rows; let j = index; let last = last">
+                                      <button mat-icon-button class="edit" (click)="attendance(courseUn.courseid)"
+                                      aria-label="Example icon button with a vertical three dot icon">
+                                      <mat-icon class="col-white">edit</mat-icon>
+                                    </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table> -->
+                            <table class="table table-striped">
+                              <thead>
+                                <tr>
+                                  <th class="dayofweek">Day Of Week</th>
+                                  <th class="sttime">Start Time - End Time</th>
+                                  <th class="entime">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody *ngIf="timeTable?.length >= 0 && timeTable && timeTable?.length">
+                                <ng-container *ngFor="let tt of timeTable; let i = index">
+                                  <tr *ngFor="let row of tt.timearray.Rows; let j = index; let last = last">
+                                    <ng-container *ngIf="j === 0">
+                                      <th [ngClass]="{'white-bg': i % 2 === 0, 'cream-bg': i % 2 !== 0}" class="dayofweek" [attr.rowspan]="tt.timearray.Rows.length">
+                                        {{ tt.timearray.dayOfWeek }}
+                                      </th>
+                                    </ng-container>
+                                    <td class="endtime">
+                                      {{ row.startTime }} - {{ row.endTime }}
+                                    </td>
+                                    <td class="action">
+                                      <button mat-icon-button class="edit" (click)="attendance(selectedClassSetupId, selectedTimeTableNameId, row.classTimeTableId, tt.timearray.dayOfWeekId)" aria-label="Example icon button with a vertical three dot icon">
+                                        <mat-icon class="col-white">arrow_forward</mat-icon>
+                                      </button>
+                                    </td>
+                                  </tr>
+                                </ng-container>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-sidenav>
+                    <mat-sidenav-content>
+                      <div class="table-responsive courses" *ngIf="this.flag">
+                        <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                          <ng-container matColumnDef="units">
+                            <mat-header-cell *matHeaderCellDef>
+                              <div class="searchcolumn">
+                                <mat-label style="color: white; font-size: 15px;">Units</mat-label>
+                              </div>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
+                              <span>{{row.unitname}}</span>
+                            </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="startDate1">
+                            <mat-header-cell *matHeaderCellDef>
+                              <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
+                              <span>{{row.startdate}}
+                              </span>
+                            </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="endDate1">
+                            <mat-header-cell *matHeaderCellDef>
+                              <mat-label style="color: white; font-size: 15px;">End Date</mat-label>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
+                              <span>{{row.enddate}}</span>
+                            </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="trainer">
+                            <mat-header-cell *matHeaderCellDef>
+                              <mat-label style="color: white; font-size: 15px;">Trainer</mat-label>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
+                              <span>{{row.teacher}}</span>
+                            </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="assessor">
+                            <mat-header-cell *matHeaderCellDef style="text-align: center;">
+                              <mat-label style="color: white; font-size: 15px;">Assessor</mat-label>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row" data-toggle="tooltip">
+                              <span>{{row.assessor}}</span>
+                            </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="actions">
+                            <mat-header-cell class="pr-0" *matHeaderCellDef>
+                              <mat-label style="color: white; font-size: 15px;">Actions</mat-label>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                              <!-- <button mat-mini-fab color="primary" (click)="getDay(row.classtimetableid)">
+                            <mat-icon aria-label="Edit" class="col-white">arrow_forward</mat-icon>
+                          </button> -->
+                              <button mat-icon-button class="btn-tbl-edit" title="Show Units"
+                                (click)="taskClick(i, row.classsetupid, row.classtimetablenameid, row.timetablename, sidenav)">
+                                <span class="material-icons-outlined" style="font-size: 19px; color: white;">
+                                  fact_check</span>
+                              </button>
+                              <!-- <button mat-mini-fab title="Edit Attendance" (click)="editAttendance(row.classsetupid)">
+                            <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                          </button> -->
+                            </mat-cell>
+                          </ng-container>
+                          <mat-header-row *matHeaderRowDef="displayedColumns"> </mat-header-row>
+                          <mat-row class="table-row" [class.focus]="highlighter === i" tabindex="1"
+                            *matRowDef="let row;let i=index; columns: displayedColumns;" [style.cursor]="'pointer'"
+                            matRipple></mat-row>
+                        </mat-table>
+                        <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0"
+                          [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                      </div>
+                    </mat-sidenav-content>
+                  </mat-sidenav-container>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

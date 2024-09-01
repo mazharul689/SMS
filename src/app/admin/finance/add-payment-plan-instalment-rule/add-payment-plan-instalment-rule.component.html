@@ -1,0 +1,104 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Add Payment Plan Installment Rule for "{{ this.paymentPlanName }}" and Installment "{{ this.filteredItem
+              }}"</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div *ngIf="errorsReq.isError" class="col-6 alert alert-danger m-auto text-center" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ errorsReq.errorMessage }}
+              </div>
+            </div>
+            <form [formGroup]="HFormGroup1">
+              <div class="row">
+                <div formArrayName="Rows"
+                  *ngFor="let item of HFormGroup1.get('Rows')['controls']; let i = index;  let last = last">
+                  <div class="row" [formGroupName]="i">
+                    <div class="col-2">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Amount Type</mat-label>
+                        <mat-select formControlName="amountTypeId">
+                          <mat-option *ngFor="let amount of allAmounts" [value]="amount.amounttypeid">
+                            {{ amount.amounttype }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-1">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Amount</mat-label>
+                        <input matInput type="number" formControlName="amount">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-2">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Rule Type</mat-label>
+                        <mat-select formControlName="ruleTypeId" (ngModelChange)="selectedRuleType($event)">
+                          <mat-option *ngFor="let item of allRules" [value]="item.ruletypeid">
+                            {{ item.ruletype }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-1" *ngIf="this.showTotalNumber == true">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Total Number</mat-label>
+                        <input matInput type="number" formControlName="totalNumber">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-1">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Rule Order</mat-label>
+                        <input matInput type="number" formControlName="paymentPlanInstalmentRuleOrder">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-2">
+                      <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Condition</mat-label>
+                        <input matInput formControlName="paymentPlanInstalmentRuleCondition">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-2">
+                      <section class="example-section">
+                        <label class="example col-xl-5 col-lg-5 col-md-5 col-sm-5">Is
+                          Active?</label>
+                        <mat-radio-group class="col-xl-8 col-lg-8 col-md-8 col-sm-8" formControlName="isactive">
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="Y">Yes</mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="N">No</mat-radio-button>
+                        </mat-radio-group>
+                      </section>
+                    </div>
+                    <div class="col-1" style="padding-top: 7px;">
+                      <button type="button" mat-mini-fab color="accent"
+                        aria-label="Example icon button with a plus one icon" (click)="addRows()">
+                        <mat-icon>plus_one</mat-icon>
+                      </button>
+                    </div>
+                    <div class="col-1" style="padding-top:7px;">
+                      <button type="button" mat-mini-fab color="warn"
+                        aria-label="Example icon button with a plus one icon" (click)="removeRows(i)">
+                        <mat-icon>exposure_neg_1</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div>
+              <button mat-raised-button color="primary" (click)="submitRule()">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,306 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <ul class="breadcrumb breadcrumb-style ">
+              <li class="breadcrumb-item">
+                <h4 class="page-title">Edit Staff</h4>
+              </li>
+              <li class="breadcrumb-item bcrumb-1">
+                <a routerLink="/admin/dashboard/main">
+                  <i class="fas fa-home"></i> Home</a>
+              </li>
+              <li class="breadcrumb-item bcrumb-2">
+                <a href="#" onClick="return false;">Staffs</a>
+              </li>
+              <li class="breadcrumb-item active">Edit</li>
+            </ul>
+          </div>
+        </div>
+      </div> -->
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2> Staff Information</h2>
+          </div>
+          <div class="body" [hidden]="process">
+            <mat-horizontal-stepper [linear]="isLinear" #stepper>
+              <mat-step [stepControl]="HFormGroup1" completed="isCompleted">
+                <div class="row">
+                  <div *ngIf="errorsReq.isError" class="col-6 alert alert-danger m-auto text-center" id="closebtn">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ errorsReq.errorMessage }}
+                  </div>
+                </div>
+                <form [formGroup]="HFormGroup1">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '1' ? 'highlight' : 'nonHighlight'">
+                      Staff Information
+                    </span>
+                  </ng-template>
+                  <div class="personalInfo">
+                    <div class="row">
+                      <span class="section-heading"><i class='fas fa-bars'></i> Personal
+                        Information</span>
+                    </div>
+                    <div class="section-content">
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Title</mat-label>
+                            <mat-select formControlName="title">
+                              <mat-option [value]="'Mr'" [disabled]="editable">
+                                Mr.
+                              </mat-option>
+                              <mat-option [value]="'Mrs'" [disabled]="editable">
+                                Mrs.
+                              </mat-option>
+                              <mat-option [value]="'other'" [disabled]="editable">
+                                Other
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>First name</mat-label>
+                            <input matInput formControlName="firstName" required [readonly]="editable">
+                            <mat-error *ngIf="HFormGroup1.get('firstName').hasError('required')">
+                              First name is required
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('firstName').hasError('maxlength')">
+                              Maximum length is 20 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Last name</mat-label>
+                            <input matInput formControlName="lastName" required [readonly]="editable">
+                            <mat-error *ngIf="HFormGroup1.get('lastName').hasError('maxlength')">
+                              Maximum length is 20 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Country</mat-label>
+                            <mat-select formControlName="countryId">
+                              <mat-option *ngFor="let countries of getCountry" [value]="countries.countryId"
+                                [disabled]="editable">
+                                {{countries.countryName }}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('countryId').hasError('required')">
+                              Please select country of birth
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Address 1</mat-label>
+                            <input matInput formControlName="address1" required [readonly]="editable">
+                            <mat-error *ngIf="HFormGroup1.get('address1').hasError('maxlength')">
+                              Maximum length is 20 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Address 2</mat-label>
+                            <input matInput formControlName="address2" required [readonly]="editable">
+                            <mat-error *ngIf="HFormGroup1.get('address2').hasError('maxlength')">
+                              Maximum length is 20 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Postcode</mat-label>
+                            <input matInput list="postcode" (ngModelChange)="postCodeChange($event)"
+                              formControlName="postCode" required [readonly]="editable">
+                            <!-- <datalist id="postcode">
+                                <option *ngFor="let postcode of postcodes">{{postcode.postCode}} </option>
+                              </datalist> -->
+                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('required')">
+                              Postcode is required
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('minlength')">
+                              Minimum length is 4 characters
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('maxlength')">
+                              Maximum length is 4 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>State</mat-label>
+                            <input matInput formControlName="stateId" [value]="states" readonly required>
+                            <mat-error *ngIf="HFormGroup1.get('stateId').hasError('required')">
+                              State is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Suburb</mat-label>
+                            <input matInput list="suburb" formControlName="suburb" required [readonly]="editable">
+                            <datalist id="suburb">
+                              <option *ngFor="let suburb of suburbs">{{suburb.name}} </option>
+                            </datalist>
+                            <mat-error *ngIf="HFormGroup1.get('suburb').hasError('required')">
+                              Suburb is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Position Title</mat-label>
+                            <mat-select formControlName="positionTitleId">
+                              <mat-option *ngFor="let position of positionTitles" [value]="position.positiontitleid"
+                                [disabled]="editable">
+                                {{position.positionname }}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('positionTitleId').hasError('required')">
+                              Please select Position Title
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <section class="example-section" style="padding-top: 10px;">
+                            <label class="example col-xl-5 col-lg-5 col-md-5 col-sm-5">Is
+                              Active?</label>
+                            <mat-radio-group class="col-xl-8 col-lg-8 col-md-8 col-sm-8" formControlName="isactive">
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width">
+                            <ngx-mat-file-input formControlName="profilePicLoc" placeholder="Choose File"
+                              (change)="fileChangeEvent($event.target.files)" [disabled]="editable">
+                            </ngx-mat-file-input>
+                            <mat-icon matSuffix [style.cursor]="'pointer'">cloud_upload</mat-icon>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="contactInfo">
+                    <div class="row">
+                      <span class="section-heading"><i class='fas fa-bars'></i> Contact
+                        Information</span>
+                    </div>
+                    <div class="section-content">
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Email</mat-label>
+                            <input matInput formControlName="email" required [readonly]="editable">
+                            <mat-error
+                              *ngIf="HFormGroup1.get('email').hasError('required') || HFormGroup1.get('email').touched">
+                              Please enter a valid email address
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('email').hasError('maxlength')">
+                              Maximum length is 80 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Mobile Phone</mat-label>
+                            <input matInput formControlName="mobile" type="tel" [readonly]="editable">
+                            <mat-error *ngIf="HFormGroup1.get('mobile').hasError('pattern')">
+                              Must be start with '04'
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('mobile').hasError('maxlength')">
+                              Maximum length is 10 characters
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('mobile').hasError('minlength')">
+                              Minimum length is 10 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Phone Number</mat-label>
+                            <input matInput formControlName="phoneNo" type="tel" [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button mat-raised-button class="msr-5" color="primary" (click)="onStaffUpdate(stepper);firstEdit()" [disabled]="editable">Next</button>
+                    <button type="button" mat-raised-button color="warn" (click)="firstEdit()">Edit</button>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step [stepControl]="HFormGroup2">
+                <form [formGroup]="HFormGroup2">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '2' ? 'highlight' : 'nonHighlight'">
+                      Document
+                    </span>
+                  </ng-template>
+                  <div class="row">
+                    <div formArrayName="docRows"
+                      *ngFor="let item of HFormGroup2.get('docRows')['controls']; let i = index;  let last = last">
+                      <div class="row" [formGroupName]="i">
+                        <div class="col-5">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Document Name</mat-label>
+                            <input matInput formControlName="documentName" [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-4">
+                          <mat-form-field class="example-full-width">
+                            <ngx-mat-file-input formControlName="doc" placeholder="Choose File"
+                              (change)="fileChangeEvent($event.target.files, i)" [disabled]="editable">
+                            </ngx-mat-file-input>
+                            <mat-icon matSuffix [style.cursor]="'pointer'">cloud_upload</mat-icon>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-1" *ngIf="last">
+                          <button type="button" mat-mini-fab color="accent"
+                            aria-label="Example icon button with a plus one icon" (click)="addDocs()">
+                            <mat-icon>plus_one</mat-icon>
+                          </button>
+                        </div>
+                        <div class="col-1">
+                          <button *ngIf="i > 0" type="button" mat-mini-fab color="warn"
+                            aria-label="Example icon button with a plus one icon" (click)="removeDocs(i)">
+                            <mat-icon>exposure_neg_1</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button mat-raised-button class="msr-5" color="primary" (click)="onDocumentSubmit();firstEdit()" [disabled]="editable">Save</button>
+                    <button type="button" mat-raised-button color="warn" (click)="firstEdit()">Edit</button>
+                  </div>
+                </form>
+              </mat-step>
+            </mat-horizontal-stepper>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

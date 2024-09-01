@@ -1,0 +1,177 @@
+<div class="addContainer" style="width: 850px;">
+  <div class="modalHeader m-0 p-0">
+    <h3>Instalment Invoice</h3>
+
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <form [formGroup]="HFormGroup1">
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Invoice Number</mat-label>
+                  <input matInput formControlName="invoiceNumber" required>
+                </mat-form-field>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Invoice Date</mat-label>
+                  <input matInput [matDatepicker]="basicDatepicker" formControlName="invoiceDate" required>
+                  <mat-datepicker-toggle matSuffix [for]="basicDatepicker">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #basicDatepicker></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Payment Due Date</mat-label>
+                  <input matInput [matDatepicker]="basicDatepicker1" formControlName="paymentDueDate" required>
+                  <mat-datepicker-toggle matSuffix [for]="basicDatepicker1">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #basicDatepicker1></mat-datepicker>
+                </mat-form-field>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Agent</mat-label>
+                  <mat-select formControlName="agentId">
+                    <mat-option *ngFor="let agent of agents" [value]="agent.agentid">
+                      {{agent.agencyname}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Agent Commission</mat-label>
+                  <input type="number" matInput formControlName="agentCommission" required (ngModelChange)="priceChange()">
+                </mat-form-field>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Amount Type</mat-label>
+                  <mat-select formControlName="amountTypeId" (ngModelChange)="priceChange()">
+                    <mat-option *ngFor="let amount of amountTypes" [value]="amount.amounttypeid">
+                      {{amount.amounttype}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>GST (%)</mat-label>
+                  <input matInput formControlName="gst" required>
+                </mat-form-field>
+              </div> -->
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" style="padding-top : 10px">
+                <section class="example-section mb-4">
+                  <label class="example col-lg-5 col-md-4 col-sm-5">GST (%)</label>
+                  <mat-radio-group class="col-lg-7 col-md-8 col-sm-7" formControlName="gst" (ngModelChange)="priceChange()">
+                    <mat-radio-button
+                      class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block-block d-lg-inline-block"
+                      value="Y">Yes</mat-radio-button>
+                    <mat-radio-button
+                      class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                      value="N">No</mat-radio-button>
+                  </mat-radio-group>
+                </section>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Payment Desc.</mat-label>
+                  <input type="text" matInput formControlName="paymentDesc" required>
+                </mat-form-field>
+              </div>
+            </div>
+            <div formArrayName="tempData"
+              *ngFor="let item of HFormGroup1.get('tempData')['controls']; let i = index;  let last = last">
+              <div class="row" [formGroupName]="i">
+                <div class="col-7">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Item Name</mat-label>
+                    <!-- <input type="text" placeholder="Item Name" matInput formControlName="itemName"
+                      [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event, i)">
+                      <mat-option *ngFor="let item of filteredItems" [value]="item.itemname">
+                        {{ item.itemname }}
+                      </mat-option>
+                    </mat-autocomplete> -->
+                    <input type="text" placeholder="Item Name" matInput formControlName="itemName">
+                  </mat-form-field>
+                </div>
+                <!-- <div class="col-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Unit Price</mat-label>
+                    <input matInput formControlName="amount" (ngModelChange)="priceChange1(i,$event)">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Item Quantity</mat-label>
+                    <input matInput type="number" formControlName="itemQty">
+                  </mat-form-field>
+                </div> -->
+                <div class="col-3">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Amount</mat-label>
+                    <input type="number" matInput formControlName="amount" (ngModelChange)="priceChange()">
+                  </mat-form-field>
+                </div>
+                <div class="col-1" style="padding-top: 7px;">
+                  <button type="button" mat-mini-fab color="accent"
+                    aria-label="Example icon button with a plus one icon" (click)="addRows()">
+                    <mat-icon>plus_one</mat-icon>
+                  </button>
+                </div>
+                <div class="col-1" style="padding-top:7px;" *ngIf="this.data.Rowsrules.length <= i">
+                  <button type="button" mat-mini-fab color="warn" aria-label="Example icon button with a plus one icon"
+                    (click)="removeRows(i)">
+                    <mat-icon>exposure_neg_1</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7" style="text-align: right;">
+                <h4>Total amount:</h4>
+              </div>
+              <div class="col-3" style="text-align: right;">
+                <h4>{{ HFormGroup1.get('totalAmount').value | number:'1.2-2'}}</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7" style="text-align: right;">
+                <h4>Total agent commission:</h4>
+              </div>
+              <div class="col-3" style="text-align: right;">
+                <h4>{{ HFormGroup1.get('totalAgentCommission').value | number:'1.2-2'}}</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7" style="text-align: right;">
+                <h4>Total GST:</h4>
+              </div>
+              <div class="col-3" style="text-align: right;">
+                <h4>{{ HFormGroup1.get('totalGST').value | number:'1.2-2'}}</h4>
+              </div>
+            </div>
+          </form>
+          <div>
+            <button mat-raised-button color="primary" (click)="saveInstalment()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

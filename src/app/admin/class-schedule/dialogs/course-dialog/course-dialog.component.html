@@ -1,0 +1,45 @@
+<div class="addContainer" style="width: 850px;">
+  <div class="modalHeader m-0 p-0">
+    <h3>{{courseDetail.coursecode}} -  {{courseDetail.coursename}}</h3>
+    <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+  <div mat-dialog-content>
+    <div class="courseDialog">
+      <div class="row m-0">
+        <!-- <div class="dia-body">
+          <div class="gnInfo">
+            <div class="heading">
+              <h5>General Information</h5>
+              <div class="conten_detail">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <div class="row group">
+                      <div class="col-sm-4">
+                        <span class="bold">Module Delivery: </span>
+                      </div>
+                      <div class="col-sm-8">
+                        <span *ngIf="courseDetail.moduleDelivery == 'N'">No</span>
+                        <span *ngIf="courseDetail.moduleDelivery == 'Y'">Yes</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="spInfo">
+            <h5>Specific Information</h5>
+          </div>
+          <div class="avtInfo">
+            <h5>Avetmiss Information</h5>
+          </div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</div>

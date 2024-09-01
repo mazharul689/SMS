@@ -1,0 +1,354 @@
+<section class="content">
+    <div class="container-fluid">
+        <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Bulk Outcome</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i>Home</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">All Course Intake Date</a>
+                        </li>
+                        <li class="breadcrumb-item active">Outcome</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 newCourseIntake">
+                <div class="card">
+                    <div class="header">
+                        <h2>Bulk Outcome</h2>
+                    </div>
+                    <div class="body">
+                        <mat-horizontal-stepper linear #stepper>
+                            <mat-step>
+                                <form [formGroup]="HFormGroup1">
+                                    <ng-template matStepLabel>
+                                        <span [ngClass]="this.stepLabel == '1' ? 'highlight' : 'nonHighlight'">
+                                            Select Student
+                                        </span>
+                                    </ng-template>
+                                    <div class="newCourseUnit">
+                                        <mat-table #table [dataSource]="dataSource" matSort class="mat-cell"
+                                            formArrayName="Rows">
+                                            <ng-container matColumnDef="rowID">
+                                                <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                                                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                        [checked]="selection.hasValue() && isAllSelected()"
+                                                        [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                                    </mat-checkbox>
+                                                </mat-header-cell>
+                                                <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index">
+                                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                                        (change)="$event ? selection.toggle(row) : null"
+                                                        [checked]="selection.isSelected(row) || row.unitType == 'C'">
+                                                    </mat-checkbox>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="bulkClientId">
+
+                                                <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                                                    <mat-label>Client Id</mat-label>
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row; let i=index">
+                                                    <span class="ml-2">{{row.clientId}}</span>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="bulkName">
+                                                <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                    Name
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row; let i=index">
+                                                    <span class="ml-2">{{row.name}}</span>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="bulkEmail">
+                                                <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                    E-mail
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row; let i=index">
+                                                    <div class="row">
+                                                        <span>{{row.email}}</span>
+                                                    </div>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="bulkStDate">
+                                                <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                    Start Date
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row; let i=index">
+                                                    <section class="example-section">
+                                                        <div class="row">
+                                                            <span>{{row.startDate}}</span>
+                                                        </div>
+                                                    </section>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="bulkEnDate">
+                                                <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                    End Date
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row; let i=index" class="pr-0">
+                                                    <section class="example-section">
+                                                        <div class="row">
+                                                            <span>{{row.endDate}}</span>
+                                                        </div>
+                                                    </section>
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                            <mat-row class="table-row"
+                                                *matRowDef="let row;let i=index; columns: displayedColumns;"
+                                                [style.cursor]="'pointer'" matRipple>
+                                            </mat-row>
+                                        </mat-table>
+                                        <mat-paginator #TableTwoPaginator [length]="dataSource.filteredData.length"
+                                            [pageIndex]="0" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+                                        </mat-paginator>
+                                    </div>
+                                    <div class="row">
+                                        <span class="section-heading"><i class='fas fa-bars'></i>Selected
+                                            Students</span>
+                                    </div>
+                                    <div class="section-content">
+                                        <div class="mt-4">
+                                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="card">
+                                                    <div class="body table-responsive unitArray">
+                                                        <div class="table table-striped">
+                                                            <div class="table-head row">
+                                                                <div class="head-col-clientId">
+                                                                    <span style="color: #fff">
+                                                                        Client Id
+                                                                    </span>
+                                                                </div>
+                                                                <div class="head-col-name">
+                                                                    <span style="color: #fff">Name</span>
+                                                                </div>
+                                                                <div class="head-col-email">
+                                                                    <span style="color: #fff">Email</span>
+                                                                </div>
+                                                            </div>
+                                                            <div formArrayName="Rows">
+                                                                <div
+                                                                    *ngFor="let row of HFormGroup1.get('Rows')['controls']; let i=index">
+                                                                    <div *ngIf="this.sendSelectedNumbers().includes(i)"
+                                                                        class="table-body row">
+                                                                        <div class="body-col-clientId">
+                                                                            <span>{{row.get('clientId').value}}</span>
+                                                                        </div>
+                                                                        <div class="body-col-name">
+                                                                            <span>{{row.get('name').value}}</span>
+                                                                        </div>
+                                                                        <div class="body-col-email">
+                                                                            <span>{{row.get('email').value}}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <button mat-raised-button matStepperNext color="primary" (click)="selectStudent()">Next</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </mat-step>
+                            <mat-step [stepControl]="HFormGroup2" class="mt-3">
+                                <div class="row">
+                                    <div *ngIf="error.isError" class="alert alert-danger col-6 m-auto text-center"
+                                        [ngStyle]="{'display': (error.isError == true) ? 'block' : 'none'}">
+                                        <span class="closebtn"
+                                            onclick="this.parentElement.style.display='none';">&times;</span>
+                                        <strong>Warning!</strong> {{ error.errorMessage }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div *ngIf="errorsReqEn.isError" class="alert alert-danger col-6 m-auto text-center"
+                                        [ngStyle]="{'display': (errorsReqEn.isError == true) ? 'block' : 'none'}">
+                                        <span class="closebtn"
+                                            onclick="this.parentElement.style.display='none';">&times;</span>
+                                        <strong>Warning!</strong> {{ errorsReqEn.errorMessage }}
+                                    </div>
+                                </div>
+                                <!-- <div class="card"> -->
+                                <form [formGroup]="HFormGroup2">
+                                    <ng-template matStepLabel>
+                                        <span [ngClass]="this.stepLabel == '2' ? 'highlight' : 'nonHighlight'">
+                                            Training Activity
+                                        </span>
+                                    </ng-template>
+                                    <div class="mt-4">
+                                        <!-- <div class="row">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-3">
+                                                <span><strong>&emsp;Students' List for
+                                                        Outcome:</strong>&emsp;{{this.names}}</span>
+                                            </div>
+                                        </div> -->
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            <div class="card">
+                                                <div class="body table-responsive trainingAct">
+                                                    <div class="table table-striped">
+                                                        <div class="table-head row">
+                                                            <div class="head-col-unit">
+                                                                <mat-checkbox aria-label="Select All" checked="checked">
+                                                                    Units
+                                                                </mat-checkbox>
+                                                            </div>
+                                                            <div class="head-col-outc">
+                                                                <mat-form-field class="example-full-width mb-3">
+                                                                    <mat-label>Outcome National</mat-label>
+                                                                    <mat-select [(ngModel)]="outcome"
+                                                                        [ngModelOptions]="{standalone: true}"
+                                                                        (ngModelChange)="outComeChange($event)">
+                                                                        <mat-option
+                                                                            *ngFor="let outNational of outcomenational"
+                                                                            [value]="outNational.outcomenationalid">
+                                                                            {{ outNational.outcomenationalcode }} -
+                                                                            {{
+                                                                            outNational.outcomenationalname }}
+                                                                        </mat-option>
+                                                                    </mat-select>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="head-col-date">
+                                                                <mat-form-field class="example-full-width mb-3">
+                                                                    <mat-label>Start Date</mat-label>
+                                                                    <input matInput [matDatepicker]="thSdPicker"
+                                                                        (ngModelChange)="sDateChange($event)"
+                                                                        [(ngModel)]="stDate"
+                                                                        [ngModelOptions]="{standalone: true}">
+                                                                    <mat-datepicker-toggle matSuffix [for]="thSdPicker">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #thSdPicker>
+                                                                    </mat-datepicker>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="head-col-date">
+                                                                <mat-form-field class="example-full-width mb-3">
+                                                                    <mat-label>End Date</mat-label>
+                                                                    <input matInput [matDatepicker]="thEdPicker"
+                                                                        (ngModelChange)="eDateChange($event)"
+                                                                        [(ngModel)]="enDate"
+                                                                        [ngModelOptions]="{standalone: true}"
+                                                                        [min]="stDate">
+                                                                    <mat-datepicker-toggle matSuffix [for]="thEdPicker">
+                                                                    </mat-datepicker-toggle>
+                                                                    <mat-datepicker #thEdPicker>
+                                                                    </mat-datepicker>
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <!-- <div class="head-col-hr">
+                                                                <mat-form-field class="example-full-width mb-3">
+                                                                    <mat-label>Hours</mat-label>
+                                                                    <input matInput type="number" min="1" max="4"
+                                                                        (ngModelChange)="hourChange($event)"
+                                                                        [(ngModel)]="hour"
+                                                                        [ngModelOptions]="{standalone: true}">
+                                                                </mat-form-field>
+                                                            </div> -->
+                                                        </div>
+                                                        <div formArrayName="RowsTrainingActivity">
+                                                            <div
+                                                                *ngFor="let row of HFormGroup2.get('RowsTrainingActivity')['controls']; let i=index">
+                                                                <div class="table-body row" [formGroupName]="i">
+                                                                    <!-- <input type="text" name="" [attr.data-id]="row.classSetupId" hidden> -->
+                                                                    <div class="body-col-unit">
+                                                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                                                            (change)="$event ? toggle(row, $event) : null"
+                                                                            formControlName="statusCheck">
+                                                                            {{row.get('unitCode').value}} -
+                                                                            {{row.get('unitName').value }}
+                                                                        </mat-checkbox>
+                                                                    </div>
+                                                                    <div class="body-col-outc">
+                                                                        <mat-form-field class="example-full-width mb-3">
+                                                                            <mat-label>Outcome National</mat-label>
+                                                                            <mat-select
+                                                                                formControlName="outcomeNationalId"
+                                                                                [value]="outcome">
+                                                                                <mat-option
+                                                                                    *ngFor="let outNational of outcomenational"
+                                                                                    [value]="outNational.outcomenationalid">
+                                                                                    {{
+                                                                                    outNational.outcomenationalcode
+                                                                                    }} - {{
+                                                                                    outNational.outcomenationalname
+                                                                                    }}
+                                                                                </mat-option>
+                                                                            </mat-select>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="body-col-date">
+                                                                        <mat-form-field class="example-full-width mb-3">
+                                                                            <mat-label>Start Date</mat-label>
+                                                                            <input matInput [matDatepicker]="sDpicker"
+                                                                                formControlName="startDate"
+                                                                                [value]="stDate">
+                                                                            <mat-datepicker-toggle matSuffix
+                                                                                [for]="sDpicker">
+                                                                            </mat-datepicker-toggle>
+                                                                            <mat-datepicker #sDpicker>
+                                                                            </mat-datepicker>
+                                                                        </mat-form-field>
+                                                                    </div>
+                                                                    <div class="body-col-date">
+                                                                        <mat-form-field class="example-full-width mb-3">
+                                                                            <mat-label>End Date</mat-label>
+                                                                            <input matInput [matDatepicker]="eDpicker"
+                                                                                formControlName="endDate"
+                                                                                [value]="endDate"
+                                                                                (ngModelChange)="compareTwoDates()">
+                                                                            <mat-datepicker-toggle matSuffix
+                                                                                [for]="eDpicker">
+                                                                            </mat-datepicker-toggle>
+                                                                            <mat-datepicker #eDpicker>
+                                                                            </mat-datepicker>
+                                                                            <mat-error *ngIf="error.isError">{{
+                                                                                error.errorMessage }}</mat-error>
+                                                                        </mat-form-field>
+                                                                        <!-- <span *ngIf="error.isError">{{ error.errorMessage }}</span> -->
+                                                                    </div>
+                                                                    <!-- <div class="body-col-hr">
+                                                                        <mat-form-field class="example-full-width mb-3">
+                                                                            <mat-label>Hours</mat-label>
+                                                                            <input matInput
+                                                                                formControlName="hoursAttended"
+                                                                                type="number" min="1" max="4"
+                                                                                [value]="hour">
+                                                                        </mat-form-field>
+                                                                    </div> -->
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <button mat-raised-button matStepperPrevious (click)="back()"
+                                                            color="warn" class="msr-2">Back</button>
+                                                        <button mat-raised-button color="primary"
+                                                            (click)="onTrainingUpdate()">Update</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </mat-step>
+                        </mat-horizontal-stepper>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

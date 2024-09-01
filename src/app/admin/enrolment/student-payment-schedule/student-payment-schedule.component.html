@@ -1,0 +1,143 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Student Payment Schedule</h2>
+          </div>
+          <div class="body">
+            <form class="register-form m-4" [formGroup]="HFormGroup1" (ngSubmit)="onPaymentScheduleSubmit()">
+              <div class="row" *ngIf="this.mode == 'add'">
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Finance Model</mat-label>
+                    <mat-select formControlName="financeModelId" required>
+                      <mat-option *ngFor="let financemodel of allFinanceModel" [value]="financemodel.financemodelid">
+                        {{ financemodel.financemodelname }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="HFormGroup1.get('financeModelId').hasError('required')">
+                      Finance Model is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-3">
+                  <mat-form-field class="example-full-width mb-3" appearance="outline">
+                    <mat-label>Payment Plan</mat-label>
+                    <mat-select formControlName="paymentPlanId" (ngModelChange)="getPaymentPlanId($event)" required>
+                      <mat-option *ngFor="let paymentplan of allPaymentPlan" [value]="paymentplan.paymentplanid">
+                        {{ paymentplan.paymentplanname }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="HFormGroup1.get('paymentPlanId').hasError('required')">
+                      Payment Plan is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+              <!-- formsection -->
+              <div class="newCourseUnit" *ngIf="showTable || mode == 'view'">
+                <h6>Payment Plan Insatalment Condition:</h6>
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                  <ckeditor formControlName="paymentPlanInstalmentCondition" [editor]="Editor" (ready)="onReady($event)"
+                    data="Start writing...."></ckeditor>
+                </div>
+                <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" formArrayName="Rows">
+                  <ng-container matColumnDef="paymentPlanInstalmentOrder1">
+                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                      <mat-label style="color: white; font-size: 15px;">Instalment</mat-label>
+                    </mat-header-cell>
+                    <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                      <mat-label>{{row.paymentPlanInstalmentOrder}} {{row.paymentPlanInstalmentOrderDesc}}</mat-label>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="financeItemId1">
+                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                      <mat-label style="color: white; font-size: 15px;">Finance Item</mat-label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                      <table>
+                        <tr *ngFor="let item of allFinanceItem;">
+                          <td *ngIf="item.financeitemid == row.financeItemId">{{ item.itemname }}</td>
+                        </tr>
+                      </table>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="ruleType1">
+                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                      <mat-label style="color: white; font-size: 15px;">Rule Type</mat-label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                      <table>
+                        <tr *ngFor="let item of row.Rowsrules; let j = index; let last = last">
+                          <td *ngIf="item.paymentPlanInstalmentRuleCondition.length > 0">{{ item.ruletype }} ({{ item.paymentPlanInstalmentRuleCondition }})</td>
+                          <td *ngIf="item.paymentPlanInstalmentRuleCondition.length == 0">{{ item.ruletype }}</td>
+                        </tr>
+                      </table>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="spsamount1">
+                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                      <mat-label style="color: white; font-size: 15px;">Amount</mat-label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                      <table>
+                        <tr *ngFor="let item of row.Rowsrules; let j = index; let last = last">
+                          <td>${{ item.amount }}</td>
+                        </tr>
+                      </table>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="isPaid1">
+                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                      <mat-label style="color: white; font-size: 15px;">Is Paid?</mat-label>
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                      <mat-label *ngIf="row.Rowsrules[0].isPaid == 'N'">No</mat-label>
+                      <mat-label *ngIf="row.Rowsrules[0].isPaid == 'Y'">Yes</mat-label>
+                    </mat-cell>
+                  </ng-container>
+                  <ng-container matColumnDef="paymentPlanInstalmentDueDate1">
+                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                      <mat-label style="color: white; font-size: 15px;">Payment Due Date</mat-label>
+                    </mat-header-cell>
+                    <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                      <mat-form-field class="example-full-width mb-3" style="width: 180px;">
+                        <input matInput [matDatepicker]="eDpicker" formControlName="paymentPlanInstalmentDueDate">
+                        <mat-datepicker-toggle matSuffix [for]="eDpicker">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #eDpicker></mat-datepicker>
+                      </mat-form-field>
+                    </mat-cell>
+                  </ng-container>
+                  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                  <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                    [style.cursor]="'pointer'" matRipple>
+                  </mat-row>
+                </mat-table>
+                <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="100"
+                  [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+              </div>
+
+              <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <div class="example-button-row" *ngIf="this.mode == 'add'">
+                    <button class="btn-space" [disabled]="!HFormGroup1.valid " mat-raised-button
+                      color="primary">Save</button>
+                  </div>
+                  <div class="example-button-row" *ngIf="this.mode == 'view'">
+                    <!-- <button class="btn-space msr-3"  mat-raised-button
+                      color="primary">Update</button> -->
+                      <button class="btn-space"  mat-raised-button
+                      color="warn" type="button" (click)="deleteStudentPaymentSchedule()">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,158 @@
+<section class="content">
+    <div class="container-fluid">
+        <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Set Units Bulk Hour</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i>Courses</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Set Units Bulk Hour</a>
+                        </li>
+                        <li class="breadcrumb-item active">Set Hours</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 newCourseIntake">
+                <div class="card">
+                    <div class="header">
+                        <h2>Set Units Bulk Hour</h2>
+                    </div>
+                    <div class="body">
+                        <form [formGroup]="HFormGroup1">
+                            <div class="newCourseUnit">
+                                <mat-table #table [dataSource]="dataSource1" matSort class="mat-cell"
+                                    formArrayName="UnitRows">
+                                    <!-- <ng-container matColumnDef="rowID">
+                                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                [checked]="selection.hasValue() && isAllSelected()"
+                                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                (click)="onUnitSubmit()">
+                                            </mat-checkbox>
+                                        </mat-header-cell>
+                                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index"
+                                            [formGroupName]="i">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? selection.toggle(row) : null"
+                                                [checked]="selection.isSelected(row) || row.unitType == 'C'"
+                                                (click)="onUnitSubmit()">
+                                            </mat-checkbox>
+                                        </mat-cell>
+                                    </ng-container> -->
+                                    <ng-container matColumnDef="unitCode2">
+
+                                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                                            <mat-label>Unit Code</mat-label>
+                                        </mat-header-cell>
+                                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index"
+                                            [formGroupName]="i">
+                                            <span class="ml-2">{{row.unitcode}}</span>
+                                        </mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="unitName1">
+                                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                            Unit Name
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                            <input matInput type="text" name="" id="" value="{{row.unitId}}"
+                                                formControlName="unitId" hidden>
+                                            {{row.unitname}}
+                                        </mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="unitType">
+                                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                            <section class="example-section">
+                                                <div class="row">
+                                                    <span style="color: #fff">&emsp;Unit Type</span>
+                                                </div>
+                                            </section>
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                                            <section class="example-section">
+                                                <div class="row">
+                                                    <span *ngIf="row.unittype == 'C'">&emsp;Core</span>
+                                                    <span *ngIf="row.unittype == 'E'">&emsp;Elective</span>
+                                                </div>
+                                            </section>
+                                        </mat-cell>
+                                    </ng-container>
+                                    <!-- <ng-container matColumnDef="vetFlag">
+                                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                            <section class="example-section">
+                                                <div class="row">
+                                                    <span style="color: #fff">VET Flag</span>
+                                                </div>
+                                            </section>
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                                            <section class="example-section">
+                                                <div class="row">
+                                                    <span *ngIf="row.vetFlag == 'Y'">Yes</span>
+                                                    <span *ngIf="row.vetFlag == 'N'">No</span>
+                                                </div>
+                                            </section>
+                                        </mat-cell>
+                                    </ng-container>
+                                    <ng-container matColumnDef="AVETMISS ">
+                                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                            <section class="example-section">
+                                                <div class="row">
+                                                    <span style="color: #fff">AVETMISS</span>
+                                                </div>
+                                            </section>
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                                            <section class="example-section">
+                                                <div class="row">
+                                                    <span *ngIf="row.AVETMISS  == 'Y'">Yes</span>
+                                                    <span *ngIf="row.AVETMISS  == 'N'">No</span>
+                                                </div>
+                                            </section>
+                                        </mat-cell>
+                                    </ng-container> -->
+                                    <ng-container matColumnDef="scheduledNominalHours">
+                                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                <mat-form-field class="example-full-width mb-3" style="padding-top: 10px">
+                                                    <mat-label style="color: #fff">Units Bulk Nominal Hour</mat-label>
+                                                    <input matInput type="number" style="color: #fff"
+                                                        (ngModelChange)="hourChange($event)" [(ngModel)]="hour"
+                                                        [ngModelOptions]="{standalone: true}">
+                                                </mat-form-field>
+                                        </mat-header-cell>
+                                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                                            <mat-form-field class="example-full-width mb-3" style="padding-top: 10px">
+                                                <mat-label>Unit Nominal Hours</mat-label>
+                                                <input matInput formControlName="scheduledNominalHours" type="number" [value]="hour" style="color: black;">
+                                            </mat-form-field>
+                                        </mat-cell>
+                                    </ng-container>
+
+                                    <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                                    <mat-row class="table-row"
+                                        *matRowDef="let row;let i=index; columns: displayedColumns1;"
+                                        [style.cursor]="'pointer'" matRipple>
+                                    </mat-row>
+                                </mat-table>
+                                <mat-paginator #TableTwoPaginator [length]="dataSource1.filteredData.length"
+                                    [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                                </mat-paginator>
+                            </div>
+                            <div>
+                                <button mat-raised-button class="msr-5" color="primary"
+                                    (click)="onUnitUpdate()">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

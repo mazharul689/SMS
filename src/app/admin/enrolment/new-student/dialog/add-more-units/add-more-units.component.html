@@ -1,0 +1,59 @@
+<div class="addContainer" style="width: 850px;">
+    <div class="modalHeader m-0 p-0">
+        <h3>Add More Units</h3>
+
+        <button mat-icon-button (click)="dialogRef.close()" aria-label="Close dialog">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+    <div mat-dialog-content>
+        <form [formGroup]="HFormGroup1">
+            <div class="newCourseUnit">
+                <mat-table #table [dataSource]="dataSource" matSort #TableTwoSort="matSort" class="mat-cell">
+                    <ng-container matColumnDef="rowID">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="unitCode">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                            <mat-form-field class="filter" floatLabel="never">
+                                <mat-label style="color: white; font-size: 15px;">Unit Code</mat-label>
+                                <input matInput [formControl]="unitCodeFilter" class="white-cursor">
+                            </mat-form-field>
+                        </mat-header-cell>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index">
+                            <span class="ml-2">{{row.unitcode}}</span>
+                        </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="unitName">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                            <mat-label style="color: white; font-size: 15px; padding-left:20px;">Unit Name</mat-label>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index" style="padding-left: 20px;">
+                            {{row.unitname}}
+                        </mat-cell>
+                    </ng-container>
+
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                        [style.cursor]="'pointer'" matRipple>
+                    </mat-row>
+                </mat-table>
+                <mat-paginator #paginator [length]="dataSource.filter.length" [pageIndex]="0" [pageSize]="5"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+            <div>
+                <button mat-raised-button (click)="onAddUnitSubmit()" color="primary">Save</button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,78 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+          <div class="col-12">
+            <ul class="header-buttons float-end d-inline-flex mb-0">
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="addItem()">
+                    <mat-icon class="col-white">add</mat-icon>
+                  </button>
+                </div>
+              </li>
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="refresh()">
+                    <mat-icon class="col-white">refresh</mat-icon>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive units">
+              <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                <ng-container matColumnDef="itemsname">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-form-field class="filter" floatLabel="never">
+                      <mat-label style="color: white; font-size: 15px;">Item Name</mat-label>
+                      <input matInput [formControl]="itemNameFilter">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.itemname}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="defaultamount">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <!-- <mat-form-field class="filter" floatLabel="never"> -->
+                    <mat-label style="color: white; font-size: 15px;">Default Amount</mat-label>
+                    <!-- <input matInput [formControl]="firstNameFilter"> -->
+                    <!-- </mat-form-field> -->
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.defaultamount}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="financeactions">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Actions</mat-label></mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button class="btn-tbl-edit" title="Edit Info"
+                      (click)="editItem(row.financeitemid)">
+                      <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button class="btn-tbl-edit" title="Exclude the item"
+                      (click)="deleteItem(row.financeitemid)">
+                      <mat-icon aria-label="Delete" style="color: red;">delete</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                  [style.cursor]="'pointer'" matRipple>
+                </mat-row>
+              </mat-table>
+              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

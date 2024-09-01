@@ -1,0 +1,95 @@
+<section class="content">
+    <div class="container-fluid">
+        <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Unenroll Student</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/certificate/all-student">
+                                <i class="fas fa-home"></i>All Student</a>
+                        </li>
+                        <li class="breadcrumb-item active">Unenroll Student</li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <div class="row clearfix editStudent">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="header">
+                    </div>
+                    <div class="body">
+                            <ng-template matStepLabel>Certificate</ng-template>
+                            <div class="container">
+                                <div class="row">
+                                    <span class="section-heading"><i class='fas fa-bars'></i> Students
+                                        Information</span>
+                                </div>
+                                <div class="section-content">
+                                    <div class="row">
+                                        <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 mb-2">
+                                            <span><strong>Student's Name</strong></span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                            <span>:&emsp;{{this.name}}</span>
+                                        </div>
+                                        <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 mb-2">
+                                            <span><strong>Email</strong></span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                            <span>:&emsp;{{this.email}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 mb-2">
+                                            <span><strong>Phone</strong></span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" >
+                                            <span>:&emsp;{{this.phone}}</span>
+                                        </div>
+                                        <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 mb-2">
+                                            <span><strong>Gender</strong></span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" *ngIf="this.gender == 'M'">
+                                            <span>:&emsp;Male</span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" *ngIf="this.gender == 'F'">
+                                            <span>:&emsp;Female</span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" *ngIf="this.gender == 'O'">
+                                            <span>:&emsp;Others</span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" *ngIf="this.gender == '@'">
+                                            <span>:&emsp;Not Specified</span>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 mb-2">
+                                            <span><strong>Date of Birth</strong></span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                            <span *ngIf="this.dob == null">:&emsp;Loading...</span>
+                                            <span *ngIf="this.dob != null">:&emsp;{{this.dob | date:'mediumDate' }}</span>
+                                        </div>
+                                        <div class="col-xl-2 col-lg-2col-md-12 col-sm-12 mb-2">
+                                            <span><strong>Course</strong></span>
+                                        </div>
+                                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                                            <span>:&emsp;{{this.course}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <button mat-raised-button (click)="deleteStudent()" color="warn">Unenroll Student</button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

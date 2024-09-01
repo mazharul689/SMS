@@ -1,0 +1,216 @@
+<!-- <section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+          <div class="col-12">
+            <ul class="header-buttons float-end d-inline-flex mb-0">
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="addPaymentPlan()">
+                    <mat-icon class="col-white">add</mat-icon>
+                  </button>
+                </div>
+              </li>
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="refresh()">
+                    <mat-icon class="col-white">refresh</mat-icon>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive units">
+              <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                <ng-container matColumnDef="paymentplanname">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-form-field class="filter" floatLabel="never" style="width: 297px;">
+                      <mat-label style="color: white; font-size: 15px;">Payment Plan Name</mat-label>
+                      <input matInput [formControl]="paymentPlanNameFilter">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.paymentplanname}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="paymentplandesc">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Payment Plan Description</mat-label>
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.paymentplandesc}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="paymentplanactions">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Actions</mat-label></mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button class="btn-tbl-edit" title="Edit Info"
+                      (click)="editPaymentPlan(row.paymentplanid)">
+                      <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button class="btn-tbl-edit" title="Add Payment Plan Rule"
+                      (click)="newPaymentPlanRule(row.paymentplanid)">
+                      <mat-icon aria-label="Edit" class="col-white">fact_check</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                  [style.cursor]="'pointer'" matRipple>
+                </mat-row>
+              </mat-table>
+              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section> -->
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+          <div class="col-12">
+            <ul class="header-buttons float-end d-inline-flex mb-0">
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="addPaymentPlan()">
+                    <mat-icon class="col-white">add</mat-icon>
+                  </button>
+                </div>
+              </li>
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="refresh()">
+                    <mat-icon class="col-white">refresh
+                    </mat-icon>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="body all-course">
+            <mat-sidenav-container class="task-container">
+              <mat-sidenav #sidenav [mode]="mode.value" position="end">
+                <div class="data-container">
+                  <div class="header">
+                    <h2 class="header-title">Payment Plan Rule</h2>
+                    <div class="header-close m-l-0">
+                      <div class="icon-button-demo">
+                        <button mat-mini-fab color="primary" (click)="newPaymentPlanRule(this.paymentPlanId)">
+                          <mat-icon class="col-white">add</mat-icon>
+                        </button>
+                      </div>
+                      <button mat-icon-button (click)="closeSlider(sidenav)">
+                        <mat-icon>close</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="row m-0">
+                    <div class="body table-responsive">
+                      <table class="table table-striped">
+                        <thead>
+                          <tr>
+                            <th class="amount">Amount</th>
+                            <th class="amountType">Amount Type</th>
+                            <th class="ruleType">Rule Type</th>
+                            <th class="isActive">Is Active?</th>
+                            <th class="action">Actions</th>
+                          </tr>
+                        </thead>
+                        <p class="m-auto text-center" *ngIf="paymentPlanRules">{{paymentPlanRules.msg}}</p>
+                        <tbody *ngIf="paymentPlanRules?.length >= 0 && paymentPlanRules && paymentPlanRules?.length">
+                          <tr *ngFor="let ppRules of paymentPlanRules">
+                            <td class="amount">{{ppRules.amount}}</td>
+                            <td class="amountType">{{ ppRules.amounttype }}</td>
+                            <td class="ruleType">{{ ppRules.ruletype }}</td>
+                            <td class="isActive">{{ppRules.isactive}}</td>
+                            <td class="action">
+                              <button mat-icon-button class="edit"
+                                (click)="editPaymentPlanRule(ppRules.paymentplanruleid)"
+                                aria-label="Example icon button with a vertical three dot icon">
+                                <mat-icon class="col-white">edit</mat-icon>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </mat-sidenav>
+              <mat-sidenav-content>
+                <div class="table-responsive courses">
+                  <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                    <ng-container matColumnDef="paymentplanname">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-form-field class="filter" floatLabel="never" style="width: 297px;">
+                          <mat-label style="color: white; font-size: 15px;">Payment Plan Name</mat-label>
+                          <input matInput [formControl]="paymentPlanNameFilter">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                        {{row.paymentplanname}}
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="paymentplandesc">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Payment Plan Description</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                        {{row.paymentplandesc}}
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="paymentplanactions">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Actions</mat-label></mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                        <button mat-icon-button class="btn-tbl-edit" title="Edit Info"
+                          (click)="editPaymentPlan(row.paymentplanid)">
+                          <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                        </button>
+                        <button mat-icon-button class="btn-tbl-edit" title="Add/Edit Installment"
+                          (click)="addInstallment(row.paymentplanid)">
+                          <mat-icon aria-label="Add" class="col-white">add</mat-icon>
+                        </button>
+                        <!-- <button mat-icon-button class="btn-tbl-edit" title="Add Payment Plan Rule"
+                          (click)="newPaymentPlanRule(row.paymentplanid)">
+                          <mat-icon aria-label="Edit" class="col-white">fact_check</mat-icon>
+                        </button> -->
+                        <button mat-icon-button class="btn-tbl-edit" title="Show Instalments"
+                          (click)="paymentPlanInstalment(row.paymentplanid)">
+                          <span class="material-icons-outlined" style="font-size: 19px;color: white;">fact_check</span>
+                        </button>
+                        <button mat-icon-button class="btn-tbl-edit" title="Exclude the payment plan"
+                          (click)="deletePaymentPlan(row)">
+                          <mat-icon aria-label="Delete" style="color: red;">delete</mat-icon>
+                        </button>
+                      </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row class="table-row" [class.focus]="highlighter === i" tabindex="1"
+                      *matRowDef="let row;let i=index; columns: displayedColumns;" [style.cursor]="'pointer'"
+                      matRipple></mat-row>
+                  </mat-table>
+                  <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                </div>
+              </mat-sidenav-content>
+            </mat-sidenav-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

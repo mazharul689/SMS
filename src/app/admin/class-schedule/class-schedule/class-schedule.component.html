@@ -1,0 +1,274 @@
+<section class="content">
+  <div class="container-fluid">
+    <!-- <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Class Schedule</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i>All Course Intake Date</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Class Schedule</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+    <div class="row clearfix editCourseIntake">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Class Set Up</h2>
+          </div>
+          <div class="body">
+            <div class="row">
+              <div *ngIf="dateValidate2.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ dateValidate2.errorMessage }}
+              </div>
+            </div>
+            <div class="row">
+              <div *ngIf="requiredError2.isError" class="alert alert-danger col-4 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ requiredError2.errorMessage }}
+              </div>
+            </div>
+            <div class="row">
+              <div *ngIf="timeValidator.isError" class="alert alert-danger col-5 m-auto" id="closebtn">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <strong>Warning!</strong> {{ timeValidator.errorMessage }}
+              </div>
+            </div>
+            <form [formGroup]="HFormGroup1" (ngSubmit)="onClassSetupUpdate()">
+              <ng-template matStepLabel>Class Schedule</ng-template>
+              <div class="mt-4">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <mat-form-field class="example-full-width mb-3">
+                      <mat-label>Class Name</mat-label>
+                      <input matInput formControlName="className" required>
+                      <mat-error *ngIf="HFormGroup1.get('className').hasError('required')"> Batch
+                        Name is required </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <div class="card">
+                    <div class="body table-responsive classSetup">
+                      <div class="table table-striped">
+                        <div class="table-head row">
+                          <div class="head-col-units">
+                            <mat-checkbox aria-label="Select All" checked="checked">
+                              Units
+                            </mat-checkbox>
+                          </div>
+                          <div class="head-col-date">
+                            <mat-form-field class="example-full-width mb-3">
+                              <mat-label>Start Date</mat-label>
+                              <input matInput [matDatepicker]="thSdPicker" [(ngModel)]="bSdate"
+                                (ngModelChange)="sDateChange($event)" [ngModelOptions]="{standalone: true}">
+                              <mat-datepicker-toggle matSuffix [for]="thSdPicker">
+                              </mat-datepicker-toggle>
+                              <mat-datepicker #thSdPicker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <div class="head-col-date">
+                            <mat-form-field class="example-full-width mb-3">
+                              <mat-label>End Date</mat-label>
+                              <input matInput [matDatepicker]="thEdPicker" [(ngModel)]="bEdate" [min]="bSdate"
+                                (ngModelChange)="eDateChange($event)" [ngModelOptions]="{standalone: true}">
+                              <mat-datepicker-toggle matSuffix [for]="thEdPicker">
+                              </mat-datepicker-toggle>
+                              <mat-datepicker #thEdPicker></mat-datepicker>
+                            </mat-form-field>
+                          </div>
+                          <!-- <div class="head-col-time">
+                                                        <mat-form-field>
+                                                            <mat-label>Start Time</mat-label>
+                                                            <input matTimepicker [(ngModel)]="bStime"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                id="timepicker-example" mode="12h"
+                                                                (timeChange)="sTimeChangeHandler($event)">
+                                                        </mat-form-field>
+                                                    </div>
+                                                    <div class="head-col-time">
+                                                        <mat-form-field>
+                                                            <mat-label>End Time</mat-label>
+                                                            <input matTimepicker [(ngModel)]="bEtime"
+                                                                [ngModelOptions]="{standalone: true}"
+                                                                id="timepicker-example" mode="12h"
+                                                                (timeChange)="eTimeChangeHandler($event)"
+                                                                [minDate]="bStime">
+                                                        </mat-form-field>
+                                                    </div> -->
+                          <div class="head-col-days" style="padding-top: 20px;">
+                            <!-- <mat-form-field class="example-full-width mb-3">
+                                                            <mat-label>Day & Time</mat-label>
+                                                            <input matInput
+                                                                class="white-cursor" (click)="setDayTime(all)" readonly>
+                                                        </mat-form-field> -->
+                            <!-- <span class="button-like-label" (click)="setDayTime(10)"
+                                                            style="padding-top: 20px;">Day & Time</span> -->
+                            <span>Day & Time</span>
+                            <!-- <mat-form-field class="example-full-width mb-3">
+                                                          <mat-label>Days</mat-label>
+                                                          <mat-select (ngModelChange)="daysChange($event)" [(ngModel)]="bDays" [ngModelOptions]="{ standalone: true }" multiple>
+                                                            <mat-option *ngFor="let day of daysOfWeek" [value]="day.dayofweekid">
+                                                              <div class="row">
+                                                                <div class="col-sm-4">
+                                                                <span class="day-name">{{ day.dayofweek }}</span>
+                                                            </div>
+                                                                <div class="col-sm-4">
+
+                                                                <mat-form-field class="time-picker">
+                                                                  <mat-label>Start Time</mat-label>
+                                                                  <input matTimepicker [(ngModel)]="bStime"
+                                                                  [ngModelOptions]="{standalone: true}"
+                                                                  id="timepicker-example" mode="12h"
+                                                                  (timeChange)="sTimeChangeHandler($event)">                                                                </mat-form-field>
+                                                            </div>
+                                                                <div class="col-sm-4">
+
+                                                                <mat-form-field class="time-picker">
+                                                                  <mat-label>End Time</mat-label>
+                                                                  <input matTimepicker [(ngModel)]="bStime"
+                                                                  [ngModelOptions]="{standalone: true}"
+                                                                  id="timepicker-example" mode="12h"
+                                                                  (timeChange)="sTimeChangeHandler($event)">                                                                </mat-form-field>
+                                                            </div>
+                                                              </div>
+                                                            </mat-option>
+                                                          </mat-select>
+                                                        </mat-form-field> -->
+                          </div>
+                          <div class="head-col-tr">
+                            <mat-form-field class="example-full-width mb-3">
+                              <mat-label>Trainer</mat-label>
+                              <mat-select (ngModelChange)="trainerChange($event)" [(ngModel)]="bTrainer"
+                                [ngModelOptions]="{standalone: true}">
+                                <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                                  {{ position.fullname}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div class="head-col-assr">
+                            <mat-form-field class="example-full-width mb-3">
+                              <mat-label>Assessor</mat-label>
+                              <mat-select (ngModelChange)="assessorChange($event)" [(ngModel)]="bAssessor"
+                                [ngModelOptions]="{standalone: true}">
+                                <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                                  {{position.fullname}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div formArrayName="classArray1" *ngIf="selectedCourseID > 0">
+                          <div *ngFor="let row of HFormGroup1.get('classArray1')['controls']; let i=index">
+                            <div class="table-body row" [formGroupName]="i">
+                              <div class="body-col-units">
+                                <mat-checkbox aria-label="Select All" (click)="$event.stopPropagation()"
+                                  checked="checked">
+                                  {{ row.get('unitname').value }}
+                                </mat-checkbox>
+                              </div>
+                              <div class="body-col-date">
+                                <mat-form-field class="example-full-width mb-3">
+                                  <mat-label>Start Date</mat-label>
+                                  <input matInput [matDatepicker]="sDpicker" formControlName="startdate"
+                                    (ngModelChange)="compareTwoDates2()">
+                                  <mat-datepicker-toggle matSuffix [for]="sDpicker">
+                                  </mat-datepicker-toggle>
+                                  <mat-datepicker #sDpicker></mat-datepicker>
+                                </mat-form-field>
+                              </div>
+                              <div class="body-col-date">
+                                <mat-form-field class="example-full-width mb-3">
+                                  <mat-label>End Date</mat-label>
+                                  <input matInput [matDatepicker]="eDpicker" formControlName="enddate"
+                                    [min]="startdate">
+                                  <mat-datepicker-toggle matSuffix [for]="eDpicker">
+                                  </mat-datepicker-toggle>
+                                  <mat-datepicker #eDpicker></mat-datepicker>
+                                </mat-form-field>
+                              </div>
+                              <!-- <div class="body-col-time">
+                                                                <mat-form-field>
+                                                                    <mat-label>Start Time</mat-label>
+                                                                    <input matTimepicker formControlName="starttime"
+                                                                        id="timepicker-example" mode="12h">
+                                                                </mat-form-field>
+                                                            </div>
+                                                            <div class="body-col-time">
+                                                                <mat-form-field>
+                                                                    <mat-label>End Time</mat-label>
+                                                                    <input matTimepicker formControlName="endtime"
+                                                                        id="timepicker-example" mode="12h"
+                                                                        (ngModelChange)="compareTwoTimes()">
+                                                                </mat-form-field>
+                                                            </div> -->
+                              <div class="body-col-days">
+                                <!-- <mat-form-field class="example-full-width  mb-3"> -->
+                                <!-- <mat-label class="button-like-label"
+                                                                        (click)="setDayTime(i)"
+                                                                        style="padding-top: 10px; color: black; padding-left: 9px;">Day & Time</mat-label> -->
+
+                                <!-- <mat-label>Days</mat-label>
+                                                                    <mat-select formControlName="dayofweekid" multiple>
+                                                                        <mat-option *ngFor="let day of daysOfWeek"
+                                                                            [value]="day.dayofweekid">
+                                                                            {{ day.dayofweek }}
+                                                                        </mat-option>
+                                                                    </mat-select> -->
+                                <!-- </mat-form-field> -->
+                                <!-- <mat-form-field class="example-full-width mb-3">
+                                                                    <mat-label>Day & Time</mat-label>
+                                                                    <input matInput formControlName="timeArray1" (click)="setDayTime(i)" readonly>
+                                                                </mat-form-field> -->
+                                <button mat-raised-button type="button" color="primary"
+                                  (click)="setDayTime(row.get('classsetupid').value)">Day & Time</button>
+                              </div>
+                              <div class="body-col-tr">
+                                <mat-form-field class="example-full-width mb-3">
+                                  <mat-label>Trainer</mat-label>
+                                  <mat-select formControlName="teacherid">
+                                    <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                                      {{position.fullname}}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <div class="body-col-assr">
+                                <mat-form-field class="example-full-width mb-3">
+                                  <mat-label>Assessor</mat-label>
+                                  <mat-select formControlName="assessorid">
+                                    <mat-option *ngFor="let position of positions" [value]="position.staffid">
+                                      {{position.fullname}}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <!-- <button mat-raised-button matStepperPrevious color="warn" class="msr-5">Back</button> -->
+                <button mat-raised-button color="primary">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

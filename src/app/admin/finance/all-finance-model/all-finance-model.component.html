@@ -1,0 +1,71 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="row">
+          <div class="col-12">
+            <ul class="header-buttons float-end d-inline-flex mb-0">
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="addFinanceModel()">
+                    <mat-icon class="col-white">add</mat-icon>
+                  </button>
+                </div>
+              </li>
+              <li>
+                <div class="icon-button-demo">
+                  <button mat-mini-fab color="primary" (click)="refresh()">
+                    <mat-icon class="col-white">refresh</mat-icon>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="body">
+            <div class="table-responsive units">
+              <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                <ng-container matColumnDef="financemodelname">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-form-field class="filter" floatLabel="never" style="width: 297px;">
+                      <mat-label style="color: white; font-size: 15px;">Finance Model Name</mat-label>
+                      <input matInput [formControl]="financeModelNameFilter">
+                    </mat-form-field>
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.financemodelname}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="tutionfee">
+                  <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Tution Fee</mat-label>
+                  </mat-header-cell>
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                    {{row.tutionfee}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="financemodelactions">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <mat-label style="color: white; font-size: 15px;">Actions</mat-label></mat-header-cell>
+                  <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                    <button mat-icon-button class="btn-tbl-edit" title="Edit Info"
+                      (click)="editFinanceModel(row.financemodelid)">
+                      <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                  [style.cursor]="'pointer'" matRipple>
+                </mat-row>
+              </mat-table>
+              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

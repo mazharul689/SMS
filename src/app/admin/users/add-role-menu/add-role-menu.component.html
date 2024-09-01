@@ -1,0 +1,168 @@
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ul class="breadcrumb breadcrumb-style ">
+                        <li class="breadcrumb-item">
+                            <h4 class="page-title">Add Role Menu</h4>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-1">
+                            <a routerLink="/admin/dashboard/main">
+                                <i class="fas fa-home"></i>Home</a>
+                        </li>
+                        <li class="breadcrumb-item bcrumb-2">
+                            <a href="#" onClick="return false;">Role Menu</a>
+                        </li>
+                        <li class="breadcrumb-item active">Add</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row clearfix">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 menu">
+                <div class="card">
+                    <div class="header">
+                        <h2>Add Role Menu</h2>
+                    </div>
+                    <div class="body">
+                        <mat-horizontal-stepper linear #stepper>
+                            <mat-step>
+                                <!-- <ng-template matStepLabel>Select Course</ng-template> -->
+                                <ng-template matStepLabel>
+                                    <span [ngClass]="this.stepLabel == '1' ? 'highlight' : 'nonHighlight'">
+                                        Select Role
+                                    </span>
+                                </ng-template>
+                                <div class="card">
+                                    <div class="table-responsive selectedMenu">
+                                        <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                                            <ng-container matColumnDef="roleId">
+                                                <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                                                    <mat-label style="color: white; font-size: 15px;">Role Id</mat-label>
+                                                </mat-header-cell>
+                                                <mat-cell class="pr-0 mw-10" *matCellDef="let row">
+                                                    {{row.roleid}}
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="roleName">
+                                                <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                    <div class="searchcolumn">
+                                                        <mat-label style="color: white; font-size: 15px;">Role Name</mat-label>
+                                                    </div>
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row">
+                                                    {{row.rolename}}
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="actions">
+                                                <mat-header-cell class="pr-0"
+                                                    *matHeaderCellDef>
+                                                    <mat-label style="color: white; font-size: 15px;">Actions</mat-label></mat-header-cell>
+                                                <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
+                                                    <button mat-mini-fab color="primary"
+                                                        (click)="selectedRoles(row.roleid, stepper)">
+                                                        <mat-icon aria-label="Edit"
+                                                            class="col-white">arrow_forward</mat-icon>
+                                                    </button>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+                                            <mat-row class="table-row"
+                                                *matRowDef="let row;let i=index; columns: displayColumns;"
+                                                [style.cursor]="'pointer'" matRipple>
+                                            </mat-row>
+                                        </mat-table>
+                                        <mat-paginator #paginator [length]="dataSource.filteredData.length"
+                                            [pageIndex]="0" [pageSize]="10"
+                                            [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                                    </div>
+                                </div>
+                            </mat-step>
+                            <mat-step [stepControl]="HFormGroup1" class="mt-3">
+                                <!-- <div class="row pb-3">
+                                    <div *ngIf="errors.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtn">
+                                        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                        <strong>Warning!</strong> {{ errors.errorMessage }}
+                                    </div>
+                                </div> -->
+                                <div class="card">
+                                    <form [formGroup]="HFormGroup1" (ngSubmit)="onAddRoleMenuSubmit()">
+                                        <!-- <ng-template matStepLabel>Select Unit</ng-template> -->
+                                        <ng-template matStepLabel>
+                                            <span [ngClass]="this.stepLabel == '2' ? 'highlight' : 'nonHighlight'">
+                                                Select Menu
+                                            </span>
+                                        </ng-template>
+                                        <div class="menu">
+                                            <mat-table #table [dataSource]="dataSource1" matSort #tableTwoSort="matSort"
+                                                class="mat-cell" formArrayName="PreRows">
+                                                <ng-container matColumnDef="rowID">
+                                                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                                                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                                                            [checked]="selection.hasValue() && isAllSelected()"
+                                                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                                                        </mat-checkbox>
+                                                    </mat-header-cell>
+                                                    <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index"
+                                                        [formGroupName]="i">
+                                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                                            (change)="$event ? selection.toggle(row) : null"
+                                                            [checked]="selection.isSelected(row)">
+                                                        </mat-checkbox>
+                                                    </mat-cell>
+                                                </ng-container>
+                                                <ng-container matColumnDef="menuId">
+                                                    <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                                                        <mat-label style="color: white; font-size: 15px;">Menu Id</mat-label>
+                                                    </mat-header-cell>
+                                                    <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index"
+                                                        [formGroupName]="i">
+                                                        <span class="ml-2">{{row.menuId}}</span>
+                                                    </mat-cell>
+                                                </ng-container>
+                                                <ng-container matColumnDef="menuName">
+                                                    <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                        <mat-label style="color: white; font-size: 15px;">Menu Name</mat-label>
+                                                        
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                                                        <span class="ml-2">{{row.menuName}}</span>
+                                                    </mat-cell>
+                                                </ng-container>
+                                                <ng-container matColumnDef="isDisplay">
+                                                    <mat-header-cell class="pr-0" *matHeaderCellDef>
+                                                        <mat-label style="color: white; font-size: 15px;">Is Display?</mat-label>
+                                                    </mat-header-cell>
+                                                    <mat-cell *matCellDef="let row">
+                                                        <label *ngIf="row.isDisplay == '1'"
+                                                            style="text-align: center;">YES</label>
+                                                        <label *ngIf="row.isDisplay == '0'"
+                                                            style="text-align: center;">NO</label>
+                                                    </mat-cell>
+                                                </ng-container>
+                                                <mat-header-row *matHeaderRowDef="displayColumns1"></mat-header-row>
+                                                <mat-row class="table-row"
+                                                    *matRowDef="let row;let i=index; columns: displayColumns1;"
+                                                    [style.cursor]="'pointer'" matRipple>
+                                                </mat-row>
+                                            </mat-table>
+                                            <mat-paginator #tableTwoPaginator [length]="dataSource.filteredData.length"
+                                                [pageIndex]="0" [pageSize]="10"
+                                                [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                                            <div class="p-3">
+                                                <button mat-raised-button matStepperPrevious color="warn"
+                                                    class="msr-2">Back</button>
+                                                <button mat-raised-button color="primary">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </mat-step>
+                        </mat-horizontal-stepper>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
