@@ -115,6 +115,15 @@ export class AddInstallmentComponent implements OnInit {
     this.apiService.getAPI(`getpaymentplaninstalmentbypaymentplanid?id=${id}`).subscribe((data) => {
       this.instalmentData = data['data']
       if (this.instalmentData[0] && this.instalmentData[0].paymentplaninstalmentorder) {
+        this.instalmentData = this.instalmentData.sort((a, b) => {
+          if (a.paymentplaninstalmentorder > b.paymentplaninstalmentorder) {
+            return 1;
+          } else if (a.paymentplaninstalmentorder < b.paymentplaninstalmentorder) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
         this.mode = "Edit";
         this.buttonFlag = true;
         this.HFormGroup1.patchValue({

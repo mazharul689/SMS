@@ -94,6 +94,16 @@
                 </mat-form-field>
               </div>
             </div>
+
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Paid Amount</mat-label>
+                  <input type="number" matInput formControlName="paidAmount" required>
+                </mat-form-field>
+              </div>
+            </div>
+
             <div formArrayName="tempData"
               *ngFor="let item of HFormGroup1.get('tempData')['controls']; let i = index;  let last = last">
               <div class="row" [formGroupName]="i">

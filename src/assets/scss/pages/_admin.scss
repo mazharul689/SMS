@@ -414,7 +414,7 @@
 //   height: 300px;
 // }
 .ck-editor__editable_inline {
-  min-height: 300px; /* Set the initial minimum height */
+  // min-height: 300px; /* Set the initial minimum height */
   max-height: none; /* Allow the editor to grow without a maximum limit */
   overflow-y: auto; /* Ensure overflow is managed when the content grows */
 }

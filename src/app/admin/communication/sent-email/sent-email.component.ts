@@ -243,40 +243,17 @@ export class SentEmailComponent implements OnInit {
       const selectedTemplate = this.emailTemplates[index];
       const emailSubject = selectedTemplate.emailsubject;
       const emailBody = selectedTemplate.emailbody;
-  
-      // Define the data to replace the placeholders with
-      // const placeholderData = {
-      //   CurrentDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
-      //   firstname: this.students[0].firstname, // Use actual student name
-      //   coursecode: 'CS101', // Replace with actual course code if available
-      //   coursename: 'Introduction to Computer Science', // Replace with actual course name if available
-      //   commencementDate: '2024-01-01', // Replace with actual commencement date
-      //   expectedCompletionDate: '2024-12-31' // Replace with actual completion date
-      // };
-      // console.log(this.students[0])
       this.students[0].CurrentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')
-      // Replace placeholders in the email body
       const updatedMessage = this.replacePlaceholders(emailBody, this.students[0]);
-  
+      const updateMessage = this.replacePlaceholders(emailSubject, this.students[0]);
       // Update form controls with the replaced content
       this.HFormGroup1.patchValue({
-        subject: emailSubject,
-        msg: updatedMessage
+        subject: updateMessage,
+        msg: updatedMessage 
       });
     }
   }
-  replacePlaceholders(template: string, data: { [key: string]: string }): string {
-    let result = template;
   
-    // Iterate over each key-value pair in the data object
-    for (const [key, value] of Object.entries(data)) {
-      const placeholder = `{${key}}`; // Placeholder format, e.g., {StudentName}
-      const regex = new RegExp(placeholder, 'g'); // Regular expression to find all instances of the placeholder
-      result = result.replace(regex, value); // Replace placeholder with actual value
-    }
-  
-    return result;
-  }
   getStudents() {
     this.apiService.getAPI('getfromemailaddress').subscribe((data) => {
       this.fromEmails = data['data']
@@ -316,7 +293,7 @@ export class SentEmailComponent implements OnInit {
     };
   }
   onChange(event: ChangeEvent): void {
-    console.log(event.editor.getData());
+    // console.log(event.editor.getData());
     this.componentEvents.push('Editor model changed.');
   }
   onReady(editor) {
@@ -330,13 +307,13 @@ export class SentEmailComponent implements OnInit {
       if (this.selectedFiles) {
         let file: File = this.selectedFiles[i]
         this.file = file.name
-        console.log('file', file)
+        // console.log('file', file)
         let formData: FormData = new FormData();
         formData.append('inputfile', file, file.name);
         formData.append('uploadfolder', 'StudentsCommunications')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            console.log('response', data.data)
+            // console.log('response', data.data)
             if (i == this.docRows.length - 1) {
               this.docLoc += data.data.replaceAll(' ', '_')
             }
@@ -348,26 +325,46 @@ export class SentEmailComponent implements OnInit {
       }
     }
   }
+  replacePlaceholders(template: string, data: { [key: string]: string }): string {
+    let result = template;
+    // Iterate over each key-value pair in the data object
+    for (const [key, value] of Object.entries(data)) {
+      const placeholder = `{${key}}`; // Placeholder format, e.g., {StudentName}
+      const regex = new RegExp(placeholder, 'g'); // Regular expression to find all instances of the placeholder
+      result = result.replace(regex, value); // Replace placeholder with actual value
+    }
+    return result;
+  }
   send() {
     let emailBody = this.HFormGroup1.value
     delete this.HFormGroup1.value.testFC;
     emailBody.msg = emailBody.msg.replace('<p>', '');
     emailBody.msg = emailBody.msg.replace('</p>', '');
+    emailBody.attachmentUrl = this.docLoc
+    emailBody.msg = this.replacePlaceholders(emailBody.msg, this.students[0]);
+    emailBody.subject = this.replacePlaceholders(emailBody.subject, this.students[0]);
+    this.HFormGroup1.value.msg = emailBody.msg
+    this.HFormGroup1.value.attachmentUrl = emailBody.attachmentUrl
     let rows = this.sendSelectedNumbers();
     (this.HFormGroup1.get('Rows') as FormArray).removeAt(0);
     for (let i = 0; i < rows.length; i++) {
       let rowData = this.fb.group({
         studentId: this.students[rows[i]].studentid,
         statusCheck: true,
-        email: this.students[rows[i]].email
+        email: this.students[rows[i]].email,
+        subject: emailBody.subject,
+        msg: emailBody.msg,
+        attachmentUrl: emailBody.attachment,
       });
       (this.HFormGroup1.get('Rows') as FormArray).push(rowData)
     }
-    emailBody.attachmentUrl = this.docLoc
-    this.HFormGroup1.value.msg = emailBody.msg
-    this.HFormGroup1.value.attachmentUrl = emailBody.attachmentUrl
+    
     let formData = this.HFormGroup1.value
     delete formData.testFC;
+    delete formData.subject
+    delete formData.msg
+    delete formData.attachmentUrl
+    // console.log(formData)
     this.apiService.postAPI(`addstudentcommunication`, formData).subscribe((data) => {
       console.log('E-mail sent successfully: ', data)
       this.router.navigate(['/admin/communication/all-communication']);

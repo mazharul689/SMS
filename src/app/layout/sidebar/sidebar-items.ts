@@ -799,7 +799,7 @@ export const ROUTES: RouteInfo[] = [
       },
       {
         path: '/admin/users/all-email',
-        title: 'All Email',
+        title: 'Email Setup',
         moduleName: 'users',
         iconType: '',
         icon: '',

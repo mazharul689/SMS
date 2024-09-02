@@ -88,7 +88,8 @@ export class InvoiceDialogComponent implements OnInit {
       userId: this.userInfo.userid,
       studentInvoiceId: this.data.studentInvoiceId,
       financeItemId: this.data.financeItemId,
-      invoiceItemDetailsId: 0
+      invoiceItemDetailsId: 0,
+      paidAmount: 0
     });
     console.log(this.HFormGroup1.value)
     this.HFormGroup2 = this.fb.group({
@@ -107,7 +108,8 @@ export class InvoiceDialogComponent implements OnInit {
       userId: this.userInfo.userid,
       studentInvoiceId: null,
       financeItemId: null,
-      invoiceItemDetailsId: 0
+      invoiceItemDetailsId: 0,
+      paidAmount: 0
     });
     (this.HFormGroup1.get('tempData') as FormArray).removeAt(0);
     for (let i = 0; i < this.data.Rowsrules.length; i++) {
@@ -226,6 +228,7 @@ export class InvoiceDialogComponent implements OnInit {
       totalgst: formData.totalGST,
       studentInvoiceId: formData.studentInvoiceId,
       financeItemId: formData.financeItemId,
+      paidAmount: formData.paidAmount
     })
     this.HFormGroup2.setControl('ItemArray', this.fb.array(formData.tempData.map(item => this.fb.group(item))));
     console.log(this.HFormGroup2.value)
