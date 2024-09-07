@@ -79,6 +79,9 @@ export class AllStudentComponent implements OnInit {
   @ViewChild("filter", { static: true }) filter: ElementRef;
 
   courseIntakeFilter = new FormControl();
+  bulkAgentFilter = new FormControl();
+  bulkClientIdFilter = new FormControl();
+  bulkApplicationStatusFilter = new FormControl();
   agentFilter = new FormControl();
   clientIdFilter = new FormControl("");
   firstNameFilter = new FormControl("");
@@ -136,6 +139,8 @@ export class AllStudentComponent implements OnInit {
   userInfo: any;
   allAgents: any;
   agentId: any;
+  allApplicationStatus: any;
+  getAll: any;
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -156,7 +161,8 @@ export class AllStudentComponent implements OnInit {
   }
   ngOnInit() {
     this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
-
+    this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
+    this.allApplicationStatus = this.getAll[0].ApplicationStatus
     this.dataSource = new MatTableDataSource(); // create new object
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -293,35 +299,34 @@ export class AllStudentComponent implements OnInit {
     };
     return filterFunction;
   }
-  search() {
-    if (this.courseIntakeFilter.value > 0) {
-      let id = this.courseIntakeDateId;
-      this.apiService.getAPI(`getstudent_filter?id=${id}`).subscribe((data) => {
-        console.log("data", data);
-        this.students = data["data"];
-        for (var i in this.students) {
-          this.students[i].startDate = this.datePipe.transform(
-            this.students[i].startdate,
-            "dd/MM/yyyy"
-          );
-          this.students[i].endDate = this.datePipe.transform(
-            this.students[i].enddate,
-            "dd/MM/yyyy"
-          );
-          this.students[i].coursename =
-            this.students[i].coursecode + " - " + this.students[i].coursename;
-        }
-        this.students = this.students.sort((a, b) => {
-          if (a.clientid < b.clientid) {
-            return 1;
-          } else if (a.clientid > b.clientid) {
-            return -1;
-          } else {
-            return 0;
-          }
-        });
-        this.dataSource.data = this.students;
-      });
+  search(cid: any, aid: any, asid: any, clid: any) {
+    let queryParams = [];
+
+    // Build query string based on available parameters
+    if (cid) {
+      queryParams.push(`courseintakedateid=${cid}`);
+    }
+    if (aid) {
+      queryParams.push(`agentid=${aid}`);
+    }
+    if (asid) {
+      queryParams.push(`applicationstatusid=${asid}`);
+    }
+    if (clid) {
+      queryParams.push(`clientid=${clid}`);
+    }
+    console.log(queryParams)
+    // If there are any query parameters, make the API call
+    if (queryParams.length > 0) {
+      const queryString = queryParams.join('&');
+      this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
+        console.log(data);
+        this.dataSource.data = data['data']; // on data receive populate dataSource.data array
+        return data;
+      })
+    }
+    else {
+      console.warn('No valid parameters provided for the API call.');
     }
   }
   searchByAgent() {
