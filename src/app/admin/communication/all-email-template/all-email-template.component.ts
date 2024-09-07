@@ -40,6 +40,9 @@ export class AllEmailTemplateComponent implements OnInit {
   getEmailTemplates(){
     this.apiService.getAPI('getemailtemplate').subscribe((data) => {
       this.allEmailTemplates = data['data']
+      for(let i in this.allEmailTemplates) {
+        this.allEmailTemplates[i].emailsubject = this.allEmailTemplates[i].emailsubject.replace(/<\/?(strong|p|b|i|h[1-6])>/g, ' ');
+      }
       this.dataSource.data = this.allEmailTemplates // on data receive populate dataSource.data array
       return data
     })

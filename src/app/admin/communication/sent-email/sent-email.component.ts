@@ -22,6 +22,7 @@ import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
 import { MatDialog } from '@angular/material/dialog';
 const moment = _rollupMoment || _moment;
+import { environment } from "src/environments/environment";
 // import AutoGrow from '@ckeditor/ckeditor5-autogrow/src/autogrow';
 export interface Students {
   // highlighted?: boolean
@@ -92,6 +93,7 @@ export class SentEmailComponent implements OnInit {
   name
   templateParameter: any
   emailTemplates: any
+  baseUrl: string;
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -107,6 +109,7 @@ export class SentEmailComponent implements OnInit {
     this.name = this.actRoute.snapshot.params.firstName;
     this.studentID = this.actRoute.snapshot.params.id;
     this.getStudents()
+    this.baseUrl = environment.testURL
   }
 
   ngOnInit(): void {
@@ -238,7 +241,7 @@ export class SentEmailComponent implements OnInit {
   check(val) {
     // Find the selected email template by its ID
     let index = this.emailTemplates.findIndex(emailTemplate => emailTemplate.emailtemplateid === val);
-  
+
     if (index !== -1) {
       const selectedTemplate = this.emailTemplates[index];
       const emailSubject = selectedTemplate.emailsubject;
@@ -249,11 +252,11 @@ export class SentEmailComponent implements OnInit {
       // Update form controls with the replaced content
       this.HFormGroup1.patchValue({
         subject: updateMessage,
-        msg: updatedMessage 
+        msg: updatedMessage
       });
     }
   }
-  
+
   getStudents() {
     this.apiService.getAPI('getfromemailaddress').subscribe((data) => {
       this.fromEmails = data['data']
@@ -338,8 +341,7 @@ export class SentEmailComponent implements OnInit {
   send() {
     let emailBody = this.HFormGroup1.value
     delete this.HFormGroup1.value.testFC;
-    emailBody.msg = emailBody.msg.replace('<p>', '');
-    emailBody.msg = emailBody.msg.replace('</p>', '');
+    emailBody.subject = emailBody.subject.replace(/<\/?(strong|p|b|i|h[1-6])>/g, "");
     emailBody.attachmentUrl = this.docLoc
     emailBody.msg = this.replacePlaceholders(emailBody.msg, this.students[0]);
     emailBody.subject = this.replacePlaceholders(emailBody.subject, this.students[0]);
@@ -354,11 +356,11 @@ export class SentEmailComponent implements OnInit {
         email: this.students[rows[i]].email,
         subject: emailBody.subject,
         msg: emailBody.msg,
-        attachmentUrl: emailBody.attachment,
+        attachmentUrl: emailBody.attachmentUrl,
       });
       (this.HFormGroup1.get('Rows') as FormArray).push(rowData)
     }
-    
+
     let formData = this.HFormGroup1.value
     delete formData.testFC;
     delete formData.subject

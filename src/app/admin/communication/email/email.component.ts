@@ -36,7 +36,7 @@ import { UploadService } from "../../../services/upload.service";
 import { NgxSpinnerService } from "ngx-spinner";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { Router } from "@angular/router";
-
+import { environment } from "src/environments/environment";
 export interface Students {
   // highlighted?: boolean
   rowID;
@@ -97,6 +97,11 @@ export class EmailComponent implements OnInit {
   emailTemplates: any;
   templateParameter: any;
   fromEmails: any;
+  baseUrl: string;
+  allCourseIntakeDate: any;
+  allAgents: any;
+  allApplicationStatus: any;
+  getAll: any;
   editorChange(newVal) {
     console.log(newVal);
   }
@@ -115,6 +120,10 @@ export class EmailComponent implements OnInit {
   getUrl = "";
   file: any;
   selected: any;
+  courseIntakeFilter = new FormControl();
+  agentFilter = new FormControl();
+  specialClientIdFilter = new FormControl();
+  applicationStatusFilter = new FormControl();
   constructor(
     private fb: FormBuilder,
     public httpClient: HttpClient,
@@ -123,11 +132,12 @@ export class EmailComponent implements OnInit {
     private datePipe: DatePipe
   ) {
     this.getStudents();
+    this.baseUrl = environment.testURL
   }
 
   ngOnInit(): void {
     this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
-
+    this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
     this.dataSource = new MatTableDataSource(); // create new object
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
@@ -175,7 +185,47 @@ export class EmailComponent implements OnInit {
     //   userId: [this.userInfo.userid, [Validators.required]],
     //   Rows: this.fb.array([this.newRowsArr()]),
     // });
+    this.apiService.getAPI("getcourse").subscribe((data) => {
+      //console.log(data);
+      this.allCourseIntakeDate = data["data"];
+    });
+    this.apiService.getAPI("getagent").subscribe((data) => {
+      this.allAgents = data["data"];
+    });
+    this.allApplicationStatus = this.getAll[0].ApplicationStatus
   }
+  search(cid: any, aid: any, asid: any, clid: any) {
+    console.log(this.applicationStatusFilter)
+    let queryParams = [];
+
+    // Build query string based on available parameters
+    if (cid) {
+      queryParams.push(`courseintakedateid=${cid}`);
+    }
+    if (aid) {
+      queryParams.push(`agentid=${aid}`);
+    }
+    if (asid) {
+      queryParams.push(`applicationstatusid=${asid}`);
+    }
+    if (clid) {
+      queryParams.push(`clientid=${clid}`);
+    }
+    console.log(queryParams)
+    // If there are any query parameters, make the API call
+    if (queryParams.length > 0) {
+      const queryString = queryParams.join('&');
+      this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
+        console.log(data);
+        this.dataSource.data = data['data']; // on data receive populate dataSource.data array
+        return data;
+      })
+    }
+    else {
+      console.warn('No valid parameters provided for the API call.');
+    }
+  }
+
   check(val) {
     let index = this.emailTemplates.findIndex(
       (emailTemplate) => emailTemplate.emailtemplateid === val
@@ -370,8 +420,9 @@ export class EmailComponent implements OnInit {
   send() {
     let emailBody = this.HFormGroup1.value;
     delete emailBody.testFC;
-    emailBody.msg = emailBody.msg.replace("<p>", "");
-    emailBody.msg = emailBody.msg.replace("</p>", "");
+    emailBody.subject = emailBody.subject.replace(/<\/?(strong|p|b|i|h[1-6])>/g, "");
+    // emailBody.msg = emailBody.msg.replace("<p>", "");
+    // emailBody.msg = emailBody.msg.replace("</p>", "");
     emailBody.attachmentUrl = this.docLoc;
     let rows = this.sendSelectedNumbers();
     console.log(this.students);
@@ -381,9 +432,9 @@ export class EmailComponent implements OnInit {
         studentId: this.students[rows[i]].studentid,
         statusCheck: true,
         email: this.students[rows[i]].email,
-        subject:  this.replacePlaceholders(emailBody.subject, this.students[rows[i]]),
+        subject: this.replacePlaceholders(emailBody.subject, this.students[rows[i]]),
         msg: this.replacePlaceholders(emailBody.msg, this.students[rows[i]]),
-        attachmentUrl: emailBody.attachment,
+        attachmentUrl: emailBody.attachmentUrl,
       });
       (this.HFormGroup1.get("Rows") as FormArray).push(rowData);
     }
@@ -410,6 +461,6 @@ export class EmailComponent implements OnInit {
       ev.dataTransfer.setData("text/html", data);
     }
   }
-  onPaste($event: any): void {}
-  onDrop(ev) {}
+  onPaste($event: any): void { }
+  onDrop(ev) { }
 }
