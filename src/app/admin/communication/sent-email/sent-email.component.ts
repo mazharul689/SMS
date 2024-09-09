@@ -267,7 +267,7 @@ export class SentEmailComponent implements OnInit {
     this.apiService.getAPI('getemailtemplate').subscribe((data) => {
       this.emailTemplates = data['data']
     })
-    this.apiService.getAPI(`getstudent?id=${this.studentID}`).subscribe((data) => {
+    this.apiService.getAPI(`getstudent?studentid=${this.studentID}`).subscribe((data) => {
       this.students = data['data']
       for (var i in this.students) {
         this.students[i].rowID = i

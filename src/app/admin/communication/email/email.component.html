@@ -146,6 +146,12 @@
                   </span>
                 </div>
                 <div class="section-content">
+                  <div class="row">
+                    <div *ngIf="errorsReq.isError" class="col-6 alert alert-danger m-auto text-center" id="closebtn">
+                      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                      <strong>Warning!</strong> {{ errorsReq.errorMessage }}
+                    </div>
+                  </div>
                   <div class="newCourseUnit">
                     <div class="materialTableHeader">
                       <div class="row m-auto">
@@ -199,7 +205,7 @@
                           <div class="search row">
                             <div class="col-sm-10">
                               <mat-form-field class="example-full-width mr-5">
-                                <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Clinet Id</mat-label>
+                                <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Client Id</mat-label>
                                  <input matInput type="text" [formControl]="specialClientIdFilter"/>
                               </mat-form-field>
                             </div>

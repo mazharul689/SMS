@@ -67,6 +67,7 @@ export class EmailComponent implements OnInit {
   HFormGroup2: FormGroup;
   // HFormGroup3: FormGroup;
   public Editor = ClassicEditor;
+  errorsReq: any = { isError: false, errorMessage: '' };
   students;
   displayedColumns: string[] = [
     "rowID",
@@ -195,7 +196,7 @@ export class EmailComponent implements OnInit {
     this.allApplicationStatus = this.getAll[0].ApplicationStatus
   }
   search(cid: any, aid: any, asid: any, clid: any) {
-    console.log(this.applicationStatusFilter)
+    // console.log(this.applicationStatusFilter)
     let queryParams = [];
 
     // Build query string based on available parameters
@@ -211,18 +212,29 @@ export class EmailComponent implements OnInit {
     if (clid) {
       queryParams.push(`clientid=${clid}`);
     }
-    console.log(queryParams)
+    // console.log(queryParams)
     // If there are any query parameters, make the API call
     if (queryParams.length > 0) {
       const queryString = queryParams.join('&');
       this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
-        console.log(data);
-        this.dataSource.data = data['data']; // on data receive populate dataSource.data array
+        // console.log(data);
+        var show = document.getElementById('closebtn')
+        // if (this.HFormGroup1.valid) {
+
+        if (data['data'].msg) {
+          // window.scroll(0, 0);
+          this.errorsReq = { isError: true, errorMessage: data['data'].msg }
+          this.dataSource.data = []
+        }
+        else {
+          this.dataSource.data = data['data']; // on data receive populate dataSource.data array
+
+        }
+        if (show) {
+          show.style.display = 'block'
+        }
         return data;
       })
-    }
-    else {
-      console.warn('No valid parameters provided for the API call.');
     }
   }
 
