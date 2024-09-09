@@ -26,3 +26,17 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 export NODE_OPTIONS=--openssl-legacy-provider
+
+## Installed Package  
+npm install ngx-echarts echarts --legacy-peer-deps
+npm install ng-apexcharts apexcharts --legacy-peer-deps
+npm install ngx-material-file-input --legacy-peer-deps
+npm install angular-progress-bar --legacy-peer-deps
+npm install mat-timepicker --legacy-peer-deps
+npm install mat-progress-buttons --legacy-peer-deps
+npm install @ckeditor/ckeditor5-angular --legacy-peer-deps
+npm install @auth0/angular-jwt --legacy-peer-deps
+
+## NPM and Node Version
+npm install -g npm@8.15.0
+node -v 16.17.0
