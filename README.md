@@ -1,6 +1,7 @@
 # Angularlight
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.3.4.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.3.
+
 
 ## Development server
 
@@ -38,5 +39,6 @@ export NODE_OPTIONS=--openssl-legacy-provider
 `npm install @auth0/angular-jwt --legacy-peer-deps`
 
 ## NPM and Node Version
-`npm install -g npm@8.15.0`
-`node -v 16.17.0`
+
+Node: 16.17.0
+Package Manager: npm 8.15.0
