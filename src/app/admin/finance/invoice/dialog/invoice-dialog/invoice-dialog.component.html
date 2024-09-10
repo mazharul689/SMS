@@ -53,7 +53,8 @@
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3">
                   <mat-label>Agent Commission</mat-label>
-                  <input type="number" matInput formControlName="agentCommission" required (ngModelChange)="priceChange()">
+                  <input type="number" matInput formControlName="agentCommission" required
+                    (ngModelChange)="priceChange()">
                 </mat-form-field>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
@@ -68,16 +69,11 @@
               </div>
             </div>
             <div class="row">
-              <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                <mat-form-field class="example-full-width mb-3">
-                  <mat-label>GST (%)</mat-label>
-                  <input matInput formControlName="gst" required>
-                </mat-form-field>
-              </div> -->
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" style="padding-top : 10px">
                 <section class="example-section mb-4">
                   <label class="example col-lg-5 col-md-4 col-sm-5">GST (%)</label>
-                  <mat-radio-group class="col-lg-7 col-md-8 col-sm-7" formControlName="gst" (ngModelChange)="priceChange()">
+                  <mat-radio-group class="col-lg-7 col-md-8 col-sm-7" formControlName="gst"
+                    (ngModelChange)="priceChange()">
                     <mat-radio-button
                       class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block-block d-lg-inline-block"
                       value="Y">Yes</mat-radio-button>
@@ -95,47 +91,38 @@
               </div>
             </div>
 
-            <div class="row">
-              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                <mat-form-field class="example-full-width mb-3">
-                  <mat-label>Paid Amount</mat-label>
-                  <input type="number" matInput formControlName="paidAmount" required>
-                </mat-form-field>
-              </div>
-            </div>
-
             <div formArrayName="tempData"
               *ngFor="let item of HFormGroup1.get('tempData')['controls']; let i = index;  let last = last">
               <div class="row" [formGroupName]="i">
-                <div class="col-7">
+                <div class="col-2">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Item Name</mat-label>
-                    <!-- <input type="text" placeholder="Item Name" matInput formControlName="itemName"
-                      [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onOptionSelected($event, i)">
-                      <mat-option *ngFor="let item of filteredItems" [value]="item.itemname">
-                        {{ item.itemname }}
-                      </mat-option>
-                    </mat-autocomplete> -->
                     <input type="text" placeholder="Item Name" matInput formControlName="itemName">
                   </mat-form-field>
                 </div>
-                <!-- <div class="col-2">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Unit Price</mat-label>
-                    <input matInput formControlName="amount" (ngModelChange)="priceChange1(i,$event)">
-                  </mat-form-field>
-                </div>
-                <div class="col-2">
-                  <mat-form-field class="example-full-width" appearance="outline">
-                    <mat-label>Item Quantity</mat-label>
-                    <input matInput type="number" formControlName="itemQty">
-                  </mat-form-field>
-                </div> -->
-                <div class="col-3">
+                <div class="col-1-5">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Amount</mat-label>
                     <input type="number" matInput formControlName="amount" (ngModelChange)="priceChange()">
+                  </mat-form-field>
+                </div>
+                <div class="col-4" style="padding-top : 20px">
+                  <section class="example-section mb-4">
+                    <label class="example col-lg-3 col-md-3 col-sm-3">Is Paid</label>
+                    <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="isPaid">
+                      <mat-radio-button
+                        class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block-block d-lg-inline-block"
+                        value="Y">Yes</mat-radio-button>
+                      <mat-radio-button
+                        class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                        value="N">No</mat-radio-button>
+                    </mat-radio-group>
+                  </section>
+                </div>
+                <div class="col-2">
+                  <mat-form-field class="example-full-width" appearance="outline">
+                    <mat-label>Paid Amount</mat-label>
+                    <input type="number" matInput formControlName="paidAmount" (ngModelChange)="priceChange()">
                   </mat-form-field>
                 </div>
                 <div class="col-1" style="padding-top: 7px;">

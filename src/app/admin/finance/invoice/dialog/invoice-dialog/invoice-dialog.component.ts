@@ -89,7 +89,7 @@ export class InvoiceDialogComponent implements OnInit {
       studentInvoiceId: this.data.studentInvoiceId,
       financeItemId: this.data.financeItemId,
       invoiceItemDetailsId: 0,
-      paidAmount: 0
+      // paidAmount: 0
     });
     console.log(this.HFormGroup1.value)
     this.HFormGroup2 = this.fb.group({
@@ -109,7 +109,7 @@ export class InvoiceDialogComponent implements OnInit {
       studentInvoiceId: null,
       financeItemId: null,
       invoiceItemDetailsId: 0,
-      paidAmount: 0
+      // paidAmount: 0
     });
     (this.HFormGroup1.get('tempData') as FormArray).removeAt(0);
     for (let i = 0; i < this.data.Rowsrules.length; i++) {
@@ -118,6 +118,8 @@ export class InvoiceDialogComponent implements OnInit {
         amount: this.data.Rowsrules[i].amount,
         agentCommission: 0,
         gstAmount: 0,
+        isPaid: this.data.Rowsrules[i].isPaid,
+        paidAmount: this.data.Rowsrules[i].paidAmount,
         invoiceItemDetailsId: this.data.Rowsrules[i].ruleTypeId
       });
       (this.HFormGroup1.get('tempData') as FormArray).push(rowData1)
@@ -140,7 +142,9 @@ export class InvoiceDialogComponent implements OnInit {
       itemName: '',
       amount: '',
       agentCommission: 0,
-      gstAmount: 0
+      gstAmount: 0,
+      isPaid: 'N',
+      paidAmount: 0
     })
   }
   getData() {
@@ -228,15 +232,15 @@ export class InvoiceDialogComponent implements OnInit {
       totalgst: formData.totalGST,
       studentInvoiceId: formData.studentInvoiceId,
       financeItemId: formData.financeItemId,
-      paidAmount: formData.paidAmount
+      // paidAmount: formData.paidAmount
     })
     this.HFormGroup2.setControl('ItemArray', this.fb.array(formData.tempData.map(item => this.fb.group(item))));
     console.log(this.HFormGroup2.value)
-    this.apiService.postAPI('editstudentinvoicebystudentinvoiceid',this.HFormGroup2.value).subscribe((data => {
-      if(data['data']['msg'] == "Recod updated"){
-        this.dialogRef.close()
-      }
-    }))
+    // this.apiService.postAPI('editstudentinvoicebystudentinvoiceid',this.HFormGroup2.value).subscribe((data => {
+    //   if(data['data']['msg'] == "Recod updated"){
+    //     this.dialogRef.close()
+    //   }
+    // }))
   }
 
 }
