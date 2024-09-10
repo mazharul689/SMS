@@ -59,8 +59,26 @@
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3">
-                  <mat-label>Amount Type</mat-label>
+                  <mat-label>Agent Commission Type</mat-label>
                   <mat-select formControlName="amountTypeId" (ngModelChange)="priceChange()">
+                    <mat-option *ngFor="let amount of amountTypes" [value]="amount.amounttypeid">
+                      {{amount.amounttype}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Agent Bonus</mat-label>
+                  <input type="number" matInput formControlName="agentBonus" required>
+                </mat-form-field>
+              </div>
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Agent Bonus Type</mat-label>
+                  <mat-select formControlName="agentBonusAmountTypeId">
                     <mat-option *ngFor="let amount of amountTypes" [value]="amount.amounttypeid">
                       {{amount.amounttype}}
                     </mat-option>

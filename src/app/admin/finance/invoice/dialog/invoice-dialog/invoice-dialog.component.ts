@@ -77,13 +77,15 @@ export class InvoiceDialogComponent implements OnInit {
       invoiceDate: new Date(),
       paymentDueDate: moment(this.data.paymentDueDate),
       agentId: this.data.agentId,
-      agentCommission: this.data.agentCommission,
+      agentCommission: this.data.agentCommission || 0,
       amountTypeId: this.data.amountTypeId,
       gst: this.data.gst,
       paymentDesc: this.data.paymentDesc,
       totalAmount: 0,
       totalGST: 0,
       totalAgentCommission: 0,
+      agentBonus: this.data.agentbonus || 0,
+      agentBonusAmountTypeId: this.data.agentbonusamounttypeid || 2,
       tempData: this.fb.array([this.itemRow()]),
       userId: this.userInfo.userid,
       studentInvoiceId: this.data.studentInvoiceId,
@@ -104,6 +106,8 @@ export class InvoiceDialogComponent implements OnInit {
       paymentDesc: '',
       totalAgentCommission: '',
       totalgst: '',
+      agentBonus: '',
+      agentBonusAmountTypeId: '',
       ItemArray: this.fb.array([this.itemRow()]),
       userId: this.userInfo.userid,
       studentInvoiceId: null,
@@ -229,6 +233,8 @@ export class InvoiceDialogComponent implements OnInit {
       gst: formData.gst,
       paymentDesc: formData.paymentDesc,
       totalAgentCommission: formData.totalAgentCommission,
+      agentBonus: formData.agentBonus,
+      agentBonusAmountTypeId: formData.agentBonusAmountTypeId,
       totalgst: formData.totalGST,
       studentInvoiceId: formData.studentInvoiceId,
       financeItemId: formData.financeItemId,
@@ -236,11 +242,11 @@ export class InvoiceDialogComponent implements OnInit {
     })
     this.HFormGroup2.setControl('ItemArray', this.fb.array(formData.tempData.map(item => this.fb.group(item))));
     console.log(this.HFormGroup2.value)
-    // this.apiService.postAPI('editstudentinvoicebystudentinvoiceid',this.HFormGroup2.value).subscribe((data => {
-    //   if(data['data']['msg'] == "Recod updated"){
-    //     this.dialogRef.close()
-    //   }
-    // }))
+    this.apiService.postAPI('editstudentinvoicebystudentinvoiceid',this.HFormGroup2.value).subscribe((data => {
+      if(data['data']['msg'] == "Recod updated"){
+        this.dialogRef.close()
+      }
+    }))
   }
 
 }
