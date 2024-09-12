@@ -27,8 +27,8 @@
                     </div>
                     <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5">
                       <mat-form-field class="example-full-width" appearance="outline">
-                        <mat-select formControlName="from_email_address">
-                          <mat-option *ngFor="let item of fromEmails" [value]="item.from_email_address">
+                        <mat-select formControlName="fromEmailAddressId" (ngModelChange)="emailChange($event)">
+                          <mat-option *ngFor="let item of fromEmails" [value]="item.fromemailaddressid">
                             {{ item.from_email_address }}
                           </mat-option>
                         </mat-select>

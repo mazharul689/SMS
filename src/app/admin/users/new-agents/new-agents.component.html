@@ -91,7 +91,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent Commission Type</mat-label>
-                            <mat-select formControlName="amountTypeId">
+                            <mat-select formControlName="amountTypeId" required>
                               <mat-option *ngFor="let amount of allAmounts" [value]="amount.amounttypeid">
                                 {{ amount.amounttype }}
                               </mat-option>
@@ -101,7 +101,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent Commission</mat-label>
-                            <input matInput formControlName="agentCommission" type="number">
+                            <input matInput formControlName="agentCommission" type="number" required>
                           </mat-form-field>
                         </div>
                       </div>

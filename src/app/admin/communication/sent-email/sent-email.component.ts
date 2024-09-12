@@ -144,6 +144,7 @@ export class SentEmailComponent implements OnInit {
       communicationType: ['E', [Validators.required]],
       testFC: [''],
       from_email_address: [''],
+      fromEmailAddressId : ["", [Validators.required]],
       subject: ['', [Validators.required]],
       msg: ['', [Validators.required]],
       attachmentUrl: ['', [Validators.required]],
@@ -306,35 +307,47 @@ export class SentEmailComponent implements OnInit {
   }
   onDocumentSubmit() {
     // Create an array to hold the promises for all the file upload requests
-    let uploadPromises: Promise<any>[] = [];
+    if(this.selectedFiles[0]){
+      let uploadPromises: Promise<any>[] = [];
 
-    for (let i = 0; i < this.docRows.length; i++) {
-      if (this.selectedFiles) {
-        let file: File = this.selectedFiles[i];
-        this.file = file.name;
-        let formData: FormData = new FormData();
-        formData.append('inputfile', file, file.name);
-        formData.append('uploadfolder', 'StudentsCommunications');
+      for (let i = 0; i < this.docRows.length; i++) {
+        if (this.selectedFiles) {
+          let file: File = this.selectedFiles[i];
+          this.file = file.name;
+          let formData: FormData = new FormData();
+          formData.append('inputfile', file, file.name);
+          formData.append('uploadfolder', 'StudentsCommunications');
 
-        if (file) {
-          // Push the API call promises into the array
-          const uploadPromise = this.apiService.postAPI('fileupload', formData).toPromise().then((data: any) => {
-            if (i == this.docRows.length - 1) {
-              this.docLoc += data.data.replaceAll(' ', '_');
-            } else {
-              this.docLoc += data.data.replaceAll(' ', '_') + ";";
-            }
-          });
+          if (file) {
+            // Push the API call promises into the array
+            const uploadPromise = this.apiService.postAPI('fileupload', formData).toPromise().then((data: any) => {
+              if (i == this.docRows.length - 1) {
+                this.docLoc += data.data.replaceAll(' ', '_');
+              } else {
+                this.docLoc += data.data.replaceAll(' ', '_') + ";";
+              }
+            });
 
-          uploadPromises.push(uploadPromise);
+            uploadPromises.push(uploadPromise);
+          }
         }
       }
+
+      // Wait for all promises to resolve before calling this.send()
+      Promise.all(uploadPromises).then(() => {
+        this.send();
+      });
+    }
+    else{
+      this.send();
     }
 
-    // Wait for all promises to resolve before calling this.send()
-    Promise.all(uploadPromises).then(() => {
-      this.send();
-    });
+  }
+  emailChange(id){
+    // console.log(id)
+    this.HFormGroup1.patchValue({
+      from_email_address: this.fromEmails[id-1].from_email_address
+    })
   }
   replacePlaceholders(template: string, data: { [key: string]: string }): string {
     let result = template;

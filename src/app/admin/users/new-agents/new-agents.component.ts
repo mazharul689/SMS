@@ -52,8 +52,8 @@ export class NewAgentsComponent implements OnInit {
       startDate: [''],
       endDate: [''],
       isActive: ['Y', [Validators.required, Validators.maxLength(100)]],
-      amountTypeId: [''],
-      agentCommission: [''],
+      amountTypeId: ['', [Validators.required]],
+      agentCommission: ['', [Validators.required]],
       gst: ['Y'],
       userId: [this.userInfo.userid]
     })
