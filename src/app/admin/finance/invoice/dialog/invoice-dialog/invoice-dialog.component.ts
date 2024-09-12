@@ -82,10 +82,12 @@ export class InvoiceDialogComponent implements OnInit {
       gst: this.data.gst,
       paymentDesc: this.data.paymentDesc,
       totalAmount: 0,
+      totalPaidAmount: 0,
+      totalAgentBonus: 0,
       totalGST: 0,
       totalAgentCommission: 0,
-      agentBonus: this.data.agentbonus || 0,
-      agentBonusAmountTypeId: this.data.agentbonusamounttypeid || 2,
+      agentBonus: this.data.agentBonus || 0,
+      agentBonusAmountTypeId: this.data.agentBonusAmountTypeId || 2,
       tempData: this.fb.array([this.itemRow()]),
       userId: this.userInfo.userid,
       studentInvoiceId: this.data.studentInvoiceId,
@@ -122,7 +124,7 @@ export class InvoiceDialogComponent implements OnInit {
         amount: this.data.Rowsrules[i].amount,
         agentCommission: 0,
         gstAmount: 0,
-        isPaid: this.data.Rowsrules[i].isPaid,
+        isPaid: this.data.Rowsrules[i].isPaid || 'N',
         paidAmount: this.data.Rowsrules[i].paidAmount,
         invoiceItemDetailsId: this.data.Rowsrules[i].ruleTypeId
       });
@@ -184,26 +186,56 @@ export class InvoiceDialogComponent implements OnInit {
 
   totalAmount: number = 30000;
 
+  isPaidChange(index: number) {
+    const formArray = this.HFormGroup1.get('tempData') as FormArray;
+    const currentRow = formArray.at(index) as FormGroup;
+
+    const isPaidValue = currentRow.get('isPaid').value;
+    const amountValue = currentRow.get('amount').value;
+
+    // If "Yes" is selected, set paidAmount to the value of amount
+    if (isPaidValue === 'Y') {
+      currentRow.get('paidAmount').setValue(amountValue);
+    } else {
+      // Optionally, you can reset or clear the paidAmount if 'No' is selected
+      currentRow.get('paidAmount').setValue(0);
+    }
+  }
+
   priceChange() {
     const invoiceItems = this.HFormGroup1.get('tempData') as FormArray;
     let totalAmount = 0;
-
+    let totalPaidAmount = 0;
+    let totalAgentBonusAmount = 0;
     invoiceItems.controls.forEach(item => {
       totalAmount += item.get('amount').value; // Assuming 'amount' is a FormControl in your FormGroup
+      totalPaidAmount += item.get('paidAmount').value;
     });
     // console.log('check', totalAmount)
-    let temp = (totalAmount * (this.HFormGroup1.value.agentCommission / 100))
+    // let temp = (totalAmount * (this.HFormGroup1.value.agentCommission / 100))
     // console.log('temp', temp)
     if (this.amountTypes[this.HFormGroup1.value.amountTypeId - 1].amounttype == '%') {
       this.HFormGroup1.patchValue({
         totalAmount: totalAmount,
+        totalPaidAmount: totalPaidAmount,
         totalAgentCommission: totalAmount * (this.HFormGroup1.value.agentCommission / 100),
       })
     }
     else {
       this.HFormGroup1.patchValue({
         totalAmount: totalAmount,
+        totalPaidAmount: totalPaidAmount,
         totalAgentCommission: this.HFormGroup1.value.agentCommission,
+      })
+    }
+    if (this.amountTypes[this.HFormGroup1.value.agentBonusAmountTypeId - 1].amounttype == '%') {
+      this.HFormGroup1.patchValue({
+        totalAgentBonus: totalAmount * (this.HFormGroup1.value.agentBonus / 100),
+      })
+    }
+    else {
+      this.HFormGroup1.patchValue({
+        totalAgentBonus: this.HFormGroup1.value.agentBonus,
       })
     }
     if (this.HFormGroup1.value.gst == 'Y') {

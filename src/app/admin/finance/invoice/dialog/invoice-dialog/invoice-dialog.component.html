@@ -72,13 +72,13 @@
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3">
                   <mat-label>Agent Bonus</mat-label>
-                  <input type="number" matInput formControlName="agentBonus" required>
+                  <input type="number" matInput formControlName="agentBonus" (ngModelChange)="priceChange()" required>
                 </mat-form-field>
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3">
                   <mat-label>Agent Bonus Type</mat-label>
-                  <mat-select formControlName="agentBonusAmountTypeId">
+                  <mat-select formControlName="agentBonusAmountTypeId" (ngModelChange)="priceChange()">
                     <mat-option *ngFor="let amount of amountTypes" [value]="amount.amounttypeid">
                       {{amount.amounttype}}
                     </mat-option>
@@ -127,7 +127,7 @@
                 <div class="col-4" style="padding-top : 20px">
                   <section class="example-section mb-4">
                     <label class="example col-lg-3 col-md-3 col-sm-3">Is Paid</label>
-                    <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="isPaid">
+                    <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="isPaid" (ngModelChange)="isPaidChange(i)">
                       <mat-radio-button
                         class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block-block d-lg-inline-block"
                         value="Y">Yes</mat-radio-button>
@@ -137,7 +137,7 @@
                     </mat-radio-group>
                   </section>
                 </div>
-                <div class="col-2">
+                <div class="col-2" *ngIf="item.get('isPaid').value != 'N'">
                   <mat-form-field class="example-full-width" appearance="outline">
                     <mat-label>Paid Amount</mat-label>
                     <input type="number" matInput formControlName="paidAmount" (ngModelChange)="priceChange()">
@@ -167,10 +167,26 @@
             </div>
             <div class="row">
               <div class="col-7" style="text-align: right;">
+                <h4>Total paid amount:</h4>
+              </div>
+              <div class="col-3" style="text-align: right;">
+                <h4>{{ HFormGroup1.get('totalPaidAmount').value | number:'1.2-2'}}</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7" style="text-align: right;">
                 <h4>Total agent commission:</h4>
               </div>
               <div class="col-3" style="text-align: right;">
                 <h4>{{ HFormGroup1.get('totalAgentCommission').value | number:'1.2-2'}}</h4>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-7" style="text-align: right;">
+                <h4>Total agent bonus:</h4>
+              </div>
+              <div class="col-3" style="text-align: right;">
+                <h4>{{ HFormGroup1.get('totalAgentBonus').value | number:'1.2-2'}}</h4>
               </div>
             </div>
             <div class="row">

@@ -12,6 +12,7 @@ export interface users {
   contactperson
   isactive
   telephone
+  mobile
   actions
 }
 
@@ -21,7 +22,7 @@ export interface users {
   styleUrls: ['./all-agents.component.sass']
 })
 export class AllAgentsComponent implements OnInit {
-  displayedColumns: string[] = ['agencyname', 'contactperson', 'isactive', 'telephone', 'actions']
+  displayedColumns: string[] = ['agencyname', 'contactperson', 'isactive', 'telephone', 'mobile', 'actions']
   dataSource: MatTableDataSource<users>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -30,11 +31,13 @@ export class AllAgentsComponent implements OnInit {
   contactPersonFilter = new FormControl('')
   isActiveFilter = new FormControl('')
   telephoneFilter = new FormControl('')
+  mobileFilter = new FormControl('')
   filteredValues = {
     agencyname: '',
     contactperson: '',
     isactive: '',
-    telephone: ''
+    telephone: '',
+    mobile: ''
   }
   allAgents: any
   constructor(
@@ -65,6 +68,10 @@ export class AllAgentsComponent implements OnInit {
     })
     this.telephoneFilter.valueChanges.subscribe(telephone => {
       this.filteredValues.telephone = telephone
+      this.dataSource.filter = JSON.stringify(this.filteredValues)
+    })
+    this.mobileFilter.valueChanges.subscribe(mobile => {
+      this.filteredValues.mobile = mobile
       this.dataSource.filter = JSON.stringify(this.filteredValues)
     })
   }

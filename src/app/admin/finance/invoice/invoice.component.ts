@@ -561,8 +561,10 @@ export class InvoiceComponent implements OnInit {
     let studentinvoiceid = value.studentInvoiceId
     window.open(`https://api.wonderit.com.au:8000/album/invoice/?inst_id=${this.userInfo.college_id}&type=invoice&sid=${studentinvoiceid}`)
   }
-  sendInvoice() {
-
+  sendInvoice(firstName, id) {
+    this.router.navigate([
+      `/admin/communication/sent-email/${firstName}/${id}`,
+    ]);
   }
 
 }

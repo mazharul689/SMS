@@ -395,29 +395,36 @@ export class EmailComponent implements OnInit {
     };
   }
   onDocumentSubmit() {
-    // let valid = true
+    // Create an array to hold the promises for all the file upload requests
+    let uploadPromises: Promise<any>[] = [];
+
     for (let i = 0; i < this.docRows.length; i++) {
       if (this.selectedFiles) {
         let file: File = this.selectedFiles[i];
         this.file = file.name;
-        console.log("file", file);
         let formData: FormData = new FormData();
-        formData.append("inputfile", file, file.name);
-        formData.append("uploadfolder", "StudentsCommunications");
+        formData.append('inputfile', file, file.name);
+        formData.append('uploadfolder', 'StudentsCommunications');
+
         if (file) {
-          this.apiService
-            .postAPI("fileupload", formData)
-            .subscribe((data: any) => {
-              console.log("response", data.data);
-              if (i == this.docRows.length - 1) {
-                this.docLoc += data.data.replaceAll(" ", "_");
-              } else {
-                this.docLoc += data.data.replaceAll(" ", "_") + ";";
-              }
-            });
+          // Push the API call promises into the array
+          const uploadPromise = this.apiService.postAPI('fileupload', formData).toPromise().then((data: any) => {
+            if (i == this.docRows.length - 1) {
+              this.docLoc += data.data.replaceAll(' ', '_');
+            } else {
+              this.docLoc += data.data.replaceAll(' ', '_') + ";";
+            }
+          });
+
+          uploadPromises.push(uploadPromise);
         }
       }
     }
+
+    // Wait for all promises to resolve before calling this.send()
+    Promise.all(uploadPromises).then(() => {
+      this.send();
+    });
   }
   replacePlaceholders(template: string, data: { [key: string]: string }): string {
     let result = template;
