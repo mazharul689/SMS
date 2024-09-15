@@ -121,7 +121,7 @@
 }
 
 .navbar-header {
-  padding: 8px;
+  // padding: 8px;
   background-color: #000;
   width: 265px;
   @include transition(all 0.5s);
@@ -494,7 +494,7 @@ nav.navbar {
     font-size: 18px;
     color: #3a2c70;
   }
-  
+
 }
 nav,
 nav .nav-wrapper i,

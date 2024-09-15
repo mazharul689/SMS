@@ -79,6 +79,7 @@
                         <ckeditor
                           formControlName="subject"
                           [editor]="Editor"
+                          [config]="editorConfig"
                           (ready)="onReady($event)"
                           required
                           (paste)="onPaste($event)"

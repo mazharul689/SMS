@@ -478,7 +478,7 @@ export class AllStudentComponent implements OnInit {
     console.log(data);
     if (data.applicationstatusname == "Cancelled") {
       window.open(
-        `https://api.wonderit.com.au:8000/report/offer_letter?inst_id=${this.userInfo.college_id}&sid=${data.studentid}&studentenrollmentid=${data.studentenrolmentid}`
+        `https://api.wonderit.com.au:8000/report/offer_letter_by_enrolmentid?inst_id=${this.userInfo.college_id}&sid=${data.studentid}`
       );
     }
     else {

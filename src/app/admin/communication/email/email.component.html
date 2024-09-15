@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-xl-5 col-lg-5 col-md-5 col-sm-5">
                       <div class="specific-ckeditor">
-                        <ckeditor formControlName="subject" [editor]="Editor" (ready)="onReady($event)" required
+                        <ckeditor formControlName="subject" [editor]="Editor" [config]="editorConfig" (ready)="onReady($event)" required
                           (paste)="onPaste($event)" (drop)="onDrop($event)" (change)="onChange($event)">
                         </ckeditor>
                       </div>

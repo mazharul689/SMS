@@ -37,10 +37,19 @@
                       <span class="asterisk">Subject</span>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                      <mat-form-field appearance="outline" style="width: 100%">
-                        <mat-label>Email Subject</mat-label>
-                        <input matInput formControlName="emailSubject">
-                      </mat-form-field>
+                      <div class="specific-ckeditor">
+                        <ckeditor
+                          formControlName="emailSubject"
+                          [editor]="Editor"
+                          [config]="editorConfig"
+                          (ready)="onReady($event)"
+                          required
+                          (paste)="onPaste($event)"
+                          (drop)="onDrop($event)"
+                          (change)="onChange($event)"
+                        >
+                        </ckeditor>
+                      </div>
                     </div>
                   </div>
                   <div class="row">

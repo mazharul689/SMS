@@ -54,6 +54,10 @@ export class SentEmailComponent implements OnInit {
   HFormGroup1: FormGroup
   HFormGroup2: FormGroup
   public Editor = ClassicEditor;
+  public editorConfig = {
+    toolbar: [],  // This disables the toolbar by providing an empty array.
+    // You can add any other configuration options if needed.
+  };
   students
   displayedColumns: string[] = ['rowID', 'clientId', 'firstName', 'lastName', 'courseName', 'email']
   dataSource: MatTableDataSource<Students>

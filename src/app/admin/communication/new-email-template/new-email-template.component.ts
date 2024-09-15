@@ -37,6 +37,10 @@ export class NewEmailTemplateComponent implements OnInit {
   HFormGroup1: FormGroup
   templateParameter: any;
   public Editor = ClassicEditor;
+  public editorConfig = {
+    toolbar: [],  // This disables the toolbar by providing an empty array.
+    // You can add any other configuration options if needed.
+  };
   public componentEvents: string[] = [];
   constructor(
     private fb: FormBuilder,

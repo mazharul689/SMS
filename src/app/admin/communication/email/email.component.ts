@@ -67,6 +67,10 @@ export class EmailComponent implements OnInit {
   HFormGroup2: FormGroup;
   // HFormGroup3: FormGroup;
   public Editor = ClassicEditor;
+  // public subjectEditor = ClassicEditor;
+  public editorConfig = {
+    toolbar: [], 
+  };
   errorsReq: any = { isError: false, errorMessage: '' };
   students;
   displayedColumns: string[] = [
