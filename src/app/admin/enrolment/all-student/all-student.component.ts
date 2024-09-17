@@ -141,6 +141,8 @@ export class AllStudentComponent implements OnInit {
   agentId: any;
   allApplicationStatus: any;
   getAll: any;
+  errorsReq: any = { isError: false, errorMessage: '' };
+
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -304,7 +306,7 @@ export class AllStudentComponent implements OnInit {
 
     // Build query string based on available parameters
     if (cid) {
-      queryParams.push(`courseintakedateid=${cid}`);
+      queryParams.push(`courseid=${cid}`);
     }
     if (aid) {
       queryParams.push(`agentid=${aid}`);
@@ -315,18 +317,29 @@ export class AllStudentComponent implements OnInit {
     if (clid) {
       queryParams.push(`clientid=${clid}`);
     }
-    console.log(queryParams)
+    // console.log(queryParams)
     // If there are any query parameters, make the API call
     if (queryParams.length > 0) {
       const queryString = queryParams.join('&');
       this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
-        console.log(data);
-        this.dataSource.data = data['data']; // on data receive populate dataSource.data array
+        // console.log(data);
+        // if (this.HFormGroup1.valid) {
+
+        if (data['data'].msg) {
+          // window.scroll(0, 0);
+          var show = document.getElementById('closebtn')
+          this.errorsReq = { isError: true, errorMessage: data['data'].msg }
+          this.dataSource.data = []
+        }
+        else {
+          this.dataSource.data = data['data']; // on data receive populate dataSource.data array
+
+        }
+        if (show) {
+          show.style.display = 'block'
+        }
         return data;
       })
-    }
-    else {
-      console.warn('No valid parameters provided for the API call.');
     }
   }
   searchByAgent() {
@@ -478,7 +491,7 @@ export class AllStudentComponent implements OnInit {
     console.log(data);
     if (data.applicationstatusname == "Cancelled") {
       window.open(
-        `https://api.wonderit.com.au:8000/report/offer_letter_by_enrolmentid?inst_id=${this.userInfo.college_id}&sid=${data.studentid}`
+        `https://api.wonderit.com.au:8000/report/offer_letter_by_enrolmentid?inst_id=${this.userInfo.college_id}&sid=${data.studentenrolmentid}`
       );
     }
     else {

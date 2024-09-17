@@ -5,6 +5,12 @@
         <div class="card">
           <div class="body">
             <div class="table-responsive all_Student">
+              <div class="row">
+                <div *ngIf="errorsReq.isError" class="col-6 alert alert-danger m-auto text-center" id="closebtn">
+                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  <strong>Warning!</strong> {{ errorsReq.errorMessage }}
+                </div>
+              </div>
               <div class="materialTableHeader">
                 <div class="row m-auto">
                   <div class="col-3">

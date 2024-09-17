@@ -75,7 +75,7 @@ export class AddInstallmentComponent implements OnInit {
       paymentPlanInstalmentOrderDesc: '',
       financeItemId: '',
       paymentPlanInstalmentDueDate: '',
-      paymentPlanInstalmentId: ''
+      paymentPlanInstalmentId: 0
     })
   }
   addRows() {

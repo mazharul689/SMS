@@ -69,7 +69,7 @@ export class EmailComponent implements OnInit {
   public Editor = ClassicEditor;
   // public subjectEditor = ClassicEditor;
   public editorConfig = {
-    toolbar: [], 
+    toolbar: [],
   };
   errorsReq: any = { isError: false, errorMessage: '' };
   students;
@@ -175,7 +175,7 @@ export class EmailComponent implements OnInit {
       testFC: [""],
       msg: ["", [Validators.required]],
       from_email_address: [''],
-      fromEmailAddressId : ["", [Validators.required]],
+      fromEmailAddressId: ["", [Validators.required]],
       attachmentUrl: ["", [Validators.required]],
       Rows: this.fb.array([this.getStudent()]),
     });
@@ -201,10 +201,10 @@ export class EmailComponent implements OnInit {
     this.allApplicationStatus = this.getAll[0].ApplicationStatus
   }
 
-  emailChange(id){
+  emailChange(id) {
     // console.log(id)
     this.HFormGroup1.patchValue({
-      from_email_address: this.fromEmails[id-1].from_email_address
+      from_email_address: this.fromEmails[id - 1].from_email_address
     })
   }
   search(cid: any, aid: any, asid: any, clid: any) {
@@ -213,7 +213,7 @@ export class EmailComponent implements OnInit {
 
     // Build query string based on available parameters
     if (cid) {
-      queryParams.push(`courseintakedateid=${cid}`);
+      queryParams.push(`courseid=${cid}`);
     }
     if (aid) {
       queryParams.push(`agentid=${aid}`);
@@ -230,16 +230,29 @@ export class EmailComponent implements OnInit {
       const queryString = queryParams.join('&');
       this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
         // console.log(data);
-        var show = document.getElementById('closebtn')
         // if (this.HFormGroup1.valid) {
 
         if (data['data'].msg) {
           // window.scroll(0, 0);
+          var show = document.getElementById('closebtn')
+
           this.errorsReq = { isError: true, errorMessage: data['data'].msg }
           this.dataSource.data = []
         }
         else {
-          this.dataSource.data = data['data']; // on data receive populate dataSource.data array
+          let students = data['data']
+          for (var i in students) {
+            students[i].rowID = i;
+            students[i].startDate = this.datePipe.transform(
+              students[i].startdate,
+              "dd/MM/yyyy"
+            );
+            students[i].endDate = this.datePipe.transform(
+              students[i].enddate,
+              "dd/MM/yyyy"
+            );
+          }
+          this.dataSource.data = students; // on data receive populate dataSource.data array
 
         }
         if (show) {
@@ -287,7 +300,7 @@ export class EmailComponent implements OnInit {
       statusCheck: "",
       studentId: "",
       email: "",
-      fromEmailAddressId : "",
+      fromEmailAddressId: "",
       communicationType: "E",
       subject: "",
       msg: "",
@@ -408,7 +421,7 @@ export class EmailComponent implements OnInit {
   }
   onDocumentSubmit() {
     // Create an array to hold the promises for all the file upload requests
-    if(this.selectedFiles[0]){
+    if (this.selectedFiles[0]) {
       let uploadPromises: Promise<any>[] = [];
 
       for (let i = 0; i < this.docRows.length; i++) {
@@ -439,7 +452,7 @@ export class EmailComponent implements OnInit {
         this.send();
       });
     }
-    else{
+    else {
       this.send();
     }
 

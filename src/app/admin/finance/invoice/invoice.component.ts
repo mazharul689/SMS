@@ -557,7 +557,7 @@ export class InvoiceComponent implements OnInit {
   }
   printInvoice(value) {
     // this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
-
+    console.log(value)
     let studentinvoiceid = value.studentInvoiceId
     window.open(`https://api.wonderit.com.au:8000/album/invoice/?inst_id=${this.userInfo.college_id}&type=invoice&sid=${studentinvoiceid}`)
   }

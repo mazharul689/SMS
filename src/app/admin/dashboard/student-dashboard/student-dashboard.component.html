@@ -498,9 +498,9 @@
                                                             {{this.shortMsg}}
                                                         </span>
                                                     </div> -->
-                          <span *ngIf="row.msg > 50 || !expandedRows[i]">{{row.shortMsg}}</span>
-                          <span *ngIf="row.msg < 50 || expandedRows[i]">{{row.msg}}</span>
-                          <button mat-icon-button class="see-more-button" (click)="toggleExpanded(i)">
+                          <span *ngIf="row.msg.length > 50 || !expandedRows[i]">{{row.shortMsg}}</span>
+                          <span *ngIf="row.msg.length < 50 || expandedRows[i]">{{row.msg}}</span>
+                          <button  mat-icon-button class="see-more-button" (click)="toggleExpanded(i)">
                             {{expandedRows[i] ? '' : 'See more'}}
                           </button>
                           <!-- <a href="#" *ngIf="shouldShowSeeMoreButton(row.msg)" (click)="toggleExpanded(i)" i18n>Read More</a>

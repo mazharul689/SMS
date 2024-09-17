@@ -256,7 +256,7 @@ export class StudentDashboardComponent implements OnInit {
     this.apiService.getAPI(`getstudentinvoicetotal?id=${this.enrolemntID}`).subscribe((data) => {
       console.log(data['data'])
       this.invoicedDueAmount = data['data'][0].invoiceddueamount
-      if(data['data'][0].totalamountpaid){
+      if (data['data'][0].totalamountpaid) {
         this.totalAmountPaid = data['data'][0].totalamountpaid
         this.invoicedDueAmount = data['data'][0].invoiceddueamount
         this.totalFee = data['data'][0].totalfee
@@ -310,14 +310,17 @@ export class StudentDashboardComponent implements OnInit {
           // }
         }
         for (let i = 0; i < this.messages.length; i++) {
-          this.messages[i].attachment = this.messages[i].email_attachment
-          this.messages[i].attachment = this.messages[i].email_attachment.split(";")
-          // console.log('check', this.messages[i].email_attachment)
-          for (let j = 0; j < this.messages[i].attachment.length; j++) {
-            this.messages[i].attachment[j] = this.messages[i].attachment[j].split("/")
-            this.messages[i].attachment[j] = decodeURIComponent(this.messages[i].attachment[j][this.messages[i].attachment[j].length - 1])
-            // console.log('check',this.messages[i].email_attachment[j].splice(15))
+          if (this.messages[i].attachment) {
+            this.messages[i].attachment = this.messages[i].email_attachment
+            this.messages[i].attachment = this.messages[i].email_attachment.split(";")
+            // console.log('check', this.messages[i].email_attachment)
+            for (let j = 0; j < this.messages[i].attachment.length; j++) {
+              this.messages[i].attachment[j] = this.messages[i].attachment[j].split("/")
+              this.messages[i].attachment[j] = decodeURIComponent(this.messages[i].attachment[j][this.messages[i].attachment[j].length - 1])
+              // console.log('check',this.messages[i].email_attachment[j].splice(15))
+            }
           }
+
         }
         this.messages.forEach((item) => {
           if (item.attachment && item.attachment.length > 0) {
