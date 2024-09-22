@@ -173,19 +173,19 @@
                             <mat-label style="color: white; font-size: 15px;">Action</mat-label>
                           </mat-header-cell>
                           <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
-                            <button mat-icon-button class="btn-tbl-edit" title="Invoice" (click)="invoice(row)" [disabled]="row.enableSaveButton == 'Y'">
+                            <button mat-icon-button class="btn-tbl-edit" title="Invoice" (click)="invoice(row)" [disabled]="this.enableSaveButton == 'Y'">
                               <span class="material-icons-outlined" style="
                           font-size: 19px;
                           color: white;
                       ">credit_card</span>
                             </button>
-                            <button mat-icon-button class="btn-tbl-edit" title="Print" (click)="printInvoice(row)" [disabled]="row.enableSaveButton == 'Y'">
+                            <button mat-icon-button class="btn-tbl-edit" title="Print" (click)="printInvoice(row)" [disabled]="this.enableSaveButton == 'Y'">
                               <span class="material-icons-outlined" style="
                           font-size: 19px;
                           color: rgb(253, 2, 2);
                       ">picture_as_pdf</span>
                             </button>
-                            <button mat-icon-button class="btn-tbl-edit" title="Send Invoice" (click)="sendInvoice(allStudents.firstname,allStudents.studentid)" [disabled]="row.enableSaveButton == 'Y'">
+                            <button mat-icon-button class="btn-tbl-edit" title="Send Invoice" (click)="sendInvoice(allStudents.firstname,allStudents.studentid)" [disabled]="this.enableSaveButton == 'Y'">
                               <span class="material-icons-outlined" style="
                           font-size: 19px;
                           color: rgb(255, 255, 255);
@@ -314,7 +314,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="row" *ngIf="enableSaveButton == 'N'">
+                <div class="row" *ngIf="showRows == true">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <div class="example-button-row">
                       <button class="btn-space" [disabled]="!HFormGroup1.valid" mat-raised-button color="primary"
