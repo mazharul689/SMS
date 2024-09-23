@@ -324,7 +324,6 @@ export class AllStudentComponent implements OnInit {
       this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
         // console.log(data);
         // if (this.HFormGroup1.valid) {
-
         if (data['data'].msg) {
           // window.scroll(0, 0);
           var show = document.getElementById('closebtn')
@@ -332,7 +331,11 @@ export class AllStudentComponent implements OnInit {
           this.dataSource.data = []
         }
         else {
-          this.dataSource.data = data['data']; // on data receive populate dataSource.data array
+          let students = data['data']
+          for (let i in students) {
+            students[i].fullname = students[i].firstname + " " + students[i].lastname;
+          }
+          this.dataSource.data = students; // on data receive populate dataSource.data array
 
         }
         if (show) {

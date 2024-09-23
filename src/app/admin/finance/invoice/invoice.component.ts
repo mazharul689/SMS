@@ -256,6 +256,13 @@ export class InvoiceComponent implements OnInit {
       this.apiService.getAPI(`getstudentinvoice?id=${id}`).subscribe((data) => {
         if (!data['data']['msg']) {
           let allPaymentPlansWithRules = data['data'];
+          allPaymentPlansWithRules.forEach(plan => {
+            // Check if any rule in rulearray.Rows has isPaid as 'Y'
+            let isPaidFound = plan.rulearray.Rows.some(rule => rule.isPaid === 'Y');
+            // Add the statuscheck field based on isPaidFound
+            plan.statuscheck = isPaidFound ? 'Y' : 'N';
+          });
+          console.log('check',allPaymentPlansWithRules)
           this.enableSaveButton = allPaymentPlansWithRules[0].enablesavebutton
           // this.allpaymentplanwithrulesdata = data['data']
           allPaymentPlansWithRules.sort((a, b) => {
@@ -281,7 +288,7 @@ export class InvoiceComponent implements OnInit {
           for (let i in allPaymentPlansWithRules) {
             let temp = 0
             for (let j in allPaymentPlansWithRules[i].rulearray.Rows) {
-              if(allPaymentPlansWithRules[i].rulearray.Rows[j].ruletype){
+              if (allPaymentPlansWithRules[i].rulearray.Rows[j].ruletype) {
                 allPaymentPlansWithRules[i].rulearray.Rows[j].ruletype = allPaymentPlansWithRules[i].rulearray.Rows[j].ruletype.replace(/<\/?p>/g, ' ');
                 temp += parseInt(allPaymentPlansWithRules[i].rulearray.Rows[j].amount)
               }
@@ -295,6 +302,7 @@ export class InvoiceComponent implements OnInit {
               invoiceNo: allPaymentPlansWithRules[i].invoicenumber,
               paymentPlanInstalmentOrderDesc: allPaymentPlansWithRules[i].paymentplaninstalmentorderdesc,
               itemName: allPaymentPlansWithRules[i].itemname,
+              isPaid: allPaymentPlansWithRules[i].statuscheck,
               paymentPlanInstalmentDueDate: moment(allPaymentPlansWithRules[i].paymentplaninstalmentduedate),
               gst: allPaymentPlansWithRules[i].gst,
               agentCommission: allPaymentPlansWithRules[i].agentcommission,
@@ -527,7 +535,7 @@ export class InvoiceComponent implements OnInit {
         }
         console.log('stuck')
       }
-      else{
+      else {
         this.getStudent(this.studentEnrolementId)
       }
       // this.router.navigate([`/admin/enrolment/all-student`])

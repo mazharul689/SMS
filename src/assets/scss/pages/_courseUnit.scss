@@ -4,6 +4,12 @@
 .newCourseUnit .body.table-responsive.classSetup .mat-checkbox {
   pointer-events: none !important;
 }
+.newCourseUnit .focus{
+  // outline:1px solid #3F51B5;
+  // border: none;
+  color:#FFF;
+  background-color: #bce0b3 !important;
+}
 .table-responsive.selectedCourse {
   width: 100%;
   max-width: 100%;
