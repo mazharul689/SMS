@@ -475,7 +475,7 @@
                         <mat-header-cell class="pr-0" *matHeaderCellDef><mat-label
                             style="color: white; font-size:15px;">Type</mat-label></mat-header-cell>
                         <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                          {{row.type}}
+                          Email
                         </mat-cell>
                       </ng-container>
                       <ng-container matColumnDef="subject">
@@ -498,11 +498,12 @@
                                                             {{this.shortMsg}}
                                                         </span>
                                                     </div> -->
-                          <span *ngIf="row.msg.length > 50 || !expandedRows[i]">{{row.shortMsg}}</span>
-                          <span *ngIf="row.msg.length < 50 || expandedRows[i]">{{row.msg}}</span>
-                          <button  mat-icon-button class="see-more-button" (click)="toggleExpanded(i)">
+                          <!-- <span>{{row.bodyPreview}}</span> -->
+                          <span *ngIf="row.bodyPreview.length > 50 || !expandedRows[i]">{{row.shortMsg || row.bodyPreview}}</span>
+                          <!-- <span *ngIf="row.bodyPreview.length < 50 || expandedRows[i]">{{row.bodyPreview}}</span> -->
+                          <!-- <button  mat-icon-button class="see-more-button" (click)="toggleExpanded(i)">
                             {{expandedRows[i] ? '' : 'See more'}}
-                          </button>
+                          </button> -->
                           <!-- <a href="#" *ngIf="shouldShowSeeMoreButton(row.msg)" (click)="toggleExpanded(i)" i18n>Read More</a>
                                                     <a href="#" *ngIf="!shouldShowSeeMoreButton(row.msg)" (click)="toggleExpanded(i)" i18n>Read Less</a> -->
                         </mat-cell>
@@ -538,7 +539,7 @@
                         <mat-header-cell class="pr-0" *matHeaderCellDef>
                           <mat-label style="color: white; font-size:15px;">Date</mat-label></mat-header-cell>
                         <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                          {{row.date}}
+                          {{ row.sentDateTime | date: 'yyyy-MM-dd' }}
                         </mat-cell>
                       </ng-container>
                       <ng-container matColumnDef="actions1">

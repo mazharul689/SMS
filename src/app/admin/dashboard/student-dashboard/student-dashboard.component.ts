@@ -289,7 +289,7 @@ export class StudentDashboardComponent implements OnInit {
   getMessage() {
     if (this.email != "loading...") {
       this.apiService.getAPI(`getemailinbox?id=${this.studentID}&email=${this.email}`).subscribe((data) => {
-        this.messages = data
+        this.messages = data['value']
         this.messageLength = this.messages.length
         this.messages.sort((a, b) => {
           const dateA = new Date(a.date);
@@ -297,36 +297,41 @@ export class StudentDashboardComponent implements OnInit {
           return dateB.getTime() - dateA.getTime();
         });
         for (let i = 0; i < this.messages.length; i++) {
-          this.messages[i].rowID = i
-          this.messages[i].msg = this.messages[i].html_body.replace(/(<([^>]+)>)/ig, '')
-          this.messages[i].shortMsg = ''
-          if (this.messages[i].msg.length > 50) {
-            this.messages[i].shortMsg = this.messages[i].msg.substring(0, 50) + '...';
+          if (this.messages[i].bodyPreview.length > 50) {
+            this.messages[i].shortMsg = this.messages[i].bodyPreview.substring(0, 50) + '...';
           }
-          this.messages[i].date = this.datePipe.transform(this.messages[i].date, 'dd/MM/yyyy')
-          // this.messages[i].flag[i] = false
-          // if (this.messages[i].email_attachment) {
-          //   this.messages[i].fileName = this.messages[i].email_attachment.slice(48)
-          // }
         }
-        for (let i = 0; i < this.messages.length; i++) {
-          if (this.messages[i].attachment) {
-            this.messages[i].attachment = this.messages[i].email_attachment
-            this.messages[i].attachment = this.messages[i].email_attachment.split(";")
-            // console.log('check', this.messages[i].email_attachment)
-            for (let j = 0; j < this.messages[i].attachment.length; j++) {
-              this.messages[i].attachment[j] = this.messages[i].attachment[j].split("/")
-              this.messages[i].attachment[j] = decodeURIComponent(this.messages[i].attachment[j][this.messages[i].attachment[j].length - 1])
-              // console.log('check',this.messages[i].email_attachment[j].splice(15))
-            }
-          }
+        // for (let i = 0; i < this.messages.length; i++) {
+        //   this.messages[i].rowID = i
+        //   this.messages[i].msg = this.messages[i].html_body.replace(/(<([^>]+)>)/ig, '')
+        //   this.messages[i].shortMsg = ''
+        //   if (this.messages[i].msg.length > 50) {
+        //     this.messages[i].shortMsg = this.messages[i].msg.substring(0, 50) + '...';
+        //   }
+        //   this.messages[i].date = this.datePipe.transform(this.messages[i].date, 'dd/MM/yyyy')
+        //   // this.messages[i].flag[i] = false
+        //   // if (this.messages[i].email_attachment) {
+        //   //   this.messages[i].fileName = this.messages[i].email_attachment.slice(48)
+        //   // }
+        // }
+        // for (let i = 0; i < this.messages.length; i++) {
+        //   if (this.messages[i].attachment) {
+        //     this.messages[i].attachment = this.messages[i].email_attachment
+        //     this.messages[i].attachment = this.messages[i].email_attachment.split(";")
+        //     // console.log('check', this.messages[i].email_attachment)
+        //     for (let j = 0; j < this.messages[i].attachment.length; j++) {
+        //       this.messages[i].attachment[j] = this.messages[i].attachment[j].split("/")
+        //       this.messages[i].attachment[j] = decodeURIComponent(this.messages[i].attachment[j][this.messages[i].attachment[j].length - 1])
+        //       // console.log('check',this.messages[i].email_attachment[j].splice(15))
+        //     }
+        //   }
 
-        }
-        this.messages.forEach((item) => {
-          if (item.attachment && item.attachment.length > 0) {
-            item.attachment = item.attachment.map((attachment) => attachment.substring(17));
-          }
-        });
+        // }
+        // this.messages.forEach((item) => {
+        //   if (item.attachment && item.attachment.length > 0) {
+        //     item.attachment = item.attachment.map((attachment) => attachment.substring(17));
+        //   }
+        // });
 
         console.log('message', this.messages)
         this.dataSource2.data = this.messages

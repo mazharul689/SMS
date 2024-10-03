@@ -1,24 +1,5 @@
 <section class="content">
   <div class="container-fluid">
-    <!-- <div class="block-header">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <ul class="breadcrumb breadcrumb-style ">
-                        <li class="breadcrumb-item">
-                            <h4 class="page-title">Certificate</h4>
-                        </li>
-                        <li class="breadcrumb-item bcrumb-1">
-                            <a routerLink="/admin/dashboard/main">
-                            <i class="fas fa-home"></i> Home</a>
-                        </li>
-                        <li class="breadcrumb-item bcrumb-2">
-                            <a href="#" onClick="return false;">Certificate</a>
-                        </li>
-                        <li class="breadcrumb-item active">All Students</li>
-                    </ul>
-                </div>
-            </div>
-        </div> -->
     <div class="row">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
@@ -71,6 +52,111 @@
               </mat-sidenav>
               <mat-sidenav-content>
                 <div class="table-responsive all_Student">
+                  <div class="row">
+                    <div *ngIf="errorsReq.isError" class="col-6 alert alert-danger m-auto text-center" id="closebtn">
+                      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                      <strong>Warning!</strong> {{ errorsReq.errorMessage }}
+                    </div>
+                  </div>
+                  <div class="materialTableHeader">
+                    <div class="row m-auto">
+                      <div class="col-2">
+                        <div class="search row">
+                          <div class="col-sm-12">
+                            <mat-form-field class="example-full-width mr-5">
+                              <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Course</mat-label>
+                              <mat-select [formControl]="courseIntakeFilter">
+                                <mat-option *ngFor="let courseIntake of allCourseIntakeDate"
+                                  [value]="courseIntake.courseid">
+                                  {{ courseIntake.coursecode }} -
+                                  {{ courseIntake.coursename }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="search row">
+                          <div class="col-sm-12">
+                            <mat-form-field class="example-full-width mr-5">
+                              <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Agent</mat-label>
+                              <mat-select [formControl]="bulkAgentFilter">
+                                <mat-option *ngFor="let agent of allAgents"
+                                  [value]="agent.agentid">
+                                  {{ agent.agencyname }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="search row">
+                          <div class="col-sm-12">
+                            <mat-form-field class="example-full-width mr-5">
+                              <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Application Status</mat-label>
+                              <mat-select [formControl]="bulkApplicationStatusFilter">
+                                <mat-option *ngFor="let status of allApplicationStatus"
+                                  [value]="status.applicationstatusid">
+                                  {{ status.applicationstatusname }}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="search row">
+                          <div class="col-sm-12">
+                            <mat-form-field class="example-full-width mr-5">
+                              <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Client Id</mat-label>
+                               <input matInput type="text" style="color: black" [formControl]="bulkClientIdFilter"/>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <div class="search row">
+                          <div class="col-sm-8">
+                            <mat-form-field class="example-full-width mr-5">
+                              <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Usi</mat-label>
+                               <input matInput type="text" style="color: black" [formControl]="usiFilter"/>
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-2">
+                            <button mat-mini-fab color="primary" (click)="search(courseIntakeFilter.value,bulkAgentFilter.value,bulkApplicationStatusFilter.value,bulkClientIdFilter.value,usiFilter.value)">
+                              <i class="fa fa-search"></i>
+                            </button>
+                          </div>
+                          <div class="col-sm-2">
+                            <button mat-mini-fab color="primary" (click)="addNew()">
+                                <mat-icon class="col-white">add</mat-icon>
+                              </button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <ul class="header-buttons">
+                          <li>
+                            <div class="icon-button-demo">
+                              <!-- <button mat-mini-fab color="primary" (click)="addNew()">
+                                <mat-icon class="col-white">add</mat-icon>
+                              </button> -->
+                            </div>
+                          </li>
+                          <li>
+                            <div class="icon-button-demo">
+                              <!-- <button mat-mini-fab color="primary" (click)="refresh()">
+                                <mat-icon class="col-white">refresh
+                                </mat-icon>
+                              </button> -->
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                   <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
                     <ng-container matColumnDef="clientId2">
                       <mat-header-cell *matHeaderCellDef style="min-height: unset;" style="font-size: 13px !important">

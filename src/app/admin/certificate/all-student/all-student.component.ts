@@ -61,7 +61,12 @@ export class AllStudentComponent implements OnInit {
   @ViewChild(MatSort, { static: true }) sort: MatSort
   @ViewChild('filter', { static: true }) filter: ElementRef
 
-  courseIntakeFilter = new FormControl()
+  courseIntakeFilter = new FormControl();
+  bulkAgentFilter = new FormControl();
+  bulkClientIdFilter = new FormControl();
+  bulkApplicationStatusFilter = new FormControl();
+  agentFilter = new FormControl();
+  usiFilter = new FormControl();
   clientId2Filter = new FormControl('')
   nameFilter = new FormControl('')
   email2Filter = new FormControl('')
@@ -98,7 +103,7 @@ export class AllStudentComponent implements OnInit {
   dataSource2: MatTableDataSource<EnrolledCourses>
   studentId
   enrolledCourses
-
+  errorsReq = { isError: false, errorMessage: '' }
   checkngIF = false
   @ViewChild(MatPaginator, { static: true }) paginator2: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort2: MatSort;
@@ -106,6 +111,9 @@ export class AllStudentComponent implements OnInit {
   @ViewChild(MatMenuTrigger)
   highlighter = 0
   userInfo: any
+  allAgents: any
+  allApplicationStatus: any
+  getAll: any
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -123,7 +131,8 @@ export class AllStudentComponent implements OnInit {
   }
   ngOnInit() {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
-
+    this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
+    this.allApplicationStatus = this.getAll[0].ApplicationStatus
     this.dataSource = new MatTableDataSource() // create new object
     this.dataSource.paginator = this.paginator
     this.dataSource.sort = this.sort
@@ -132,6 +141,9 @@ export class AllStudentComponent implements OnInit {
       //console.log(data);
       this.allCourseIntakeDate = data['data']
     })
+    this.apiService.getAPI("getagent").subscribe((data) => {
+      this.allAgents = data["data"];
+    });
     //this.courseIntakeFilter.setValue('id')
     // console.log(this.courseIntakeFilter.value)
     this.courseIntakeFilter.valueChanges.subscribe(courseIntakeDateId => {
@@ -226,22 +238,50 @@ export class AllStudentComponent implements OnInit {
     }
     return filterFunction;
   }
-  search() {
-    if (this.courseIntakeFilter.value > 0) {
-      let id = this.courseIntakeDateId
-      this.apiService.getAPI(`getstudent_filter?id=${id}`).subscribe((data) => {
-        console.log('data', data)
-        this.students = data['data']
-        this.students = this.students.sort((a, b) => {
-          if (a.clientId < b.clientId) {
-            return 1;
-          } else if (a.clientId > b.clientId) {
-            return -1;
-          } else {
-            return 0;
+  search(cid: any, aid: any, asid: any, clid: any, uid: any) {
+    let queryParams = [];
+
+    // Build query string based on available parameters
+    if (cid) {
+      queryParams.push(`courseid=${cid}`);
+    }
+    if (aid) {
+      queryParams.push(`agentid=${aid}`);
+    }
+    if (asid) {
+      queryParams.push(`applicationstatusid=${asid}`);
+    }
+    if (clid) {
+      queryParams.push(`clientid=${clid}`);
+    }
+    if(uid){
+      queryParams.push(`usiNo=${uid}`);
+    }
+    // console.log(queryParams)
+    // If there are any query parameters, make the API call
+    if (queryParams.length > 0) {
+      const queryString = queryParams.join('&');
+      this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
+        // console.log(data);
+        // if (this.HFormGroup1.valid) {
+        if (data['data'].msg) {
+          // window.scroll(0, 0);
+          var show = document.getElementById('closebtn')
+          this.errorsReq = { isError: true, errorMessage: data['data'].msg }
+          this.dataSource.data = []
+        }
+        else {
+          let students = data['data']
+          for (let i in students) {
+            students[i].fullname = students[i].firstname + " " + students[i].lastname;
           }
-        });
-        this.dataSource.data = this.students
+          this.dataSource.data = students; // on data receive populate dataSource.data array
+
+        }
+        if (show) {
+          show.style.display = 'block'
+        }
+        return data;
       })
     }
   }

@@ -83,6 +83,7 @@ export class AllStudentComponent implements OnInit {
   bulkClientIdFilter = new FormControl();
   bulkApplicationStatusFilter = new FormControl();
   agentFilter = new FormControl();
+  usiFilter = new FormControl();
   clientIdFilter = new FormControl("");
   firstNameFilter = new FormControl("");
   lastNameFilter = new FormControl("");
@@ -301,7 +302,7 @@ export class AllStudentComponent implements OnInit {
     };
     return filterFunction;
   }
-  search(cid: any, aid: any, asid: any, clid: any) {
+  search(cid: any, aid: any, asid: any, clid: any, uid: any) {
     let queryParams = [];
 
     // Build query string based on available parameters
@@ -316,6 +317,9 @@ export class AllStudentComponent implements OnInit {
     }
     if (clid) {
       queryParams.push(`clientid=${clid}`);
+    }
+    if(uid){
+      queryParams.push(`usiNo=${uid}`);
     }
     // console.log(queryParams)
     // If there are any query parameters, make the API call

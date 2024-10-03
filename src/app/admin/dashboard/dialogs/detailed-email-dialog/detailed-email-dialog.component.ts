@@ -21,7 +21,7 @@ export class DetailedEmailDialogComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('data',this.data)
+    console.log('data',this.data.toRecipients[0].emailAddress.name)
   }
 
   onReady(editor) {

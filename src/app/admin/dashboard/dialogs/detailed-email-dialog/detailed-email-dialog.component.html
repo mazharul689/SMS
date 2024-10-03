@@ -15,7 +15,8 @@
                             <span><strong>Type</strong></span>
                         </div>
                         <div class="col-10">
-                            <span>: {{data.type}}</span>
+                            <!-- <span>: {{data.type}}</span> -->
+                            <span>: Email</span>
                         </div>
                     </div>
                     <div class="row info">
@@ -23,7 +24,7 @@
                             <span><strong>From</strong></span>
                         </div>
                         <div class="col-10">
-                            <span>: {{data.from}}</span>
+                            <span>: {{data.toRecipients[0].emailAddress.address}}</span>
                         </div>
                     </div>
                     <div class="row info">
@@ -31,7 +32,7 @@
                             <span><strong>To</strong></span>
                         </div>
                         <div class="col-10">
-                            <span>: {{data.to}}</span>
+                            <span>: {{data.from.emailAddress.address}}</span>
                         </div>
                     </div>
                     <div class="row info">
@@ -48,7 +49,7 @@
                         </div>
                         <div class="col-10">
                             <ckeditor [editor]="Editor" (ready)="onReady($event)" [disabled]="true"
-                        data={{data.html_body}} ></ckeditor>
+                        data={{data.bodyPreview}} ></ckeditor>
                         </div>
                     </div>
                     <div class="row info" *ngIf="data.email_attachment">
