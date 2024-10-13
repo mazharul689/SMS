@@ -30,7 +30,7 @@ const routes: Routes = [
     component: AllEmailTemplateComponent
   },
   {
-    path: 'mail-box/:firstName/:id',
+    path: 'mail-box/:firstName/:hexEmail/:id',
     component: MailBoxComponent
   },
   {

@@ -134,7 +134,7 @@ export class AllCommunicationComponent implements OnInit {
     })
 
     this.firstNameFilter.valueChanges.subscribe(firstname => {
-      this.filteredValues.firstname = firstname; 
+      this.filteredValues.firstname = firstname;
       this.dataSource.filter = JSON.stringify(this.filteredValues)
     })
     this.lastNameFilter.valueChanges.subscribe(lastname => {
@@ -154,7 +154,7 @@ export class AllCommunicationComponent implements OnInit {
     this.apiService.getAPI('getstudentcommunication').subscribe((data) => {
       // console.log(data['data']);
       this.students = data['data']
-      
+
       this.dataSource.data = this.students // on data receive populate dataSource.data array
       return data
     })
@@ -198,10 +198,18 @@ export class AllCommunicationComponent implements OnInit {
   addNew() {
     this.router.navigate(['/admin/communication/email']);
   }
-  viewMail(firstName,id){
-    // console.log(firstName)
-    this.router.navigate([`/admin/communication/mail-box/${firstName}/${id}`]);
+  viewMail(firstName,email,id){
+    const hexEmail = this.convertToHex(email);
+    console.log(hexEmail)
+    this.router.navigate([`/admin/communication/mail-box/${firstName}/${hexEmail}/${id}`]);
 
+  }
+  convertToHex(email: string): string {
+    let hex = '';
+    for (let i = 0; i < email.length; i++) {
+      hex += email.charCodeAt(i).toString(16);
+    }
+    return hex;
   }
   public loadData() {
     this.dataSource = new MatTableDataSource() // create new object

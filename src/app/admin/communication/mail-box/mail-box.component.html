@@ -58,7 +58,7 @@
                                             </mat-header-cell>
                                             <mat-cell *matCellDef="let row" data-toggle="tooltip"
                                                 data-placement="right">
-                                                <span>{{row.type}}</span>
+                                                <span>Email</span>
                                                 <!-- <mat-label *ngIf="row.communicationType == 'E'">E-mail</mat-label>
                                                 <mat-label *ngIf="row.communicationType == 'S'">SMS</mat-label> -->
                                             </mat-cell>
@@ -76,11 +76,11 @@
                                               <mat-label style="color: white;">Message</mat-label>
                                             </mat-header-cell>
                                             <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right" >
-                                              <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.msg}}</span>
+                                              <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.bodyPreview}}</span>
 
                                             </mat-cell>
                                           </ng-container>
-                                          
+
                                         <ng-container matColumnDef="attachment">
                                             <mat-header-cell *matHeaderCellDef style="background: #3F51B5;">
                                                 <mat-label style="color: white;">Attachment</mat-label>
@@ -107,7 +107,7 @@
                                                 <mat-label style="color: white;">Date</mat-label>
                                             </mat-header-cell>
                                             <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
-                                                {{row.date}}
+                                              {{ row.sentDateTime | date: 'yyyy-MM-dd' }}
                                             </mat-cell>
                                         </ng-container>
                                         <ng-container matColumnDef="actions1">

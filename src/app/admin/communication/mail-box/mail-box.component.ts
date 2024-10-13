@@ -45,6 +45,7 @@ export interface Message {
 export class MailBoxComponent implements OnInit {
   messages
   studentID
+  hexEmail
   firstName
   mode = new FormControl('side')
   displayedColumns: string[] = ['type', 'subject', 'message', 'attachment', 'date', 'actions1']
@@ -61,9 +62,11 @@ export class MailBoxComponent implements OnInit {
     private datePipe: DatePipe,
     private router: Router,
   ) {
+    this.hexEmail = this.actRoute.snapshot.params.hexEmail;
     this.firstName = this.actRoute.snapshot.params.firstName;
     this.studentID = this.actRoute.snapshot.params.id;
-    this.getMessage()
+
+    this.getMessage(this.studentID, this.convertHexToString(this.hexEmail))
   }
 
   ngOnInit(): void {
@@ -74,6 +77,13 @@ export class MailBoxComponent implements OnInit {
   newMessage(firstName,id){
     this.router.navigate([`/admin/communication/sent-email/${firstName}/${id}`]);
 
+  }
+  convertHexToString(hex: string): string {
+    let str = '';
+    for (let i = 0; i < hex.length; i += 2) {
+      str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+    }
+    return str;
   }
   /*getMessage(){
     this.apiService.getAPI(`getstudentcommunicationbystudentid?id=${this.studentID}`).subscribe((data) => {
@@ -104,25 +114,25 @@ export class MailBoxComponent implements OnInit {
     })
   }*/
 
-  getMessage(){
-    this.apiService.getAPI(`getemailinbox?id=${this.studentID}`).subscribe((data) => {
+  getMessage(studentId, email){
+    this.apiService.getAPI(`getemailinbox?id=${studentId}&email=${email}`).subscribe((data) => {
       this.messages = data
       this.messages.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
+        const dateA = new Date(a.sentDateTime);
+        const dateB = new Date(b.sentDateTime);
         return dateB.getTime() - dateA.getTime();
       });
 
-      for(let i = 0; i < this.messages.length; i++){
-        // this.messages[i].html_body = this.messages[i].html_body.replace( /(<([^>]+)>)/ig, '')
-        this.messages[i].msg = this.messages[i].html_body.replace( /(<([^>]+)>)/ig, '')
-        this.messages[i].rowID = i
-        // this.messages[i].email_attachment = this.messages[i].email_attachment.split(";")
-        this.messages[i].date = this.datePipe.transform(this.messages[i].date, 'dd/MM/yyyy')
-        if(this.messages[i].email_attachment){
-          this.messages[i].fileName = this.messages[i].email_attachment.replace("tmp/export/emailattachments/22/","")
-        }
-      }
+      // for(let i = 0; i < this.messages.length; i++){
+      //   // this.messages[i].html_body = this.messages[i].html_body.replace( /(<([^>]+)>)/ig, '')
+      //   this.messages[i].msg = this.messages[i].html_body.replace( /(<([^>]+)>)/ig, '')
+      //   this.messages[i].rowID = i
+      //   // this.messages[i].email_attachment = this.messages[i].email_attachment.split(";")
+      //   this.messages[i].date = this.datePipe.transform(this.messages[i].date, 'dd/MM/yyyy')
+      //   if(this.messages[i].email_attachment){
+      //     this.messages[i].fileName = this.messages[i].email_attachment.replace("tmp/export/emailattachments/22/","")
+      //   }
+      // }
 
       // for(let i = 0; i < this.messages.length; i++){
       //   this.messages[i].email_attachment = this.messages[i].email_attachment.split(";")

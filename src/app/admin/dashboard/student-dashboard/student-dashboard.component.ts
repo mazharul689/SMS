@@ -289,7 +289,7 @@ export class StudentDashboardComponent implements OnInit {
   getMessage() {
     if (this.email != "loading...") {
       this.apiService.getAPI(`getemailinbox?id=${this.studentID}&email=${this.email}`).subscribe((data) => {
-        this.messages = data['value']
+        this.messages = data
         this.messageLength = this.messages.length
         this.messages.sort((a, b) => {
           const dateA = new Date(a.date);

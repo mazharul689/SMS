@@ -156,7 +156,7 @@
                                                 <mat-label style="color: white; font-size: 15px;">Actions</mat-label>
                                             </mat-header-cell>
                                             <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
-                                                <button mat-icon-button class="btn-tbl-edit" title="view message" (click)="viewMail(row.firstname,row.studentid)">
+                                                <button mat-icon-button class="btn-tbl-edit" title="view message" (click)="viewMail(row.firstname,row.email,row.studentid)">
                                                     <mat-icon aria-label="Edit" class="col-white">description</mat-icon>
                                                 </button>
                                                 <!-- <button mat-icon-button class="btn-tbl-veiw-enrol" title="Add Course" (click)="addEnrCourse(studentId)">

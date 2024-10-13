@@ -326,7 +326,7 @@ export class SentEmailComponent implements OnInit {
             // Push the API call promises into the array
             const uploadPromise = this.apiService.postAPI('fileupload', formData).toPromise().then((data: any) => {
               if (i == this.docRows.length - 1) {
-                this.docLoc += data.data.replaceAll(' ', '_');
+                this.docLoc += data.data.replaceAll(' ', '_') + ";";
               } else {
                 this.docLoc += data.data.replaceAll(' ', '_') + ";";
               }
