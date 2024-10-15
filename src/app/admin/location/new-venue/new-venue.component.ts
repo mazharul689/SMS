@@ -22,13 +22,22 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 })
 export class NewVenueComponent implements OnInit {
   HFormGroup1: FormGroup
-  states
+  states: any
   countries
   trainingOrgs
   requiredError = { isError: false, errorMessage: '' }
   duplicateVenueerr = false
   duplicateVenueErrMsg
   dateValidate = { isError: false, errorMessage: '' }
+  getAll: any;
+  postCodeChanges: any;
+  suburbDisable = true;
+  suburbs: Object;
+  apiTest = false;
+  stateAbbr: any;
+  stateName: any;
+  stateIdChanges: any;
+  allStates: any;
   constructor
   (
     private fb: FormBuilder,
@@ -37,14 +46,48 @@ export class NewVenueComponent implements OnInit {
     private router: Router
   ) { }
 
+  public postCodeChange(newValue) {
+    this.postCodeChanges = newValue
+    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC') {
+      this.suburbDisable = false
+      this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
+        this.suburbs = data
+        this.apiTest = true
+        this.states = data[0].state.name
+        this.stateAbbr = this.suburbs[0].state.abbreviation
+        this.apiService.getAPI(`getstateid?id=${this.stateAbbr}`).subscribe((data) => {
+          this.stateName = data['data'][0].stateid
+          this.HFormGroup1.patchValue({
+            stateId: this.stateName
+          })
+        })
+      })
+    }
+    else if (this.postCodeChanges.length == 4 || this.postCodeChanges == '0000' || this.postCodeChanges == '@@@@' || this.postCodeChanges == 'OSPC') {
+      this.states = null
+      this.stateName = null
+      this.HFormGroup1.patchValue({
+        suburb: 'Not specified'
+      })
+      this.suburbDisable = true
+    }
+  }
+  public stateIdChange(newValue) {
+    this.stateIdChanges = newValue
+  }
+
   ngOnInit(): void {
+    this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
+    this.countries = this.getAll[0].Country
+    this.trainingOrgs = this.getAll[0].trainingorg
+    this.allStates = this.getAll[0].State
     this.HFormGroup1 = this.fb.group({
       venueCode: ['', [Validators.required, Validators.maxLength(10)]],
       venueName: ['', [Validators.required, Validators.maxLength(100)]],
       trainingOrgId: [1, [Validators.required]],
       address1: ['', [Validators.required, Validators.maxLength(30)]],
       suburb: ['', [Validators.maxLength(20)]],
-      stateId: [10, [Validators.required]],
+      stateId: ['', [Validators.required]],
       postCode: ['', [Validators.required, Validators.max(9999)]],
       countryId: [1, [Validators.required]],
       contactNo: ['', [Validators.required, Validators.maxLength(100)]],
@@ -52,15 +95,15 @@ export class NewVenueComponent implements OnInit {
       effectiveDateFrom: [''],
       effectiveDateTo: ['']
     })
-    this.apiService.getAPI('getstate').subscribe((data) => {
-      this.states = data['data'];
-    })
-    this.apiService.getAPI('getcountry').subscribe((data) => {
-      this.countries = data['data'];
-    })
-    this.apiService.getAPI('gettrainingOrg').subscribe((data) => {
-      this.trainingOrgs = data['data'];
-    })
+    // this.apiService.getAPI('getstate').subscribe((data) => {
+    //   this.states = data['data'];
+    // })
+    // this.apiService.getAPI('getcountry').subscribe((data) => {
+    //   this.countries = data['data'];
+    // })
+    // this.apiService.getAPI('gettrainingOrg').subscribe((data) => {
+    //   this.trainingOrgs = data['data'];
+    // })
   }
   compareTwoDates(){
     setTimeout(() => {

@@ -119,40 +119,45 @@
                                         </mat-form-field>
                                     </div>
                                     <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                                        <mat-form-field class="example-full-width mb-3">
-                                            <mat-label>State</mat-label>
-                                            <mat-select formControlName="stateId" required>
-                                                <mat-option *ngFor="let state of states" [value]="state.stateid">
-                                                    {{state.statecode}} - {{ state.statename }}
-                                                </mat-option>
-                                            </mat-select>
-                                            <mat-error *ngIf="HFormGroup1.get('stateId').hasError('required')">
-                                                State is required
-                                            </mat-error>
-                                        </mat-form-field>
+                                      <mat-form-field class="example-full-width mb-3">
+                                        <mat-label>Postcode</mat-label>
+                                        <input matInput list="postcode" (ngModelChange)="postCodeChange($event)"
+                                          formControlName="postCode" required>
+                                        <mat-error *ngIf="HFormGroup1.get('postCode').hasError('required')">
+                                          Postcode is required
+                                        </mat-error>
+                                        <mat-error *ngIf="HFormGroup1.get('postCode').hasError('minlength')">
+                                          Minimum length is 4 characters
+                                        </mat-error>
+                                        <mat-error *ngIf="HFormGroup1.get('postCode').hasError('maxlength')">
+                                          Maximum length is 4 characters
+                                        </mat-error>
+                                      </mat-form-field>
                                     </div>
-                                </div>
-                                <div class="row">
+
+                                  </div>
+                                  <div class="row">
                                     <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                                        <mat-form-field class="example-full-width mb-3">
-                                            <mat-label>Suburb</mat-label>
-                                            <input matInput formControlName="suburb" type="text">
-                                            <mat-error *ngIf="HFormGroup1.get('suburb').hasError('maxlength')">
-                                                Maximum length is 20
-                                            </mat-error>
-                                        </mat-form-field>
+                                      <mat-form-field class="example-full-width mb-3">
+                                        <mat-label>State</mat-label>
+                                        <mat-select formControlName="stateId" required>
+                                          <mat-option *ngFor="let state of allStates" [value]="state.stateid">
+                                            {{state.statename}}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>
                                     </div>
                                     <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                                        <mat-form-field class="example-full-width mb-3">
-                                            <mat-label>Postcode</mat-label>
-                                            <input matInput formControlName="postCode" type="number" required>
-                                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('required')">
-                                                Postcode is required
-                                            </mat-error>
-                                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('max')">
-                                                Maximum length is 4 characters
-                                            </mat-error>
-                                        </mat-form-field>
+                                      <mat-form-field class="example-full-width mb-3">
+                                        <mat-label>Suburb</mat-label>
+                                        <input matInput list="suburb" formControlName="suburb" [readonly]="suburbDisable" required>
+                                        <datalist id="suburb">
+                                          <option *ngFor="let suburb of suburbs">{{suburb.name}} </option>
+                                        </datalist>
+                                        <mat-error *ngIf="HFormGroup1.get('suburb').hasError('required')">
+                                          Suburb is required
+                                        </mat-error>
+                                      </mat-form-field>
                                     </div>
                                     <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                                         <mat-form-field class="example-full-width mb-3">

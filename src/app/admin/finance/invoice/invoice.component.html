@@ -195,7 +195,7 @@
                         </ng-container>
                       </ng-container>
                       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                      <mat-row class="table-row" [class.focus]="row.isPaid == 'Y'" *matRowDef="let row;let i=index; columns: displayedColumns;"
+                      <mat-row  class="table-row" [class.focus]="row.isPaid == 'F'" [class.partial]="row.isPaid == 'P'" *matRowDef="let row;let i=index; columns: displayedColumns;"
                         [style.cursor]="'pointer'" matRipple>
                       </mat-row>
                     </mat-table>

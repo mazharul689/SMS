@@ -287,13 +287,23 @@ export class InvoiceComponent implements OnInit {
           }
           for (let i in allPaymentPlansWithRules) {
             let temp = 0
+            let totalPaidAmount = 0
             for (let j in allPaymentPlansWithRules[i].rulearray.Rows) {
               if (allPaymentPlansWithRules[i].rulearray.Rows[j].ruletype) {
                 allPaymentPlansWithRules[i].rulearray.Rows[j].ruletype = allPaymentPlansWithRules[i].rulearray.Rows[j].ruletype.replace(/<\/?p>/g, ' ');
                 temp += parseInt(allPaymentPlansWithRules[i].rulearray.Rows[j].amount)
+                totalPaidAmount += parseInt(allPaymentPlansWithRules[i].rulearray.Rows[j].paidAmount || 0)
+
               }
             }
             allPaymentPlansWithRules[i].totalAmount = temp
+            allPaymentPlansWithRules[i].totalPaidAmount = totalPaidAmount
+            if(allPaymentPlansWithRules[i].statuscheck == 'Y' && temp == totalPaidAmount){
+              allPaymentPlansWithRules[i].statuscheck = 'F'
+            }
+            else if(allPaymentPlansWithRules[i].statuscheck == 'Y' &&  temp > totalPaidAmount ){
+              allPaymentPlansWithRules[i].statuscheck = 'P'
+            }
           }
           this.inputItemArray.clear();
           for (let i = 0; i < allPaymentPlansWithRules.length; i++) {
@@ -311,6 +321,7 @@ export class InvoiceComponent implements OnInit {
               paymentDesc: allPaymentPlansWithRules[i].paymentdesc,
               amountTypeId: allPaymentPlansWithRules[i].amounttypeid,
               totalAmount: allPaymentPlansWithRules[i].totalAmount,
+              totalPaidAmount: allPaymentPlansWithRules[i].totalPaidAmount,
               agentId: allPaymentPlansWithRules[i].agentid,
               Rowsrules: [allPaymentPlansWithRules[i].rulearray.Rows],
               financeItemId: allPaymentPlansWithRules[i].financeitemid,
@@ -320,6 +331,7 @@ export class InvoiceComponent implements OnInit {
             (this.HFormGroup1.get('inputItemArray') as FormArray).push(rowData)
           }
           console.log(this.HFormGroup1.value)
+
           this.dataSource.data = this.HFormGroup1.value.inputItemArray
           return data
         }

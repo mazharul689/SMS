@@ -382,10 +382,6 @@ export class NewStudentComponent implements OnInit {
   }
   public stateIdChange(newValue) {
     this.stateIdChanges = newValue
-    // this.apiService.getAPI(`getpostcode?id=${this.stateIdChanges}`).subscribe((data)=>{
-    //   this.postcodes = data['data']
-    //   console.log('postcodes',this.postcodes)
-    // })
   }
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue

@@ -31,6 +31,14 @@ export class EditVenueComponent implements OnInit {
   duplicateVenueerr = false
   duplicateVenueErrMsg
   dateValidate = { isError: false, errorMessage: '' }
+  getAll: any;
+  allStates: any;
+  postCodeChanges: any;
+  suburbDisable = true;
+  suburbs: Object;
+  apiTest = false;
+  stateAbbr: any;
+  stateName: any;
   constructor
   (
     private fb: FormBuilder,
@@ -40,7 +48,37 @@ export class EditVenueComponent implements OnInit {
     private activatedRoute: ActivatedRoute
   ) { }
 
+  public postCodeChange(newValue) {
+    this.postCodeChanges = newValue
+    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC') {
+      this.suburbDisable = false
+      this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
+        this.suburbs = data
+        this.apiTest = true
+        this.states = data[0].state.name
+        this.stateAbbr = this.suburbs[0].state.abbreviation
+        this.apiService.getAPI(`getstateid?id=${this.stateAbbr}`).subscribe((data) => {
+          this.stateName = data['data'][0].stateid
+          this.HFormGroup1.patchValue({
+            stateId: this.stateName
+          })
+        })
+      })
+    }
+    else if (this.postCodeChanges.length == 4 || this.postCodeChanges == '0000' || this.postCodeChanges == '@@@@' || this.postCodeChanges == 'OSPC') {
+      this.states = null
+      this.stateName = null
+      this.HFormGroup1.patchValue({
+        suburb: 'Not specified'
+      })
+      this.suburbDisable = true
+    }
+  }
   ngOnInit(): void {
+    this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
+    this.countries = this.getAll[0].Country
+    this.trainingOrgs = this.getAll[0].trainingorg
+    this.allStates = this.getAll[0].State
     this.venueID = this.activatedRoute.snapshot.paramMap.get('id');
     this.HFormGroup1 = this.fb.group({
       venueCode: ['', [Validators.required, Validators.maxLength(10)]],
@@ -66,7 +104,7 @@ export class EditVenueComponent implements OnInit {
       this.trainingOrgs = data['data'];
     })
     this.apiService.getAPI(`getvenue?id=${this.venueID}`).subscribe((data) => {
-      console.log(data['data']); 
+      console.log(data['data']);
       this.location = data['data'][0]
       console.log(this.location)
       this.HFormGroup1.patchValue({
