@@ -76,6 +76,7 @@ export class InvoiceDialogComponent implements OnInit {
       invoiceNumber: '',
       invoiceDate: new Date(),
       paymentDueDate: moment(this.data.paymentDueDate),
+      extendedDueDate: this.data.extendedDueDate,
       agentId: this.data.agentId,
       agentCommission: this.data.agentCommission || 0,
       amountTypeId: this.data.amountTypeId,
@@ -101,6 +102,7 @@ export class InvoiceDialogComponent implements OnInit {
       invoiceNumber: '',
       invoiceDate: '',
       paymentDueDate: '',
+      extendedDueDate: '',
       agentId: '',
       agentCommission: '',
       amountTypeId: '',
@@ -254,11 +256,16 @@ export class InvoiceDialogComponent implements OnInit {
     formData.invoiceDate = this.datePipe.transform(formData.invoiceDate, 'yyyy-MM-dd')
     formData.paymentDueDate = this.datePipe.transform(formData.paymentDueDate, 'yyyy-MM-dd')
     console.log(formData)
+
+    if(formData.extendedDueDate.valid){
+      formData.extendedDueDate = this.datePipe.transform(formData.extendedDueDate, 'yyyy-MM-dd')
+    }
     this.HFormGroup2.patchValue({
       studentEnrolmentId : formData.studentEnrolmentId ,
       invoiceNumber: formData.invoiceNumber,
       invoiceDate: formData.invoiceDate,
       paymentDueDate: formData.paymentDueDate,
+      extendedDueDate: formData.extendedDueDate,
       agentId: formData.agentId,
       agentCommission: formData.agentCommission,
       amountTypeId: formData.amountTypeId,
@@ -275,7 +282,8 @@ export class InvoiceDialogComponent implements OnInit {
     this.HFormGroup2.setControl('ItemArray', this.fb.array(formData.tempData.map(item => this.fb.group(item))));
     console.log(this.HFormGroup2.value)
     this.apiService.postAPI('editstudentinvoicebystudentinvoiceid',this.HFormGroup2.value).subscribe((data => {
-      if(data['data']['msg'] == "Recod updated"){
+// console.log(data['data']['msg'])
+      if(data['data']['msg'] == "Record updated"){
         this.dialogRef.close()
       }
     }))

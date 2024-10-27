@@ -50,7 +50,7 @@ const ELEMENT_DATA: PaymentPlanWithRules[] = []
 })
 export class InvoiceComponent implements OnInit {
   // displayedColumns: string[] = ['rowId', 'paymentRule', 'itemQty', 'unitPrice', 'GST', 'amount', 'dueDate']
-  displayedColumns: string[] = ['paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'actions']
+  displayedColumns: string[] = ['paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'dueamount', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'actions']
   dataSource: MatTableDataSource<PaymentPlanWithRules>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator
   @ViewChild(MatSort, { static: true }) sort: MatSort
@@ -123,6 +123,7 @@ export class InvoiceComponent implements OnInit {
       invoiceNumber: null,
       invoiceDate: null,
       paymentDueDate: null,
+      extendedDueDate: null,
       agentId: null,
       agentCommission: null,
       amountTypeId: null,
@@ -298,6 +299,7 @@ export class InvoiceComponent implements OnInit {
             }
             allPaymentPlansWithRules[i].totalAmount = temp
             allPaymentPlansWithRules[i].totalPaidAmount = totalPaidAmount
+            allPaymentPlansWithRules[i].dueAmount = temp - totalPaidAmount
             if(allPaymentPlansWithRules[i].statuscheck == 'Y' && temp == totalPaidAmount){
               allPaymentPlansWithRules[i].statuscheck = 'F'
             }
@@ -314,6 +316,7 @@ export class InvoiceComponent implements OnInit {
               itemName: allPaymentPlansWithRules[i].itemname,
               isPaid: allPaymentPlansWithRules[i].statuscheck,
               paymentPlanInstalmentDueDate: moment(allPaymentPlansWithRules[i].paymentplaninstalmentduedate),
+              extendedDueDate: moment(allPaymentPlansWithRules[i].extendedduedate),
               gst: allPaymentPlansWithRules[i].gst,
               agentCommission: allPaymentPlansWithRules[i].agentcommission,
               agentBonus: allPaymentPlansWithRules[i].agentbonus,
@@ -322,6 +325,7 @@ export class InvoiceComponent implements OnInit {
               amountTypeId: allPaymentPlansWithRules[i].amounttypeid,
               totalAmount: allPaymentPlansWithRules[i].totalAmount,
               totalPaidAmount: allPaymentPlansWithRules[i].totalPaidAmount,
+              totalDueAmount: allPaymentPlansWithRules[i].dueAmount,
               agentId: allPaymentPlansWithRules[i].agentid,
               Rowsrules: [allPaymentPlansWithRules[i].rulearray.Rows],
               financeItemId: allPaymentPlansWithRules[i].financeitemid,
@@ -367,6 +371,7 @@ export class InvoiceComponent implements OnInit {
       invoiceNumber: '',
       invoiceDate: '',
       paymentDueDate: '',
+      extendedDueDate: '',
       agentId: '',
       agentCommission: '',
       amountTypeId: '',
@@ -522,6 +527,7 @@ export class InvoiceComponent implements OnInit {
       invoiceNumber: form1Value.AdditionalItem[0].invoiceNumber,
       invoiceDate: this.datePipe.transform(new Date(), 'yyyy-MM-dd'),
       paymentDueDate: this.datePipe.transform(form1Value.AdditionalItem[0].paymentPlanInstalmentDueDate, 'yyyy-MM-dd'),
+      extendedDueDate: this.datePipe.transform(form1Value.AdditionalItem[0].extendedDueDate, 'yyyy-MM-dd'),
       paymentPlanInstalmentDueDate: this.datePipe.transform(form1Value.AdditionalItem[0].paymentPlanInstalmentDueDate, 'yyyy-MM-dd'),
       agentId: form1Value.AdditionalItem[0].agentId,
       agentCommission: form1Value.AdditionalItem[0].agentCommission,

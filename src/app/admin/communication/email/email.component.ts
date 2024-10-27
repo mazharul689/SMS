@@ -71,7 +71,7 @@ export class EmailComponent implements OnInit {
   public editorConfig = {
     toolbar: [],
   };
-  errorsReq: any = { isError: false, errorMessage: '' };
+  errorsReq: any = { isError: false, errorMessage: "" };
   students;
   displayedColumns: string[] = [
     "rowID",
@@ -90,12 +90,13 @@ export class EmailComponent implements OnInit {
   lastNameFilter = new FormControl("");
   courseNameFilter = new FormControl("");
   emailFilter = new FormControl("");
+
   filteredValues = {
     courseIntakeDateId: "",
-    clientId: "",
-    firstName: "",
-    lastName: "",
-    courseName: "",
+    clientid: "",
+    firstname: "",
+    lastname: "",
+    coursename: "",
     email: "",
   };
   userInfo: any;
@@ -108,7 +109,7 @@ export class EmailComponent implements OnInit {
   allApplicationStatus: any;
   getAll: any;
   editorChange(newVal) {
-    console.log(newVal);
+    // console.log(newVal);
   }
   public componentEvents: string[] = [];
   selection = new SelectionModel<Students>(true, []);
@@ -128,7 +129,9 @@ export class EmailComponent implements OnInit {
   courseIntakeFilter = new FormControl();
   agentFilter = new FormControl();
   specialClientIdFilter = new FormControl();
-  applicationStatusFilter = new FormControl();
+  applicationStatusFilter = new FormControl(6);
+  usiFilter = new FormControl();
+  studentNameFilter = new FormControl();
   constructor(
     private fb: FormBuilder,
     public httpClient: HttpClient,
@@ -137,31 +140,31 @@ export class EmailComponent implements OnInit {
     private datePipe: DatePipe
   ) {
     this.getStudents();
-    this.baseUrl = environment.testURL
+    this.baseUrl = environment.testURL;
   }
 
   ngOnInit(): void {
     this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
-    this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
+    this.getAll = JSON.parse(window.localStorage.getItem("getAll"));
     this.dataSource = new MatTableDataSource(); // create new object
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
 
     this.dataSource.filterPredicate = this.createFilter();
-    this.clientIdFilter.valueChanges.subscribe((clientId) => {
-      this.filteredValues.clientId = clientId;
+    this.clientIdFilter.valueChanges.subscribe((clientid) => {
+      this.filteredValues.clientid = clientid;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
-    this.firstNameFilter.valueChanges.subscribe((firstName) => {
-      this.filteredValues.firstName = firstName;
+    this.firstNameFilter.valueChanges.subscribe((firstname) => {
+      this.filteredValues.firstname = firstname;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
     this.lastNameFilter.valueChanges.subscribe((lastName) => {
-      this.filteredValues.lastName = lastName;
+      this.filteredValues.lastname = lastName;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
     this.courseNameFilter.valueChanges.subscribe((courseName) => {
-      this.filteredValues.courseName = courseName;
+      this.filteredValues.coursename = courseName;
       this.dataSource.filter = JSON.stringify(this.filteredValues);
     });
     this.emailFilter.valueChanges.subscribe((email) => {
@@ -174,7 +177,7 @@ export class EmailComponent implements OnInit {
       subject: ["", [Validators.required]],
       testFC: [""],
       msg: ["", [Validators.required]],
-      from_email_address: [''],
+      from_email_address: [""],
       fromEmailAddressId: ["", [Validators.required]],
       attachmentUrl: ["", [Validators.required]],
       Rows: this.fb.array([this.getStudent()]),
@@ -192,74 +195,95 @@ export class EmailComponent implements OnInit {
     //   Rows: this.fb.array([this.newRowsArr()]),
     // });
     this.apiService.getAPI("getcourse").subscribe((data) => {
-      //console.log(data);
       this.allCourseIntakeDate = data["data"];
+      this.allCourseIntakeDate.push({
+        courseid: 100,
+        coursename: "All",
+      });
     });
     this.apiService.getAPI("getagent").subscribe((data) => {
       this.allAgents = data["data"];
+      this.allAgents.push({
+        agencyname: "All",
+        agentid: 100,
+      });
+      // console.log(this.allAgents);
     });
-    this.allApplicationStatus = this.getAll[0].ApplicationStatus
+    this.allApplicationStatus = this.getAll[0].ApplicationStatus;
+    this.allApplicationStatus.push({
+      applicationstatusname: "All",
+      applicationstatusid: 100,
+    });
+    this.apiService.getAPI("getfromemailaddress").subscribe((data) => {
+      this.fromEmails = data["data"];
+    });
+    this.apiService.getAPI("getemailtemplate").subscribe((data) => {
+      this.emailTemplates = data["data"];
+    });
+    this.apiService.getAPI("gettemplateparameter").subscribe((data) => {
+      this.templateParameter = data["data"];
+    });
   }
 
   emailChange(id) {
     // console.log(id)
     this.HFormGroup1.patchValue({
-      from_email_address: this.fromEmails[id - 1].from_email_address
-    })
+      from_email_address: this.fromEmails[id - 1].from_email_address,
+    });
   }
-  search(cid: any, aid: any, asid: any, clid: any) {
-    // console.log(this.applicationStatusFilter)
+  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any) {
+    // this.selection = new SelectionModel<Students>(true, []);
     let queryParams = [];
 
     // Build query string based on available parameters
-    if (cid) {
+    if (cid && cid != 100) {
       queryParams.push(`courseid=${cid}`);
     }
-    if (aid) {
+    if (aid && aid != 100) {
       queryParams.push(`agentid=${aid}`);
     }
-    if (asid) {
+    if (asid && asid != 100) {
       queryParams.push(`applicationstatusid=${asid}`);
     }
     if (clid) {
       queryParams.push(`clientid=${clid}`);
     }
+    if (uid) {
+      queryParams.push(`usiNo=${uid}`);
+    }
+    if (name) {
+      queryParams.push(`studentname=${name}`);
+    }
     // console.log(queryParams)
     // If there are any query parameters, make the API call
     if (queryParams.length > 0) {
-      const queryString = queryParams.join('&');
+      const queryString = queryParams.join("&");
       this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
         // console.log(data);
         // if (this.HFormGroup1.valid) {
-
-        if (data['data'].msg) {
+        if (data["data"].msg) {
           // window.scroll(0, 0);
-          var show = document.getElementById('closebtn')
-
-          this.errorsReq = { isError: true, errorMessage: data['data'].msg }
-          this.dataSource.data = []
-        }
-        else {
-          let students = data['data']
-          for (var i in students) {
+          var show = document.getElementById("closebtn");
+          this.errorsReq = { isError: true, errorMessage: data["data"].msg };
+          this.dataSource.data = [];
+        } else {
+          let students = data["data"];
+          for (let i in students) {
             students[i].rowID = i;
-            students[i].startDate = this.datePipe.transform(
-              students[i].startdate,
-              "dd/MM/yyyy"
-            );
-            students[i].endDate = this.datePipe.transform(
-              students[i].enddate,
-              "dd/MM/yyyy"
-            );
+            students[i].fullname =
+              students[i].firstname + " " + students[i].lastname;
           }
           this.dataSource.data = students; // on data receive populate dataSource.data array
-
+          // console.log(this.dataSource.data);
+          return data;
         }
         if (show) {
-          show.style.display = 'block'
+          show.style.display = "block";
         }
         return data;
-      })
+      });
+    } else {
+      this.getStudents();
     }
   }
 
@@ -348,20 +372,7 @@ export class EmailComponent implements OnInit {
     }
   }
   getStudents() {
-    this.apiService.getAPI("getfromemailaddress").subscribe((data) => {
-      this.fromEmails = data["data"];
-    });
-    this.apiService.getAPI("getemailtemplate").subscribe((data) => {
-      this.emailTemplates = data["data"];
-    });
-    this.apiService.getAPI("gettemplateparameter").subscribe((data) => {
-      this.templateParameter = data["data"];
-    });
-    this.apiService.getAPI("getstudent").subscribe((data) => {
-      // if(data.message){
-      //   alert('Session Expired')
-      //   this.router.navigate(['/authentication/signin']);
-      // }
+    this.apiService.getAPI(`getstudent?applicationstatusid=6`).subscribe((data) => {
       this.students = data["data"];
       // console.log('student',this.students)
       for (var i in this.students) {
@@ -376,6 +387,7 @@ export class EmailComponent implements OnInit {
         );
       }
       this.dataSource.data = this.students; // on data receive populate dataSource.data array
+      // console.log(this.dataSource.data)
       return data;
     });
   }
@@ -383,20 +395,20 @@ export class EmailComponent implements OnInit {
     let filterFunction = function (data, filter): boolean {
       let searchTerms = JSON.parse(filter);
       return (
-        data.clientId
+        data.clientid
           .toLowerCase()
           .toString()
-          .indexOf(searchTerms.clientId.toLowerCase()) !== -1 &&
-        data.firstName
+          .indexOf(searchTerms.clientid.toLowerCase()) !== -1 &&
+        data.firstname
           .toLowerCase()
-          .indexOf(searchTerms.firstName.toLowerCase()) !== -1 &&
-        (data.lastName || "")
+          .indexOf(searchTerms.firstname.toLowerCase()) !== -1 &&
+        (data.lastname || "")
           .toLowerCase()
-          .indexOf(searchTerms.lastName.toLowerCase()) !== -1 &&
-        (data.courseName || "")
+          .indexOf(searchTerms.lastname.toLowerCase()) !== -1 &&
+        (data.coursename || "")
           .toLowerCase()
           .toLowerCase()
-          .indexOf(searchTerms.courseName.toLowerCase()) !== -1 &&
+          .indexOf(searchTerms.coursename.toLowerCase()) !== -1 &&
         data.email
           .toLowerCase()
           .toLowerCase()
@@ -429,14 +441,17 @@ export class EmailComponent implements OnInit {
           let file: File = this.selectedFiles[i];
           this.file = file.name;
           let formData: FormData = new FormData();
-          formData.append('inputfile', file, file.name);
-          formData.append('uploadfolder', 'StudentsCommunications');
+          formData.append("inputfile", file, file.name);
+          formData.append("uploadfolder", "StudentsCommunications");
 
           if (file) {
             // Push the API call promises into the array
-            const uploadPromise = this.apiService.postAPI('fileupload', formData).toPromise().then((data: any) => {
-                this.docLoc += data.data.replaceAll(' ', '_') + ";";
-            });
+            const uploadPromise = this.apiService
+              .postAPI("fileupload", formData)
+              .toPromise()
+              .then((data: any) => {
+                this.docLoc += data.data.replaceAll(" ", "_") + ";";
+              });
 
             uploadPromises.push(uploadPromise);
           }
@@ -445,20 +460,24 @@ export class EmailComponent implements OnInit {
 
       // Wait for all promises to resolve before calling this.send()
       Promise.all(uploadPromises).then(() => {
+        if (this.docLoc.endsWith(";")) {
+          this.docLoc = this.docLoc.slice(0, -1);
+        }
         this.send();
       });
-    }
-    else {
+    } else {
       this.send();
     }
-
   }
-  replacePlaceholders(template: string, data: { [key: string]: string }): string {
+  replacePlaceholders(
+    template: string,
+    data: { [key: string]: string }
+  ): string {
     let result = template;
     // Iterate over each key-value pair in the data object
     for (const [key, value] of Object.entries(data)) {
       const placeholder = `{${key}}`; // Placeholder format, e.g., {StudentName}
-      const regex = new RegExp(placeholder, 'g'); // Regular expression to find all instances of the placeholder
+      const regex = new RegExp(placeholder, "g"); // Regular expression to find all instances of the placeholder
       result = result.replace(regex, value); // Replace placeholder with actual value
     }
     return result;
@@ -466,19 +485,26 @@ export class EmailComponent implements OnInit {
   send() {
     let emailBody = this.HFormGroup1.value;
     delete emailBody.testFC;
-    emailBody.subject = emailBody.subject.replace(/<\/?(strong|p|b|i|h[1-6])>/g, "");
+    emailBody.subject = emailBody.subject.replace(
+      /<\/?(strong|p|b|i|h[1-6])>/g,
+      ""
+    );
     // emailBody.msg = emailBody.msg.replace("<p>", "");
     // emailBody.msg = emailBody.msg.replace("</p>", "");
     emailBody.attachmentUrl = this.docLoc;
     let rows = this.sendSelectedNumbers();
-    console.log(this.students);
+    // console.log(rows);
+    // console.log(this.students);
     (this.HFormGroup1.get("Rows") as FormArray).removeAt(0);
     for (let i = 0; i < rows.length; i++) {
       let rowData = this.fb.group({
         studentId: this.students[rows[i]].studentid,
         statusCheck: true,
         email: this.students[rows[i]].email,
-        subject: this.replacePlaceholders(emailBody.subject, this.students[rows[i]]),
+        subject: this.replacePlaceholders(
+          emailBody.subject,
+          this.students[rows[i]]
+        ),
         msg: this.replacePlaceholders(emailBody.msg, this.students[rows[i]]),
         attachmentUrl: emailBody.attachmentUrl,
       });
@@ -486,17 +512,19 @@ export class EmailComponent implements OnInit {
     }
     this.HFormGroup1.value.msg = emailBody.msg;
     this.HFormGroup1.value.attachmentUrl = emailBody.attachmentUrl;
-    let formData = this.HFormGroup1.value
-    delete formData.email
-    delete formData.subject
-    delete formData.msg
-    delete formData.attachmentUrl
-    delete formData.testFC
+    let formData = this.HFormGroup1.value;
+    delete formData.email;
+    delete formData.subject;
+    delete formData.msg;
+    delete formData.attachmentUrl;
+    delete formData.testFC;
     // console.log("form data", formData);
-    this.apiService.postAPI(`addstudentcommunication`, this.HFormGroup1.value).subscribe((data) => {
-      console.log('E-mail sent successfully: ', data)
-      this.router.navigate(['/admin/communication/all-communication']);
-    })
+    this.apiService
+      .postAPI(`addstudentcommunication`, this.HFormGroup1.value)
+      .subscribe((data) => {
+        // console.log("E-mail sent successfully: ", data);
+        this.router.navigate(["/admin/communication/all-communication"]);
+      });
   }
   drag(ev: any, templateparameterid: number) {
     const dragObj = this.templateParameter.find(

@@ -40,6 +40,17 @@
               </div>
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3">
+                  <mat-label>Extended Due Date</mat-label>
+                  <input matInput [matDatepicker]="basicDatepicker2" formControlName="extendedDueDate">
+                  <mat-datepicker-toggle matSuffix [for]="basicDatepicker2">
+                  </mat-datepicker-toggle>
+                  <mat-datepicker #basicDatepicker2></mat-datepicker>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <mat-form-field class="example-full-width mb-3">
                   <mat-label>Agent</mat-label>
                   <mat-select formControlName="agentId">
                     <mat-option *ngFor="let agent of agents" [value]="agent.agentid">
@@ -48,8 +59,6 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-            </div>
-            <div class="row">
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3">
                   <mat-label>Agent Commission</mat-label>
@@ -57,6 +66,9 @@
                     (ngModelChange)="priceChange()">
                 </mat-form-field>
               </div>
+
+            </div>
+            <div class="row">
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3">
                   <mat-label>Agent Commission Type</mat-label>
@@ -67,14 +79,15 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-            </div>
-            <div class="row">
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3">
                   <mat-label>Agent Bonus</mat-label>
                   <input type="number" matInput formControlName="agentBonus" (ngModelChange)="priceChange()" required>
                 </mat-form-field>
               </div>
+
+            </div>
+            <div class="row">
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                 <mat-form-field class="example-full-width mb-3">
                   <mat-label>Agent Bonus Type</mat-label>
@@ -85,8 +98,6 @@
                   </mat-select>
                 </mat-form-field>
               </div>
-            </div>
-            <div class="row">
               <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" style="padding-top : 10px">
                 <section class="example-section mb-4">
                   <label class="example col-lg-5 col-md-4 col-sm-5">GST (%)</label>

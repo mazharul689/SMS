@@ -84,6 +84,7 @@ export class AllStudentComponent implements OnInit {
   bulkApplicationStatusFilter = new FormControl();
   agentFilter = new FormControl();
   usiFilter = new FormControl();
+  studentNameFilter = new FormControl();
   clientIdFilter = new FormControl("");
   firstNameFilter = new FormControl("");
   lastNameFilter = new FormControl("");
@@ -96,6 +97,7 @@ export class AllStudentComponent implements OnInit {
   enrolmentDateFilter = new FormControl("");
   classNameFilter = new FormControl("");
   expectedCompletionDateFilter = new FormControl("");
+
   filteredValues = {
     courseIntakeDateId: "",
     clientid: "",
@@ -166,16 +168,29 @@ export class AllStudentComponent implements OnInit {
     this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
     this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
     this.allApplicationStatus = this.getAll[0].ApplicationStatus
+    this.allApplicationStatus.push({
+      applicationstatusname: "All",
+      applicationstatusid: 100
+    })
     this.dataSource = new MatTableDataSource(); // create new object
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
     //Filtering
     this.apiService.getAPI("getcourse").subscribe((data) => {
-      //console.log(data);
       this.allCourseIntakeDate = data["data"];
+      this.allCourseIntakeDate.push({
+        courseid: 100,
+        coursename: "All"
+      })
     });
     this.apiService.getAPI("getagent").subscribe((data) => {
       this.allAgents = data["data"];
+      this.allAgents.push({
+        agencyname: "All",
+        agentid: 100
+      });
+      console.log(this.allAgents)
+
     });
     //this.courseIntakeFilter.setValue('id')
     // console.log(this.courseIntakeFilter.value)
@@ -302,17 +317,17 @@ export class AllStudentComponent implements OnInit {
     };
     return filterFunction;
   }
-  search(cid: any, aid: any, asid: any, clid: any, uid: any) {
+  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any) {
     let queryParams = [];
 
     // Build query string based on available parameters
-    if (cid) {
+    if (cid && cid != 100) {
       queryParams.push(`courseid=${cid}`);
     }
-    if (aid) {
+    if (aid && aid != 100) {
       queryParams.push(`agentid=${aid}`);
     }
-    if (asid) {
+    if (asid && asid != 100) {
       queryParams.push(`applicationstatusid=${asid}`);
     }
     if (clid) {
@@ -320,6 +335,9 @@ export class AllStudentComponent implements OnInit {
     }
     if(uid){
       queryParams.push(`usiNo=${uid}`);
+    }
+    if(name){
+      queryParams.push(`studentname=${name}`);
     }
     // console.log(queryParams)
     // If there are any query parameters, make the API call
@@ -347,6 +365,9 @@ export class AllStudentComponent implements OnInit {
         }
         return data;
       })
+    }
+    else{
+      this.getStudents()
     }
   }
   searchByAgent() {

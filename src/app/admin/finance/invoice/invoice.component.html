@@ -8,13 +8,15 @@
           </div>
           <div class="body">
             <div class="row">
-              <div *ngIf="this.errorsEncounter.isError" class="col-4 alert alert-danger m-auto text-center"id="closebtn">
+              <div *ngIf="this.errorsEncounter.isError" class="col-4 alert alert-danger m-auto text-center"
+                id="closebtn">
                 <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                <strong>Warning!</strong> {{ this.errorsEncounter.errorMessage }}
+                <strong>Warning!</strong>
+                {{ this.errorsEncounter.errorMessage }}
               </div>
             </div>
             <div class="row">
-              <div *ngIf="this.errorsReq.isError" class="col-4 alert alert-danger m-auto text-center"id="closebtn">
+              <div *ngIf="this.errorsReq.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtn">
                 <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
                 <strong>Warning!</strong> {{ this.errorsReq.errorMessage }}
               </div>
@@ -25,13 +27,14 @@
                   <span><strong>Student's Name</strong></span>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2" *ngIf="allStudents">
-                  <span>:&emsp;{{allStudents.firstname}} {{allStudents.lastname}}</span>
+                  <span>:&emsp;{{ allStudents.firstname }}
+                    {{ allStudents.lastname }}</span>
                 </div>
                 <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
                   <span><strong>Email</strong></span>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2" *ngIf="allStudents">
-                  <span>:&emsp;{{allStudents.email}}</span>
+                  <span>:&emsp;{{ allStudents.email }}</span>
                 </div>
               </div>
               <div class="row">
@@ -39,13 +42,14 @@
                   <span><strong>Birth Date</strong></span>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2" *ngIf="allStudents">
-                  <span>:&emsp;{{allStudents.dob | date:'dd/MM/yyyy'}}</span>
+                  <span>:&emsp;{{ allStudents.dob | date : "dd/MM/yyyy" }}</span>
                 </div>
                 <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
                   <span><strong>Course</strong></span>
                 </div>
                 <div class="col-xl-5 col-lg-5 col-md-6 col-sm-6 mb-2" *ngIf="allStudents">
-                  <span>:&emsp;{{allStudents.coursecode}} - {{ allStudents.coursename }}</span>
+                  <span>:&emsp;{{ allStudents.coursecode }} -
+                    {{ allStudents.coursename }}</span>
                 </div>
               </div>
               <div class="row">
@@ -53,7 +57,7 @@
                   <span><strong>Total Payable Amount</strong></span>
                 </div>
                 <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 mb-2" *ngIf="allStudents">
-                  <span>:&emsp;{{allStudents.tuitionfee}}</span>
+                  <span>:&emsp;{{ allStudents.tuitionfee }}</span>
                 </div>
               </div>
               <!-- <div class="row">
@@ -74,10 +78,12 @@
                 </div>
               </div> -->
               <div *ngIf="!this.errorsEncounter.isError">
-                <div class="row" style="padding-bottom: 20px;" *ngIf="enableSaveButton == 'N'">
+                <div class="row" style="padding-bottom: 20px" *ngIf="enableSaveButton == 'N'">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 text-end">
                     <div class="example-button-row">
-                      <button class="btn-space" mat-raised-button color="primary" (click)="addItem()">Add More</button>
+                      <button class="btn-space" mat-raised-button color="primary" (click)="addItem()">
+                        Add More
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -86,40 +92,51 @@
                     <mat-table #table [dataSource]="dataSource" matSort class="mat-cell" formArrayName="inputItemArray">
                       <ng-container matColumnDef="paymentPlanInstalmentOrder">
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
-                          <mat-label style="color: white; font-size: 15px;">Ins No</mat-label>
+                          <mat-label style="color: white; font-size: 15px">Ins No</mat-label>
                         </mat-header-cell>
-                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
-                          <mat-label>{{row.paymentPlanInstalmentOrder}}</mat-label>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i = index" [formGroupName]="i">
+                          <mat-label>{{
+                            row.paymentPlanInstalmentOrder
+                            }}</mat-label>
                         </mat-cell>
                       </ng-container>
                       <ng-container matColumnDef="invoiceNo">
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
-                          <mat-label style="color: white; font-size: 15px;">Inv No</mat-label>
+                          <mat-label style="color: white; font-size: 15px">Inv No</mat-label>
                         </mat-header-cell>
-                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
-                          <mat-label>{{row.invoiceNo}}</mat-label>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i = index" [formGroupName]="i">
+                          <mat-label>{{ row.invoiceNo }}</mat-label>
                         </mat-cell>
                       </ng-container>
                       <ng-container matColumnDef="financeItemId">
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
-                          <mat-label style="color: white; font-size: 15px;">Finance Item</mat-label>
+                          <mat-label style="color: white; font-size: 15px">Finance Item</mat-label>
                         </mat-header-cell>
-                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
-                          <mat-label>{{row.itemName}}</mat-label>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i = index" [formGroupName]="i">
+                          <mat-label>{{ row.itemName }}</mat-label>
                         </mat-cell>
                       </ng-container>
                       <ng-container matColumnDef="ruleType">
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
-                          <mat-label style="color: white; font-size: 15px;">Rule Type</mat-label>
+                          <mat-label style="color: white; font-size: 15px">Rule Type</mat-label>
                         </mat-header-cell>
-                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-cell *matCellDef="let row; let i = index" [formGroupName]="i" class="pr-0">
                           <table>
-                            <tr *ngFor="let item of row.Rowsrules; let j = index; let last = last">
+                            <tr *ngFor="
+                                let item of row.Rowsrules;
+                                let j = index;
+                                let last = last
+                              ">
                               <td>
                                 {{ item.ruletype }}
-                                <span
-                                  *ngIf="item.paymentPlanInstalmentRuleCondition && item.paymentPlanInstalmentRuleCondition.length > 0">
-                                  ({{ item.paymentPlanInstalmentRuleCondition }})
+                                <span *ngIf="
+                                    item.paymentPlanInstalmentRuleCondition &&
+                                    item.paymentPlanInstalmentRuleCondition
+                                      .length > 0
+                                  ">
+                                  ({{
+                                  item.paymentPlanInstalmentRuleCondition
+                                  }})
                                 </span>
                               </td>
                             </tr>
@@ -128,75 +145,108 @@
                       </ng-container>
                       <ng-container matColumnDef="spsamount">
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
-                          <mat-label style="color: white; font-size: 15px;">Amount</mat-label>
+                          <mat-label style="color: white; font-size: 15px">Amount</mat-label>
                         </mat-header-cell>
-                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-cell *matCellDef="let row; let i = index" [formGroupName]="i" class="pr-0">
                           <table>
-                            <tr *ngFor="let item of row.Rowsrules; let j = index; let last = last">
-                              <td>${{ item.amount }}</td>
+                            <tr *ngFor="
+                                let item of row.Rowsrules;
+                                let j = index;
+                                let last = last
+                              ">
+                              <td>${{ item.amount | number : "1.2-2" }}</td>
                             </tr>
                           </table>
                         </mat-cell>
                       </ng-container>
                       <ng-container matColumnDef="commission">
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
-                          <mat-label style="color: white; font-size: 15px;">Commission</mat-label>
+                          <mat-label style="color: white; font-size: 15px">Commission</mat-label>
                         </mat-header-cell>
-                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
-                          <mat-label>{{ row.agentCommission }}%+GST = {{ (row.agentCommission / 100) * row.totalAmount
-                            }}+{{ (10/100) * row.totalAmount }} </mat-label>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i = index" [formGroupName]="i">
+                          <mat-label>{{ row.agentCommission }}%+GST =
+                            {{
+                            (row.agentCommission / 100) * row.totalAmount
+                            | number : "1.2-2"
+                            }}
+                            +
+                            {{
+                            (10 / 100) * row.totalAmount | number : "1.2-2"
+                            }}
+                            =
+                            {{
+                            (row.agentCommission / 100) * row.totalAmount +
+                            (10 / 100) * row.totalAmount | number : "1.2-2"
+                            }}</mat-label>
                         </mat-cell>
                       </ng-container>
-
+                      <ng-container matColumnDef="dueamount">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size: 15px">Due Amount</mat-label>
+                        </mat-header-cell>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i = index" [formGroupName]="i"
+                          style="justify-content: center">
+                          <mat-label>${{
+                            row.totalDueAmount | number : "1.2-2"
+                            }}</mat-label>
+                        </mat-cell>
+                      </ng-container>
                       <ng-container matColumnDef="paymentPlanInstalmentDueDate">
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
-                          <mat-label style="color: white; font-size: 15px;">Due Date</mat-label>
+                          <mat-label style="
+                              color: white;
+                              font-size: 15px; padding-left: 10px;">Due Date</mat-label>
                         </mat-header-cell>
-                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
-                          <mat-form-field class="example-full-width mb-3" style="width: 90px;">
-                            <input matInput [matDatepicker]="eDpicker" formControlName="paymentPlanInstalmentDueDate">
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i = index" [formGroupName]="i">
+                          <mat-form-field class="example-full-width mb-3" style="width: 90px">
+                            <input matInput [matDatepicker]="eDpicker" formControlName="paymentPlanInstalmentDueDate" />
                             <mat-datepicker-toggle matSuffix [for]="eDpicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #eDpicker></mat-datepicker>
                           </mat-form-field>
                         </mat-cell>
-                        <ng-container matColumnDef="paymentDesc">
-                          <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
-                            <mat-label style="color: white; font-size: 15px;">Pay. Desc.</mat-label>
-                          </mat-header-cell>
-                          <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
-                            <mat-label>{{ row.paymentDesc }}</mat-label>
-                          </mat-cell>
-                        </ng-container>
-                        <ng-container matColumnDef="actions">
-                          <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
-                            <mat-label style="color: white; font-size: 15px;">Action</mat-label>
-                          </mat-header-cell>
-                          <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
-                            <button mat-icon-button class="btn-tbl-edit" title="Invoice" (click)="invoice(row)" [disabled]="this.enableSaveButton == 'Y'">
-                              <span class="material-icons-outlined" style="
-                          font-size: 19px;
-                          color: white;
-                      ">credit_card</span>
-                            </button>
-                            <button mat-icon-button class="btn-tbl-edit" title="Print" (click)="printInvoice(row)" [disabled]="this.enableSaveButton == 'Y'">
-                              <span class="material-icons-outlined" style="
-                          font-size: 19px;
-                          color: rgb(253, 2, 2);
-                      ">picture_as_pdf</span>
-                            </button>
-                            <button mat-icon-button class="btn-tbl-edit" title="Send Invoice" (click)="sendInvoice(allStudents.firstname,allStudents.studentid)" [disabled]="this.enableSaveButton == 'Y'">
-                              <span class="material-icons-outlined" style="
-                          font-size: 19px;
-                          color: rgb(255, 255, 255);
-                      ">email</span>
-                            </button>
-                          </mat-cell>
-                        </ng-container>
+                      </ng-container>
+                      <ng-container matColumnDef="paymentDesc">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size: 15px">Pay. Desc.</mat-label>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i = index" [formGroupName]="i" class="pr-0">
+                          <mat-label>{{ row.paymentDesc }}</mat-label>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="actions">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size: 15px">Action</mat-label>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i = index" [formGroupName]="i" class="pr-0">
+                          <button mat-icon-button class="btn-tbl-edit" title="Invoice" (click)="invoice(row)"
+                            [disabled]="this.enableSaveButton == 'Y'">
+                            <span class="material-icons-outlined"
+                              style="font-size: 19px; color: white">credit_card</span>
+                          </button>
+                          <button mat-icon-button class="btn-tbl-edit" title="Print" (click)="printInvoice(row)"
+                            [disabled]="this.enableSaveButton == 'Y'">
+                            <span class="material-icons-outlined"
+                              style="font-size: 19px; color: rgb(253, 2, 2)">picture_as_pdf</span>
+                          </button>
+                          <button mat-icon-button class="btn-tbl-edit" title="Send Invoice" (click)="
+                              sendInvoice(
+                                allStudents.firstname,
+                                allStudents.studentid
+                              )
+                            " [disabled]="this.enableSaveButton == 'Y'">
+                            <span class="material-icons-outlined"
+                              style="font-size: 19px; color: rgb(255, 255, 255)">email</span>
+                          </button>
+                        </mat-cell>
                       </ng-container>
                       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                      <mat-row  class="table-row" [class.focus]="row.isPaid == 'F'" [class.partial]="row.isPaid == 'P'" *matRowDef="let row;let i=index; columns: displayedColumns;"
-                        [style.cursor]="'pointer'" matRipple>
+                      <mat-row class="table-row" [class.focus]="row.isPaid == 'F'" [class.partial]="row.isPaid == 'P'"
+                        *matRowDef="
+                          let row;
+                          let i = index;
+                          columns: displayedColumns
+                        " [style.cursor]="'pointer'" matRipple>
                       </mat-row>
                     </mat-table>
                     <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
@@ -212,19 +262,22 @@
                   </div>
                 </div> -->
                 <div class="row" *ngIf="showRows">
-                  <div formArrayName="AdditionalItem"
-                    *ngFor="let item of HFormGroup1.get('AdditionalItem')['controls']; let i = index;  let last = last">
+                  <div formArrayName="AdditionalItem" *ngFor="
+                      let item of HFormGroup1.get('AdditionalItem')['controls'];
+                      let i = index;
+                      let last = last
+                    ">
                     <div class="row" [formGroupName]="i">
                       <div class="col-1">
                         <mat-form-field class="example-full-width" appearance="outline">
                           <mat-label>Ins No.</mat-label>
-                          <input matInput type="number" formControlName="paymentPlanInstalmentOrder">
+                          <input matInput type="number" formControlName="paymentPlanInstalmentOrder" />
                         </mat-form-field>
                       </div>
                       <div class="col-1-5">
                         <mat-form-field class="example-full-width" appearance="outline">
                           <mat-label>Inv. No.</mat-label>
-                          <input matInput formControlName="invoiceNumber">
+                          <input matInput formControlName="invoiceNumber" />
                         </mat-form-field>
                       </div>
                       <div class="col-1-5">
@@ -240,7 +293,7 @@
                       <div class="col-2">
                         <mat-form-field class="example-full-width" appearance="outline">
                           <mat-label>Due Date</mat-label>
-                          <input matInput [matDatepicker]="dDpicker" formControlName="paymentPlanInstalmentDueDate">
+                          <input matInput [matDatepicker]="dDpicker" formControlName="paymentPlanInstalmentDueDate" />
                           <mat-datepicker-toggle matSuffix [for]="dDpicker">
                           </mat-datepicker-toggle>
                           <mat-datepicker #dDpicker></mat-datepicker>
@@ -249,7 +302,7 @@
                       <div class="col-2">
                         <mat-form-field class="example-full-width" appearance="outline">
                           <mat-label>Payment Desc.</mat-label>
-                          <input matInput formControlName="paymentDesc">
+                          <input matInput formControlName="paymentDesc" />
                         </mat-form-field>
                       </div>
                       <div class="col-1">
@@ -264,33 +317,34 @@
                       </div>
 
                       <div class="col-3">
-                          <label class="example col-md-2 col-sm-2">GST</label>
-                          <mat-radio-group class="col-md-10 col-sm-10" formControlName="gst">
-                            <mat-radio-button
-                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
-                              value="Y" [disabled]="editable">Yes</mat-radio-button>
-                            <mat-radio-button
-                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
-                              value="N" [disabled]="editable">No</mat-radio-button>
-                          </mat-radio-group>
-
+                        <label class="example col-md-2 col-sm-2">GST</label>
+                        <mat-radio-group class="col-md-10 col-sm-10" formControlName="gst">
+                          <mat-radio-button
+                            class="example-margin d-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="Y" [disabled]="editable">Yes</mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="N" [disabled]="editable">No</mat-radio-button>
+                        </mat-radio-group>
                       </div>
-                      <div formArrayName="Rowsrules"
-                        *ngFor="let rule of item.get('Rowsrules')['controls']; let j = index">
+                      <div formArrayName="Rowsrules" *ngFor="
+                          let rule of item.get('Rowsrules')['controls'];
+                          let j = index
+                        ">
                         <div class="row" [formGroupName]="j">
                           <div class="col-2">
                             <mat-form-field class="example-full-width" appearance="outline">
                               <mat-label>Item Name</mat-label>
-                              <input matInput formControlName="itemName">
+                              <input matInput formControlName="itemName" />
                             </mat-form-field>
                           </div>
                           <div class="col-2">
                             <mat-form-field class="example-full-width" appearance="outline">
                               <mat-label>Amount</mat-label>
-                              <input matInput type="number" formControlName="amount">
+                              <input matInput type="number" formControlName="amount" />
                             </mat-form-field>
                           </div>
-                          <div class="col-2" style="padding-top: 7px;">
+                          <div class="col-2" style="padding-top: 7px">
                             <button type="button" mat-mini-fab color="accent"
                               aria-label="Example icon button with a plus one icon" (click)="addRows(i)">
                               <mat-icon>plus_one</mat-icon>
@@ -310,7 +364,9 @@
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <div class="example-button-row">
                       <button class="btn-space" [disabled]="!HFormGroup1.valid" mat-raised-button color="primary"
-                        (click)="onInvoiceSubmit()">Save</button>
+                        (click)="onInvoiceSubmit()">
+                        Save
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -318,7 +374,9 @@
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <div class="example-button-row">
                       <button class="btn-space" [disabled]="!HFormGroup1.valid" mat-raised-button color="primary"
-                        (click)="addStudentInvoice()">Save</button>
+                        (click)="addStudentInvoice()">
+                        Save
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -327,8 +385,9 @@
                 <div class="row">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <div class="example-button-row">
-                      <button class="btn-space" mat-raised-button color="primary"
-                        (click)="setStudentPaymentSchedule()">Set Student Payment Schedule</button>
+                      <button class="btn-space" mat-raised-button color="primary" (click)="setStudentPaymentSchedule()">
+                        Set Student Payment Schedule
+                      </button>
                     </div>
                   </div>
                 </div>

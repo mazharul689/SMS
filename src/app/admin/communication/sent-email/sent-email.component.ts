@@ -335,6 +335,9 @@ export class SentEmailComponent implements OnInit {
 
       // Wait for all promises to resolve before calling this.send()
       Promise.all(uploadPromises).then(() => {
+        if (this.docLoc.endsWith(";")) {
+          this.docLoc = this.docLoc.slice(0, -1);
+        }
         this.send();
       });
     }
