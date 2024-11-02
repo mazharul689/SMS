@@ -11,11 +11,14 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatSelectModule } from '@angular/material/select'
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatRadioModule } from '@angular/material/radio';
-
+import { StudentsPaymentsComponent } from './students-payments/students-payments.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
   declarations: [
     AvetmissComponent,
-    AsqaComponent
+    AsqaComponent,
+    StudentsPaymentsComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +31,9 @@ import { MatRadioModule } from '@angular/material/radio';
     MatIconModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTableModule,
+    MatPaginatorModule,
   ]
 })
 export class ReportsModule { }

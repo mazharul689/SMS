@@ -56,6 +56,8 @@
     "chart.js": "^2.9.4",
     "core-js": "^3.12.1",
     "echarts": "^4.9.0",
+    "exceljs": "^4.4.0",
+    "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
     "mat-progress-buttons": "^9.2.1",
@@ -81,6 +83,7 @@
     "tslib": "^2.2.0",
     "url-polyfill": "^1.1.12",
     "util": "^0.12.4",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

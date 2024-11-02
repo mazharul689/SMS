@@ -241,7 +241,7 @@
                         </mat-cell>
                       </ng-container>
                       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                      <mat-row class="table-row" [class.focus]="row.isPaid == 'F'" [class.partial]="row.isPaid == 'P'"
+                      <mat-row class="table-row" [class.requiredSave]="enableSaveButton == 'Y'" [class.focus]="row.isPaid == 'F'" [class.partial]="row.isPaid == 'P'"
                         *matRowDef="
                           let row;
                           let i = index;
