@@ -141,3 +141,32 @@
 .units .mat-column-actions {
   max-width: 10% !important;
 }
+
+
+//Students payment report
+.units .mat-column-clientId {
+  max-width: 11% !important;
+}
+.units .mat-column-name {
+  max-width: 12% !important;
+}
+.units .mat-column-courseCode {
+  max-width: 12% !important;
+}
+.units .mat-column-courseName {
+  max-width: 25% !important;
+}
+.units .mat-column-totalFee {
+  max-width: 10% !important;
+}
+.units .mat-column-totalPaidAmount {
+  max-width: 15% !important;
+}
+.units .mat-column-totalDueAmount {
+  max-width: 15% !important;
+}
+
+
+.units .mat-form-field-ripple {
+  background-color: #eff3ef !important;
+}

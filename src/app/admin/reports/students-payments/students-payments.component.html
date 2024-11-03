@@ -7,7 +7,7 @@
             <ul class="header-buttons float-end d-inline-flex mb-0">
               <li>
                 <div class="icon-button-demo">
-                  <button mat-mini-fab color="primary" matTooltip="Add New Receipt" (click)="downloadAsExcel(allStudentPayments)">
+                  <button mat-mini-fab color="primary" matTooltip="Add New Receipt" (click)="testByMazhar()">
                     <mat-icon class="col-white">receipt</mat-icon>
                   </button>
                 </div>
@@ -22,9 +22,9 @@
               <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
                 <ng-container matColumnDef="clientId">
                   <mat-header-cell class="pr-0" *matHeaderCellDef>
-                    <mat-form-field class="filter" floatLabel="never">
+                    <mat-form-field class="filter" floatLabel="never" style="width: 65px;">
                       <mat-label style="color: white; font-size: 15px;">Client Id</mat-label>
-                      <input matInput [formControl]="clientIdFilter">
+                      <input matInput style="color: white;" class="white-cursor" [formControl]="clientIdFilter">
                     </mat-form-field>
                   </mat-header-cell>
                   <mat-cell class="pr-0" *matCellDef="let row">
@@ -34,14 +34,40 @@
                 <ng-container matColumnDef="name">
                   <mat-header-cell class="pr-0" *matHeaderCellDef>
                     <div class="searchcolumn">
-                      <mat-form-field class="filter" floatLabel="never">
+                      <mat-form-field class="filter" floatLabel="never" style="width: 105px;">
                         <mat-label style="color: white; font-size: 15px;">Students Name</mat-label>
-                        <input matInput [formControl]="nameFilter">
+                        <input matInput style="color: white;" class="white-cursor" [formControl]="nameFilter">
                       </mat-form-field>
                     </div>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row">
                     {{row.name}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="courseCode">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <div class="searchcolumn">
+                      <mat-form-field class="filter" floatLabel="never" style="width: 105px;">
+                        <mat-label style="color: white; font-size: 15px;">Course Code</mat-label>
+                        <input matInput style="color: white;" class="white-cursor" [formControl]="courseCodeFilter">
+                      </mat-form-field>
+                    </div>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{row.coursecode}}
+                  </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="courseName">
+                  <mat-header-cell class="pr-0" *matHeaderCellDef>
+                    <div class="searchcolumn">
+                      <mat-form-field class="filter" floatLabel="never" style="width: 255px;">
+                        <mat-label style="color: white; font-size: 15px;">Course Name</mat-label>
+                        <input matInput style="color: white;" class="white-cursor" [formControl]="courseNameFilter">
+                      </mat-form-field>
+                    </div>
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let row">
+                    {{row.coursename}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="totalFee">
