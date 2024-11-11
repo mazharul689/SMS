@@ -329,7 +329,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     tuitionfee: '',
     amounttypeid: '',
     agentcommission: '',
-    gst: ''
+    gst: '',
+    offerletternumber: ''
   }
   priorDetails = {
     userid: '',
@@ -606,6 +607,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       reasonTakingCourseId: [2],
       applyForRPL: ['N'],
       studentEnrolmentDate: [null],
+      offerLetterNumber: '',
       TuitionFee: ['0', [Validators.required]],
       priorDetail: this.fb.group({
         userId: [1],
@@ -1012,6 +1014,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
             trainingContractid: this.editEnrolment.trainingcontractid,
             reasonTakingCourseId: this.editEnrolment.reasontakingcourseid,
             applyForRPL: this.editEnrolment.applyforrpl,
+            offerLetterNumber: this.editEnrolment.offerletternumber,
             studentEnrolmentDate: moment(this.editEnrolment.studentenrolmentdate),
             TuitionFee: this.editEnrolment.tuitionfee,
             agentCommission: this.editEnrolment.agentcommission,

@@ -254,4 +254,8 @@ export class TrainingactivityComponent implements OnInit {
       window.scroll(0, 0)
     }
   }
+  closeErrorAlert() {
+    this.error.isError = false;
+  }
+
 }

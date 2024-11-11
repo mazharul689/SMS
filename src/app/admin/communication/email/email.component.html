@@ -35,6 +35,7 @@
                       </mat-form-field>
                     </div>
                   </div>
+
                   <div class="row">
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2" style="padding: 20px">
                       <span>Template</span>
@@ -49,6 +50,7 @@
                       </mat-form-field>
                     </div>
                   </div>
+
                   <div class="row">
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-2" style="padding: 20px">
                       <span class="asterisk">Subject</span>
@@ -145,11 +147,40 @@
                     Recipients
                   </span>
                 </div>
+
                 <div class="section-content">
                   <div class="row">
                     <div *ngIf="errorsReq.isError" class="col-6 alert alert-danger m-auto text-center" id="closebtn">
                       <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
                       <strong>Warning!</strong> {{ errorsReq.errorMessage }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2" style="padding: 10px">
+                      <section class="example-full-width mb-3">
+                        <label class="example col-lg-5 col-md-5 col-sm-5: asterisk">Incluede Agents Email</label>
+                        <mat-radio-group class="col-lg-7 col-md-7 col-sm-7" formControlName="agentsCheck">
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="Y">Yes</mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="N">No</mat-radio-button>
+                        </mat-radio-group>
+                      </section>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2" style="padding: 10px">
+                      <section class="example-full-width mb-3">
+                        <label class="example col-lg-5 col-md-5 col-sm-5: asterisk">Incluede Alter Email</label>
+                        <mat-radio-group class="col-lg-7 col-md-7 col-sm-7" formControlName="altEmailCheck">
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="Y">Yes</mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="N">No</mat-radio-button>
+                        </mat-radio-group>
+                      </section>
                     </div>
                   </div>
                   <div class="newCourseUnit">

@@ -1,21 +1,5 @@
 <section class="content">
     <div class="container-fluid">
-        <!-- <div class="block-header">
-            <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <ul class="breadcrumb breadcrumb-style ">
-                        <li class="breadcrumb-item">
-                            <h4 class="page-title">Outcome</h4>
-                        </li>
-                        <li class="breadcrumb-item bcrumb-1">
-                            <a routerLink="/admin/outcome/all-student">
-                                <i class="fas fa-home"></i>All Student</a>
-                        </li>
-                        <li class="breadcrumb-item active">Training Activity</li>
-                    </ul>
-                </div>
-            </div>
-        </div> -->
         <div class="row clearfix editStudent">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                 <div class="card">
@@ -26,7 +10,7 @@
                         <div class="row">
                             <div *ngIf="error.isError" class="alert alert-danger col-3 m-auto"
                                 [ngStyle]="{'display': (error.isError == true) ? 'block' : 'none'}">
-                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                <span class="closebtn" (click)="closeErrorAlert()">&times;</span>
                                 <strong>Warning!</strong> {{ error.errorMessage }}
                             </div>
                         </div>
@@ -132,7 +116,7 @@
                                                                 <mat-form-field class="example-full-width mb-3">
                                                                     <mat-label>Start Date</mat-label>
                                                                     <input matInput [matDatepicker]="sDpicker"
-                                                                        formControlName="startDate" [value]="stDate">
+                                                                        formControlName="startDate" [value]="stdDate">
                                                                     <mat-datepicker-toggle matSuffix [for]="sDpicker">
                                                                     </mat-datepicker-toggle>
                                                                     <mat-datepicker #sDpicker>
@@ -144,7 +128,7 @@
                                                                     <mat-label>End Date</mat-label>
                                                                     <input matInput [matDatepicker]="eDpicker"
                                                                         formControlName="endDate" [value]="endDate"
-                                                                        (ngModelChange)="compareTwoDates()">
+                                                                        (ngModelChange)="compareTwoDates()" [min]="stdDate">
                                                                     <mat-datepicker-toggle matSuffix [for]="eDpicker">
                                                                     </mat-datepicker-toggle>
                                                                     <mat-datepicker #eDpicker>

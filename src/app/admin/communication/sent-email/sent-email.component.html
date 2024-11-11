@@ -172,6 +172,34 @@
                   </span>
                 </div>
                 <div class="section-content">
+                  <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2" style="padding: 10px">
+                      <section class="example-full-width mb-3">
+                        <label class="example col-lg-5 col-md-5 col-sm-5: asterisk">Incluede Agents Email</label>
+                        <mat-radio-group class="col-lg-7 col-md-7 col-sm-7" formControlName="agentsCheck">
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="Y">Yes</mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="N">No</mat-radio-button>
+                        </mat-radio-group>
+                      </section>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 mb-2" style="padding: 10px">
+                      <section class="example-full-width mb-3">
+                        <label class="example col-lg-5 col-md-5 col-sm-5: asterisk">Incluede Alter Email</label>
+                        <mat-radio-group class="col-lg-7 col-md-7 col-sm-7" formControlName="altEmailCheck">
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="Y">Yes</mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="N">No</mat-radio-button>
+                        </mat-radio-group>
+                      </section>
+                    </div>
+                  </div>
                   <div class="newCourseUnit">
                     <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
                       <ng-container matColumnDef="rowID">

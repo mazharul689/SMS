@@ -886,6 +886,7 @@ export class NewStudentComponent implements OnInit {
       TuitionFee: ['0', [Validators.required]],
       amountTypeId: '',
       agentCommission: '',
+      offerLetterNumber: '',
       gst: 'Y',
       priorDetail: this.fb.group({
         userId: [this.userInfo.userid],

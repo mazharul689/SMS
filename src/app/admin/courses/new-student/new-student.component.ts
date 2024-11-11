@@ -303,6 +303,7 @@ export class NewStudentComponent implements OnInit {
   difSuburbDisable: boolean
   courseIntakeData: any
   allStates: any
+  allAmounts: any
 
   // editTraning = [{
   //   trainingActivityId: '',
@@ -840,8 +841,12 @@ export class NewStudentComponent implements OnInit {
       trainingContractid: [null],
       reasonTakingCourseId: [2],
       applyForRPL: ['N'],
-      studentEnrolmentDate: [''],
+      studentEnrolmentDate: [null],
       TuitionFee: ['0', [Validators.required]],
+      amountTypeId: '',
+      agentCommission: '',
+      offerLetterNumber: '',
+      gst: 'Y',
       priorDetail: this.fb.group({
         userId: [this.userInfo.userid],
         studentEnrolmentId: [''],
@@ -964,6 +969,16 @@ export class NewStudentComponent implements OnInit {
       // console.log('trainingcontract',this.trainingContract)
 
     }
+    if (!window.localStorage.getItem('amounts')) {
+      this.apiService.getAPI(`getamounttype`).subscribe((data) => {
+        this.allAmounts = data['data']
+        window.localStorage.setItem("amounts", JSON.stringify(this.allAmounts))
+      })
+    }
+    else {
+      this.allAmounts = JSON.parse(window.localStorage.getItem('amounts'))
+    }
+
     // this.apiService.getAPI('gettrainingcontract').subscribe((data) => {
     //   //  console.log(data);
     //   this.trainingContract = data['data']
@@ -1149,6 +1164,16 @@ export class NewStudentComponent implements OnInit {
         })
       }
     }
+  }
+  getAgentId(id) {
+    this.apiService.getAPI(`getagent?id=${id}`).subscribe((data) => {
+      let agentDetails = data['data'][0]
+      this.HFormGroup4.patchValue({
+        amountTypeId: agentDetails.amounttypeid,
+        agentCommission: agentDetails.agentcommission,
+        gst: agentDetails.gst
+      })
+    })
   }
 
   getStudentInfo() {

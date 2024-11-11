@@ -1386,7 +1386,7 @@
                 <form [formGroup]="HFormGroup4" (ngSubmit)="onEnrolemntSubmit(stepper)">
                   <!-- <ng-template matStepLabel>Enrolment</ng-template> -->
                   <ng-template matStepLabel>
-                    <span [ngClass]="this.stepLabel == '4' ? 'highlight' : 'nonHighlight'">
+                    <span [ngClass]="this.stepLabel == '3' ? 'highlight' : 'nonHighlight'">
                       Enrolment
                     </span>
                   </ng-template>
@@ -1404,12 +1404,41 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent</mat-label>
-                            <mat-select formControlName="agentId">
+                            <mat-select formControlName="agentId" (ngModelChange)="getAgentId($event)">
                               <mat-option *ngFor="let agent of agents" [value]="agent.agentid">
                                 {{agent.agencyname}}
                               </mat-option>
                             </mat-select>
                           </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Agent Commission Type</mat-label>
+                            <mat-select formControlName="amountTypeId">
+                              <mat-option *ngFor="let amount of allAmounts" [value]="amount.amounttypeid">
+                                {{amount.amounttype}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Agent Commission</mat-label>
+                            <input matInput type="number" formControlName="agentCommission">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <section class="example-section mb-4">
+                            <label class="example col-md-5 col-sm-4">GST</label>
+                            <mat-radio-group class="col-md-7 col-sm-8" formControlName="gst">
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
@@ -1520,6 +1549,13 @@
                         </div>
                       </div>
                       <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Offer Letter Number</mat-label>
+                            <input matInput formControlName="offerLetterNumber" type="number"
+                              (ngModelChange)="setExpectedCompletion($event)">
+                          </mat-form-field>
+                        </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
                           <section class="example-section mb-4">
                             <label class="example col-md-4 col-sm-3">Apply For RPL</label>
@@ -1536,8 +1572,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Enrolment Date</mat-label>
-                            <input matInput [matDatepicker]="enroleDatepicker" formControlName="studentEnrolmentDate"
-                              >
+                            <input matInput [matDatepicker]="enroleDatepicker" formControlName="studentEnrolmentDate">
                             <mat-datepicker-toggle matSuffix [for]="enroleDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #enroleDatepicker></mat-datepicker>
@@ -1569,7 +1604,8 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
                           <section class="example-section mb-4">
                             <label class="example col-md-4 col-sm-3">Course Duration Type</label>
-                            <mat-radio-group class="col-md-8 col-sm-9" formControlName="courseDurationType" (ngModelChange)="setExpectedCompletion($event)">
+                            <mat-radio-group class="col-md-8 col-sm-9" formControlName="courseDurationType"
+                              (ngModelChange)="setExpectedCompletion($event)">
                               <mat-radio-button
                                 class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
                                 value="D">Day</mat-radio-button>
@@ -1582,7 +1618,8 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Course Duration</mat-label>
-                            <input matInput formControlName="courseDuration" (ngModelChange)="setExpectedCompletion($event)">
+                            <input matInput formControlName="courseDuration"
+                              (ngModelChange)="setExpectedCompletion($event)">
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">

@@ -188,6 +188,8 @@ export class EmailComponent implements OnInit {
 
     this.HFormGroup2 = this.fb.group({
       docRows: this.fb.array([this.newDocArr()]),
+      agentsCheck: ["Y"],
+      altEmailCheck: ["Y"],
     });
 
     // this.HFormGroup3 = this.fb.group({
@@ -478,9 +480,23 @@ export class EmailComponent implements OnInit {
     for (const [key, value] of Object.entries(data)) {
       const placeholder = `{${key}}`; // Placeholder format, e.g., {StudentName}
       const regex = new RegExp(placeholder, "g"); // Regular expression to find all instances of the placeholder
-      result = result.replace(regex, value); // Replace placeholder with actual value
+      // console.log(`Replacing "${placeholder}" with "${value}"`);
+      result = result.replace(regex, typeof value === "string" ? value.trim() : ""); // Replace placeholder with actual value
     }
     return result;
+  }
+  emails(eEmail, agent_contactemail, altemail) {
+    let email = [];
+    if (eEmail) {
+      email.push(`${eEmail}`);
+    }
+    if (agent_contactemail && this.HFormGroup2.value.agentsCheck == "Y") {
+      email.push(`${agent_contactemail}`);
+    }
+    if (altemail && this.HFormGroup2.value.altEmailCheck == "Y") {
+      email.push(`${altemail}`);
+    }
+    return email.join(";");;
   }
   send() {
     let emailBody = this.HFormGroup1.value;
@@ -497,10 +513,18 @@ export class EmailComponent implements OnInit {
     // console.log(this.students);
     (this.HFormGroup1.get("Rows") as FormArray).removeAt(0);
     for (let i = 0; i < rows.length; i++) {
+      // this.emails(this.students[rows[i]].email,
+      //     this.students[rows[i]].agent_contactemail,
+      //     this.students[rows[i]].altemail
+      //   );
       let rowData = this.fb.group({
         studentId: this.students[rows[i]].studentid,
         statusCheck: true,
-        email: this.students[rows[i]].email,
+        // email: this.students[rows[i]].email,
+        email: this.emails(this.students[rows[i]].email,
+          this.students[rows[i]].agent_contactemail,
+          this.students[rows[i]].altemail
+        ),
         subject: this.replacePlaceholders(
           emailBody.subject,
           this.students[rows[i]]

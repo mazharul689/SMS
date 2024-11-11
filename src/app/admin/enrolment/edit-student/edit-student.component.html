@@ -1862,6 +1862,13 @@
                       </div>
                       <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Offer Letter Number</mat-label>
+                            <input matInput formControlName="offerLetterNumber"
+                              (ngModelChange)="setExpectedCompletion($event)" type="number" [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <section class="example-section mb-4">
                             <label class="example col-md-5 col-sm-4">Apply For RPL</label>
                             <mat-radio-group class="col-md-7 col-sm-8" formControlName="applyForRPL">

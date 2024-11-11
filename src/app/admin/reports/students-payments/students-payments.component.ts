@@ -8,7 +8,20 @@ import { fromEvent } from 'rxjs';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms'
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
-
+import { DatePipe } from "@angular/common";
+import * as _moment from "moment";
+import { default as _rollupMoment } from "moment";
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+} from "@angular/material/core";
+import {
+  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
+  MAT_MOMENT_DATE_FORMATS,
+  MomentDateAdapter,
+} from "@angular/material-moment-adapter";
+const moment = _rollupMoment || _moment;
 export interface StudentsPayment {
   clientId
   studentName
@@ -21,7 +34,17 @@ export interface StudentsPayment {
 @Component({
   selector: 'app-students-payments',
   templateUrl: './students-payments.component.html',
-  styleUrls: ['./students-payments.component.sass']
+  styleUrls: ['./students-payments.component.sass'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS],
+    },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: "en-GB" },
+    DatePipe,
+  ],
 })
 export class StudentsPaymentsComponent implements OnInit {
   displayedColumns: string[] = ['clientId', 'name', 'courseCode', 'courseName', 'totalFee', 'totalPaidAmount', 'totalDueAmount']
@@ -43,6 +66,7 @@ export class StudentsPaymentsComponent implements OnInit {
   error = { isError: false, errorMessage: '' }
   constructor(
     private apiService: ApiService,
+    private datePipe: DatePipe,
     private router: Router,
     private fb: FormBuilder,
   ) {
@@ -78,7 +102,7 @@ export class StudentsPaymentsComponent implements OnInit {
       return data.clientid.toLowerCase().toString().indexOf(searchTerms.clientid.toLowerCase()) !== -1
         && data.name.toLowerCase().indexOf(searchTerms.name.toLowerCase()) !== -1
         && data.coursecode.toLowerCase().indexOf(searchTerms.coursecode.toLowerCase()) !== -1
-        && data.coursename.toLowerCase().indexOf(searchTerms.coursename.toLowerCase())!== -1;
+        && data.coursename.toLowerCase().indexOf(searchTerms.coursename.toLowerCase()) !== -1;
     }
     return filterFunction
   }
@@ -192,7 +216,7 @@ export class StudentsPaymentsComponent implements OnInit {
     });
   }
 
-  testByMazhar(){
+  testByMazhar() {
     const title = 'Students Payment';
     const headers = [
       "Client ID",
@@ -201,8 +225,14 @@ export class StudentsPaymentsComponent implements OnInit {
       "First Name",
       "Middle Name",
       "Last Name",
+      "Agency Name",
       "Item Name",
       "Total Fee",
+      "Invoice Number",
+      "Invoice Date",
+      "Payment Plan Instalment Due Date",
+      "Extended Due Date",
+      "Payment Plan Instalment Order",
       "Invoiced Due Amount",
       "Total Amount Paid",
     ];
@@ -213,8 +243,14 @@ export class StudentsPaymentsComponent implements OnInit {
       student.firstname,
       student.middlename,
       student.lastname,
+      student.agencyname,
       student.itemname,
       student.totalfee,
+      student.invoicenumber,
+      student.invoicedate,
+      student.paymentplaninstalmentduedate,
+      student.extendedduedate,
+      student.paymentplaninstalmentorder,
       student.invoiceddueamount,
       student.totalamountpaid
     ]);
@@ -231,7 +267,7 @@ export class StudentsPaymentsComponent implements OnInit {
     };
     titleRow.alignment = { horizontal: 'center', vertical: 'middle' };
     // worksheet.addRow([]);
-    worksheet.mergeCells('A1:J2');
+    worksheet.mergeCells('A1:P2');
     // worksheet.addRow([]);
     const headerRow = worksheet.addRow(headers);
     headerRow.eachCell((cell, number) => {
@@ -256,16 +292,6 @@ export class StudentsPaymentsComponent implements OnInit {
     data.forEach(d => {
       const row = worksheet.addRow(d);
       const qty = row.getCell(5);
-      // let color = 'FF99FF99';
-      // if (+qty.value < 500) {
-      //   color = 'FF9999';
-      // }
-
-      // qty.fill = {
-      //   type: 'pattern',
-      //   pattern: 'solid',
-      //   fgColor: { argb: color }
-      // };
     });
     worksheet.eachRow({ includeEmpty: true }, (row) => {
       row.eachCell({ includeEmpty: true }, (cell) => {
@@ -283,10 +309,16 @@ export class StudentsPaymentsComponent implements OnInit {
     worksheet.getColumn(4).width = 12;
     worksheet.getColumn(5).width = 15;
     worksheet.getColumn(6).width = 12;
-    worksheet.getColumn(7).width = 35;
-    worksheet.getColumn(8).width = 15;
-    worksheet.getColumn(9).width = 20;
-    worksheet.getColumn(10).width = 20;
+    worksheet.getColumn(7).width = 20;
+    worksheet.getColumn(8).width = 35;
+    worksheet.getColumn(9).width = 15;
+    worksheet.getColumn(10).width = 15;
+    worksheet.getColumn(11).width = 15;
+    worksheet.getColumn(12).width = 33;
+    worksheet.getColumn(13).width = 20;
+    worksheet.getColumn(14).width = 30;
+    worksheet.getColumn(15).width = 22;
+    worksheet.getColumn(16).width = 20;
     workbook.xlsx.writeBuffer().then((data: any) => {
       const blob = new Blob([data], {
         type:
@@ -312,43 +344,36 @@ export class StudentsPaymentsComponent implements OnInit {
     });
   }
 
-  getStudentPayments(){
+  getStudentPayments() {
     this.apiService.getAPI('getstudentinvoicetotal').subscribe((data) => {
       this.allStudentPayments = data['data'];
-      this.allStudentPayments = data['data'].map(student => ({
-        clientid: student.clientid,
-        coursecode: student.coursecode,
-        coursename: student.coursename,
-        firstname: student.firstname,
-        middlename: student.middlename,
-        lastname: student.lastname,
-        itemname: student.itemname,
-        totalfee: student.totalfee,
-        invoiceddueamount: student.invoiceddueamount,
-        totalamountpaid: student.totalamountpaid
-    }));
-    this.allStudentPayments = this.allStudentPayments.sort((a, b) => {
-      if (a.firstname > b.firstname) {
-        return 1;
-      } else if (a.firstname < b.firstname) {
-        return -1;
+      for (var i in this.allStudentPayments) {
+        this.allStudentPayments[i].invoicedate = this.datePipe.transform(this.allStudentPayments[i].invoicedate,"dd/MM/yyyy");
+        this.allStudentPayments[i].paymentplaninstalmentduedate = this.datePipe.transform(this.allStudentPayments[i].paymentplaninstalmentduedate,"dd/MM/yyyy");
+        this.allStudentPayments[i].extendedduedate = this.datePipe.transform(this.allStudentPayments[i].extendedduedate,"dd/MM/yyyy");
       }
-    });
-    // Create a copy of the original data for modification
-    let allData = JSON.parse(JSON.stringify(data['data'])); // Deep copy to avoid reference issues
-    for (let i = 0; i < allData.length; i++) {
-      allData[i].name = `${allData[i].firstname || ''} ${allData[i].middlename || ''} ${allData[i].lastname || ''} `
-    }
-    allData = allData.sort((a, b) => {
-      if (a.firstname > b.firstname) {
-        return 1;
-      } else if (a.firstname < b.firstname) {
-        return -1;
+      this.allStudentPayments = this.allStudentPayments.sort((a, b) => {
+        if (a.firstname > b.firstname) {
+          return 1;
+        } else if (a.firstname < b.firstname) {
+          return -1;
+        }
+      });
+      // Create a copy of the original data for modification
+      let allData = JSON.parse(JSON.stringify(data['data'])); // Deep copy to avoid reference issues
+      for (let i = 0; i < allData.length; i++) {
+        allData[i].name = `${allData[i].firstname || ''} ${allData[i].middlename || ''} ${allData[i].lastname || ''} `
       }
-    });
-    // console.log(allData);  // Remains unchanged
-    this.dataSource.data = allData;       // Contains the 'name' field for display or further use
-    return data;
+      allData = allData.sort((a, b) => {
+        if (a.firstname > b.firstname) {
+          return 1;
+        } else if (a.firstname < b.firstname) {
+          return -1;
+        }
+      });
+      // console.log(allData);  // Remains unchanged
+      this.dataSource.data = allData;       // Contains the 'name' field for display or further use
+      return data;
     })
   }
 
