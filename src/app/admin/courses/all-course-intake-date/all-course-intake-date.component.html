@@ -149,6 +149,10 @@
                       (click)="cloneCourseIntake(row.courseintakedateid)">
                       <mat-icon aria-label="Add" class="col-white">add</mat-icon>
                     </button>
+                    <button mat-icon-button class="btn-tbl-edit" title="Exclude the course intake"
+                      (click)="deleteCourseIntake(row.courseintakedateid)">
+                      <mat-icon aria-label="Delete" style="color: red;">delete</mat-icon>
+                    </button>
                   </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

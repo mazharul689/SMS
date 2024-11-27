@@ -148,7 +148,7 @@ export class SentEmailComponent implements OnInit {
       communicationType: ['E', [Validators.required]],
       testFC: [''],
       from_email_address: [''],
-      fromEmailAddressId : ["", [Validators.required]],
+      fromEmailAddressId: ["", [Validators.required]],
       subject: ['', [Validators.required]],
       msg: ['', [Validators.required]],
       attachmentUrl: ['', [Validators.required]],
@@ -254,6 +254,7 @@ export class SentEmailComponent implements OnInit {
       const emailSubject = selectedTemplate.emailsubject;
       const emailBody = selectedTemplate.emailbody;
       this.students[0].CurrentDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd')
+      console.log('bal',this.students)
       const updatedMessage = this.replacePlaceholders(emailBody, this.students[0]);
       const updateMessage = this.replacePlaceholders(emailSubject, this.students[0]);
       // Update form controls with the replaced content
@@ -264,28 +265,64 @@ export class SentEmailComponent implements OnInit {
     }
   }
 
-  getStudents() {
-    this.apiService.getAPI('getfromemailaddress').subscribe((data) => {
-      this.fromEmails = data['data']
-    })
-    this.apiService.getAPI('gettemplateparameter').subscribe((data) => {
-      this.templateParameter = data['data']
-    })
-    this.apiService.getAPI('getemailtemplate').subscribe((data) => {
-      this.emailTemplates = data['data']
-    })
-    this.apiService.getAPI(`getstudent?studentid=${this.studentID}`).subscribe((data) => {
-      this.students = data['data']
-      for (var i in this.students) {
-        this.students[i].rowID = i
-        this.students[i].startDate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
-        this.students[i].endDate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
+  async getStudents() {
+    try {
+      // Fetch additional data needed before students
+      const [fromEmailData, templateParameterData, emailTemplateData] = await Promise.all([
+        this.apiService.getAPI('getfromemailaddress').toPromise(),
+        this.apiService.getAPI('gettemplateparameter').toPromise(),
+        this.apiService.getAPI('getemailtemplate').toPromise(),
+      ]);
+
+      // Assign received data
+      this.fromEmails = fromEmailData['data'];
+      this.templateParameter = templateParameterData['data'];
+      this.emailTemplates = emailTemplateData['data'];
+
+      // Fetch students data
+      const studentData: any = await this.apiService.getAPI(`getstudent?studentid=${this.studentID}`).toPromise();
+      this.students = studentData['data'];
+
+      if (this.students.length > 0) {
+        // Fetch invoice data for the first student's enrolment ID
+        const invoiceData: any = await this.apiService.getAPI(`getstudentinvoicetotal?id=${this.students[0].studentenrolmentid}`).toPromise();
+        const invoice = invoiceData['data'];
+
+        let temptotalfee = 0;
+        let tempinvoicedueamount = 0;
+        let temptotalamountpaid = 0;
+
+        for (const i in invoice) {
+          // Convert the date string to a Date object
+          const installmentDueDate = new Date(invoice[i].paymentplaninstalmentduedate);
+
+          if (installmentDueDate < new Date()) {
+            temptotalfee += invoice[i].totalfee || 0; // Handle potential null/undefined
+            tempinvoicedueamount += invoice[i].invoicedueamount || 0;
+            temptotalamountpaid += invoice[i].totalamountpaid || 0;
+          }
+        }
+
+        // Update student data
+        for (const i in this.students) {
+          this.students[i].rowID = i;
+          this.students[i].startDate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy');
+          this.students[i].endDate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy');
+          this.students[i].TotalFee = temptotalfee;
+          this.students[i].invoicedDueAmount = tempinvoicedueamount;
+          this.students[i].TotalamountPaid = temptotalamountpaid;
+        }
+
+        // Update the dataSource
+        console.log(this.students);
+        this.dataSource.data = this.students;
+        this.masterToggle();
       }
-      this.dataSource.data = this.students // on data receive populate dataSource.data array
-      this.masterToggle()
-      return data
-    })
+    } catch (error) {
+      console.error('Error loading students or related data:', error);
+    }
   }
+
   createFilter(): (data: any, filter: string) => boolean {
     let filterFunction = function (data, filter): boolean {
       let searchTerms = JSON.parse(filter);
@@ -313,7 +350,7 @@ export class SentEmailComponent implements OnInit {
   }
   onDocumentSubmit() {
     // Create an array to hold the promises for all the file upload requests
-    if(this.selectedFiles[0]){
+    if (this.selectedFiles[0]) {
       let uploadPromises: Promise<any>[] = [];
 
       for (let i = 0; i < this.docRows.length; i++) {
@@ -327,7 +364,7 @@ export class SentEmailComponent implements OnInit {
           if (file) {
             // Push the API call promises into the array
             const uploadPromise = this.apiService.postAPI('fileupload', formData).toPromise().then((data: any) => {
-                this.docLoc += data.data.replaceAll(' ', '_') + ";";
+              this.docLoc += data.data.replaceAll(' ', '_') + ";";
             });
 
             uploadPromises.push(uploadPromise);
@@ -343,40 +380,9 @@ export class SentEmailComponent implements OnInit {
         this.send();
       });
     }
-    else{
+    else {
       this.send();
     }
-
-  }
-  emailChange(id){
-    // console.log(id)
-    this.HFormGroup1.patchValue({
-      from_email_address: this.fromEmails[id-1].from_email_address
-    })
-  }
-  replacePlaceholders(template: string, data: { [key: string]: string }): string {
-    let result = template;
-    // Iterate over each key-value pair in the data object
-    for (const [key, value] of Object.entries(data)) {
-      const placeholder = `{${key}}`; // Placeholder format, e.g., {StudentName}
-      const regex = new RegExp(placeholder, 'g'); // Regular expression to find all instances of the placeholder
-      // console.log(`Replacing "${placeholder}" with "${value}"`);
-      result = result.replace(regex, typeof value === "string" ? value.trim() : ""); // Replace placeholder with actual value
-    }
-    return result;
-  }
-  emails(eEmail, agent_contactemail, altemail) {
-    let email = [];
-    if (eEmail) {
-      email.push(`${eEmail}`);
-    }
-    if (agent_contactemail && this.HFormGroup2.value.agentsCheck == "Y") {
-      email.push(`${agent_contactemail}`);
-    }
-    if (altemail && this.HFormGroup2.value.altEmailCheck == "Y") {
-      email.push(`${altemail}`);
-    }
-    return email.join(";");;
   }
   send() {
     let emailBody = this.HFormGroup1.value
@@ -415,6 +421,44 @@ export class SentEmailComponent implements OnInit {
       this.router.navigate(['/admin/communication/all-communication']);
     })
   }
+  emailChange(id) {
+    // console.log(id)
+    this.HFormGroup1.patchValue({
+      from_email_address: this.fromEmails[id - 1].from_email_address
+    })
+  }
+  replacePlaceholders(
+    template: string,
+    data: { [key: string]: string | number | null }
+  ): string {
+    let result = template;
+    console.log('check',data);
+    // Iterate over each key-value pair in the data object
+    for (const [key, value] of Object.entries(data)) {
+      const placeholder = `{${key}}`; // Placeholder format, e.g., {TotalFee}
+      console.log(key)
+      const regex = new RegExp(placeholder, "g"); // Regular expression to find all instances of the placeholder
+
+      // Replace placeholder with actual value or empty string if value is null/undefined
+      result = result.replace(regex, value !== null && value !== undefined ? String(value).trim() : "");
+    }
+
+    return result;
+  }
+  emails(eEmail, agent_contactemail, altemail) {
+    let email = [];
+    if (eEmail) {
+      email.push(`${eEmail}`);
+    }
+    if (agent_contactemail && this.HFormGroup2.value.agentsCheck == "Y") {
+      email.push(`${agent_contactemail}`);
+    }
+    if (altemail && this.HFormGroup2.value.altEmailCheck == "Y") {
+      email.push(`${altemail}`);
+    }
+    return email.join(";");;
+  }
+
 
 
 

@@ -910,19 +910,15 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
-                          [ngClass]="HFormGroup1.get('studentOriginId').value == '1' ? 'd-block' : 'd-none'">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>State</mat-label>
-                            <input matInput formControlName="stateId" [value]="states" readonly>
-                            <!-- <mat-select (ngModelChange)="stateIdChange($event)" formControlName="stateId" required>
-                              <mat-option *ngFor="let state of states" [value]="stateName.stateId">
-                                {{state.name}}
+                            <!-- <input matInput formControlName="stateId" [value]="states" readonly > -->
+                            <mat-select (ngModelChange)="stateIdChange($event)" formControlName="stateId" required>
+                              <mat-option *ngFor="let state of allStates" [value]="state.stateid">
+                                {{state.statename}}
                               </mat-option>
-                            </mat-select> -->
-                            <mat-error *ngIf="HFormGroup1.get('stateId').hasError('required')">
-                              State is required
-                            </mat-error>
+                            </mat-select>
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"

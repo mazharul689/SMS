@@ -8,6 +8,7 @@ import { fromEvent } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog'
 import { CourseIntakeDialogComponent } from '../dialogs/course-intake-dialog/course-intake-dialog.component'
+import { DeleteCourseIntakeDateComponent } from '../dialogs/delete-course-intake-date/delete-course-intake-date.component'
 
 export interface courseIntakes {
   // courseIntakeDateId
@@ -58,7 +59,6 @@ export class AllCourseIntakeDateComponent implements OnInit {
 
   ) {
     this.getCourseIntakes()
-
   }
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource() // create new object
@@ -183,5 +183,13 @@ export class AllCourseIntakeDateComponent implements OnInit {
   }
   cloneCourseIntake(id) {
     this.router.navigate([`/admin/courses/clone-course-intake-date/${id}`]);
+  }
+  deleteCourseIntake(courseintakedateid){
+    const dialogRef = this.dialog.open(DeleteCourseIntakeDateComponent, {
+      data: courseintakedateid,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      this.loadData()
+    });
   }
 }

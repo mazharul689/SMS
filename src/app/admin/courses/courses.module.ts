@@ -47,6 +47,7 @@ import { AddCourseUnitComponent } from './add-course-unit/add-course-unit.compon
 import { AllClassTimeTableComponent } from './all-class-time-table/all-class-time-table.component';
 import { NewClassTimeTableComponent } from './new-class-time-table/new-class-time-table.component';
 import { EditClassTimeTableComponent } from './edit-class-time-table/edit-class-time-table.component';
+import { DeleteCourseIntakeDateComponent } from './dialogs/delete-course-intake-date/delete-course-intake-date.component';
 
 
 @NgModule({
@@ -71,7 +72,8 @@ import { EditClassTimeTableComponent } from './edit-class-time-table/edit-class-
     AddCourseUnitComponent,
     AllClassTimeTableComponent,
     NewClassTimeTableComponent,
-    EditClassTimeTableComponent
+    EditClassTimeTableComponent,
+    DeleteCourseIntakeDateComponent
   ],
   imports: [
     CommonModule,

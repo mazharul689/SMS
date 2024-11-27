@@ -219,6 +219,7 @@ export class StudentsPaymentsComponent implements OnInit {
   testByMazhar() {
     const title = 'Students Payment';
     const headers = [
+      "Status",
       "Client ID",
       "Course Code",
       "Course Name",
@@ -233,10 +234,13 @@ export class StudentsPaymentsComponent implements OnInit {
       "Payment Plan Instalment Due Date",
       "Extended Due Date",
       "Payment Plan Instalment Order",
-      "Invoiced Due Amount",
+      "Total Fee",
       "Total Amount Paid",
+      "Invoiced Due Amount",
+
     ];
     const data = this.allStudentPayments.map(student => [
+      student.applicationstatusname,
       student.clientid,
       student.coursecode,
       student.coursename,
@@ -251,8 +255,9 @@ export class StudentsPaymentsComponent implements OnInit {
       student.paymentplaninstalmentduedate,
       student.extendedduedate,
       student.paymentplaninstalmentorder,
+      student.totalfee,
+      student.totalamountpaid,
       student.invoiceddueamount,
-      student.totalamountpaid
     ]);
 
     const workbook = new ExcelJS.Workbook();
@@ -262,21 +267,12 @@ export class StudentsPaymentsComponent implements OnInit {
     titleRow.font = {
       family: 4,
       size: 16,
-      // underline: 'double',
       bold: true
     };
     titleRow.alignment = { horizontal: 'center', vertical: 'middle' };
-    // worksheet.addRow([]);
-    worksheet.mergeCells('A1:P2');
-    // worksheet.addRow([]);
+    worksheet.mergeCells('A1:R2');
     const headerRow = worksheet.addRow(headers);
     headerRow.eachCell((cell, number) => {
-      // cell.fill = {
-      //   type: 'pattern',
-      //   pattern: 'solid',
-      //   fgColor: { argb: 'FFFFFF00' },
-      //   bgColor: { argb: 'FF0000FF' }
-      // };
       cell.border = {
         top: { style: 'thin' },
         left: { style: 'thin' },
@@ -286,12 +282,62 @@ export class StudentsPaymentsComponent implements OnInit {
       cell.font = {
         family: 4,
         size: 12,
-        bold: true
+        bold: true,
+        color: { argb: 'FFFFFFFF' } // White font color
+      };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF000000' } // Black background color
       };
     });
+    worksheet.autoFilter = {
+      from: 'A3', // Starting cell of the header row
+      to: 'R3'    // Ending cell of the header row (adjust based on your last column)
+    };
     data.forEach(d => {
       const row = worksheet.addRow(d);
       const qty = row.getCell(5);
+      if (d[17] !== 0) {
+        const rowIndex = row.number;
+        const fullRow = worksheet.getRow(rowIndex); // Get the entire row, including empty cells
+
+        fullRow.eachCell({ includeEmpty: true }, (cell) => {
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFFFFF00' } // Yellow background color
+          };
+        });
+      } else {
+        // Style the row with a green background for zero values
+        const rowIndex = row.number;
+        const fullRow = worksheet.getRow(rowIndex); // Get the entire row, including empty cells
+
+        fullRow.eachCell({ includeEmpty: true }, (cell) => {
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FF00FF00' } // Green background color
+          };
+        });
+      }
+      if (d[0] === 'Cancelled') {
+        // console.log(d[0]);
+        const rowIndex = row.number; // Get the row number
+        const fullRow = worksheet.getRow(rowIndex); // Get the entire row, including empty cells
+
+        fullRow.eachCell({ includeEmpty: true }, (cell) => {
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFFF0000' } // Red background color
+          };
+          cell.font = {
+            color: { argb: 'FFFFFFFF' } // White font color for better visibility
+          };
+        });
+      }
     });
     worksheet.eachRow({ includeEmpty: true }, (row) => {
       row.eachCell({ includeEmpty: true }, (cell) => {
@@ -303,22 +349,59 @@ export class StudentsPaymentsComponent implements OnInit {
         };
       });
     });
-    worksheet.getColumn(1).width = 10;
-    worksheet.getColumn(2).width = 12;
-    worksheet.getColumn(3).width = 35;
-    worksheet.getColumn(4).width = 12;
+    worksheet.getColumn(1).width = 13
+    worksheet.getColumn(2).width = 13;
+    worksheet.getColumn(3).width = 15;
+    worksheet.getColumn(4).width = 35;
     worksheet.getColumn(5).width = 15;
-    worksheet.getColumn(6).width = 12;
-    worksheet.getColumn(7).width = 20;
-    worksheet.getColumn(8).width = 35;
-    worksheet.getColumn(9).width = 15;
+    worksheet.getColumn(6).width = 18;
+    worksheet.getColumn(7).width = 15;
+    worksheet.getColumn(8).width = 20;
+    worksheet.getColumn(9).width = 35;
     worksheet.getColumn(10).width = 15;
-    worksheet.getColumn(11).width = 15;
-    worksheet.getColumn(12).width = 33;
-    worksheet.getColumn(13).width = 20;
-    worksheet.getColumn(14).width = 30;
-    worksheet.getColumn(15).width = 22;
-    worksheet.getColumn(16).width = 20;
+    worksheet.getColumn(11).width = 18;
+    worksheet.getColumn(12).width = 15;
+    worksheet.getColumn(13).width = 36;
+    worksheet.getColumn(14).width = 23;
+    worksheet.getColumn(15).width = 33;
+    worksheet.getColumn(16).width = 22;
+    worksheet.getColumn(17).width = 23;
+    worksheet.getColumn(18).width = 23;
+
+    const footerStartRow = worksheet.lastRow?.number + 3 || data.length + 5;
+    const gapRow1 = worksheet.addRow([]); // Add first empty row
+    const gapRow2 = worksheet.addRow([]); // Add second empty row
+    // Add color definitions for Red, Green, and Yellow
+    const footerData = [
+      { color: 'FFFF0000', text: 'Cancelled' },  // Red
+      { color: 'FF00FF00', text: 'No Dues' },         // Green
+      { color: 'FFFFFF00', text: 'Due Amounts Available' } // Yellow
+    ];
+
+    footerData.forEach((item) => {
+      const row = worksheet.addRow([]);
+      row.getCell(3).fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: item.color }
+      }; // Add color to column C
+      row.getCell(4).value = item.text; // Add description to column D
+      row.getCell(3).alignment = { horizontal: 'center', vertical: 'middle' };
+      row.getCell(4).alignment = { horizontal: 'left', vertical: 'middle' };
+      row.height = 20; // Adjust row height for better visibility
+    });
+
+    // Ensure consistent styling for footer rows
+    worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+      if (rowNumber >= footerStartRow) {
+        row.eachCell({ includeEmpty: true }, (cell) => {
+          cell.font = { size: 11 }; // Set font size for footer rows
+        });
+      }
+    });
+
+
+
     workbook.xlsx.writeBuffer().then((data: any) => {
       const blob = new Blob([data], {
         type:
@@ -348,9 +431,10 @@ export class StudentsPaymentsComponent implements OnInit {
     this.apiService.getAPI('getstudentinvoicetotal').subscribe((data) => {
       this.allStudentPayments = data['data'];
       for (var i in this.allStudentPayments) {
-        this.allStudentPayments[i].invoicedate = this.datePipe.transform(this.allStudentPayments[i].invoicedate,"dd/MM/yyyy");
-        this.allStudentPayments[i].paymentplaninstalmentduedate = this.datePipe.transform(this.allStudentPayments[i].paymentplaninstalmentduedate,"dd/MM/yyyy");
-        this.allStudentPayments[i].extendedduedate = this.datePipe.transform(this.allStudentPayments[i].extendedduedate,"dd/MM/yyyy");
+        this.allStudentPayments[i].invoicedate = this.datePipe.transform(this.allStudentPayments[i].invoicedate, "dd/MM/yyyy");
+        this.allStudentPayments[i].paymentplaninstalmentduedate = this.datePipe.transform(this.allStudentPayments[i].paymentplaninstalmentduedate, "dd/MM/yyyy");
+        this.allStudentPayments[i].extendedduedate = this.datePipe.transform(this.allStudentPayments[i].extendedduedate, "dd/MM/yyyy");
+        this.allStudentPayments[i].invoiceddueamount = this.allStudentPayments[i].totalfee - this.allStudentPayments[i].totalamountpaid
       }
       this.allStudentPayments = this.allStudentPayments.sort((a, b) => {
         if (a.firstname > b.firstname) {

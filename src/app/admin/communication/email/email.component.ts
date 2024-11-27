@@ -433,58 +433,26 @@ export class EmailComponent implements OnInit {
       return new Adapter(loader, editor.config);
     };
   }
-  onDocumentSubmit() {
-    // Create an array to hold the promises for all the file upload requests
-    if (this.selectedFiles[0]) {
-      let uploadPromises: Promise<any>[] = [];
-
-      for (let i = 0; i < this.docRows.length; i++) {
-        if (this.selectedFiles) {
-          let file: File = this.selectedFiles[i];
-          this.file = file.name;
-          let formData: FormData = new FormData();
-          formData.append("inputfile", file, file.name);
-          formData.append("uploadfolder", "StudentsCommunications");
-
-          if (file) {
-            // Push the API call promises into the array
-            const uploadPromise = this.apiService
-              .postAPI("fileupload", formData)
-              .toPromise()
-              .then((data: any) => {
-                this.docLoc += data.data.replaceAll(" ", "_") + ";";
-              });
-
-            uploadPromises.push(uploadPromise);
-          }
-        }
-      }
-
-      // Wait for all promises to resolve before calling this.send()
-      Promise.all(uploadPromises).then(() => {
-        if (this.docLoc.endsWith(";")) {
-          this.docLoc = this.docLoc.slice(0, -1);
-        }
-        this.send();
-      });
-    } else {
-      this.send();
-    }
-  }
   replacePlaceholders(
     template: string,
-    data: { [key: string]: string }
+    data: { [key: string]: string | number | null }
   ): string {
     let result = template;
+    console.log('check',data);
     // Iterate over each key-value pair in the data object
     for (const [key, value] of Object.entries(data)) {
-      const placeholder = `{${key}}`; // Placeholder format, e.g., {StudentName}
+      const placeholder = `{${key}}`; // Placeholder format, e.g., {TotalFee}
+      console.log(key)
       const regex = new RegExp(placeholder, "g"); // Regular expression to find all instances of the placeholder
-      // console.log(`Replacing "${placeholder}" with "${value}"`);
-      result = result.replace(regex, typeof value === "string" ? value.trim() : ""); // Replace placeholder with actual value
+
+      // Replace placeholder with actual value or empty string if value is null/undefined
+      result = result.replace(regex, value !== null && value !== undefined ? String(value).trim() : "");
     }
+
     return result;
   }
+
+
   emails(eEmail, agent_contactemail, altemail) {
     let email = [];
     if (eEmail) {
@@ -498,58 +466,113 @@ export class EmailComponent implements OnInit {
     }
     return email.join(";");;
   }
-  send() {
-    let emailBody = this.HFormGroup1.value;
-    delete emailBody.testFC;
-    emailBody.subject = emailBody.subject.replace(
-      /<\/?(strong|p|b|i|h[1-6])>/g,
-      ""
-    );
-    // emailBody.msg = emailBody.msg.replace("<p>", "");
-    // emailBody.msg = emailBody.msg.replace("</p>", "");
-    emailBody.attachmentUrl = this.docLoc;
-    let rows = this.sendSelectedNumbers();
-    // console.log(rows);
-    // console.log(this.students);
-    (this.HFormGroup1.get("Rows") as FormArray).removeAt(0);
-    for (let i = 0; i < rows.length; i++) {
-      // this.emails(this.students[rows[i]].email,
-      //     this.students[rows[i]].agent_contactemail,
-      //     this.students[rows[i]].altemail
-      //   );
-      let rowData = this.fb.group({
-        studentId: this.students[rows[i]].studentid,
-        statusCheck: true,
-        // email: this.students[rows[i]].email,
-        email: this.emails(this.students[rows[i]].email,
-          this.students[rows[i]].agent_contactemail,
-          this.students[rows[i]].altemail
-        ),
-        subject: this.replacePlaceholders(
-          emailBody.subject,
-          this.students[rows[i]]
-        ),
-        msg: this.replacePlaceholders(emailBody.msg, this.students[rows[i]]),
-        attachmentUrl: emailBody.attachmentUrl,
+  getAllDataOfStudent(students: any): Promise<any> {
+    return new Promise((resolve) => {
+      this.apiService.getAPI(`getstudentinvoicetotal?id=${students.studentenrolmentid}`).subscribe((data) => {
+        const invoice = data['data'];
+        let temptotalfee = 0;
+        let tempinvoicedueamount = 0;
+        let temptotalamountpaid = 0;
+
+        for (const i in invoice) {
+          // Convert the date string to a Date object
+          const installmentDueDate = new Date(invoice[i].paymentplaninstalmentduedate);
+
+          if (installmentDueDate < new Date()) {
+            temptotalfee += invoice[i].totalfee || 0; // Handle potential null/undefined
+            tempinvoicedueamount += invoice[i].invoicedueamount || 0;
+            temptotalamountpaid += invoice[i].totalamountpaid || 0;
+          }
+        }
+
+        students.TotalFee = temptotalfee;
+        students.invoicedDueAmount = tempinvoicedueamount;
+        students.TotalamountPaid = temptotalamountpaid;
+        resolve(students); // Resolve with updated student data
       });
-      (this.HFormGroup1.get("Rows") as FormArray).push(rowData);
-    }
-    this.HFormGroup1.value.msg = emailBody.msg;
-    this.HFormGroup1.value.attachmentUrl = emailBody.attachmentUrl;
-    let formData = this.HFormGroup1.value;
-    delete formData.email;
-    delete formData.subject;
-    delete formData.msg;
-    delete formData.attachmentUrl;
-    delete formData.testFC;
-    // console.log("form data", formData);
-    this.apiService
-      .postAPI(`addstudentcommunication`, this.HFormGroup1.value)
-      .subscribe((data) => {
-        // console.log("E-mail sent successfully: ", data);
-        this.router.navigate(["/admin/communication/all-communication"]);
-      });
+    });
   }
+
+  onDocumentSubmit() {
+    if (this.selectedFiles[0]) {
+      const uploadPromises: Promise<any>[] = [];
+
+      for (let i = 0; i < this.docRows.length; i++) {
+        const file: File = this.selectedFiles[i];
+        const formData = new FormData();
+        formData.append("inputfile", file, file.name);
+        formData.append("uploadfolder", "StudentsCommunications");
+
+        if (file) {
+          const uploadPromise = this.apiService.postAPI("fileupload", formData)
+            .toPromise()
+            .then((data: any) => {
+              this.docLoc += data.data.replaceAll(" ", "_") + ";";
+            });
+
+          uploadPromises.push(uploadPromise);
+        }
+      }
+
+      Promise.all(uploadPromises).then(() => {
+        if (this.docLoc.endsWith(";")) {
+          this.docLoc = this.docLoc.slice(0, -1);
+        }
+        this.prepareAndSendEmails();
+      });
+    } else {
+      this.prepareAndSendEmails();
+    }
+  }
+
+  prepareAndSendEmails() {
+    const rows = this.sendSelectedNumbers();
+    const studentPromises = rows.map((rowIndex) =>
+      this.getAllDataOfStudent(this.students[rowIndex])
+    );
+
+    Promise.all(studentPromises).then((updatedStudents) => {
+      const emailBody = this.HFormGroup1.value;
+      delete emailBody.testFC;
+
+      emailBody.subject = emailBody.subject.replace(
+        /<\/?(strong|p|b|i|h[1-6])>/g,
+        ""
+      );
+      emailBody.attachmentUrl = this.docLoc;
+
+      (this.HFormGroup1.get("Rows") as FormArray).removeAt(0);
+
+      updatedStudents.forEach((student) => {
+        const rowData = this.fb.group({
+          studentId: student.studentid,
+          statusCheck: true,
+          email: this.emails(student.email, student.agent_contactemail, student.altemail),
+          subject: this.replacePlaceholders(emailBody.subject, student),
+          msg: this.replacePlaceholders(emailBody.msg, student),
+          attachmentUrl: emailBody.attachmentUrl,
+        });
+
+        (this.HFormGroup1.get("Rows") as FormArray).push(rowData);
+      });
+
+      this.HFormGroup1.value.msg = emailBody.msg;
+      this.HFormGroup1.value.attachmentUrl = emailBody.attachmentUrl;
+      const formData = this.HFormGroup1.value;
+
+      delete formData.email;
+      delete formData.subject;
+      delete formData.msg;
+      delete formData.attachmentUrl;
+      delete formData.testFC;
+
+      this.apiService.postAPI(`addstudentcommunication`, this.HFormGroup1.value)
+        .subscribe(() => {
+          this.router.navigate(["/admin/communication/all-communication"]);
+        });
+    });
+  }
+
   drag(ev: any, templateparameterid: number) {
     const dragObj = this.templateParameter.find(
       (x) => x.templateparameterid === templateparameterid

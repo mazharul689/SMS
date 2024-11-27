@@ -304,6 +304,7 @@ export class NewStudentComponent implements OnInit {
   courseIntakeData: any
   allStates: any
   allAmounts: any
+  apiTest = false
 
   // editTraning = [{
   //   trainingActivityId: '',
@@ -348,28 +349,22 @@ export class NewStudentComponent implements OnInit {
   }
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue
-    // console.log(this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC')
     if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC') {
       this.suburbDisable = false
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
         this.suburbs = data
-        // console.log('suburbs',this.suburbs)
+        this.apiTest = true
         this.states = data[0].state.name
-        // this.stateName = this.states.name
         this.stateAbbr = this.suburbs[0].state.abbreviation
         this.apiService.getAPI(`getstateid?id=${this.stateAbbr}`).subscribe((data) => {
           this.stateName = data['data'][0].stateid
           this.HFormGroup1.patchValue({
             stateId: this.stateName
           })
-          // console.log('data',this.stateName)
         })
-        // console.log('suburbs',this.suburbs)
-        // console.log('statename',this.suburbs[0].state.name)
       })
     }
     else if (this.postCodeChanges.length == 4 || this.postCodeChanges == '0000' || this.postCodeChanges == '@@@@' || this.postCodeChanges == 'OSPC') {
-      // console.log('got you')
       this.states = null
       this.stateName = null
       this.HFormGroup1.patchValue({
@@ -572,8 +567,7 @@ export class NewStudentComponent implements OnInit {
     this.schoolLevel = this.getAll[0].SchoolLevel
     this.englishSpeakingScoreType = this.getAll[0].EnglishSpeakingScoreType
     this.getVisa = this.getAll[0].VisaStatus
-    this.allStates = this.getAll[0].States
-
+    this.allStates = this.getAll[0].State
     // console.log(this.schoolLevel)
 
 
