@@ -12,7 +12,8 @@ import { FormControl } from "@angular/forms";
 import { StudentDialogComponent } from "./dialogs/student-dialog/student-dialog.component";
 import { Router } from "@angular/router";
 import { DatePipe } from "@angular/common";
-
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 import * as _moment from "moment";
 import { default as _rollupMoment } from "moment";
 import {
@@ -333,10 +334,10 @@ export class AllStudentComponent implements OnInit {
     if (clid) {
       queryParams.push(`clientid=${clid}`);
     }
-    if(uid){
+    if (uid) {
       queryParams.push(`usiNo=${uid}`);
     }
-    if(name){
+    if (name) {
       queryParams.push(`studentname=${name}`);
     }
     // console.log(queryParams)
@@ -358,7 +359,7 @@ export class AllStudentComponent implements OnInit {
             students[i].fullname = students[i].firstname + " " + students[i].lastname;
           }
           this.dataSource.data = students; // on data receive populate dataSource.data array
-
+          this.students = students;
         }
         if (show) {
           show.style.display = 'block'
@@ -366,7 +367,7 @@ export class AllStudentComponent implements OnInit {
         return data;
       })
     }
-    else{
+    else {
       this.getStudents()
     }
   }
@@ -530,5 +531,101 @@ export class AllStudentComponent implements OnInit {
   }
   assignUnits(id) {
     this.router.navigate([`/admin/enrolment/assign-units/${id}`]);
+  }
+  testByMazhar() {
+    const title = 'Students List';
+    const headers = [
+      "Client Id",
+      "Name",
+      "Course Code",
+      "Course Name",
+      "Class Name",
+      "Email",
+      "Alt.Email",
+      "Commencement Date",
+      "Expected Completion Date",
+      "Enrollment Status",
+    ];
+    const data = this.students.map(student => [
+      student.clientid,
+      student.studentname,
+      student.coursecode,
+      student.coursename,
+      student.classname,
+      student.email,
+      student.altemail,
+      student.commencementdate,
+      student.expectedcompletiondate,
+      student.applicationstatusname
+    ]);
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Students');
+
+    const titleRow = worksheet.addRow([title]);
+    titleRow.font = {
+      family: 4,
+      size: 16,
+      bold: true
+    };
+    titleRow.alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.mergeCells('A1:J2');
+    const headerRow = worksheet.addRow(headers);
+    headerRow.eachCell((cell, number) => {
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' }
+      };
+      cell.font = {
+        family: 4,
+        size: 12,
+        bold: true,
+        color: { argb: 'FFFFFFFF' } // White font color
+      };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF000000' } // Black background color
+      };
+    });
+    worksheet.autoFilter = {
+      from: 'A3', // Starting cell of the header row
+      to: 'J3'    // Ending cell of the header row (adjust based on your last column)
+    };
+    data.forEach(d => {
+      const row = worksheet.addRow(d);
+      const qty = row.getCell(5);
+
+    });
+    worksheet.eachRow({ includeEmpty: true }, (row) => {
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        };
+      });
+    });
+    worksheet.getColumn(1).width = 13
+    worksheet.getColumn(2).width = 17;
+    worksheet.getColumn(3).width = 15;
+    worksheet.getColumn(4).width = 45;
+    worksheet.getColumn(5).width = 15;
+    worksheet.getColumn(6).width = 28;
+    worksheet.getColumn(7).width = 25;
+    worksheet.getColumn(8).width = 25;
+    worksheet.getColumn(9).width = 28;
+    worksheet.getColumn(10).width = 20;
+
+    workbook.xlsx.writeBuffer().then((data: any) => {
+      const blob = new Blob([data], {
+        type:
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+      saveAs.saveAs(blob, 'Students List.xlsx');
+    });
   }
 }

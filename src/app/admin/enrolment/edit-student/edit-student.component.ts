@@ -589,28 +589,28 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       studentId: [''],
       studentOriginId: [''],
       courseIntakeDateId: [''],
-      agentId: [null],
-      agentCommission: [''],
-      amountTypeId: [''],
-      gst: ['Y'],
-      applicationStatusId: [3, [Validators.required]],
+      agentId: [null,[Validators.required]],
+      applicationStatusId: [2, [Validators.required]],
       deliveryModeId: [1],
       specificFundingId: [null],
       fundingSourceNationalId: [4, [Validators.required]],
       fundingSourceStateId: [1],
       commencingProgramId: [1, [Validators.required]],
-      commencementDate: [null],
+      commencementDate: [null, [Validators.required]],
       courseDuration: [null],
-      courseDurationType: [null],
-      expectedCompletionDate: [null],
+      courseDurationType: ['W', [Validators.required]],
+      expectedCompletionDate: [null, [Validators.required]],
       trainingContractid: [null],
-      reasonTakingCourseId: [2],
+      reasonTakingCourseId: [2, [Validators.required]],
       applyForRPL: ['N'],
-      studentEnrolmentDate: [null],
-      offerLetterNumber: '',
+      studentEnrolmentDate: [null, [Validators.required]],
       TuitionFee: ['0', [Validators.required]],
+      amountTypeId: [null, [Validators.required]],
+      agentCommission: [null, [Validators.required]],
+      offerLetterNumber: [0, [Validators.required]],
+      gst: 'Y',
       priorDetail: this.fb.group({
-        userId: [1],
+        userId: [this.userInfo.userid],
         studentEnrolmentId: [''],
         QualificationId: ['']
       })
@@ -1902,7 +1902,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
             //console.log('response', data.data)
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false

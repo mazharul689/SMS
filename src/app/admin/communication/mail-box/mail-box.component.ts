@@ -147,7 +147,7 @@ export class MailBoxComponent implements OnInit {
   }
 
   download(link){
-    let baseApi = "https://api.wonderit.com.au:5000/"
+    let baseApi = "https://api.wonderit.com.au:5023/"
     // console.log(this.messages[rowID].attachment[i])
     window.open(baseApi + link)
   }

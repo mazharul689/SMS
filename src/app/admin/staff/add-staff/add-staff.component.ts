@@ -167,7 +167,7 @@ export class AddStaffComponent implements OnInit {
       if (file) {
         this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
           this.HFormGroup1.value.profilePicLoc = ""
-          this.HFormGroup1.value.profilePicLoc = "https://api.wonderit.com.au:5000/" + data.data
+          this.HFormGroup1.value.profilePicLoc = "https://api.wonderit.com.au:5023/" + data.data
           let staffBody = this.HFormGroup1.value
           staffBody.stateId = this.stateName
           staffBody = this.HFormGroup1.value
@@ -210,7 +210,7 @@ export class AddStaffComponent implements OnInit {
         formData.append('uploadfolder', 'StaffsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false

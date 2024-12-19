@@ -366,7 +366,7 @@ export class StudentDashboardComponent implements OnInit {
         this.certificateCount++
         this.certificate = data['data'][0]
         this.certificateLink = this.certificate.certificatepath
-        this.certificate.certificatePath = this.certificate.certificatepath.replace('https://api.wonderit.com.au:5000/tmp/StudentsCertificate/', '')
+        this.certificate.certificatePath = this.certificate.certificatepath.replace('https://api.wonderit.com.au:5023/tmp/StudentsCertificate/', '')
         const certificate = this.certificate.certificatePath
         const certificateLink = this.certificateLink
         const rowID = this.certificateCount
@@ -410,7 +410,7 @@ export class StudentDashboardComponent implements OnInit {
     window.open(link)
   }
   download(link) {
-    let baseApi = "https://api.wonderit.com.au:5000/"
+    let baseApi = "https://api.wonderit.com.au:5023/"
     // console.log(this.messages[rowID].attachment[i])
     window.open(baseApi + link)
   }

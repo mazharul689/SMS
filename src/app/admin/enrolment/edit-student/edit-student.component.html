@@ -1648,7 +1648,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent</mat-label>
-                            <mat-select formControlName="agentId" (ngModelChange)="getAgentId($event)">
+                            <mat-select formControlName="agentId" (ngModelChange)="getAgentId($event)" required>
                               <mat-option *ngFor="let agent of agents" [value]="agent.agentid" [disabled]="editable">
                                 {{agent.agencyname}}
                               </mat-option>
@@ -1658,7 +1658,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent Commission Type</mat-label>
-                            <mat-select formControlName="amountTypeId">
+                            <mat-select formControlName="amountTypeId" required>
                               <mat-option *ngFor="let amount of allAmounts" [value]="amount.amounttypeid"
                                 [disabled]="editable">
                                 {{amount.amounttype}}
@@ -1669,7 +1669,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent Commission</mat-label>
-                            <input matInput type="number" formControlName="agentCommission" [readonly]="editable">
+                            <input matInput type="number" formControlName="agentCommission" [readonly]="editable" required>
                           </mat-form-field>
                         </div>
 
@@ -1786,7 +1786,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Reason Taking Course</mat-label>
-                            <mat-select formControlName="reasonTakingCourseId">
+                            <mat-select formControlName="reasonTakingCourseId" required>
                               <mat-option *ngFor="let reasontaking of reasonTakingCourse"
                                 [value]="reasontaking.reasontakingcourseid" [disabled]="editable">
                                 {{reasontaking.reasoncode}} - {{ reasontaking.reasonname
@@ -1800,7 +1800,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Tuition Fee</mat-label>
-                            <input matInput formControlName="TuitionFee" required [readonly]="editable">
+                            <input matInput type="number" formControlName="TuitionFee" required [readonly]="editable">
                             <mat-error *ngIf="HFormGroup4.get('TuitionFee').hasError('required')">
                               Tuition Fee is required
                             </mat-error>
@@ -1810,7 +1810,7 @@
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Enrolment Date</mat-label>
                             <input matInput [matDatepicker]="enroleDatepicker" formControlName="studentEnrolmentDate"
-                              [readonly]="editable">
+                              [readonly]="editable" required>
                             <mat-datepicker-toggle matSuffix [for]="enroleDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #enroleDatepicker [disabled]="editable"></mat-datepicker>
@@ -1820,7 +1820,7 @@
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Commencement Date</mat-label>
                             <input matInput [matDatepicker]="cdDatepicker" formControlName="commencementDate"
-                              [readonly]="editable">
+                              [readonly]="editable" required>
                             <mat-datepicker-toggle matSuffix [for]="cdDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #cdDatepicker [disabled]="editable"></mat-datepicker>
@@ -1830,7 +1830,7 @@
                       <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
                           <section class="example-section mb-4">
-                            <label class="example col-md-5 col-sm-4">Course Duration Type</label>
+                            <label class="example col-md-5 col-sm-4 asterisk">Course Duration Type</label>
                             <mat-radio-group class="col-md-7 col-sm-8" formControlName="courseDurationType"
                               (ngModelChange)="setExpectedCompletion($event)">
                               <mat-radio-button
@@ -1853,7 +1853,7 @@
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Expected Completion Date</mat-label>
                             <input matInput [matDatepicker]="ecDatepicker" formControlName="expectedCompletionDate"
-                              [readonly]="editable">
+                              [readonly]="editable" required>
                             <mat-datepicker-toggle matSuffix [for]="ecDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #ecDatepicker [disabled]="editable"></mat-datepicker>
@@ -1865,7 +1865,7 @@
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Offer Letter Number</mat-label>
                             <input matInput formControlName="offerLetterNumber"
-                              (ngModelChange)="setExpectedCompletion($event)" type="number" [readonly]="editable">
+                              (ngModelChange)="setExpectedCompletion($event)" type="number" [readonly]="editable" required>
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">

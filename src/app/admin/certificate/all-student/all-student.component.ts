@@ -197,7 +197,7 @@ export class AllStudentComponent implements OnInit {
         this.students[i].startDate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
         this.students[i].endDate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
         if (this.students[i].certificatepath != null) {
-          this.students[i].doc = this.students[i].certificatepath.replace('https://api.wonderit.com.au:5000/tmp/StudentsCertificate/', '')
+          this.students[i].doc = this.students[i].certificatepath.replace('https://api.wonderit.com.au:5023/tmp/StudentsCertificate/', '')
         }
         if (this.students[i].certificatepath == "") {
           this.students[i].certificatepath = null

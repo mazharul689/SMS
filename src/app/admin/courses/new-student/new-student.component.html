@@ -1400,27 +1400,36 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent</mat-label>
-                            <mat-select formControlName="agentId" (ngModelChange)="getAgentId($event)">
+                            <mat-select formControlName="agentId" (ngModelChange)="getAgentId($event)" required>
                               <mat-option *ngFor="let agent of agents" [value]="agent.agentid">
                                 {{agent.agencyname}}
                               </mat-option>
                             </mat-select>
+                            <mat-error *ngIf="HFormGroup4.get('agentId').hasError('required')">
+                              Please select date of agentId
+                            </mat-error>
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent Commission Type</mat-label>
-                            <mat-select formControlName="amountTypeId">
+                            <mat-select formControlName="amountTypeId" required>
                               <mat-option *ngFor="let amount of allAmounts" [value]="amount.amounttypeid">
                                 {{amount.amounttype}}
                               </mat-option>
                             </mat-select>
+                            <mat-error *ngIf="HFormGroup4.get('amountTypeId').hasError('required')">
+                              Please select amount type
+                            </mat-error>
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent Commission</mat-label>
-                            <input matInput type="number" formControlName="agentCommission">
+                            <input matInput type="number" formControlName="agentCommission" required>
+                            <mat-error *ngIf="HFormGroup4.get('agentCommission').hasError('required')">
+                              Please select date of birth
+                            </mat-error>
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
@@ -1534,13 +1543,16 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Reason Taking Course</mat-label>
-                            <mat-select formControlName="reasonTakingCourseId">
+                            <mat-select formControlName="reasonTakingCourseId" required>
                               <mat-option *ngFor="let reasontaking of reasonTakingCourse"
                                 [value]="reasontaking.reasontakingcourseid">
                                 {{reasontaking.reasoncode}} - {{ reasontaking.reasonname
                                 }}
                               </mat-option>
                             </mat-select>
+                            <mat-error *ngIf="HFormGroup4.get('reasonTakingCourseId').hasError('required')">
+                              Reason taking course is required
+                            </mat-error>
                           </mat-form-field>
                         </div>
                       </div>
@@ -1549,7 +1561,10 @@
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Offer Letter Number</mat-label>
                             <input matInput formControlName="offerLetterNumber" type="number"
-                              (ngModelChange)="setExpectedCompletion($event)">
+                              (ngModelChange)="setExpectedCompletion($event)" required>
+                              <mat-error *ngIf="HFormGroup4.get('offerLetterNumber').hasError('required')">
+                                Offer letter number is required
+                              </mat-error>
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
@@ -1568,21 +1583,12 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Enrolment Date</mat-label>
-                            <input matInput [matDatepicker]="enroleDatepicker" formControlName="studentEnrolmentDate">
+                            <input matInput [matDatepicker]="enroleDatepicker" formControlName="studentEnrolmentDate" required>
                             <mat-datepicker-toggle matSuffix [for]="enroleDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #enroleDatepicker></mat-datepicker>
-                            <!-- <mat-error *ngIf="HFormGroup4.get('studentEnrolmentDate').hasError('required')">
+                            <mat-error *ngIf="HFormGroup4.get('studentEnrolmentDate').hasError('required')">
                               Please select enrolment date
-                            </mat-error> -->
-                          </mat-form-field>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Tuition Fee</mat-label>
-                            <input matInput formControlName="TuitionFee" required>
-                            <mat-error *ngIf="HFormGroup4.get('TuitionFee').hasError('required')">
-                              Tuition Fee is required
                             </mat-error>
                           </mat-form-field>
                         </div>
@@ -1590,16 +1596,28 @@
                       <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Tuition Fee</mat-label>
+                            <input matInput type="number" formControlName="TuitionFee" required>
+                            <mat-error *ngIf="HFormGroup4.get('TuitionFee').hasError('required')">
+                              Tuition Fee is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
                             <mat-label>Commencement Date</mat-label>
-                            <input matInput [matDatepicker]="commenementDatepicker" formControlName="commencementDate">
+                            <input matInput [matDatepicker]="commenementDatepicker" formControlName="commencementDate" required>
                             <mat-datepicker-toggle matSuffix [for]="commenementDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #commenementDatepicker></mat-datepicker>
+                            <mat-error *ngIf="HFormGroup4.get('commencementDate').hasError('required')">
+                              Please select commencement date
+                            </mat-error>
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
                           <section class="example-section mb-4">
-                            <label class="example col-md-4 col-sm-3">Course Duration Type</label>
+                            <label class="example col-md-4 col-sm-3 asterisk">Course Duration Type</label>
                             <mat-radio-group class="col-md-8 col-sm-9" formControlName="courseDurationType"
                               (ngModelChange)="setExpectedCompletion($event)">
                               <mat-radio-button
@@ -1611,6 +1629,8 @@
                             </mat-radio-group>
                           </section>
                         </div>
+                      </div>
+                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Course Duration</mat-label>
@@ -1621,10 +1641,13 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Expected Completion Date</mat-label>
-                            <input matInput [matDatepicker]="ECDatepicker" formControlName="expectedCompletionDate">
+                            <input matInput [matDatepicker]="ECDatepicker" formControlName="expectedCompletionDate" required>
                             <mat-datepicker-toggle matSuffix [for]="ECDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #ECDatepicker></mat-datepicker>
+                            <mat-error *ngIf="HFormGroup4.get('expectedCompletionDate').hasError('required')">
+                              Please select expected completion date
+                            </mat-error>
                           </mat-form-field>
                         </div>
                       </div>

@@ -76,16 +76,6 @@
                            <input matInput type="text" style="color: black" [formControl]="usiFilter"/>
                         </mat-form-field>
                       </div>
-                      <div class="col-sm-2">
-                        <button mat-mini-fab color="primary" (click)="search(courseIntakeFilter.value,bulkAgentFilter.value,bulkApplicationStatusFilter.value,bulkClientIdFilter.value,usiFilter.value,studentNameFilter.value)">
-                          <i class="fa fa-search"></i>
-                        </button>
-                      </div>
-                      <div class="col-sm-2">
-                        <button mat-mini-fab color="primary" (click)="addNew()">
-                            <mat-icon class="col-white">add</mat-icon>
-                          </button>
-                      </div>
                     </div>
                   </div>
                   <div class="col-3">
@@ -94,6 +84,25 @@
                         <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Student Name</mat-label>
                          <input matInput type="text" style="color: black" [formControl]="studentNameFilter"/>
                       </mat-form-field>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <div class="search row">
+                      <div class="col-sm-3">
+                        <button mat-mini-fab color="primary" (click)="search(courseIntakeFilter.value,bulkAgentFilter.value,bulkApplicationStatusFilter.value,bulkClientIdFilter.value,usiFilter.value,studentNameFilter.value)">
+                          <i class="fa fa-search"></i>
+                        </button>
+                      </div>
+                      <div class="col-sm-3">
+                        <button mat-mini-fab color="primary" (click)="addNew()">
+                            <mat-icon class="col-white">add</mat-icon>
+                          </button>
+                      </div>
+                      <div class="col-sm-3">
+                        <button mat-mini-fab color="primary" matTooltip="Download Report" (click)="testByMazhar()">
+                          <mat-icon class="col-white">receipt</mat-icon>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

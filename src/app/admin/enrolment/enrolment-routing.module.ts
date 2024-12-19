@@ -7,6 +7,7 @@ import { UnenrollStudentComponent } from './unenroll-student/unenroll-student.co
 import { StudentPaymentScheduleComponent } from './student-payment-schedule/student-payment-schedule.component';
 import { AsignClassComponent } from './asign-class/asign-class.component';
 import { AssignUnitsComponent } from './assign-units/assign-units.component';
+import { FindUsiComponent } from './find-usi/find-usi.component';
 
 const routes: Routes = [
   {
@@ -40,6 +41,10 @@ const routes: Routes = [
   {
     path: 'assign-units/:id',
     component: AssignUnitsComponent
+  },
+  {
+    path: 'find-usi',
+    component: FindUsiComponent
   }
 ];
 
