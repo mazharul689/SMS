@@ -14,6 +14,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { StudentsPaymentsComponent } from './students-payments/students-payments.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 @NgModule({
   declarations: [
     AvetmissComponent,
@@ -34,6 +35,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatRadioModule,
     MatTableModule,
     MatPaginatorModule,
+    MatProgressSpinnerModule
   ]
 })
 export class ReportsModule { }

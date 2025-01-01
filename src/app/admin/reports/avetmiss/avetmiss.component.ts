@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ApiService } from 'src/app/api/api.service'
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, } from '@angular/material-moment-adapter'
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core'
+import { MatProgressButtonOptions } from 'mat-progress-buttons'
 @Component({
   selector: 'app-avetmiss',
   templateUrl: './avetmiss.component.html',
@@ -29,9 +30,26 @@ export class AvetmissComponent implements OnInit {
     private apiService: ApiService,
     private datePipe: DatePipe
   ) { }
+
+  spinnerButtonOptions: MatProgressButtonOptions = {
+      active: false,
+      text: 'Loading..',
+      spinnerSize: 25,
+      raised: true,
+      stroked: false,
+      buttonColor: 'primary',
+      spinnerColor: 'accent',
+      fullWidth: false,
+      disabled: false,
+      mode: 'indeterminate',
+      buttonIcon: {
+        fontIcon: 'login',
+      },
+    };
+
   ngOnInit(): void {
     this.HFormGroup1 = this.fb.group({
-      reportCheck: [''],
+      reportCheck: ['C'],
       certificateIssueDateFrom: ['', [Validators.required]],
       certificateIssueDateTo: ['', [Validators.required]],
     })
@@ -51,37 +69,48 @@ export class AvetmissComponent implements OnInit {
       }
     }, 0);
   }
-  avetmissSubmit() {
-    const avetmissBody = this.HFormGroup1.value
-    avetmissBody.certificateIssueDateFrom = this.datePipe.transform(avetmissBody.certificateIssueDateFrom, 'yyyy-MM-dd')
-    avetmissBody.certificateIssueDateTo = this.datePipe.transform(avetmissBody.certificateIssueDateTo, 'yyyy-MM-dd')
-    var show = document.getElementById('closebtn')
-    console.log('formvalue',this.HFormGroup1.value)
-    if ((this.dateValidate1.isError == false)) {
-      // console.log('post',avetmissBody)
-      if(this.HFormGroup1.value.reportCheck == 'A'){
-        delete this.HFormGroup1.value.reportCheck;
-        this.apiService.postAPI('getavetmissallenrolled', this.HFormGroup1.value).subscribe((data) => {
-          console.log('reports',data['data']);
-          this.baseApi = "https://api.wonderit.com.au:5023/"
-          console.log(this.baseApi + data['data'])
-          window.open(this.baseApi + data['data'])
-        })
-      }
-      else if(this.HFormGroup1.value.reportCheck == 'C'){
-        delete this.HFormGroup1.value.reportCheck;
-        this.apiService.postAPI('getavetmisscertifiedonly', this.HFormGroup1.value).subscribe((data) => {
-          console.log('reports',data['data']);
-          this.baseApi = "https://api.wonderit.com.au:5023/"
-          console.log(this.baseApi + data['data'])
-          window.open(this.baseApi + data['data'])
-        })
-      }
+  isLoading: boolean = false;
 
-    }
-    else {
-      show.style.display = 'block'
-      window.scroll(0, 0)
-    }
+avetmissSubmit() {
+  this.isLoading = true; // Start spinner
+  this.spinnerButtonOptions.active = true;
+  const avetmissBody = this.HFormGroup1.value;
+  avetmissBody.certificateIssueDateFrom = this.datePipe.transform(
+    avetmissBody.certificateIssueDateFrom,
+    'yyyy-MM-dd'
+  );
+  avetmissBody.certificateIssueDateTo = this.datePipe.transform(
+    avetmissBody.certificateIssueDateTo,
+    'yyyy-MM-dd'
+  );
+  const show = document.getElementById('closebtn');
+
+  if (!this.dateValidate1.isError) {
+    const apiEndpoint = this.HFormGroup1.value.reportCheck === 'A'
+      ? 'getavetmissallenrolled'
+      : 'getavetmisscertifiedonly';
+
+    this.apiService.postAPI(apiEndpoint, this.HFormGroup1.value).subscribe(
+      (data) => {
+        console.log('reports', data['data']);
+        this.baseApi = 'https://api.wonderit.com.au:5027/';
+        console.log(this.baseApi + data['data']);
+        window.open(this.baseApi + data['data']);
+        this.isLoading = false; // Stop spinner after success
+        this.spinnerButtonOptions.active = false;
+      },
+      (error) => {
+        console.error('Error:', error);
+        this.isLoading = false; // Stop spinner after error
+        this.spinnerButtonOptions.active = false;
+      }
+    );
+  } else {
+    show.style.display = 'block';
+    window.scroll(0, 0);
+    this.isLoading = false; // Stop spinner if validation fails
+    this.spinnerButtonOptions.active = false;
   }
+}
+
 }

@@ -7,16 +7,16 @@ export class ShareService {
   // cliLogo = 'assets/images/banner/HMILogo.png'
   // cliLogo = 'assets/images/banner/wonsmsLogo6.png'
   // cliLogo = 'assets/images/banner/pacificBigLogo.png'
-  cliLogo = 'assets/images/banner/ALITBigLogo.png'
-  // cliLogo = 'assets/images/banner/PICBigLogo.png'
+  // cliLogo = 'assets/images/banner/ALITBigLogo.png'
+  cliLogo = 'assets/images/banner/PICBigLogo.png'
   // cliLogo = 'assets/images/banner/ETCBigLogo.png'
 
   // cliLogo = 'assets/images/banner/aits.png'
   logoSrc = 'assets/images/banner/wonsmsLogo.png'
   // logoSrc1 = 'assets/images/banner/pacificLogo.png'
-  // logoSrc1 = 'assets/images/banner/PICSmallLogo.png'
+  logoSrc1 = 'assets/images/banner/PICSmallLogo.png'
   // logoSrc1 = 'assets/images/banner/ETCSmallLogo.png'
-  logoSrc1 = 'assets/images/banner/ALITSmallLogo.png'
+  // logoSrc1 = 'assets/images/banner/ALITSmallLogo.png'
 
 
   // logoSrc1 = 'assets/images/banner/HMISmallLogo.png'

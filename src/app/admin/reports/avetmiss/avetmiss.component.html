@@ -74,8 +74,23 @@
                           </mat-error>
                         </mat-form-field>
                       </div>
-                      <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                      <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
                         <button mat-raised-button color="primary">Download</button>
+                      </div> -->
+                      <!-- <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                        <button mat-raised-button color="primary" [disabled]="isLoading">
+                          <span *ngIf="!isLoading">Download</span>
+                          <mat-spinner *ngIf="isLoading" diameter="50">Loading..</mat-spinner>
+                        </button>
+                      </div> -->
+                      <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 mb-2">
+                        <button class="loading" [disabled]="isLoading">
+                          <span *ngIf="!isLoading">Download</span>
+                          <span *ngIf="isLoading">
+                            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+                            Processing...
+                          </span>
+                        </button>
                       </div>
                     </div>
                   </form>
