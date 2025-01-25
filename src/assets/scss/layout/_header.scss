@@ -6,11 +6,22 @@
 .specialLogoImg {
   width: 150px;
 }
-.rto_name{
-  padding-right: 240px;
-  padding-top: 20px;
+// .rto_name{
+//   padding-right: 240px;
+//   padding-top: 20px;
+// }
+.rto_name {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  padding-top: 15px;
 }
 .demo_name{
   padding-right: 380px;
   padding-top: 20px;
+}
+.nav {
+  position: relative;
+  height: 0px !important;
 }

@@ -98,7 +98,7 @@ export class AddDocumentDialogComponent implements OnInit {
         formData.append('uploadfolder', 'StudentsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.preDocRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
+            this.preDocRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5013/" + data.data
             for (let i = 0; i < this.preDocRows.length; i++) {
               if (!this.preDocRows.at(i).value.documentName && !this.preDocRows.at(i).value.documentLoc) {
                 valid = false

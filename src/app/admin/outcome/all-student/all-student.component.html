@@ -201,19 +201,7 @@
                                             <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" title="click to view general info"> {{row.lastname}}
                                             </mat-cell>
                                         </ng-container> -->
-                    <ng-container matColumnDef="emailo">
-                      <mat-header-cell *matHeaderCellDef style="font-size: 13px !important;">
-                        <mat-form-field class="filter" floatLabel="never">
-                          <mat-label style="color: white; font-size: 15px;">Email</mat-label>
-                          <input matInput [formControl]="emailFilter" class="white-cursor">
-                        </mat-form-field>
-                      </mat-header-cell>
-                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info">
-                        <span
-                          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.email}}</span>
-                      </mat-cell>
-                    </ng-container>
+
                     <!-- <ng-container matColumnDef="courseCode">
                                             <mat-header-cell *matHeaderCellDef>
                                                 <mat-form-field class="filter" floatLabel="never">
@@ -235,6 +223,19 @@
                         title="click to view general info">
                         <span
                           style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.coursename}}</span>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="status">
+                      <mat-header-cell *matHeaderCellDef style="font-size: 13px !important; padding-left: 10px;">
+                        <mat-form-field class="filter" floatLabel="never">
+                          <mat-label style="color: white; font-size: 15px; ">Application Status</mat-label>
+                          <input matInput [formControl]="statusFilter" class="white-cursor">
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                        title="click to view general info">
+                        <span
+                          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-left:10px;">{{row.applicationstatusname}}</span>
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="startDateo">

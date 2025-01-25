@@ -1615,8 +1615,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Offer Letter Number</mat-label>
-                            <input matInput formControlName="offerLetterNumber" type="number"
-                              (ngModelChange)="setExpectedCompletion($event)" required>
+                            <input matInput formControlName="offerLetterNumber" type="number" required>
                               <mat-error *ngIf="HFormGroup4.get('offerLetterNumber').hasError('required')">
                                 Offer letter number is required
                               </mat-error>

@@ -176,7 +176,8 @@ export class AllCoursesComponent implements OnInit {
     this.apiService.getAPI1(`Training/${this.getCourseCode}?cid=${this.userInfo.college_id}`).subscribe((data)=>{
       console.log('training.gov.au',data)
       alert('Successfully loaded all data')
-      this.getCourses()
+      // this.getCourses()
+      this.refresh()
       // this.router.navigate([`/admin/courses/all-courses`])
       // window.location.reload();
     })

@@ -1799,6 +1799,12 @@
                       <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Offer Letter Number</mat-label>
+                            <input matInput formControlName="offerLetterNumber" type="number" [readonly]="editable" required>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
                             <mat-label>Tuition Fee</mat-label>
                             <input matInput type="number" formControlName="TuitionFee" required [readonly]="editable">
                             <mat-error *ngIf="HFormGroup4.get('TuitionFee').hasError('required')">
@@ -1816,6 +1822,8 @@
                             <mat-datepicker #enroleDatepicker [disabled]="editable"></mat-datepicker>
                           </mat-form-field>
                         </div>
+                      </div>
+                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Commencement Date</mat-label>
@@ -1826,8 +1834,6 @@
                             <mat-datepicker #cdDatepicker [disabled]="editable"></mat-datepicker>
                           </mat-form-field>
                         </div>
-                      </div>
-                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
                           <section class="example-section mb-4">
                             <label class="example col-md-5 col-sm-4 asterisk">Course Duration Type</label>
@@ -1849,6 +1855,9 @@
                               (ngModelChange)="setExpectedCompletion($event)" [readonly]="editable">
                           </mat-form-field>
                         </div>
+
+                      </div>
+                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Expected Completion Date</mat-label>
@@ -1857,15 +1866,6 @@
                             <mat-datepicker-toggle matSuffix [for]="ecDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #ecDatepicker [disabled]="editable"></mat-datepicker>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Offer Letter Number</mat-label>
-                            <input matInput formControlName="offerLetterNumber"
-                              (ngModelChange)="setExpectedCompletion($event)" type="number" [readonly]="editable" required>
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">

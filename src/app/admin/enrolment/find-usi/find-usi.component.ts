@@ -62,7 +62,7 @@ export class FindUsiComponent implements OnInit {
     this.y = this.ymd[0] - 0
     this.m = this.ymd[1] - 0
     this.d = this.ymd[2] - 0
-    if (this.HFormGroup1.value.LastName == '.' || this.HFormGroup1.value.LastName == null) {
+    if (this.HFormGroup1.value.FamilyName == '.' || this.HFormGroup1.value.FamilyName == null) {
       usibody = {
         college_id: this.userInfo.college_id,
         SingleName: body.FirstName,
@@ -75,7 +75,7 @@ export class FindUsiComponent implements OnInit {
       usibody = {
         college_id: this.userInfo.college_id,
         FirstName: body.FirstName,
-        FamilyName: body.LastName,
+        FamilyName: body.FamilyName,
         year: this.y,
         month: this.m,
         day: this.d
@@ -83,6 +83,9 @@ export class FindUsiComponent implements OnInit {
     }
     this.apiService.postAPI1('USINo', usibody).subscribe((data) => {
       console.log(data)
+      const response = JSON.stringify(data); // Parse the JSON string
+      // const usiValue = response.USI; // Access the `USI` value
+      console.log(response);
     })
   }
 

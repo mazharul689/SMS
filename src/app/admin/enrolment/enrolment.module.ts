@@ -48,6 +48,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { AssignUnitsComponent } from './assign-units/assign-units.component';
 import { DeleteStudentPaymentScheduleDialogComponent } from './student-payment-schedule/delete-student-payment-schedule-dialog/delete-student-payment-schedule-dialog.component';
 import { FindUsiComponent } from './find-usi/find-usi.component';
+import { AllCancelledStudentComponent } from './all-cancelled-student/all-cancelled-student.component';
 @NgModule({
   declarations: [
     NewStudentComponent,
@@ -66,6 +67,7 @@ import { FindUsiComponent } from './find-usi/find-usi.component';
     AssignUnitsComponent,
     DeleteStudentPaymentScheduleDialogComponent,
     FindUsiComponent,
+    AllCancelledStudentComponent,
   ],
   imports: [
     HttpClientModule,

@@ -305,6 +305,7 @@ export class NewStudentComponent implements OnInit {
   allStates: any
   allAmounts: any
   apiTest = false
+  offerLetterNumber
 
   // editTraning = [{
   //   trainingActivityId: '',
@@ -816,6 +817,11 @@ export class NewStudentComponent implements OnInit {
     })
     // this.updateAll()
     //Enrolment
+    this.apiService.getAPI('getofferletternumber').subscribe((data) => {
+      const offerLetterString = data['data']; // e.g., "OfferLetterNumber: 5"
+      this.offerLetterNumber = parseInt(offerLetterString.split(':')[1].trim(), 10);
+      // console.log(this.offerLetterNumber)
+    })
     this.HFormGroup4 = this.fb.group({
       userId: [this.userInfo.userid],
       studentId: [''],
@@ -826,7 +832,7 @@ export class NewStudentComponent implements OnInit {
       deliveryModeId: [1],
       specificFundingId: [null],
       fundingSourceNationalId: [4, [Validators.required]],
-      fundingSourceStateId: [1],
+      fundingSourceStateId: [null],
       commencingProgramId: [1, [Validators.required]],
       commencementDate: [null, [Validators.required]],
       courseDuration: [null],
@@ -846,6 +852,9 @@ export class NewStudentComponent implements OnInit {
         studentEnrolmentId: [''],
         QualificationId: ['']
       })
+    })
+    this.HFormGroup4.patchValue({
+      offerLetterNumber: this.offerLetterNumber
     })
     // this.apiService.getAPI('getagent').subscribe((data) => {
     //   this.agents = data['data']
@@ -2004,7 +2013,7 @@ export class NewStudentComponent implements OnInit {
         formData.append('uploadfolder', 'StudentsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5013/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false
@@ -2087,7 +2096,7 @@ export class NewStudentComponent implements OnInit {
   //           // console.log('certificate', data['data'])
   //           // console.log('enrolmentid', this.studentEnrolID)
   //           this.certificate = data['data']
-  //           this.baseApi = "https://api.wonderit.com.au:5023/"
+  //           this.baseApi = "https://api.wonderit.com.au:5013/"
   //           // this.link = this.baseApi.concat(this.certificate.toString())
   //           // console.log('link',this.link)
   //           window.open(this.baseApi + data['data'])

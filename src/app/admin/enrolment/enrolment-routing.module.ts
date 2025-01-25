@@ -8,7 +8,7 @@ import { StudentPaymentScheduleComponent } from './student-payment-schedule/stud
 import { AsignClassComponent } from './asign-class/asign-class.component';
 import { AssignUnitsComponent } from './assign-units/assign-units.component';
 import { FindUsiComponent } from './find-usi/find-usi.component';
-
+import { AllCancelledStudentComponent } from './all-cancelled-student/all-cancelled-student.component';
 const routes: Routes = [
   {
     path: 'all-student',
@@ -45,7 +45,12 @@ const routes: Routes = [
   {
     path: 'find-usi',
     component: FindUsiComponent
+  },
+  {
+    path: 'all-cancelled-student',
+    component: AllCancelledStudentComponent
   }
+
 ];
 
 @NgModule({

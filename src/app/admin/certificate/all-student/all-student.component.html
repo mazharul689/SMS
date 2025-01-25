@@ -82,8 +82,7 @@
                             <mat-form-field class="example-full-width mr-5">
                               <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Agent</mat-label>
                               <mat-select [formControl]="bulkAgentFilter">
-                                <mat-option *ngFor="let agent of allAgents"
-                                  [value]="agent.agentid">
+                                <mat-option *ngFor="let agent of allAgents" [value]="agent.agentid">
                                   {{ agent.agencyname }}
                                 </mat-option>
                               </mat-select>
@@ -91,7 +90,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col-3">
+                      <div class="col-2">
                         <div class="search row">
                           <div class="col-sm-12">
                             <mat-form-field class="example-full-width mr-5">
@@ -111,28 +110,39 @@
                           <div class="col-sm-12">
                             <mat-form-field class="example-full-width mr-5">
                               <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Client Id</mat-label>
-                               <input matInput type="text" style="color: black" [formControl]="bulkClientIdFilter"/>
+                              <input matInput type="text" style="color: black" [formControl]="bulkClientIdFilter" />
                             </mat-form-field>
                           </div>
                         </div>
                       </div>
-                      <div class="col-3">
+                      <div class="col-2">
                         <div class="search row">
-                          <div class="col-sm-8">
+                          <div class="col-sm-12">
                             <mat-form-field class="example-full-width mr-5">
                               <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Usi</mat-label>
-                               <input matInput type="text" style="color: black" [formControl]="usiFilter"/>
+                              <input matInput type="text" style="color: black" [formControl]="usiFilter" />
                             </mat-form-field>
                           </div>
-                          <div class="col-sm-2">
-                            <button mat-mini-fab color="primary" (click)="search(courseIntakeFilter.value,bulkAgentFilter.value,bulkApplicationStatusFilter.value,bulkClientIdFilter.value,usiFilter.value)">
+                        </div>
+                      </div>
+                      <div class="col-2">
+                        <div class="search row">
+                          <div class="col-sm-7">
+                            <mat-form-field class="example-full-width mr-5">
+                              <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Name</mat-label>
+                              <input matInput type="text" style="color: black" [formControl]="studentNameFilter" />
+                            </mat-form-field>
+                          </div>
+                          <div class="col-sm-3">
+                            <button mat-mini-fab color="primary"
+                              (click)="search(courseIntakeFilter.value,bulkAgentFilter.value,bulkApplicationStatusFilter.value,bulkClientIdFilter.value,usiFilter.value,studentNameFilter.value)">
                               <i class="fa fa-search"></i>
                             </button>
                           </div>
                           <div class="col-sm-2">
                             <button mat-mini-fab color="primary" (click)="addNew()">
-                                <mat-icon class="col-white">add</mat-icon>
-                              </button>
+                              <mat-icon class="col-white">add</mat-icon>
+                            </button>
                           </div>
                         </div>
                       </div>
@@ -167,8 +177,8 @@
                           </mat-form-field>
                         </div>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
-                        data-placement="right" title="click to view general info">{{row.clientid}}</mat-cell>
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                        title="click to view general info">{{row.clientid}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="name">
                       <mat-header-cell *matHeaderCellDef style="font-size: 13px !important">
@@ -177,8 +187,8 @@
                           <input matInput [formControl]="nameFilter" class="white-cursor">
                         </mat-form-field>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
-                        data-placement="right" title="click to view general info">
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                        title="click to view general info">
                         <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.firstname}}
                           {{row.lastname}}</span>
                       </mat-cell>
@@ -200,8 +210,8 @@
                           <input matInput [formControl]="email2Filter" class="white-cursor">
                         </mat-form-field>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
-                        data-placement="right" title="click to view general info">
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                        title="click to view general info">
                         <span
                           style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.email}}</span>
                       </mat-cell>
@@ -213,8 +223,8 @@
                           <input matInput [formControl]="courseFilter" class="white-cursor">
                         </mat-form-field>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
-                        data-placement="right" title="click to view general info">
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                        title="click to view general info">
                         <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.coursecode}}
                           - {{row.coursename}}</span>
                       </mat-cell>
@@ -236,8 +246,8 @@
                           <input matInput [formControl]="startDateFilter" class="white-cursor">
                         </mat-form-field>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
-                        data-placement="right" title="click to view general info"> {{row.startDate}}
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                        title="click to view general info"> {{row.startDate}}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="endDate2">
@@ -247,8 +257,8 @@
                           <input matInput [formControl]="endDateFilter" class="white-cursor">
                         </mat-form-field>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
-                        data-placement="right" title="click to view general info"> {{row.endDate}}
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                        title="click to view general info"> {{row.endDate}}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="certificateType">
@@ -258,10 +268,11 @@
                           <input matInput [formControl]="certificateType" readonly="true" class="white-cursor">
                         </mat-form-field>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
-                        data-placement="right" title="click to view general info">
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                        title="click to view general info">
                         <label *ngIf="row.certificatetype == 'C'">Certificate</label>
                         <label *ngIf="row.certificatetype == 'S'">Statement</label>
+                        <label *ngIf="row.certificatetype == 'R'">Result</label>
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="certificate">
@@ -274,8 +285,7 @@
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" style="text-align: center">
                         <span *ngIf="row.certificateFlag == true"
                           style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                          <button type="button" mat-icon-button color="primary"
-                            (click)="downloadCertificate(row)">
+                          <button type="button" mat-icon-button color="primary" (click)="downloadCertificate(row)">
                             <mat-icon style="color: blue;">cloud_download</mat-icon>
                             <!-- <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i> -->
                           </button>
@@ -289,6 +299,15 @@
                             <!-- <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i> -->
                           </button>
                           Download Attainment
+                        </span>
+                        <span *ngIf="row.sorFlag == true"
+                          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                          <button type="button" mat-icon-button color="primary"
+                            (click)="downloadResult(row.studentenrolmentid)">
+                            <mat-icon style="color: blue;">cloud_download</mat-icon>
+                            <!-- <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i> -->
+                          </button>
+                          Download Result
                         </span>
                         <!-- </div> -->
                       </mat-cell>

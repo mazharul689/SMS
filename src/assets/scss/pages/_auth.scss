@@ -108,6 +108,21 @@ img{
     box-shadow: 0px 9px 15px -11px rgba(88,54,114,1);
 }
 
+.loading {
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  display: block;
+  margin: auto;
+  // margin-top: 30px;
+  background: #3F51B5;
+  color: #fff;
+  font-weight: bold;
+  -webkit-box-shadow: 0px 9px 15px -11px #3F51B5;
+  -moz-box-shadow: 0px 9px 15px -11px #3F51B5;
+  box-shadow: 0px 9px 15px -11px #3F51B5;
+}
+
 
 
 .right {

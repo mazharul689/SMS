@@ -56,7 +56,7 @@ export interface EnrolledCourses {
 export class AllStudentComponent implements OnInit {
   mode = new FormControl('side')
   students
-  displayedColumns: string[] = ['clientIdo', 'fullNameo', 'emailo', 'courseNameo', 'startDateo', 'endDateo', 'actionso']
+  displayedColumns: string[] = ['clientIdo', 'fullNameo', 'courseNameo', 'status', 'startDateo', 'endDateo', 'actionso']
   dataSource: MatTableDataSource<Students>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator
   @ViewChild(MatSort, { static: true }) sort: MatSort
@@ -72,7 +72,7 @@ export class AllStudentComponent implements OnInit {
   clientIdFilter = new FormControl('')
   firstNameFilter = new FormControl('')
   lastNameFilter = new FormControl('')
-  emailFilter = new FormControl('')
+  statusFilter = new FormControl('')
   courseCodeFilter = new FormControl('')
   courseNameFilter = new FormControl('')
   startDateFilter = new FormControl('')
@@ -83,7 +83,7 @@ export class AllStudentComponent implements OnInit {
     clientid: '',
     fullname: '',
     lastname: '',
-    email: '',
+    applicationstatusname: '',
     coursecode: '',
     coursename: '',
     startdate: '',
@@ -180,8 +180,8 @@ export class AllStudentComponent implements OnInit {
     //   this.filteredValues.lastname = lastName;
     //   this.dataSource.filter = JSON.stringify(this.filteredValues)
     // })
-    this.emailFilter.valueChanges.subscribe(email => {
-      this.filteredValues.email = email;
+    this.statusFilter.valueChanges.subscribe(applicationstatusname => {
+      this.filteredValues.applicationstatusname = applicationstatusname;
       this.dataSource.filter = JSON.stringify(this.filteredValues)
     })
     // this.courseCodeFilter.valueChanges.subscribe(courseCode =>{
@@ -230,7 +230,7 @@ export class AllStudentComponent implements OnInit {
         return data.clientid.toLowerCase().toString().indexOf(searchTerms.clientid.toLowerCase()) !== -1
           && data.fullname.toLowerCase().indexOf(searchTerms.fullname.toLowerCase()) !== -1
           // && (data.lastname || '').toLowerCase().indexOf(searchTerms.lastname.toLowerCase()) !== -1
-          && data.email.toLowerCase().indexOf(searchTerms.email.toLowerCase()) !== -1
+          && data.applicationstatusname.toLowerCase().indexOf(searchTerms.applicationstatusname.toLowerCase()) !== -1
           // && (data.coursecode || '').toLowerCase().indexOf(searchTerms.coursecode.toLowerCase()) !== -1
           && (data.coursename || '').toLowerCase().indexOf(searchTerms.coursename.toLowerCase()) !== -1
           && (data.startdate || '').toLowerCase().indexOf(searchTerms.startdate.toLowerCase()) !== -1

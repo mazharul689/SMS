@@ -70,6 +70,7 @@ export class AllStudentComponent implements OnInit {
   clientId2Filter = new FormControl('')
   nameFilter = new FormControl('')
   email2Filter = new FormControl('')
+  studentNameFilter = new FormControl();
   courseFilter = new FormControl('')
   startDateFilter = new FormControl('')
   endDateFilter = new FormControl('')
@@ -197,7 +198,7 @@ export class AllStudentComponent implements OnInit {
         this.students[i].startDate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
         this.students[i].endDate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
         if (this.students[i].certificatepath != null) {
-          this.students[i].doc = this.students[i].certificatepath.replace('https://api.wonderit.com.au:5023/tmp/StudentsCertificate/', '')
+          this.students[i].doc = this.students[i].certificatepath.replace('https://api.wonderit.com.au:5013/tmp/StudentsCertificate/', '')
         }
         if (this.students[i].certificatepath == "") {
           this.students[i].certificatepath = null
@@ -207,6 +208,9 @@ export class AllStudentComponent implements OnInit {
         }
         else if (this.students[i].certificatetype == "S") {
           this.students[i].attainmentFlag = true
+        }
+        else if (this.students[i].certificatetype == "R") {
+          this.students[i].sorFlag = true
         }
       }
       this.students = this.students.sort((a, b) => {
@@ -238,7 +242,7 @@ export class AllStudentComponent implements OnInit {
     }
     return filterFunction;
   }
-  search(cid: any, aid: any, asid: any, clid: any, uid: any) {
+  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any) {
     let queryParams = [];
 
     // Build query string based on available parameters
@@ -257,11 +261,14 @@ export class AllStudentComponent implements OnInit {
     if(uid){
       queryParams.push(`usiNo=${uid}`);
     }
+    if (name) {
+      queryParams.push(`studentname=${name}`);
+    }
     // console.log(queryParams)
     // If there are any query parameters, make the API call
     if (queryParams.length > 0) {
       const queryString = queryParams.join('&');
-      this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
+      this.apiService.getAPI(`getstudentcertificatelist?${queryString}`).subscribe((data) => {
         // console.log(data);
         // if (this.HFormGroup1.valid) {
         if (data['data'].msg) {
@@ -378,6 +385,9 @@ export class AllStudentComponent implements OnInit {
   downloadAttainment(id) {
     window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${id}`)
 
+  }
+  downloadResult(id){
+    window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${id}`)
   }
   // clearCache(): void {
   //   caches.keys().then(keys => {

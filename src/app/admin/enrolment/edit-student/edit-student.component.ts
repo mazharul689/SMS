@@ -1902,7 +1902,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
             //console.log('response', data.data)
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5013/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false

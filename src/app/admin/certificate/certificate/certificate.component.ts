@@ -311,7 +311,7 @@ export class CertificateComponent implements OnInit {
     certificateBody.Issuedflag = 'Y'
     certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd')
     certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd')
-    if (certificateBody.certificateType == 'C') {
+    if (certificateBody.certificateType == 'C' || certificateBody.certificateType == 'R') {
       for (let i = 0; i < this.trainingActId.length; i++) {
         nums[i] = this.trainingActId[i].trainingactivityid;
       }
@@ -345,8 +345,12 @@ export class CertificateComponent implements OnInit {
           window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${certificateBody.studentEnrolmentId}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }
-        else {
+        else if (certificateBody.certificateType == 'S') {
           window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${certificateBody.studentEnrolmentId}&_token=${this.userInfo.refresh_token}`)
+          this.router.navigate(['/admin/certificate/all-student'])
+        }
+        else if (certificateBody.certificateType == 'R') {
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${certificateBody.studentEnrolmentId}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }
       })
@@ -451,7 +455,7 @@ export class CertificateComponent implements OnInit {
     //       }
     //     }
     //     else {
-    //       this.baseApi = "https://api.wonderit.com.au:5023/"
+    //       this.baseApi = "https://api.wonderit.com.au:5013/"
     //       window.open(this.baseApi + data)
     //     }
     //   })

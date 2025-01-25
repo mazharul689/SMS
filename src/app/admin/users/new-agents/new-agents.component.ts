@@ -118,7 +118,7 @@ export class NewAgentsComponent implements OnInit {
         formData.append('uploadfolder', 'AgentsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.agentDocumentLoc = "https://api.wonderit.com.au:5023/" + data.data
+            this.docRows.at(i).value.agentDocumentLoc = "https://api.wonderit.com.au:5013/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.agentDocumentName && !this.docRows.at(i).value.agentDocumentLoc) {
                 valid = false
@@ -135,6 +135,7 @@ export class NewAgentsComponent implements OnInit {
         }
       }
     }
+    this.router.navigate(['/admin/users/all-agents'])
     // this.stepLabel++
     // stepper.next()
   }
