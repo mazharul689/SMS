@@ -46,6 +46,14 @@
                         <span class="ml-2">{{row.unitName}}</span>
                       </mat-cell>
                     </ng-container>
+                    <ng-container matColumnDef="CAclassName">
+                      <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                        <mat-label style="color: white; font-size: 15px;">Class Name</mat-label>
+                      </mat-header-cell>
+                      <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                        <span class="ml-2">{{row.className}}</span>
+                      </mat-cell>
+                    </ng-container>
                     <ng-container matColumnDef="CAstartDate">
                       <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
                         <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>

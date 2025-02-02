@@ -59,16 +59,16 @@
                     </span> -->
                   </ng-template>
                   <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Class Name</mat-label>
                         <input matInput formControlName="className" type="text" required [readonly]="editable">
                       </mat-form-field>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Course</mat-label>
-                        <mat-select formControlName="courseId" (change)="unitsByCourses()" required>
+                        <mat-select formControlName="courseId" (change)="unitsByCourses()" (ngModelChange)="courseName($event)" required>
                           <mat-option *ngFor="let course of courses" [value]="course.courseid" [disabled]="editable">
                             {{ course.coursecode }} - {{ course.coursename }}
                           </mat-option>
@@ -76,6 +76,12 @@
                         <mat-error *ngIf="HFormGroup1.get('courseId').hasError('required')">
                           Course is required
                         </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Certificate Course Name</mat-label>
+                        <input matInput formControlName="certificateCourseName" type="text" required [readonly]="editable">
                       </mat-form-field>
                     </div>
                   </div>

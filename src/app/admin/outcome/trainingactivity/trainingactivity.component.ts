@@ -77,7 +77,7 @@ export class TrainingactivityComponent implements OnInit {
   show_msg = false
   show_msg2 = false
   userInfo: any
-
+  studentDetails
 
 
   constructor(
@@ -89,12 +89,14 @@ export class TrainingactivityComponent implements OnInit {
     private state: StateService,
     private actRoute: ActivatedRoute,
     private router: Router
-  ) { }
+  ) {
+    this.enrolemntID = this.actRoute.snapshot.params.id;
+    this.getstudent(this.enrolemntID)
+  }
 
   ngOnInit(): void {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
 
-    this.enrolemntID = this.actRoute.snapshot.params.id;
     this.step = this.actRoute.snapshot.params.step;
     this.HFormGroup1 = this.fb.group({
       userId: [this.userInfo.userid],
@@ -154,6 +156,13 @@ export class TrainingactivityComponent implements OnInit {
         }
       })
     // })
+  }
+  getstudent(id){
+    this.apiService.getAPI(`getstudentenrolmentbystudentenrolmentid?id=${id}`).subscribe((data) => {
+      this.studentDetails = data['data'][0]
+      this.studentDetails.fullname = this.studentDetails.firstname + ' ' + this.studentDetails.middlename + ' ' + this.studentDetails.lastname
+      console.log(this.studentDetails)
+    })
   }
   compareTwoDates() {
     setTimeout(() => {

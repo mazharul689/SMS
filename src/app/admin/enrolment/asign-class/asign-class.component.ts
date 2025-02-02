@@ -18,6 +18,7 @@ export interface AllUnits {
   rowID
   CAunitCode: string
   CAunitName: string
+  CAclassName: string
   CAstartDate: string
   CAendDate: Date
 }
@@ -37,7 +38,7 @@ export interface AllUnits {
   ],
 })
 export class AsignClassComponent implements OnInit {
-  displayedColumns: string[] = ['rowID', 'CAunitCode', 'CAunitName', 'CAstartDate', 'CAendDate']
+  displayedColumns: string[] = ['rowID', 'CAunitCode', 'CAunitName', 'CAclassName', 'CAstartDate', 'CAendDate']
   dataSource: MatTableDataSource<AllUnits>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator
   @ViewChild(MatSort, { static: true }) sort: MatSort
@@ -111,6 +112,7 @@ export class AsignClassComponent implements OnInit {
       classSetupId: '',
       outcomeNationalId: 9,
       outcomeTrainingOrgId: '',
+      className: '',
       startDate: '',
       endDate: '',
       hoursAttended: '',
@@ -144,6 +146,7 @@ export class AsignClassComponent implements OnInit {
           classSetupId: allUnits[i].classsetupid,
           outcomeNationalId: 9,
           outcomeTrainingOrgId: null,
+          className: allUnits[i].classname,
           startDate: this.datePipe.transform(allUnits[i].startdate, 'yyyy-MM-dd'),
           endDate: this.datePipe.transform(allUnits[i].enddate, 'yyyy-MM-dd'),
           hoursAttended: null,

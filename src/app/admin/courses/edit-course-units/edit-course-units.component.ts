@@ -212,7 +212,7 @@ export class EditCourseUnitsComponent implements OnInit {
     else {
       this.selection.clear()
       this.dataSource1.data.forEach(row => {
-        if (this.dataSource1.data[row.rowID].unitType == 'C' || this.dataSource1.data[row.rowID].unitOrderBy) {
+        if (this.dataSource1.data[row.rowID].unitType == 'C' || this.dataSource1.data[row.rowID].statusCheck == true) {
           this.selection.select(row)
         }
       });
@@ -271,22 +271,22 @@ export class EditCourseUnitsComponent implements OnInit {
       });
       this.apiService.getAPI(`getcourseunitbycourseid?id=${id}`).subscribe((data) => {
         this.previousData = data['data']
-        // this.firstMasterToggle();
-        if(this.previousData.msg != 'No record found'){
+        if (this.previousData.msg != 'No record found') {
           this.units.forEach((data) => {
             const matchingIndex = this.previousData.findIndex((unit) => unit.unitid === data.unitid);
             if (matchingIndex !== -1) {
               data.unitdurationtype = this.previousData[matchingIndex].unitdurationtype;
               data.unitduration = this.previousData[matchingIndex].unitduration;
               data.unitorderby = this.previousData[matchingIndex].unitorderby;
+              data.statusCheck = true;
             }
           });
         }
-        else{
-          this.units.forEach((data,index) => {
-              data.unitdurationtype = 'W';
-              data.unitduration = 0;
-              data.unitorderby = index;
+        else {
+          this.units.forEach((data, index) => {
+            data.unitdurationtype = 'W';
+            data.unitduration = 0;
+            data.unitorderby = index;
           });
         }
 

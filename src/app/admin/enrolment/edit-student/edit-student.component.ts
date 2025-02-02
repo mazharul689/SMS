@@ -395,6 +395,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
   studentDocuments: any
   allAmounts: any
   allStates: any
+  retry: boolean
 
 
   fNameChange(newValue) {
@@ -501,7 +502,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       title: [''],
       firstName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.maxLength(40)]],
       middleName: ['', [Validators.maxLength(40)]],
-      lastName: ['', [Validators.maxLength(40), Validators.required]],
+      lastName: [null, [Validators.maxLength(40)]],
       email: ['', [Validators.required, Validators.email, Validators.minLength(5), Validators.maxLength(80)]],
       oldEmail: [''],
       altEmail: ['', [Validators.maxLength(80)]],
@@ -526,7 +527,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       homeLanguageId: [16, [Validators.required]],
       englishSpeakingStatusId: [1],
       englishSpeakingScoreTypeId: [1],
-      englishSpeakingScore: ['', [Validators.required]],
+      englishSpeakingScore: [0],
       employmentStatusId: [9],
       indigenousStatusId: [5, [Validators.required]],
       stillInSecSchool: ['N'],
@@ -589,7 +590,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       studentId: [''],
       studentOriginId: [''],
       courseIntakeDateId: [''],
-      agentId: [null,[Validators.required]],
+      agentId: [null, [Validators.required]],
       applicationStatusId: [2, [Validators.required]],
       deliveryModeId: [1],
       specificFundingId: [null],
@@ -778,21 +779,21 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         this.editStudent = data['data'][0]
         // console.log('editstudent', this.editStudent)
         this.temp = this.editStudent.usiverificationstatus
-        this.temp = this.temp.split(" ")
-        // console.log('temp', this.editStudent)
-        if (this.temp[0] == 'Valid' && this.editStudent.lastname != '.') {
-          this.usiStatusCheck.UsiStatus = this.temp[0]
-          this.usiStatusCheck.FirstName = this.temp[1]
-          this.usiStatusCheck.FamilyName = this.temp[2]
-          this.usiStatusCheck.DateOfBirth = this.temp[3]
+        if (this.temp != null) {
+          this.temp = this.temp.split(" ")
+          // console.log('temp', this.editStudent)
+          if (this.temp[0] == 'Valid' && this.editStudent.lastname != '.') {
+            this.usiStatusCheck.UsiStatus = this.temp[0]
+            this.usiStatusCheck.FirstName = this.temp[1]
+            this.usiStatusCheck.FamilyName = this.temp[2]
+            this.usiStatusCheck.DateOfBirth = this.temp[3]
+          }
+          if (this.temp[0] == 'Valid' && this.editStudent.lastname == '.') {
+            this.usiStatusCheckForSingleName.UsiStatus = this.temp[0]
+            this.usiStatusCheckForSingleName.SingleName = this.temp[1]
+            this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2]
+          }
         }
-        if (this.temp[0] == 'Valid' && this.editStudent.lastname == '.') {
-          this.usiStatusCheckForSingleName.UsiStatus = this.temp[0]
-          this.usiStatusCheckForSingleName.SingleName = this.temp[1]
-          this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2]
-        }
-
-
         this.HFormGroup1.patchValue({
           userId: this.editStudent.userid,
           clientId: this.editStudent.clientid,
@@ -900,20 +901,21 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         this.editStudent = data['data'][0]
         //console.log('editstudent', this.editStudent)
         this.temp = this.editStudent.usiverificationstatus
-        this.temp = this.temp.split(" ")
-        // console.log('temp', this.editStudent)
-        if (this.temp[0] == 'Valid' && this.editStudent.lastname != '.') {
-          this.usiStatusCheck.UsiStatus = this.temp[0]
-          this.usiStatusCheck.FirstName = this.temp[1]
-          this.usiStatusCheck.FamilyName = this.temp[2]
-          this.usiStatusCheck.DateOfBirth = this.temp[3]
+        if (this.temp != null) {
+          this.temp = this.temp.split(" ")
+          // console.log('temp', this.editStudent)
+          if (this.temp[0] == 'Valid' && this.editStudent.lastname != '.') {
+            this.usiStatusCheck.UsiStatus = this.temp[0]
+            this.usiStatusCheck.FirstName = this.temp[1]
+            this.usiStatusCheck.FamilyName = this.temp[2]
+            this.usiStatusCheck.DateOfBirth = this.temp[3]
+          }
+          if (this.temp[0] == 'Valid' && this.editStudent.lastname == '.') {
+            this.usiStatusCheckForSingleName.UsiStatus = this.temp[0]
+            this.usiStatusCheckForSingleName.SingleName = this.temp[1]
+            this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2]
+          }
         }
-        if (this.temp[0] == 'Valid' && this.editStudent.lastname == '.') {
-          this.usiStatusCheckForSingleName.UsiStatus = this.temp[0]
-          this.usiStatusCheckForSingleName.SingleName = this.temp[1]
-          this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2]
-        }
-
         this.HFormGroup1.patchValue({
           userId: this.editStudent.userid,
           clientId: this.editStudent.clientid,
@@ -1707,10 +1709,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
   }
   onVerifyUsi() {
     this.usiFlag = true
-    if (this.HFormGroup1.value.firstName == "" || this.HFormGroup1.value.lastName == "" ||
-      this.HFormGroup1.value.dob == "" || this.HFormGroup1.value.usi == "null") {
-      //error
-      // alert('error')
+    this.retry = false
+    if (this.HFormGroup1.value.firstName == "" || this.HFormGroup1.value.dob == "" || this.HFormGroup1.value.usi == "null") {
       this.usiFlag = false
     }
     else {
@@ -1723,7 +1723,10 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       this.y = this.ymd[0] - 0
       this.m = this.ymd[1] - 0
       this.d = this.ymd[2] - 0
-      if (this.HFormGroup1.value.lastName == '.') {
+      if (this.HFormGroup1.value.lastName === '.' ||
+        this.HFormGroup1.value.lastName === '' ||
+        this.HFormGroup1.value.lastName === null) {
+
         usibody = {
           college_id: this.userInfo.college_id,
           usi: this.usiNo,
@@ -1731,9 +1734,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           year: this.y,
           month: this.m,
           day: this.d
-        }
-      }
-      else {
+        };
+      } else {
         usibody = {
           college_id: this.userInfo.college_id,
           usi: this.usiNo,
@@ -1742,7 +1744,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           year: this.y,
           month: this.m,
           day: this.d
-        }
+        };
       }
 
       this.apiService.postAPI1('usi', usibody).subscribe((data) => {
@@ -1751,7 +1753,9 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
 
         this.usiDetails = data;
         this.usiDetails = JSON.parse(this.usiDetails)
-        if (this.HFormGroup1.value.lastName == '.') {
+        if (this.HFormGroup1.value.lastName === '.' ||
+          this.HFormGroup1.value.lastName === '' ||
+          this.HFormGroup1.value.lastName === null) {
           this.usiStatusCheckForSingleName.UsiStatus = this.usiDetails.USIStatus
           this.usiStatusCheckForSingleName.SingleName = this.usiDetails.SingleName
           this.usiStatusCheckForSingleName.DateOfBirth = this.usiDetails.DateOfBirth
@@ -1767,6 +1771,13 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
 
         }
       })
+      setTimeout(() => {
+        if (this.usiFlag == true) {
+          this.retry = true
+          this.usiFlag = false
+          this.progress = 100
+        }
+      }, 10000);
     }
   }
   onUnitUpdate() {
@@ -1902,7 +1913,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
             //console.log('response', data.data)
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5013/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false

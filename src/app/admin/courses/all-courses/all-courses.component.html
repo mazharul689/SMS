@@ -114,8 +114,8 @@
                           </mat-form-field>
                         </div>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
-                        data-placement="right" title="click to view course info">{{row.coursecode}}</mat-cell>
+                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
+                        data-placement="right" >{{row.coursecode}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="courseName">
                       <mat-header-cell *matHeaderCellDef>
@@ -124,8 +124,8 @@
                           <input matInput [formControl]="courseNameFilter" class="white-cursor">
                         </mat-form-field>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
-                        data-placement="right" title="click to view course info"> {{row.coursename}}
+                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
+                        data-placement="right" > {{row.coursename}}
                       </mat-cell>
                     </ng-container>
 

@@ -14,6 +14,48 @@
                                 <strong>Warning!</strong> {{ error.errorMessage }}
                             </div>
                         </div>
+                        <div class="row">
+                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                            <span><strong>Student's Name</strong></span>
+                          </div>
+                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                            <span>:&emsp;{{ studentDetails?.fullname ? studentDetails.fullname : 'loading...' }}</span>
+                          </div>
+                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                            <span><strong>Email</strong></span>
+                          </div>
+                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                            <span>:&emsp;{{ studentDetails?.email ? studentDetails.email : 'loading...' }}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                            <span><strong>Date of Birth</strong></span>
+                          </div>
+                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                            <span>:&emsp;{{ studentDetails?.dob ? (studentDetails.dob | date:'dd/MM/yyyy') : 'loading...' }}</span>
+                          </div>
+                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                            <span><strong>Phone</strong></span>
+                          </div>
+                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                            <span>:&emsp;{{ studentDetails?.mobile ? studentDetails.mobile : 'Not Found' }}</span>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                            <span><strong>USI</strong></span>
+                          </div>
+                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                            <span>:&emsp;{{ studentDetails?.usino !== null ? studentDetails?.usino : 'Not Found' }}</span>
+                          </div>
+                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                            <span><strong>USI Status</strong></span>
+                          </div>
+                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                            <span>:&emsp;{{ studentDetails?.usiverificationstatus === 'Y' ? 'Valid' : 'Not Verified' }}</span>
+                          </div>
+                        </div>
                         <!-- <div class="row">
                                     <div *ngIf="errorAll.isAllerror"
                                         class="col-6 alert alert-danger m-auto text-center">

@@ -198,7 +198,7 @@ export class AllStudentComponent implements OnInit {
         this.students[i].startDate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
         this.students[i].endDate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
         if (this.students[i].certificatepath != null) {
-          this.students[i].doc = this.students[i].certificatepath.replace('https://api.wonderit.com.au:5013/tmp/StudentsCertificate/', '')
+          this.students[i].doc = this.students[i].certificatepath.replace('https://api.wonderit.com.au:5000/tmp/StudentsCertificate/', '')
         }
         if (this.students[i].certificatepath == "") {
           this.students[i].certificatepath = null
@@ -374,12 +374,12 @@ export class AllStudentComponent implements OnInit {
   downloadCertificate(row) {
     // console.log('id',id)
     // window.open(this.students[id].certificatepath)
-    if (row.rtotype == 'C') {
-      window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=cricoscertificate&sid=${row.studentenrolmentid}&_token=${this.userInfo.refresh_token}`)
-    }
-    else {
+    // if (row.rtotype == 'C') {
+    //   window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=cricoscertificate&sid=${row.studentenrolmentid}&_token=${this.userInfo.refresh_token}`)
+    // }
+    // else {
       window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${row.studentenrolmentid}&_token=${this.userInfo.refresh_token}`)
-    }
+    // }
 
   }
   downloadAttainment(id) {

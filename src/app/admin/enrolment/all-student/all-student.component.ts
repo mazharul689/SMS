@@ -262,7 +262,7 @@ export class AllStudentComponent implements OnInit {
           this.students[i].coursename = "";
         } else {
           this.students[i].coursename =
-            this.students[i].coursecode + " - " + this.students[i].coursename;
+            this.students[i].coursecode;
         }
         this.students[i].fullname =
           this.students[i].firstname + " " + this.students[i].lastname;

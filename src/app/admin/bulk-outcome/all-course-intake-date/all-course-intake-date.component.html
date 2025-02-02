@@ -29,7 +29,7 @@
                       <input matInput [formControl]="courseIdFilter">
                     </mat-form-field>
                   </mat-header-cell>
-                  <mat-cell class="pr-0 mw-10" *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
+                  <mat-cell class="pr-0 mw-10" *matCellDef="let row"  data-toggle="tooltip"
                     data-placement="right" title="click to general info">
                     {{row.courseintakedateid}}
                   </mat-cell>
@@ -41,8 +41,8 @@
                       <input matInput [formControl]="courseCodeFilter">
                     </mat-form-field>
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip" data-placement="right"
-                    title="click to view info">
+                  <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right"
+                    >
                     {{row.coursecode}}
                   </mat-cell>
                 </ng-container>
@@ -53,8 +53,8 @@
                       <input matInput [formControl]="courseNameFilter">
                     </mat-form-field>
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip" data-placement="right"
-                    title="click to view info">
+                  <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right"
+                    >
                     {{row.coursename}}
                   </mat-cell>
                 </ng-container>
@@ -65,8 +65,8 @@
                       <input matInput [formControl]="startDateFilter">
                     </mat-form-field>
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip" data-placement="right"
-                    title="click to view info">
+                  <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right"
+                    >
                     {{row.startdate}}
                   </mat-cell>
                 </ng-container>
@@ -77,8 +77,8 @@
                       <input matInput [formControl]="endDateFilter">
                     </mat-form-field>
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip" data-placement="right"
-                    title="click to view info">
+                  <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right"
+                    >
                     {{row.enddate}}
                   </mat-cell>
                 </ng-container>

@@ -215,19 +215,22 @@
 }
 //assign in class
 .newCourseUnit .mat-column-rowID {
-  max-width: 5% !important;
+  max-width: 3% !important;
 }
 .newCourseUnit .mat-column-CAunitCode {
-  max-width: 15% !important;
+  max-width: 10% !important;
 }
 .newCourseUnit .mat-column-CAunitName {
-  max-width: 50% !important;
+  max-width: 45% !important;
+}
+.newCourseUnit .mat-column-CAclassName {
+  max-width: 14% !important;
 }
 .newCourseUnit .mat-column-CAstartDate {
-  max-width: 15% !important;
+  max-width: 14% !important;
 }
 .newCourseUnit .mat-column-CAendDate {
-  max-width: 15% !important;
+  max-width: 14% !important;
 }
 //classsetup page design
 .newCourseUnit .mat-column-csrowID {

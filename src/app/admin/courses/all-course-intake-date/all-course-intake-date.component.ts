@@ -39,7 +39,7 @@ export class AllCourseIntakeDateComponent implements OnInit {
   filteredValues = {
     courseintakedateid: '',
     coursecode: '',
-    coursename: '',
+    certificatecoursename: '',
     startdate: '',
     enddate: '',
     classname: ''
@@ -73,8 +73,8 @@ export class AllCourseIntakeDateComponent implements OnInit {
       this.filteredValues.coursecode = coursecode
       this.dataSource.filter = JSON.stringify(this.filteredValues)
     })
-    this.courseNameFilter.valueChanges.subscribe(coursename => {
-      this.filteredValues.coursename = coursename;
+    this.courseNameFilter.valueChanges.subscribe(certificatecoursename => {
+      this.filteredValues.certificatecoursename = certificatecoursename;
       this.dataSource.filter = JSON.stringify(this.filteredValues)
     })
     this.classNameFilter.valueChanges.subscribe(classname => {
@@ -103,7 +103,7 @@ export class AllCourseIntakeDateComponent implements OnInit {
       let searchTerms = JSON.parse(filter);
       return data.courseintakedateid.toString().indexOf(searchTerms.courseintakedateid) !== -1
         && (data.coursecode || '').toLowerCase().indexOf(searchTerms.coursecode.toLowerCase()) !== -1
-        && (data.coursename || '').toLowerCase().indexOf(searchTerms.coursename.toLowerCase()) !== -1
+        && (data.certificatecoursename || '').toLowerCase().indexOf(searchTerms.certificatecoursename.toLowerCase()) !== -1
         && (data.classname || '').toLowerCase().indexOf(searchTerms.classname.toLowerCase()) !== -1
         && (data.startdate || '').toLowerCase().indexOf(searchTerms.startdate.toLowerCase()) !== -1
         && (data.enddate || '').toLowerCase().indexOf(searchTerms.enddate.toLowerCase()) !== -1;

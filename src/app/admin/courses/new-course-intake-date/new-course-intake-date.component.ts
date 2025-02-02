@@ -138,6 +138,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
       className: ['', [Validators.required]],
       studentOriginIds: 1,
       courseId: ['', [Validators.required]],
+      certificateCourseName: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       courseDurationType: ['W', [Validators.required]],
       courseDuration: ['', [Validators.required]],
@@ -596,6 +597,13 @@ export class NewCourseIntakeDateComponent implements OnInit {
   //     this.dataSource.paginator.firstPage();
   //   }
   // }
+  courseName(val){
+    const selectedCourse = this.courses.find(course => course.courseid === val);
+    console.log(selectedCourse.coursename)
+    this.HFormGroup1.patchValue({
+      certificateCourseName: selectedCourse.coursename
+    })
+  }
   onCourseIntakeSubmmit(stepper) {
     this.duplCourseIntakeErr = false
     const courseBody = this.HFormGroup1.value

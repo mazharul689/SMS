@@ -54,16 +54,16 @@
                     </span>
                   </ng-template>
                   <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Class Name</mat-label>
                         <input matInput formControlName="className" type="text"  required>
                       </mat-form-field>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Course</mat-label>
-                        <mat-select formControlName="courseId" (change)="unitsByCourses()" required>
+                        <mat-select formControlName="courseId" (change)="unitsByCourses()" (ngModelChange)="courseName($event)"  required>
                           <mat-option *ngFor="let course of courses" [value]="course.courseid">
                             {{ course.coursecode }} - {{ course.coursename }}
                           </mat-option>
@@ -71,6 +71,12 @@
                         <mat-error *ngIf="HFormGroup1.get('courseId').hasError('required')">
                           Course is required
                         </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Certificate Course Name</mat-label>
+                        <input matInput formControlName="certificateCourseName" type="text"  required>
                       </mat-form-field>
                     </div>
                   </div>
@@ -182,12 +188,12 @@
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
                           <mat-checkbox (change)="$event ? masterToggle() : null"
                             [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                            [indeterminate]="selection.hasValue() && !isAllSelected()" disabled>
                           </mat-checkbox>
                         </mat-header-cell>
                         <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
                           <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)" disabled>
                           </mat-checkbox>
                         </mat-cell>
                       </ng-container>
@@ -316,7 +322,7 @@
                             <div class="table-head row">
                               <div class="head-col-unit">
                                 <mat-checkbox aria-label="Select All" checked="checked"
-                                  (change)="$event ? toggleAll($event) : null">
+                                  (change)="$event ? toggleAll($event) : null" disabled>
                                   Unit Code
                                 </mat-checkbox>
                               </div>
@@ -339,7 +345,7 @@
                                 <div class="table-body row" [formGroupName]="i">
                                   <div class="body-col-unit">
                                     <mat-checkbox (click)="$event.stopPropagation()" checked="checked"
-                                      (change)="$event ? toggle(row, $event) : null" formControlName="statusCheck">
+                                      (change)="$event ? toggle(row, $event) : null" formControlName="statusCheck" disabled>
                                       {{row.get('unitCode').value}}
                                     </mat-checkbox>
                                   </div>

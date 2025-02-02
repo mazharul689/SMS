@@ -179,6 +179,7 @@ export class EditCourseIntakeDateComponent implements OnInit {
       className: ['',[Validators.required]],
       studentOriginIds: 1,
       courseId: ['', [Validators.required]],
+      certificateCourseName: ['', [Validators.required]],
       startDate: ['', [Validators.required]],
       courseDurationType: ['', [Validators.required]],
       courseDuration: ['', [Validators.required]],
@@ -229,6 +230,7 @@ export class EditCourseIntakeDateComponent implements OnInit {
         className: this.editCourseIntake.classname,
         studentOriginIds: this.editCourseIntake.studentoriginids,
         courseId: parseInt(this.editCourseIntake.courseid),
+        certificateCourseName: this.editCourseIntake.certificatecoursename,
         startDate: moment(this.editCourseIntake.startdate),
         courseDurationType: this.editCourseIntake.coursedurationtype,
         courseDuration: this.editCourseIntake.courseduration,
@@ -364,6 +366,14 @@ export class EditCourseIntakeDateComponent implements OnInit {
     //     domesticTutionFees: this.editCourseIntake.domesticTutionFees
     //   })
     // })
+  }
+
+  courseName(val){
+    const selectedCourse = this.courses.find(course => course.courseid === val);
+    console.log(selectedCourse.coursename)
+    this.HFormGroup1.patchValue({
+      certificateCourseName: selectedCourse.coursename
+    })
   }
   setEndDate(val) {
     console.log(val)

@@ -63,7 +63,7 @@ const ELEMENT_DATA: allUnits[] = []
   ],
 })
 export class NewStudentComponent implements OnInit {
-  displayedColumns: string[] = ['courseCode', 'courseName', 'startDate', 'endDate', 'action']
+  displayedColumns: string[] = ['courseCode', 'courseName', 'className', 'startDate', 'endDate', 'action']
   dataSource: MatTableDataSource<CourseData>
   units
   displayedColumns1: string[] = ['rowID', 'unitCode', 'unitName', 'unitType', 'vetFlag', 'AVETMISS ']
@@ -306,6 +306,7 @@ export class NewStudentComponent implements OnInit {
   allAmounts: any
   apiTest = false
   offerLetterNumber
+  retry: boolean
 
   // editTraning = [{
   //   trainingActivityId: '',
@@ -393,7 +394,7 @@ export class NewStudentComponent implements OnInit {
       this.difStates = null
       this.difStateName = null
       this.HFormGroup1.patchValue({
-          suburb_postal: 'Not Specified'
+        suburb_postal: 'Not Specified'
       })
       this.difSuburbDisable = true
     }
@@ -489,7 +490,7 @@ export class NewStudentComponent implements OnInit {
       homeLanguageId: [16, [Validators.required]],
       englishSpeakingStatusId: [1],
       englishSpeakingScoreTypeId: [1],
-      englishSpeakingScore: ['', [Validators.required]],
+      englishSpeakingScore: [0],
       employmentStatusId: [9],
       indigenousStatusId: [5, [Validators.required]],
       stillInSecSchool: ['N'],
@@ -817,11 +818,7 @@ export class NewStudentComponent implements OnInit {
     })
     // this.updateAll()
     //Enrolment
-    this.apiService.getAPI('getofferletternumber').subscribe((data) => {
-      const offerLetterString = data['data']; // e.g., "OfferLetterNumber: 5"
-      this.offerLetterNumber = parseInt(offerLetterString.split(':')[1].trim(), 10);
-      // console.log(this.offerLetterNumber)
-    })
+
     this.HFormGroup4 = this.fb.group({
       userId: [this.userInfo.userid],
       studentId: [''],
@@ -834,14 +831,14 @@ export class NewStudentComponent implements OnInit {
       fundingSourceNationalId: [4, [Validators.required]],
       fundingSourceStateId: [null],
       commencingProgramId: [1, [Validators.required]],
-      commencementDate: [null, [Validators.required]],
+      commencementDate: [new Date(), [Validators.required]],
       courseDuration: [null],
       courseDurationType: ['W', [Validators.required]],
       expectedCompletionDate: [null, [Validators.required]],
       trainingContractid: [null],
       reasonTakingCourseId: [2, [Validators.required]],
       applyForRPL: ['N'],
-      studentEnrolmentDate: [null, [Validators.required]],
+      studentEnrolmentDate: [new Date(), [Validators.required]],
       TuitionFee: ['0', [Validators.required]],
       amountTypeId: [null, [Validators.required]],
       agentCommission: [null, [Validators.required]],
@@ -853,9 +850,15 @@ export class NewStudentComponent implements OnInit {
         QualificationId: ['']
       })
     })
-    this.HFormGroup4.patchValue({
-      offerLetterNumber: this.offerLetterNumber
+    this.apiService.getAPI('getofferletternumber').subscribe((data) => {
+      const offerLetterString = data['data']; // e.g., "OfferLetterNumber: 5"
+      this.offerLetterNumber = parseInt(offerLetterString.split(':')[1].trim(), 10);
+      this.HFormGroup4.patchValue({
+        offerLetterNumber: this.offerLetterNumber
+      })
+      // console.log(this.offerLetterNumber)
     })
+
     // this.apiService.getAPI('getagent').subscribe((data) => {
     //   this.agents = data['data']
     // })
@@ -1135,7 +1138,7 @@ export class NewStudentComponent implements OnInit {
       for (let i = 0; i < this.Rows.length; i++) {
         if (this.datePipe.transform(this.Rows.at(i).value.endDate, 'yyyy-MM-dd') < this.datePipe.transform(this.Rows.at(i).value.startDate, 'yyyy-MM-dd')) {
           this.error = { isError: true, errorMessage: "End Date is bigger than start date!" }
-          console.log(this.error)
+          // console.log(this.error)
         }
         if (this.error.isError == true) {
           window.scroll(0, 0)
@@ -1144,9 +1147,9 @@ export class NewStudentComponent implements OnInit {
           }
           break;
         }
-        console.log(this.error.isError)
+        // console.log(this.error.isError)
       }
-      console.log(this.error.isError)
+      // console.log(this.error.isError)
     }, 1);
   }
   setExpectedCompletion(event) {
@@ -1159,7 +1162,7 @@ export class NewStudentComponent implements OnInit {
           expectedCompletionDate: moment(enddate)
         })
       }
-      else if (formVal.courseDurationType == 'D'){
+      else if (formVal.courseDurationType == 'D') {
         const enddate = new Date(formVal.commencementDate);
         enddate.setDate(enddate.getDate() + (formVal.courseDuration));
         this.HFormGroup4.patchValue({
@@ -1402,14 +1405,14 @@ export class NewStudentComponent implements OnInit {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource1.data.forEach(row => this.selection.select(row));
-    console.log('form3value', this.HFormGroup3.value.unitArray)
+    // console.log('form3value', this.HFormGroup3.value.unitArray)
   }
   sendSelectedNumbers() {
     let selectedNumbers: number[] = [];
     for (let item of this.selection.selected) {
       selectedNumbers.push(item.rowID)
     }
-    console.log('hits', selectedNumbers);
+    // console.log('hits', selectedNumbers);
     return selectedNumbers;
   }
 
@@ -1538,7 +1541,12 @@ export class NewStudentComponent implements OnInit {
       //alert('test');
       //console.log(data);
       this.courses = data['data'];
-      console.log('courses', this.courses)
+      this.HFormGroup4.patchValue({
+        courseDuration: this.courses[0].courseduration
+      })
+      console.log('coursedurationcheck',this.HFormGroup4.value)
+      this.setExpectedCompletion(new Date())
+      // console.log('courses', this.courses)
       //alert('test');
       //  console.log('Course Info', this.courses);
       this.dataSource.data = this.courses // on data receive populate dataSource.data array
@@ -1590,8 +1598,13 @@ export class NewStudentComponent implements OnInit {
       this.units = data['data']
       this.apiService.getAPI(`getcourseintakedate?id=${this.courseIntakeID}`).subscribe((data) => {
         this.courseIntakeData = data['data'][0]
+        this.HFormGroup4.patchValue({
+          courseDuration: this.courseIntakeData.courseduration,
+          commencementDate: this.courseIntakeData.startdate,
+        })
+        this.setExpectedCompletion(new Date())
       })
-      console.log(this.units);
+      // console.log(this.units);
       this.courseId = this.units[0].courseid;
       (this.HFormGroup3.get('unitRows') as FormArray).removeAt(0);
       for (let i = 0; i < this.units.length; i++) {
@@ -1612,7 +1625,7 @@ export class NewStudentComponent implements OnInit {
         });
         (this.HFormGroup3.get('unitRows') as FormArray).push(rowData1)
       }
-      console.log('value', this.HFormGroup3.value)
+      // console.log('value', this.HFormGroup3.value)
       this.dataSource1 = new MatTableDataSource() // create new object
       this.dataSource1.data = this.unitRows.value
       this.dataSource1.paginator = this.tableTwoPaginator
@@ -1644,9 +1657,9 @@ export class NewStudentComponent implements OnInit {
     dialogRef.afterClosed().subscribe((data: any) => {
       if (data.length > 0) {
         let j = this.units.length + data.length
-        console.log(data)
+        // console.log(data)
         for (let i = this.units.length, k = 0; i < j; i++, k++) {
-          console.log(i)
+          // console.log(i)
           let rowData1 = this.fb.group({
             rowID: i,
             statusCheck: 0,
@@ -1700,7 +1713,7 @@ export class NewStudentComponent implements OnInit {
   selectionChange(event: StepperSelectionEvent) {
     // console.log(event.selectedStep);
     this.stepLabel = event.selectedStep.label
-    console.log(this.stepLabel)
+    // console.log(this.stepLabel)
   }
   onStudentSubmmit(stepper: MatStepper) {
 
@@ -1710,7 +1723,7 @@ export class NewStudentComponent implements OnInit {
     body.clientId = this.clientID
     // body.stateId = this.stateName
     // body.stateId_postal = this.difStateName
-    console.log('bodydata', body)
+    // console.log('bodydata', body)
     // console.log('usistatus',this.usiStatus)
 
     if (this.usiStatusCheck.UsiStatus == 'Valid' || this.usiStatusCheckForSingleName.UsiStatus == 'Valid') {
@@ -1751,18 +1764,18 @@ export class NewStudentComponent implements OnInit {
         if (data && data['data'] && data['data'][0] && data['data'][0]['error']) {
           err = true;
           this.err_msg = data['data'][0]['error_msg'];
-          console.log(this.err_msg);
+          // console.log(this.err_msg);
           window.scroll(0, 0);
           this.errors = { isError: true, errorMessage: this.err_msg };
         }
 
         if (!err) {
           this.studentID = data;
-          console.log(this.studentID)
+          // console.log(this.studentID)
           if (this.studentID < 1) {
             err = true;
             this.err_msg = "Student Id did not generate, please refresh the page and submit again";
-            console.log(this.err_msg);
+            // console.log(this.err_msg);
             window.scroll(0, 0);
             this.errors = { isError: true, errorMessage: this.err_msg };
           }
@@ -1817,11 +1830,9 @@ export class NewStudentComponent implements OnInit {
   }
   onVerifyUsi() {
     this.disable = true
-    // alert('ok')
-    if (this.HFormGroup1.value.firstName == "" || this.HFormGroup1.value.lastName == "" ||
-      this.HFormGroup1.value.dob == "" || this.HFormGroup1.value.usi == "null") {
-      //error
-      // alert('error')
+    this.retry = false
+
+    if (this.HFormGroup1.value.firstName == "" || this.HFormGroup1.value.dob == "" || this.HFormGroup1.value.usi == "null") {
       this.disable = false
     }
     else {
@@ -1833,9 +1844,10 @@ export class NewStudentComponent implements OnInit {
       this.y = this.ymd[0] - 0
       this.m = this.ymd[1] - 0
       this.d = this.ymd[2] - 0
-      // console.log('date',date)
-      // console.log('check',this.HFormGroup1.value.lastName)
-      if (this.HFormGroup1.value.lastName == '.' || this.HFormGroup1.value.lastName == null ) {
+      if (this.HFormGroup1.value.lastName === '.' ||
+        this.HFormGroup1.value.lastName === '' ||
+        this.HFormGroup1.value.lastName === null) {
+
         usibody = {
           college_id: this.userInfo.college_id,
           usi: this.usiNo,
@@ -1843,9 +1855,8 @@ export class NewStudentComponent implements OnInit {
           year: this.y,
           month: this.m,
           day: this.d
-        }
-      }
-      else {
+        };
+      } else {
         usibody = {
           college_id: this.userInfo.college_id,
           usi: this.usiNo,
@@ -1854,22 +1865,20 @@ export class NewStudentComponent implements OnInit {
           year: this.y,
           month: this.m,
           day: this.d
-        }
+        };
       }
-      // console.log('validity', usibody.valid)
       this.apiService.postAPI1('usi', usibody).subscribe((data) => {
-        console.log('data', data)
         this.progress = 100
         this.disable = false
         this.usiDetails = data;
         this.usiDetails = JSON.parse(this.usiDetails)
-        if (this.HFormGroup1.value.lastName == '.') {
+        if (this.HFormGroup1.value.lastName === '.' ||
+          this.HFormGroup1.value.lastName === '' ||
+          this.HFormGroup1.value.lastName === null) {
           this.usiStatusCheckForSingleName.UsiStatus = this.usiDetails.USIStatus
           this.usiStatusCheckForSingleName.SingleName = this.usiDetails.SingleName
           this.usiStatusCheckForSingleName.DateOfBirth = this.usiDetails.DateOfBirth
           this.verifyStatus = this.usiDetails.USIStatus + " " + this.usiDetails.SingleName + " " + this.usiDetails.DateOfBirth
-          // this.usiDetails = JSON.stringify(this.usiStatusCheckForSingleName)
-          // console.log('usistatuscheck', this.usiStatusCheckForSingleName)
         }
         else {
           this.usiStatusCheck.UsiStatus = this.usiDetails.USIStatus
@@ -1877,18 +1886,22 @@ export class NewStudentComponent implements OnInit {
           this.usiStatusCheck.FamilyName = this.usiDetails.FamilyName
           this.usiStatusCheck.DateOfBirth = this.usiDetails.DateOfBirth
           this.verifyStatus = this.usiDetails.USIStatus + " " + this.usiDetails.FirstName + " " + this.usiDetails.FamilyName + " " + this.usiDetails.DateOfBirth
-
-          // this.usiDetails = JSON.stringify(this.usiStatusCheck)
-          // console.log('usistatuscheck', this.usiStatusCheck)
         }
       })
+      setTimeout(() => {
+        if (this.disable == true) {
+          this.retry = true
+          this.disable = false
+          this.progress = undefined
+        }
+      }, 10000);
     }
   }
 
   onUnitSubmit(stepper: MatStepper) {
     let rows = this.sendSelectedNumbers();
-    console.log('row', rows)
-    console.log('formvalue3', this.HFormGroup3.value.unitRows)
+    // console.log('row', rows)
+    // console.log('formvalue3', this.HFormGroup3.value.unitRows)
     const unitBody = this.HFormGroup3.value.unitRows;
     for (let i = 0; i < rows.length; i++) {
       unitBody[rows[i]].statusCheck = 1
@@ -1990,7 +2003,7 @@ export class NewStudentComponent implements OnInit {
   onConfirmationSubmit(stepper: MatStepper) {
     this.HFormGroup6.value.studentEnrolmentId = this.studentEnrolID
     this.apiService.postAPI('addtrainingactivity', this.HFormGroup6.value).subscribe((data) => {
-      console.log('Enrolment Successfull: ', data['data'])
+      // console.log('Enrolment Successfull: ', data['data'])
       this.router.navigate(['/admin/enrolment/all-student'])
     })
   }
@@ -2013,7 +2026,7 @@ export class NewStudentComponent implements OnInit {
         formData.append('uploadfolder', 'StudentsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5013/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false
@@ -2096,7 +2109,7 @@ export class NewStudentComponent implements OnInit {
   //           // console.log('certificate', data['data'])
   //           // console.log('enrolmentid', this.studentEnrolID)
   //           this.certificate = data['data']
-  //           this.baseApi = "https://api.wonderit.com.au:5013/"
+  //           this.baseApi = "https://api.wonderit.com.au:5000/"
   //           // this.link = this.baseApi.concat(this.certificate.toString())
   //           // console.log('link',this.link)
   //           window.open(this.baseApi + data['data'])

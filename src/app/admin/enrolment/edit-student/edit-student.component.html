@@ -114,7 +114,7 @@
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Last name</mat-label>
                             <input matInput formControlName="lastName" (ngModelChange)="lNameChange($event)"
-                              [readonly]="editable" required>
+                              [readonly]="editable">
                             <mat-error *ngIf="HFormGroup1.get('lastName').hasError('maxlength')">
                               Maximum length is 20 characters
                             </mat-error>
@@ -525,10 +525,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>English Speaking Score</mat-label>
-                            <input matInput formControlName="englishSpeakingScore" [readonly]="editable" required>
-                            <mat-error *ngIf="HFormGroup1.get('englishSpeakingScore').hasError('required')">
-                              IELTS score is required
-                            </mat-error>
+                            <input matInput formControlName="englishSpeakingScore" [readonly]="editable">
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
@@ -772,7 +769,7 @@
                           </div>
                         </div>
                         <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 mb-2 text-center"
-                          *ngIf="this.HFormGroup1.value.lastName != '.'">
+                          *ngIf="this.HFormGroup1.value.lastName != '.' && this.HFormGroup1.value.lastName != '' && this.HFormGroup1.value.lastName != null">
                           <h6>USI Verification Status</h6>
                           <div class="container">
                             <div class="row">
@@ -852,7 +849,7 @@
                           </div>
                         </div>
                         <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 mb-2 text-center"
-                          *ngIf="this.HFormGroup1.value.lastName == '.'">
+                          *ngIf="this.HFormGroup1.value.lastName == '.' || this.HFormGroup1.value.lastName == '' || this.HFormGroup1.value.lastName == null">
                           <h6>Usi Verification Status</h6>
                           <div class="container">
                             <div class="row">
@@ -1072,7 +1069,7 @@
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>State</mat-label>
                             <!-- <input matInput formControlName="stateId" [value]="states" readonly required> -->
-                            <mat-select  formControlName="stateId" required>
+                            <mat-select formControlName="stateId" required>
                               <mat-option *ngFor="let state of allStates" [value]="state.stateid">
                                 {{state.statename}}
                               </mat-option>
@@ -1669,7 +1666,8 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Agent Commission</mat-label>
-                            <input matInput type="number" formControlName="agentCommission" [readonly]="editable" required>
+                            <input matInput type="number" formControlName="agentCommission" [readonly]="editable"
+                              required>
                           </mat-form-field>
                         </div>
 
@@ -1800,7 +1798,8 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Offer Letter Number</mat-label>
-                            <input matInput formControlName="offerLetterNumber" type="number" [readonly]="editable" required>
+                            <input matInput formControlName="offerLetterNumber" type="number" [readonly]="editable"
+                              required>
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">

@@ -75,7 +75,7 @@ const ELEMENT_DATA: allUnits[] = []
   ],
 })
 export class NewStudentComponent implements OnInit {
-  displayedColumns: string[] = ['courseCode', 'courseName', 'startDate', 'endDate', 'action']
+  displayedColumns: string[] = ['courseCode', 'courseName', 'className', 'startDate', 'endDate', 'action']
   dataSource: MatTableDataSource<CourseData>
   units
   displayedColumns1: string[] = ['rowID', 'unitCode', 'unitName', 'unitType', 'vetFlag', 'AVETMISS ']
@@ -565,7 +565,7 @@ export class NewStudentComponent implements OnInit {
       homeLanguageId: [16, [Validators.required]],
       englishSpeakingStatusId: [1],
       englishSpeakingScoreTypeId: [1],
-      englishSpeakingScore: ['', [Validators.required]],
+      englishSpeakingScore: [0],
       employmentStatusId: [9],
       indigenousStatusId: [5, [Validators.required]],
       stillInSecSchool: ['N'],
@@ -1644,7 +1644,8 @@ export class NewStudentComponent implements OnInit {
       this.courseIntakeData = data['data'][0]
       console.log(this.courseIntakeData)
       this.HFormGroup4.patchValue({
-        courseDuration: this.courseIntakeData.courseduration
+        courseDuration: this.courseIntakeData.courseduration,
+        commencementDate: this.courseIntakeData.startdate,
       })
       this.setExpectedCompletion(new Date())
     })
@@ -1791,7 +1792,7 @@ export class NewStudentComponent implements OnInit {
     this.show_msg2 = false
     const body = this.HFormGroup1.value
     body.clientId = this.clientID
-    if(body.lastName == null){
+    if (body.lastName == null) {
       body.lastName = '.'
     }
     // if (this.apiTest) {
@@ -1916,8 +1917,7 @@ export class NewStudentComponent implements OnInit {
     this.disable = true
     this.retry = false
 
-    if (this.HFormGroup1.value.firstName == "" || this.HFormGroup1.value.lastName == "" ||
-      this.HFormGroup1.value.dob == "" || this.HFormGroup1.value.usi == "null") {
+    if (this.HFormGroup1.value.firstName == "" || this.HFormGroup1.value.dob == "" || this.HFormGroup1.value.usi == "null") {
       this.disable = false
     }
     else {
@@ -1929,7 +1929,10 @@ export class NewStudentComponent implements OnInit {
       this.y = this.ymd[0] - 0
       this.m = this.ymd[1] - 0
       this.d = this.ymd[2] - 0
-      if (this.HFormGroup1.value.lastName == '.' || this.HFormGroup1.value.lastName == null ) {
+      if (this.HFormGroup1.value.lastName === '.' ||
+        this.HFormGroup1.value.lastName === '' ||
+        this.HFormGroup1.value.lastName === null) {
+
         usibody = {
           college_id: this.userInfo.college_id,
           usi: this.usiNo,
@@ -1937,9 +1940,8 @@ export class NewStudentComponent implements OnInit {
           year: this.y,
           month: this.m,
           day: this.d
-        }
-      }
-      else {
+        };
+      } else {
         usibody = {
           college_id: this.userInfo.college_id,
           usi: this.usiNo,
@@ -1948,15 +1950,16 @@ export class NewStudentComponent implements OnInit {
           year: this.y,
           month: this.m,
           day: this.d
-        }
+        };
       }
       this.apiService.postAPI1('usi', usibody).subscribe((data) => {
-        console.log('data', data)
         this.progress = 100
         this.disable = false
         this.usiDetails = data;
         this.usiDetails = JSON.parse(this.usiDetails)
-        if (this.HFormGroup1.value.lastName == '.') {
+        if (this.HFormGroup1.value.lastName === '.' ||
+          this.HFormGroup1.value.lastName === '' ||
+          this.HFormGroup1.value.lastName === null) {
           this.usiStatusCheckForSingleName.UsiStatus = this.usiDetails.USIStatus
           this.usiStatusCheckForSingleName.SingleName = this.usiDetails.SingleName
           this.usiStatusCheckForSingleName.DateOfBirth = this.usiDetails.DateOfBirth
@@ -2216,7 +2219,7 @@ export class NewStudentComponent implements OnInit {
         formData.append('uploadfolder', 'StudentsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5013/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false
@@ -2299,7 +2302,7 @@ export class NewStudentComponent implements OnInit {
   //           // console.log('certificate', data['data'])
   //           // console.log('enrolmentid', this.studentEnrolID)
   //           this.certificate = data['data']
-  //           this.baseApi = "https://api.wonderit.com.au:5013/"
+  //           this.baseApi = "https://api.wonderit.com.au:5000/"
   //           // this.link = this.baseApi.concat(this.certificate.toString())
   //           // console.log('link',this.link)
   //           window.open(this.baseApi + data['data'])

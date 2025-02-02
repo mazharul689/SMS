@@ -178,7 +178,7 @@
                         </div>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info">{{row.clientid}}</mat-cell>
+                        >{{row.clientid}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="name">
                       <mat-header-cell *matHeaderCellDef style="font-size: 13px !important">
@@ -188,7 +188,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info">
+                        >
                         <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.firstname}}
                           {{row.lastname}}</span>
                       </mat-cell>
@@ -200,7 +200,7 @@
                                                     <input matInput [formControl]="lastNameFilter">
                                                 </mat-form-field>
                                             </mat-header-cell>
-                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" title="click to view general info"> {{row.lastName}}
+                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" > {{row.lastName}}
                                             </mat-cell>
                                         </ng-container> -->
                     <ng-container matColumnDef="email2">
@@ -211,7 +211,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info">
+                        >
                         <span
                           style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.email}}</span>
                       </mat-cell>
@@ -224,7 +224,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info">
+                        >
                         <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.coursecode}}
                           - {{row.coursename}}</span>
                       </mat-cell>
@@ -236,7 +236,7 @@
                                                     <input matInput [formControl]="courseNameFilter">
                                                 </mat-form-field>
                                             </mat-header-cell>
-                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" title="click to view general info"> {{row.courseName}}
+                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" > {{row.courseName}}
                                             </mat-cell>
                                         </ng-container> -->
                     <ng-container matColumnDef="startDate2">
@@ -247,7 +247,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info"> {{row.startDate}}
+                        > {{row.startDate}}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="endDate2">
@@ -258,7 +258,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info"> {{row.endDate}}
+                        > {{row.endDate}}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="certificateType">
@@ -269,7 +269,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info">
+                        >
                         <label *ngIf="row.certificatetype == 'C'">Certificate</label>
                         <label *ngIf="row.certificatetype == 'S'">Statement</label>
                         <label *ngIf="row.certificatetype == 'R'">Result</label>
