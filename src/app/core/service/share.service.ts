@@ -17,8 +17,8 @@ export class ShareService {
   // logoSrc1 = 'assets/images/banner/pacificLogo.png'
   // logoSrc1 = 'assets/images/banner/PICSmallLogo.png'
   // logoSrc1 = 'assets/images/banner/ETCSmallLogo.png'
-  logoSrc1 = 'assets/images/banner/ALITSmallLogo.png'
-  // logoSrc1 = 'assets/images/banner/bibeSmallLogo.png'
+  // logoSrc1 = 'assets/images/banner/ALITSmallLogo.png'
+  logoSrc1 = 'assets/images/banner/bibeSmallLogo.png'
 
 
   // logoSrc1 = 'assets/images/banner/HMISmallLogo.png'

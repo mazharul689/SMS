@@ -319,7 +319,7 @@ mode = new FormControl("side");
     };
     return filterFunction;
   }
-  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any) {
+  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, email: any) {
     let queryParams = [];
     queryParams.push(`applicationstatusid=5`);
     // Build query string based on available parameters
@@ -337,6 +337,9 @@ mode = new FormControl("side");
     }
     if (name) {
       queryParams.push(`studentname=${name}`);
+    }
+    if(email){
+      queryParams.push(`email=${email}`);
     }
     // console.log(queryParams)
     // If there are any query parameters, make the API call

@@ -71,6 +71,7 @@ export class AllStudentComponent implements OnInit {
   nameFilter = new FormControl('')
   email2Filter = new FormControl('')
   studentNameFilter = new FormControl();
+  emailFilter = new FormControl();
   courseFilter = new FormControl('')
   startDateFilter = new FormControl('')
   endDateFilter = new FormControl('')
@@ -242,7 +243,7 @@ export class AllStudentComponent implements OnInit {
     }
     return filterFunction;
   }
-  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any) {
+  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, email: any) {
     let queryParams = [];
 
     // Build query string based on available parameters
@@ -263,6 +264,9 @@ export class AllStudentComponent implements OnInit {
     }
     if (name) {
       queryParams.push(`studentname=${name}`);
+    }
+    if (email) {
+      queryParams.push(`email=${email}`);
     }
     // console.log(queryParams)
     // If there are any query parameters, make the API call
