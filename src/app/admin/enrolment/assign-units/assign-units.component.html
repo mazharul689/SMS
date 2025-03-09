@@ -13,8 +13,9 @@
                 <strong>Warning!</strong> {{ errorsReqEn.errorMessage }}
               </div>
             </div> -->
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mx-auto my-4 text-end" >
-              <button type="button" style="margin-bottom: 20px;" mat-raised-button color="primary" (click)="addMoreUnits()">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mx-auto my-4 text-end">
+              <button type="button" style="margin-bottom: 20px;" mat-raised-button color="primary"
+                (click)="addMoreUnits()">
                 Add More Units
               </button>
             </div>
@@ -35,7 +36,7 @@
                         </mat-checkbox>
                       </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="unitCode">
+                    <ng-container matColumnDef="ounitCode">
                       <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
                         <mat-label style="color: white; font-size: 15px;">Unit
                           Code</mat-label>
@@ -44,7 +45,7 @@
                         <span class="ml-2">{{row.unitCode}}</span>
                       </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="unitName">
+                    <ng-container matColumnDef="ounitName">
                       <mat-header-cell class="pr-0" *matHeaderCellDef>
                         <mat-label style="color: white; font-size: 15px;">Unit
                           Name</mat-label>
@@ -55,21 +56,12 @@
                         {{row.unitName}}
                       </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="unitType">
+                    <ng-container matColumnDef="ounitType">
                       <mat-header-cell class="pr-0" *matHeaderCellDef>
                         <section class="example-section">
                           <div class="row">
                             <mat-label style="color: white; font-size: 15px;">Unit
                               Type</mat-label>
-                            <!-- <div class="col-sm-12">
-                              <div class="group">
-                                <input type="radio" id="unitTypeId" name="unit" value="C" [(ngModel)]="bulkUnitType"
-                                  [ngModelOptions]="{standalone: true}" (change)="UnitBulkSet()"> <label>Core</label>
-                                <input type="radio" id="unitTypeId" name="unit" value="E" [(ngModel)]="bulkUnitType"
-                                  [ngModelOptions]="{standalone: true}" (change)="UnitBulkSet()">
-                                <label>Elective</label>
-                              </div>
-                            </div> -->
                           </div>
                         </section>
                       </mat-header-cell>
@@ -94,74 +86,78 @@
                         </section>
                       </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="vetFlag">
-                      <mat-header-cell class="pr-0" *matHeaderCellDef>
-                        <section class="example-section">
-                          <div class="row">
-                            <mat-label style="color: white; font-size: 15px;">VET
-                              Flag</mat-label>
-                            <!-- <div class="col-sm-12">
-                              <input type="radio" id="vetFlagId" name="vetFlag" value="Y" [(ngModel)]="bulkVetFlag"
-                                [ngModelOptions]="{standalone: true}" (change)="vetFlagBulkSet()">
-                              <label>Yes</label>
-                              <input type="radio" id="vetFlagId" name="vetFlag" value="N" [(ngModel)]="bulkVetFlag"
-                                [ngModelOptions]="{standalone: true}" (change)="vetFlagBulkSet()">
-                              <label>No</label>
-                            </div> -->
-                          </div>
-                        </section>
+                    <ng-container matColumnDef="ooutcomeNat">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef [ngClass]="{'selected-value': outcome}">
+                        <mat-form-field class="example-full-width mb-3" style="width: 90%;">
+                          <mat-label style="color: white;">Outcome National</mat-label>
+                          <mat-select [(ngModel)]="outcome" [ngModelOptions]="{standalone: true}"
+                            (ngModelChange)="outComeChange($event)">
+                            <mat-option *ngFor="let outNational of outcomenational"
+                              [value]="outNational.outcomenationalid">
+                              {{ outNational.outcomenationalcode }} - {{
+                              outNational.outcomenationalname }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
-                        <section class="example-section">
-                          <div class="row">
-                            <div class="col-sm-12">
-                              <input type="radio" id="vetFlagId{{row.rowID}}" name="vettlag{{row.rowID}}" value="Y"
-                                [attr.data-rowid]="row.rowID" [checked]="row.vetFlag == 'Y'"
-                                (change)="vetFlagRowChange($event)">
-                              <label>Yes</label>
-                              <input type="radio" id="vetFlagId{{row.rowID}}" name="vettlag{{row.rowID}}" value="N"
-                                [attr.data-rowid]="row.rowID" [checked]="row.vetFlag == 'N'"
-                                (change)="vetFlagRowChange($event)">
-                              <label>No</label>
-                            </div>
-                          </div>
-                        </section>
+                        <mat-form-field class="example-full-width mb-3" style="width: 90%;">
+                          <mat-label>Outcome National</mat-label>
+                          <mat-select formControlName="outcomeNationalId" [value]="outcome">
+                            <mat-option *ngFor="let outNational of outcomenational"
+                              [value]="outNational.outcomenationalid">
+                              {{ outNational.outcomenationalcode
+                              }} - {{
+                              outNational.outcomenationalname }}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
                       </mat-cell>
                     </ng-container>
-                    <ng-container matColumnDef="AVETMISS">
+                    <ng-container matColumnDef="ostartDate">
                       <mat-header-cell class="pr-0" *matHeaderCellDef>
-                        <section class="example-section">
-                          <div class="row">
-                            <mat-label style="color: white; font-size: 15px;">Avetmiss
-                              Report</mat-label>
-                            <!-- <div class="col-sm-12">
-                              <input type="radio" id="AVETMISSId" name="AVETMISS " value="Y"
-                                [(ngModel)]="bulkAVETMISS" [ngModelOptions]="{standalone: true}"
-                                (change)="AVETMISSBulkSet()">
-                              <label>Yes</label>
-                              <input type="radio" id="AVETMISSId" name="AVETMISS " value="N"
-                                [(ngModel)]="bulkAVETMISS" [ngModelOptions]="{standalone: true}"
-                                (change)="AVETMISSBulkSet()">
-                              <label>No</label>
-                            </div> -->
-                          </div>
-                        </section>
+                        <mat-form-field class="example-full-width mb-3" style="width: 90%;">
+                          <mat-label>Start Date</mat-label>
+                          <input matInput [matDatepicker]="thSdPicker" (ngModelChange)="sDateChange($event)"
+                            [(ngModel)]="stDate" [ngModelOptions]="{standalone: true}">
+                          <mat-datepicker-toggle matSuffix [for]="thSdPicker">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #thSdPicker>
+                          </mat-datepicker>
+                        </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
-                        <section class="example-section">
-                          <div class="row">
-                            <div class="col-sm-12">
-                              <input type="radio" id="AVETMISSId{{row.rowID}}" name="AVETMISS {{row.rowID}}" value="Y"
-                                [attr.data-rowid]="row.rowID" [checked]="row.AVETMISS  == 'Y'"
-                                (change)="AVETMISSRowChange($event)">
-                                <label>Yes</label>
-                                <input type="radio" id="AVETMISSId{{row.rowID}}" name="AVETMISS {{row.rowID}}"
-                                value="N" [attr.data-rowid]="row.rowID" [checked]="row.AVETMISS  == 'N'"
-                                (change)="AVETMISSRowChange($event)">
-                                <label>No</label>
-                            </div>
-                          </div>
-                        </section>
+                        <mat-form-field class="example-full-width mb-3" style="width: 90%;">
+                          <mat-label>Start Date</mat-label>
+                          <input matInput [matDatepicker]="sDpicker" formControlName="startDate">
+                          <mat-datepicker-toggle matSuffix [for]="sDpicker">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #sDpicker>
+                          </mat-datepicker>
+                        </mat-form-field>
+                      </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="oendDate">
+                      <mat-header-cell class="pr-0" *matHeaderCellDef>
+                        <mat-form-field class="example-full-width mb-3" style="width: 90%;">
+                          <mat-label>End Date</mat-label>
+                          <input matInput [matDatepicker]="thEdPicker" (ngModelChange)="eDateChange($event)"
+                            [(ngModel)]="enDate" [ngModelOptions]="{standalone: true}" [min]="stDate">
+                          <mat-datepicker-toggle matSuffix [for]="thEdPicker">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #thEdPicker>
+                          </mat-datepicker>
+                        </mat-form-field>
+                      </mat-header-cell>
+                      <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                        <mat-form-field class="example-full-width mb-3" style="width: 90%;">
+                          <mat-label>End Date</mat-label>
+                          <input matInput [matDatepicker]="sDpicker" formControlName="endDate">
+                          <mat-datepicker-toggle matSuffix [for]="sDpicker">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #sDpicker>
+                          </mat-datepicker>
+                        </mat-form-field>
                       </mat-cell>
                     </ng-container>
 
@@ -170,8 +166,8 @@
                       [style.cursor]="'pointer'" matRipple>
                     </mat-row>
                   </mat-table>
-                  <mat-paginator #Tpaginator [length]="dataSource.filteredData.length" [pageIndex]="0"
-                    [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+                  <mat-paginator #Tpaginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+                    [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 
                 </div>
               </div>
