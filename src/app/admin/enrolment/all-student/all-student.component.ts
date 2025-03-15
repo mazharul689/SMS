@@ -343,7 +343,7 @@ export class AllStudentComponent implements OnInit {
     if(email){
       queryParams.push(`email=${email}`);
     }
-    // console.log(queryParams)
+    console.log(queryParams)
     // If there are any query parameters, make the API call
     if (queryParams.length > 0) {
       const queryString = queryParams.join('&');

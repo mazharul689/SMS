@@ -90,6 +90,7 @@ export class CertificateComponent implements OnInit {
   dateValidate1 = { isError: false, errorMessage: '' }
   loading: boolean
   userInfo: any
+  certificateId: any
 
   public issuedFlagChange(newValue) {
     if (newValue == 'Y') {
@@ -130,8 +131,14 @@ export class CertificateComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private router: Router,
   ) {
-    this.enrolemntID = this.actRoute.snapshot.params.id;
     this.step = this.actRoute.snapshot.params.step;
+    if(this.step === 'E'){
+      this.enrolemntID = this.actRoute.snapshot.params.id;
+    }
+    else{
+      this.certificateId = this.actRoute.snapshot.params.id;
+      this.enrolemntID = this.actRoute.snapshot.params.eid;
+    }
     this.getStudentInfo()
     this.getOutcome()
   }
@@ -158,32 +165,46 @@ export class CertificateComponent implements OnInit {
     //   this.editEnrolment = data['data'][0]
     //   this.enrolemntID = data['data'][0]['studentEnrolmentId']
     // //console.log(this.enrolemntID)
-    this.apiService.getAPI(`getcertificate?id=${this.enrolemntID}`).subscribe((data) => {
-      // //console.log(data['data'])
-      if (!data['data'].msg) {
-        this.editCertificate = data['data'][0]
-        //console.log('data', this.editCertificate)
-        this.HFormGroup1.patchValue({
-          completionDate: moment(this.editCertificate.completiondate),
-          certificateIssueDate: moment(this.editCertificate.certificateissuedate),
-          certificateIssueNumber: this.editCertificate.certificateissuenumber,
-          certificateType: this.editCertificate.certificatetype,
-          Issuedflag: this.editCertificate.issuedflag,
-          rtoType: this.editCertificate.rtotype
-        })
-      }
-      else {
-        this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
-          this.issueNumber = data['data']
-          this.issueNumber = this.issueNumber.split(" ")
-          this.issueNumber = this.issueNumber[1]
-          this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
+    if(this.step === 'C'){
+      this.apiService.getAPI(`getcertificate?id=${this.certificateId}`).subscribe((data) => {
+        // //console.log(data['data'])
+        if (!data['data'].msg) {
+          this.editCertificate = data['data'][0]
+          //console.log('data', this.editCertificate)
           this.HFormGroup1.patchValue({
-            certificateIssueNumber: this.issueNumber
+            completionDate: moment(this.editCertificate.completiondate),
+            certificateIssueDate: moment(this.editCertificate.certificateissuedate),
+            certificateIssueNumber: this.editCertificate.certificateissuenumber,
+            certificateType: this.editCertificate.certificatetype,
+            Issuedflag: this.editCertificate.issuedflag,
+            rtoType: this.editCertificate.rtotype
           })
+        }
+        else {
+          this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
+            this.issueNumber = data['data']
+            this.issueNumber = this.issueNumber.split(" ")
+            this.issueNumber = this.issueNumber[1]
+            this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
+            this.HFormGroup1.patchValue({
+              certificateIssueNumber: this.issueNumber
+            })
+          })
+        }
+      })
+    }
+    else {
+      this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
+        this.issueNumber = data['data']
+        this.issueNumber = this.issueNumber.split(" ")
+        this.issueNumber = this.issueNumber[1]
+        this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
+        this.HFormGroup1.patchValue({
+          certificateIssueNumber: this.issueNumber
         })
-      }
-    })
+      })
+    }
+
 
     this.apiService.getAPI(`verifyoutcomeforcertificate?id=${this.enrolemntID}`).subscribe((data) => {
       this.outcomeCheck = data['data']
@@ -342,15 +363,15 @@ export class CertificateComponent implements OnInit {
           }
         }
         if (certificateBody.certificateType == 'C') {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${certificateBody.studentEnrolmentId}&_token=${this.userInfo.refresh_token}`)
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }
         else if (certificateBody.certificateType == 'S') {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${certificateBody.studentEnrolmentId}&_token=${this.userInfo.refresh_token}`)
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${data}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }
         else if (certificateBody.certificateType == 'R') {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${certificateBody.studentEnrolmentId}&_token=${this.userInfo.refresh_token}`)
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${data}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }
       })
@@ -455,7 +476,7 @@ export class CertificateComponent implements OnInit {
     //       }
     //     }
     //     else {
-    //       this.baseApi = "https://api.wonderit.com.au:5000/"
+    //       this.baseApi = "https://api.wonderit.com.au:5023/"
     //       window.open(this.baseApi + data)
     //     }
     //   })

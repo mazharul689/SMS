@@ -255,9 +255,9 @@
                               </button>
                             </span>
                             <button mat-icon-button class="btn-tbl-edit" title="Exclude the Document"
-                                  (click)="deleteStudentDocument(row)">
-                                  <mat-icon aria-label="Delete" style="color: red;">delete</mat-icon>
-                                </button>
+                              (click)="deleteStudentDocument(row)">
+                              <mat-icon aria-label="Delete" style="color: red;">delete</mat-icon>
+                            </button>
                           </mat-cell>
                         </ng-container>
                         <mat-header-row *matHeaderRowDef="displayedColumns4"></mat-header-row>
@@ -280,16 +280,56 @@
                       <span><strong>{{this.errorCertificate}}</strong></span>
                     </div>
                     <div class="row" *ngIf="certificateCount > 0">
-                      <div style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
-                        *ngFor="let certificate of certificates">
-                        <span>
-                          {{certificate.rowID}}.
-                          <button type="button" mat-icon-button color="primary"
-                            (click)="downloadCertificate(certificate.certificateLink)">
-                            <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i>
-                          </button>
-                          {{certificate.certificate}}
-                        </span>
+                      <div class="table-responsive courseIntake">
+                        <mat-table #table [dataSource]="dataSource6" matSort class="mat-cell">
+                          <ng-container matColumnDef="certificateType">
+                            <mat-header-cell class="pr-0" *matHeaderCellDef>
+                              <mat-label style="color: white; font-size:15px;">Certificate
+                                Type</mat-label></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                              <span *ngIf="row.certificatetype == 'S'"> Statement of Attainment </span>
+                              <span *ngIf="row.certificatetype == 'C'"> Certificate </span>
+                              <span *ngIf="row.certificatetype == 'R'"> Statement of Result </span>
+                            </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="issueDate">
+                            <mat-header-cell class="pr-0" *matHeaderCellDef>
+                              <mat-label style="color: white; font-size:15px;">Issue Date</mat-label></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                              {{row.certificateissuedate | date:'dd/MM/yyyy'}}
+                            </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="certCourseCode">
+                            <mat-header-cell class="pr-0" *matHeaderCellDef>
+                              <mat-label style="color: white; font-size:15px;">Course Code</mat-label></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                              {{row.coursecode}}
+                            </mat-cell>
+                          </ng-container>
+                          <ng-container matColumnDef="certActions">
+                            <mat-header-cell class="pr-0" *matHeaderCellDef>
+                              <mat-label style="color: white; font-size:15px;">Actions</mat-label></mat-header-cell>
+                            <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
+                              <!-- <button mat-icon-button class="btn-tbl-edit" title="Exclude the Document"
+                                    (click)="deleteStudentDocument(row)">
+                                    <mat-icon aria-label="Delete" style="color: red;">delete</mat-icon>
+                                  </button> -->
+                              <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                <button type="button" mat-icon-button color="primary"
+                                  (click)="downloadCertificate(row)">
+                                  <mat-icon style="color: blue;">cloud_download</mat-icon>
+                                </button>
+                                Download
+                              </span>
+                            </mat-cell>
+                          </ng-container>
+                          <mat-header-row *matHeaderRowDef="displayedColumns5"></mat-header-row>
+                          <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns5;"
+                            [style.cursor]="'pointer'" matRipple>
+                          </mat-row>
+                        </mat-table>
+                        <mat-paginator #tableSixPaginator [length]="dataSource6.filteredData.length" [pageIndex]="0"
+                          [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
                       </div>
                     </div>
                   </mat-expansion-panel>
@@ -330,7 +370,7 @@
                             <mat-label style="color: white; font-size:15px;">Start
                               Date</mat-label></mat-header-cell>
                           <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                            {{row.startdate | date }}
+                            {{row.startdate | date:'dd/MM/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="dashboardEND">
@@ -338,7 +378,7 @@
                             <mat-label style="color: white; font-size:15px;">End
                               Date</mat-label></mat-header-cell>
                           <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                            {{row.enddate | date }}
+                            {{row.enddate | date:'dd/MM/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -499,7 +539,8 @@
                                                         </span>
                                                     </div> -->
                           <!-- <span>{{row.bodyPreview}}</span> -->
-                          <span *ngIf="row.bodyPreview.length > 50 || !expandedRows[i]">{{row.shortMsg || row.bodyPreview}}</span>
+                          <span *ngIf="row.bodyPreview.length > 50 || !expandedRows[i]">{{row.shortMsg ||
+                            row.bodyPreview}}</span>
                           <!-- <span *ngIf="row.bodyPreview.length < 50 || expandedRows[i]">{{row.bodyPreview}}</span> -->
                           <!-- <button  mat-icon-button class="see-more-button" (click)="toggleExpanded(i)">
                             {{expandedRows[i] ? '' : 'See more'}}

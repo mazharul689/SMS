@@ -23,7 +23,7 @@ export interface courseIntakes {
   styleUrls: ['./all-course-intake-date.component.sass']
 })
 export class AllCourseIntakeDateComponent implements OnInit {
-  displayedColumns: string[] = ['courseCode', 'courseName', 'startDate', 'endDate', 'actions']
+  displayedColumns: string[] = ['courseCode', 'baCourseName', 'startDate', 'endDate', 'actions']
   dataSource: MatTableDataSource<courseIntakes>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -54,9 +54,9 @@ export class AllCourseIntakeDateComponent implements OnInit {
     public dialog: MatDialog,
     private fb: FormBuilder,
 
-  ) { 
+  ) {
     this.getCourseIntakes()
-    
+
   }
   ngOnInit(): void {
     this.dataSource = new MatTableDataSource() // create new object
@@ -83,7 +83,7 @@ export class AllCourseIntakeDateComponent implements OnInit {
       this.filteredValues.enddate = enddate;
       this.dataSource.filter = JSON.stringify(this.filteredValues)
     })
-    
+
     this.HFormGroup1 = this.fb.group({
       courseId: '',
       startYear: 2021
@@ -97,7 +97,7 @@ export class AllCourseIntakeDateComponent implements OnInit {
     let filterFunction = function (data, filter): boolean {
       let searchTerms = JSON.parse(filter);
       return data.courseintakedateid.toString().indexOf(searchTerms.courseintakedateid) !== -1
-        && (data.coursecode || '').toLowerCase().indexOf(searchTerms.coursecode.toLowerCase()) !== -1 
+        && (data.coursecode || '').toLowerCase().indexOf(searchTerms.coursecode.toLowerCase()) !== -1
         && (data.coursename || '').toLowerCase().indexOf(searchTerms.coursename.toLowerCase()) !== -1
         && (data.startdate || '').toLowerCase().indexOf(searchTerms.startdate.toLowerCase()) !== -1
         && (data.enddate || '').toLowerCase().indexOf(searchTerms.enddate.toLowerCase()) !== -1;
@@ -130,7 +130,7 @@ export class AllCourseIntakeDateComponent implements OnInit {
     this.router.navigate(['/admin/courses/new-course-intake-date']);
   }
   public loadData() {
-    this.dataSource = new MatTableDataSource() 
+    this.dataSource = new MatTableDataSource()
     this.getCourseIntakes()
     this.dataSource.paginator = this.paginator
     this.dataSource.sort = this.sort

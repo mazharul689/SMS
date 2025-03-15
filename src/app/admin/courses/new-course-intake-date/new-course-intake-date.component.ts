@@ -621,14 +621,14 @@ export class NewCourseIntakeDateComponent implements OnInit {
         this.apiService.postAPI('addcourseintakedate', this.HFormGroup1.value).subscribe((data) => {
           // console.log(data);
           // console.log('Course Intake Date Submission: ', data['data'])
-          if (data['data']) {
+          if (data['data'] && !data['data'][0].error) {
             this.courseIntakeDateID = data['data'][0].courseintakedateid;
             console.log(this.courseIntakeDateID)
             this.stepLabel++
             stepper.next()
           }
           let err
-          if (data['data'][0] && data['data'][0]['error']) {
+          if (data['data'][0] && data['data'][0].error) {
             err = data['data'][0]['error']
             if (err == 'true') {
               this.duplCourseIntakeErr = true

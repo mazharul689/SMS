@@ -11,7 +11,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HttpClient } from '@angular/common/http';
 import { ApiService } from 'src/app/api/api.service';
-
+import { forkJoin } from 'rxjs';
 export interface Login {
   username: string | null;
   password: string;
@@ -130,72 +130,77 @@ export class SigninComponent implements OnInit {
     this.loading = true;
     this.spinner.show();
     // Make login request here
-
     this.authService
       .login(this.f.username.value, this.f.password.value)
       .pipe(first())
       .subscribe({
         next: (data) => {
-          // console.log('data', data)
-          let token
           if (!data.status) {
-            this.apiService.getAPI('getrolemenu').subscribe((data1) => {
-              this.allRoleMenu = data1
+            forkJoin({
+              roleMenu: this.apiService.getAPI('getrolemenu'),
+              roles: this.apiService.getAPI('getroles')
+            }).subscribe(({ roleMenu, roles }) => {
+
+              this.allRoleMenu = roleMenu;
               window.localStorage.setItem('allRoleMenu', JSON.stringify(this.allRoleMenu));
-            })
-            this.apiService.getAPI('getroles').subscribe((data2) => {
-              this.roles = data2['data']
-              for (let i in this.roles) {
-                if (this.roles[i].roleid == data.roleid) {
-                  data.role = this.roles[i].rolename
+
+              this.roles = roles['data'];
+              for (let role of this.roles) {
+                if (role.roleid == data.roleid) {
+                  data.role = role.rolename;
                 }
               }
               localStorage.setItem('currentUser', JSON.stringify(data));
-              window.location.reload();
-              if (window.localStorage.getItem('currentUser')) {
-                this.router.navigate(['/admin/dashboard/main'])
-                token = data.access_token
-                this.authService.storeUserData(token)
-              }
-            })
 
-          }
-          else {
-            this.error = data.message
+              let token = data.access_token;
+              this.authService.storeUserData(token);
+              // Navigate only after both API calls complete
+              this.router.navigate(['/admin/dashboard/main']);
+              window.location.reload();
+            });
+          } else {
+            this.error = data.message;
             this.spinnerButtonOptions.active = false;
             this.loading = false;
             this.spinner.hide();
           }
-
-        },
-        // error: (error) => {
-        //   console.log('error', error.Status)
-
-        //   this.error = error
-        //   if (error.status === 401) {
-        //     alert("Incorrect username or password.");
-        //     this.loading = false;
-        //   } else {
-        //     alert("ok")
-        //     event.preventDefault()
-
-        //     this.loading = false;
-        //   }
-        // },
+        }
       });
-    // this.authService.login(this.f.username.value, this.f.password.value).subscribe((data) => {
-    //   let token
-    //   this.router.navigate(['/admin/dashboard/main'])
-    //   token = data.access_token
-    //   // console.log('userdata', token)
-    //   this.authService.storeUserData(token)
-    // },
-    //   error => {
-    //     this.submitted = false;
+    // this.authService
+    //   .login(this.f.username.value, this.f.password.value)
+    //   .pipe(first())
+    //   .subscribe({
+    //     next: (data) => {
+    //       let token
+    //       if (!data.status) {
+    //         this.apiService.getAPI('getrolemenu').subscribe((data1) => {
+    //           this.allRoleMenu = data1
+    //           window.localStorage.setItem('allRoleMenu', JSON.stringify(this.allRoleMenu));
+    //         })
+    //         this.apiService.getAPI('getroles').subscribe((data2) => {
+    //           this.roles = data2['data']
+    //           for (let i in this.roles) {
+    //             if (this.roles[i].roleid == data.roleid) {
+    //               data.role = this.roles[i].rolename
+    //             }
+    //           }
+    //           localStorage.setItem('currentUser', JSON.stringify(data));
+    //           window.location.reload();
+    //           if (window.localStorage.getItem('currentUser')) {
+    //             this.router.navigate(['/admin/dashboard/main'])
+    //             token = data.access_token
+    //             this.authService.storeUserData(token)
+    //           }
+    //         })
 
-    //     this.error = error;
-    //     this.spinnerButtonOptions.active = false;
-    //     this.loading = false;
+    //       }
+    //       else {
+    //         this.error = data.message
+    //         this.spinnerButtonOptions.active = false;
+    //         this.loading = false;
+    //         this.spinner.hide();
+    //       }
+    //     },
     //   });
   }
 }

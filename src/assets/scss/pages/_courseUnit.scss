@@ -134,6 +134,9 @@
 .newCourseUnit mat-table {
   width: 100%;
 }
+.table-responsive .table-head .mat-select-value {
+  color: #fff;
+}
 .newCourseUnit .mat-row:nth-child(2n+1){
   background-color: #ebebee;
 }
@@ -160,6 +163,24 @@
 }
 .newCourseUnit .mat-column-unitCode {
   max-width: 10% !important;
+}
+.newCourseUnit .mat-column-ounitCode {
+  max-width: 10% !important;
+}
+.newCourseUnit .mat-column-ounitName {
+  max-width: 30% !important;
+}
+.newCourseUnit .mat-column-ounitType {
+  max-width: 10% !important;
+}
+.newCourseUnit .mat-column-ooutcomeNat {
+  max-width: 15% !important;
+}
+.newCourseUnit .mat-column-ostartDate {
+  max-width: 15% !important;
+}
+.newCourseUnit .mat-column-oendDate {
+  max-width: 15% !important;
 }
 .newCourseUnit .mat-column-unitCode2 {
   max-width: 15% !important;
@@ -279,7 +300,7 @@
 
 //bulk-outcome
 .newCourseUnit .mat-column-rowID {
-  max-width: 10% !important;
+  max-width: 5% !important;
 }
 .newCourseUnit .mat-column-unitCode1 {
   max-width: 10% !important;

@@ -326,10 +326,8 @@ export class NewStudentComponent implements OnInit {
   addMoreFlag: boolean
   AllUnits: any
   courseId: any
-  // setUnitTypeVal1: any
   bulkUnitType1: string
   bulkVetFlag1: string
-  // setVetFlagVal1: any
   bulkAVETMISS1: string
   englishSpeakingScoreType: any
   suburbDisable: boolean
@@ -342,39 +340,12 @@ export class NewStudentComponent implements OnInit {
   allStates: any
   apiTest = false
   offerLetterNumber
-  // setAVETMISSVal1: any
-
-  // editTraning = [{
-  //   trainingActivityId: '',
-  //   classSetupId: '',
-  //   endDate: '',
-  //   hoursAttended: '',
-  //   outcomeNationalId: '',
-  //   outcomeNationalName: '',
-  //   startDate: '',
-  //   statusCheck: '',
-  //   unitId: '',
-  //   unitName: ''
-  // }]
   fNameChange(newValue) {
     this.fname = newValue;
-    // console.log(this.fname);
   }
   lNameChange(newValue) {
     this.lname = newValue;
-    // console.log(this.fname);
   }
-  // public yearMonthDateChange(newValue) {
-  //   // this.ymd = this.datePipe.transform(newValue, 'yyyy-MM-dd')
-  //   console.log('date', newValue)
-  //   // this.ymd = this.ymd.split("-")
-  //   // this.y = this.ymd[0] - 0
-  //   // this.m = this.ymd[1] - 0
-  //   // this.d = this.ymd[2] - 0
-  //   // console.log('year', this.y)
-  //   // console.log('month', this.m)
-  //   // console.log('date', this.d)
-  // }
   public usiChange(newValue) {
     this.usiNo = newValue
   }
@@ -434,25 +405,6 @@ export class NewStudentComponent implements OnInit {
       this.difSuburbDisable = true
     }
   }
-  // public issuedFlagChange(newValue) {
-  //   if (newValue == 'Y') {
-  //     this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
-  //       this.issueNumber = data['data']
-  //       this.issueNumber = this.issueNumber.split(" ")
-  //       this.issueNumber = this.issueNumber[1]
-  //       this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
-  //       this.HFormGroup8.patchValue({
-  //         certificateIssueNumber: this.issueNumber
-  //       })
-  //       // this.HFormGroup8.value.certificateIssueNumber = this.certificateissuenumber
-  //     })
-  //   }
-  //   else{
-  //     this.HFormGroup8.patchValue({
-  //       certificateIssueNumber: null
-  //     })
-  //   }
-  // }
   selectedUserId
   selectedDisableType = []
   selectedUsiType = []
@@ -566,6 +518,7 @@ export class NewStudentComponent implements OnInit {
       englishSpeakingStatusId: [1],
       englishSpeakingScoreTypeId: [1],
       englishSpeakingScore: [0],
+      englishSpeakingScoreExpdate: [null],
       employmentStatusId: [9],
       indigenousStatusId: [5, [Validators.required]],
       stillInSecSchool: ['N'],
@@ -579,10 +532,6 @@ export class NewStudentComponent implements OnInit {
       signatoryText: ['', [Validators.maxLength(200)]],
       usiNo: [null, [Validators.maxLength(10)]],
       usiVerificationStatus: ['', [Validators.maxLength(100)]],
-      // usi: ['', [Validators.maxLength(10)]],
-      // dobyyyy: ['', [Validators.maxLength(4)]],
-      // dobmm: ['', [Validators.maxLength(2)]],
-      // dobdd: ['', [Validators.maxLength(2)]],
       flatUnitDetails: ['', [Validators.maxLength(30)]],
       streetNumber: ['', [Validators.required, Validators.maxLength(15)]],
       streetName: ['', [Validators.required, Validators.maxLength(70)]],
@@ -602,6 +551,11 @@ export class NewStudentComponent implements OnInit {
       disabilityDetails: this.fb.group({
         disabilityId: [''],
       }),
+      priorDetail: this.fb.group({
+        userId: [this.userInfo.userid],
+        studentId: [''],
+        QualificationId: ['']
+      }),
       usiDetails: this.fb.group({
         usi: [null, [Validators.maxLength(10)]],
         firstName: ['', [Validators.pattern('[a-zA-Z ]*'), Validators.maxLength(20)]],
@@ -620,221 +574,14 @@ export class NewStudentComponent implements OnInit {
     }
     else {
       this.studentOrigins = JSON.parse(window.localStorage.getItem('studentOrigins'))
-      // console.log(this.studentOrigins)
     }
-    // this.apiService.getAPI('getstudentorigin').subscribe((data) => {
-    //   // console.log(data);
-    //   this.studentOrigins = data['data']
-    // })
     this.apiService.getAPI('getclientid').subscribe((data) => {
       // console.log(data);
       this.clientID = data['data']
       this.clientID = this.clientID.replace('clientId: \"', '')
       this.clientID = this.clientID.slice(0, -1)
     })
-    // this.apiService.getAPI('getcountry').subscribe((data) => {
-    //   // console.log(data);
-    //   this.getcountry = data['data']
-    // })
-    // if (!window.localStorage.getItem('getcountry')) {
-    //   this.apiService.getAPI(`getcountry`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.getcountry = data['data']
-    //     window.localStorage.setItem("getcountry", JSON.stringify(this.getcountry))
-    //   })
-    // }
-    // else {
-    //   this.getcountry = JSON.parse(window.localStorage.getItem('getcountry'))
-    // }
-    // this.apiService.getAPI('getcountry').subscribe((data) => {
-    //   // console.log(data);
-    //   // console.log('country:', data['data']);
-    //   this.getcountry = data['data']
-    // })
-    // if (!window.localStorage.getItem('getnationality')) {
-    //   this.apiService.getAPI(`getnationality`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.getnationality = data['data']
-    //     window.localStorage.setItem("getnationality", JSON.stringify(this.getnationality))
-    //   })
-    // }
-    // else {
-    //   this.getnationality = JSON.parse(window.localStorage.getItem('getnationality'))
-    // }
-    // this.apiService.getAPI('getnationality').subscribe((data) => {
-    //   // console.log(data);
-    //   this.getnationality = data['data']
-    // })
-    // if (!window.localStorage.getItem('getHomeLang')) {
-    //   this.apiService.getAPI(`getlanguage`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.getHomeLang = data['data']
-    //     window.localStorage.setItem("getHomeLang", JSON.stringify(this.getHomeLang))
-    //   })
-    // }
-    // else {
-    //   this.getHomeLang = JSON.parse(window.localStorage.getItem('getHomeLang'))
-    // }
-    // this.apiService.getAPI('getlanguage').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.getHomeLang = data['data']
-    // })
-    // this.apiService.getAPI('getusi').subscribe((data) => {
-    //   // console.log(data);
-    //   this.usiNo = data['data']
-    // })
-    // if (!window.localStorage.getItem('getVisa')) {
-    //   this.apiService.getAPI(`getvisastatus`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.getVisa = data['data']
-    //     window.localStorage.setItem("getVisa", JSON.stringify(this.getVisa))
-    //   })
-    // }
-    // else {
-    //   this.getVisa = JSON.parse(window.localStorage.getItem('getVisa'))
-    // }
-    // this.apiService.getAPI('getvisastatus').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.getVisa = data['data']
-    // })
-    // if (!window.localStorage.getItem('engStatusAll')) {
-    //   this.apiService.getAPI(`getenglishspeakingstatus`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.engStatusAll = data['data']
-    //     window.localStorage.setItem("engStatusAll", JSON.stringify(this.engStatusAll))
-    //   })
-    // }
-    // else {
-    //   this.engStatusAll = JSON.parse(window.localStorage.getItem('engStatusAll'))
-    // }
-    // this.apiService.getAPI('getenglishspeakingstatus').subscribe((data) => {
-    //   // console.log(data);
-    //   this.engStatusAll = data['data']
-    // })
-    // if (!window.localStorage.getItem('employmentStatus')) {
-    //   this.apiService.getAPI(`getemploymentstatus`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.employmentStatus = data['data']
-    //     window.localStorage.setItem("employmentStatus", JSON.stringify(this.employmentStatus))
-    //   })
-    // }
-    // else {
-    //   this.employmentStatus = JSON.parse(window.localStorage.getItem('employmentStatus'))
-    // }
-    // this.apiService.getAPI('getemploymentstatus').subscribe((data) => {
-    //   // console.log(data);
-    //   this.employmentStatus = data['data']
-    // })
-    // if (!window.localStorage.getItem('indigStatusAll')) {
-    //   this.apiService.getAPI(`getindigenousstatus`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.indigStatusAll = data['data']
-    //     window.localStorage.setItem("indigStatusAll", JSON.stringify(this.indigStatusAll))
-    //   })
-    // }
-    // else {
-    //   this.indigStatusAll = JSON.parse(window.localStorage.getItem('indigStatusAll'))
-    // }
-    // this.apiService.getAPI('getindigenousstatus').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.indigStatusAll = data['data']
-    // })
-    // if (!window.localStorage.getItem('schoolTypeAll')) {
-    //   this.apiService.getAPI(`getschooltype`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.schoolTypeAll = data['data']
-    //     window.localStorage.setItem("schoolTypeAll", JSON.stringify(this.schoolTypeAll))
-    //   })
-    // }
-    // else {
-    //   this.schoolTypeAll = JSON.parse(window.localStorage.getItem('schoolTypeAll'))
-    // }
-    // this.apiService.getAPI('getschooltype').subscribe((data) => {
-    //   // console.log(data);
-    //   this.schoolTypeAll = data['data']
-    // })
-    // if (!window.localStorage.getItem('schoolLevel')) {
-    //   this.apiService.getAPI(`getschoollevel`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.schoolLevel = data['data']
-    //     window.localStorage.setItem("schoolLevel", JSON.stringify(this.schoolLevel))
-    //   })
-    // }
-    // else {
-    //   this.schoolLevel = JSON.parse(window.localStorage.getItem('schoolLevel'))
-    // }
-    // this.apiService.getAPI('getschoollevel').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.schoolLevel = data['data']
-    // })
-    // if (!window.localStorage.getItem('disabilities')) {
-    //   this.apiService.getAPI(`getdisability`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.disabilities = data['data']
-    //     window.localStorage.setItem("disabilities", JSON.stringify(this.disabilities))
-    //   })
-    // }
-    // else {
-    //   this.disabilities = JSON.parse(window.localStorage.getItem('disabilities'))
-    // }
-    // this.apiService.getAPI('getdisability').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.disabilities = data['data']
-    // })
 
-    // if (!window.localStorage.getItem('surveyStatus')) {
-    //   this.apiService.getAPI(`getsurveycontactstatus`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.surveyStatus = data['data']
-    //     window.localStorage.setItem("surveyStatus", JSON.stringify(this.surveyStatus))
-    //   })
-    // }
-    // else {
-    //   this.surveyStatus = JSON.parse(window.localStorage.getItem('surveyStatus'))
-    // }
-    // this.apiService.getAPI('getsurveycontactstatus').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.surveyStatus = data['data']
-    // })
-
-
-
-
-
-    // if (!window.localStorage.getItem('states1')) {
-    //   this.apiService.getAPI(`getstate`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.states1 = data['data']
-    //     window.localStorage.setItem("states1", JSON.stringify(this.states1))
-    //   })
-    // }
-    // else {
-    //   this.states1 = JSON.parse(window.localStorage.getItem('states1'))
-    // }
-
-    // this.apiService.getAPI('getstate').subscribe((data) => {
-    //   // console.log('stateid',data);
-    //   this.states1 = data['data']
-    //   // console.log('states',this.states1)
-
-    // })
-    // if (!window.localStorage.getItem('postcodes')) {
-    //   console.log('no record')
-    //   this.apiService.getAPI(`getpostcode`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.postcodes = data['data']
-    //     window.localStorage.setItem("postcodes", JSON.stringify(this.postcodes))
-    //   })
-    // }
-    // else {
-    //   this.postcodes = JSON.parse(window.localStorage.getItem('postcodes'))
-    //   console.log('postcodes', this.postcodes)
-    // }
-
-    // this.apiService.getAPI(`getsuburb`).subscribe((data)=>{
-    //   // console.log('suburb',data)
-    //   this.suburbs = data['data']
-    // })
     //Course
     this.HFormGroup2 = this.fb.group({
       courseIntakeDateId: ['', [Validators.required]]
@@ -843,28 +590,12 @@ export class NewStudentComponent implements OnInit {
     this.getCourses()
     this.dataSource.paginator = this.paginator
     this.dataSource.sort = this.sort
-    // this.apiService.getAPI(`getstudentenrolmentbystudentid?id=${this.studentID}`).subscribe((data) => {
-    //   this.courses = data['data'][0]
-    //   // this.dataSource.data = this.courses // on data receive populate dataSource.data array
-    //   // return data
-    // })
-    // this.apiService.getAPI('getcourseintakedate').subscribe((data) => {
-    //   console.log('Course Info', data);
-    //   this.courses = data['data']
-
-    // })
     //Units
     this.HFormGroup3 = this.fb.group({
       unitRows: this.fb.array([this.unitArr()])
     })
-    // this.HFormGroup3 = this.fb.group({
-    //   courseIntakeId: '',
-    //   Rows_units: this.fb.array([this.unitArr()]),
-    //   userId: this.userInfo.userid
-    // })
-    // this.updateAll()
-    //Enrolment
 
+    //Enrolment
     this.HFormGroup4 = this.fb.group({
       userId: [this.userInfo.userid],
       studentId: [''],
@@ -890,11 +621,7 @@ export class NewStudentComponent implements OnInit {
       agentCommission: [null, [Validators.required]],
       offerLetterNumber: [this.offerLetterNumber, [Validators.required]],
       gst: 'Y',
-      priorDetail: this.fb.group({
-        userId: [this.userInfo.userid],
-        studentEnrolmentId: [''],
-        QualificationId: ['']
-      })
+
     })
     this.apiService.getAPI('getofferletternumber').subscribe((data) => {
       const offerLetterString = data['data']; // e.g., "OfferLetterNumber: 5"
@@ -929,96 +656,7 @@ export class NewStudentComponent implements OnInit {
     else {
       this.allAmounts = JSON.parse(window.localStorage.getItem('amounts'))
     }
-    // this.apiService.getAPI('getagent').subscribe((data) => {
-    //   //  console.log(data);
-    //   //  console.log('agent:', data['data']);
-    //   this.agents = data['data']
-    // })
-    // if (!window.localStorage.getItem('applicationStatus')) {
-    //   this.apiService.getAPI(`getapplicationstatus`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.applicationStatus = data['data']
-    //     window.localStorage.setItem("applicationStatus", JSON.stringify(this.applicationStatus))
-    //   })
-    // }
-    // else {
-    //   this.applicationStatus = JSON.parse(window.localStorage.getItem('applicationStatus'))
-    // }
-    // this.apiService.getAPI('getapplicationstatus').subscribe((data) => {
-    //   //   console.log(data);
-    //   this.applicationStatus = data['data']
-    // })
-    // if (!window.localStorage.getItem('deliveryMode')) {
-    //   this.apiService.getAPI(`getdeliverymode`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.deliveryMode = data['data']
-    //     window.localStorage.setItem("deliveryMode", JSON.stringify(this.deliveryMode))
-    //   })
-    // }
-    // else {
-    //   this.deliveryMode = JSON.parse(window.localStorage.getItem('deliveryMode'))
-    // }
-    // this.apiService.getAPI('getdeliverymode').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.deliveryMode = data['data']
-    // })
-    // if (!window.localStorage.getItem('specificFunding')) {
-    //   this.apiService.getAPI(`getspecificfunding`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.specificFunding = data['data']
-    //     window.localStorage.setItem("specificFunding", JSON.stringify(this.specificFunding))
-    //   })
-    // }
-    // else {
-    //   this.specificFunding = JSON.parse(window.localStorage.getItem('specificFunding'))
-    // }
-    // this.apiService.getAPI('getspecificfunding').subscribe((data) => {
-    //   //   console.log(data);
-    //   this.specificFunding = data['data']
-    // })
-    // if (!window.localStorage.getItem('fundingSourceNational')) {
-    //   this.apiService.getAPI(`getfundingsourcenational`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.fundingSourceNational = data['data']
-    //     window.localStorage.setItem("fundingSourceNational", JSON.stringify(this.fundingSourceNational))
-    //   })
-    // }
-    // else {
-    //   this.fundingSourceNational = JSON.parse(window.localStorage.getItem('fundingSourceNational'))
-    // }
 
-    // this.apiService.getAPI('getfundingsourcenational').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.fundingSourceNational = data['data']
-    // })
-    // if (!window.localStorage.getItem('fundingSourceState')) {
-    //   this.apiService.getAPI(`getfundingsourcestate`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.fundingSourceState = data['data']
-    //     window.localStorage.setItem("fundingSourceState", JSON.stringify(this.fundingSourceState))
-    //   })
-    // }
-    // else {
-    //   this.fundingSourceState = JSON.parse(window.localStorage.getItem('fundingSourceState'))
-    // }
-    // this.apiService.getAPI('getfundingsourcestate').subscribe((data) => {
-    //   // console.log(data);
-    //   this.fundingSourceState = data['data']
-    // })
-    // if (!window.localStorage.getItem('commencingProgram')) {
-    //   this.apiService.getAPI(`getcommencingprogram`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.commencingProgram = data['data']
-    //     window.localStorage.setItem("commencingProgram", JSON.stringify(this.commencingProgram))
-    //   })
-    // }
-    // else {
-    //   this.commencingProgram = JSON.parse(window.localStorage.getItem('commencingProgram'))
-    // }
-    // this.apiService.getAPI('getcommencingprogram').subscribe((data) => {
-    //   // console.log(data);
-    //   this.commencingProgram = data['data']
-    // })
     if (!window.localStorage.getItem('trainingContract')) {
       this.apiService.getAPI(`gettrainingcontract`).subscribe((data) => {
         // console.log('postcodes',data)
@@ -1029,38 +667,6 @@ export class NewStudentComponent implements OnInit {
     else {
       this.trainingContract = JSON.parse(window.localStorage.getItem('trainingContract'))
     }
-    // this.apiService.getAPI('gettrainingcontract').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.trainingContract = data['data']
-    // })
-    // if (!window.localStorage.getItem('reasonTakingCourse')) {
-    //   this.apiService.getAPI(`getreasontakingcourse`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.reasonTakingCourse = data['data']
-    //     window.localStorage.setItem("reasonTakingCourse", JSON.stringify(this.reasonTakingCourse))
-    //   })
-    // }
-    // else {
-    //   this.reasonTakingCourse = JSON.parse(window.localStorage.getItem('reasonTakingCourse'))
-    // }
-    // this.apiService.getAPI('getreasontakingcourse').subscribe((data) => {
-    //   // console.log(data);
-    //   this.reasonTakingCourse = data['data']
-    // })
-    // if (!window.localStorage.getItem('qualifications')) {
-    //   this.apiService.getAPI(`getqualification`).subscribe((data) => {
-    //     // console.log('postcodes',data)
-    //     this.qualifications = data['data']
-    //     window.localStorage.setItem("qualifications", JSON.stringify(this.qualifications))
-    //   })
-    // }
-    // else {
-    //   this.qualifications = JSON.parse(window.localStorage.getItem('qualifications'))
-    // }
-    // this.apiService.getAPI('getqualification').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.qualifications = data['data']
-    // })
 
     //Confirmation
     this.HFormGroup6 = this.fb.group({
@@ -1075,12 +681,7 @@ export class NewStudentComponent implements OnInit {
       docRows: this.fb.array([this.newDocArr()])
     });
 
-    //Training Activity
-    // this.HFormGroup7 = this.fb.group({
-    //   userId: [1],
-    //   studentEnrolmentId: [],
-    //   Rows: this.fb.array([this.newTAarrays()]),
-    // })
+
     if (!window.localStorage.getItem('outcomenational')) {
       this.apiService.getAPI(`getoutcomenational`).subscribe((data) => {
         // console.log('postcodes',data)
@@ -1091,20 +692,6 @@ export class NewStudentComponent implements OnInit {
     else {
       this.outcomenational = JSON.parse(window.localStorage.getItem('outcomenational'))
     }
-    // this.apiService.getAPI('getoutcomenational').subscribe((data) => {
-    //   //  console.log(data);
-    //   this.outcomenational = data['data']
-    // })
-
-
-    //Certificate
-    // this.HFormGroup8 = this.fb.group({
-    //   completionDate: ['', [Validators.required]],
-    //   certificateIssueDate: [null],
-    //   certificateIssueNumber: [null, [Validators.maxLength(10)]],
-    //   certificateType: ['c'],
-    //   Issuedflag: ['N', [Validators.maxLength(10)]]
-    // })
 
 
 
@@ -1152,34 +739,11 @@ export class NewStudentComponent implements OnInit {
       this.HFormGroup1.controls['usiDetails'].get('dobmm').updateValueAndValidity()
       this.HFormGroup1.controls['usiDetails'].get('dobdd').updateValueAndValidity()
     })
-    // this.subscription = control4.valueChanges.subscribe(value => {
-    //   if (value == 'Y') {
-    //     this.HFormGroup1.controls['postalDetails'].get('streetNumber').setValidators([Validators.required])
-    //     this.HFormGroup1.controls['postalDetails'].get('streetName').setValidators([Validators.required])
-    //     this.HFormGroup1.controls['postalDetails'].get('suburb').setValidators([Validators.required])
-    //     this.HFormGroup1.controls['postalDetails'].get('stateId').setValidators([Validators.required])
-    //     this.HFormGroup1.controls['postalDetails'].get('postCode').setValidators([Validators.required])
-    //   }
-    //   else {
-    //     this.HFormGroup1.controls['postalDetails'].get('streetNumber').setValidators(null)
-    //     this.HFormGroup1.controls['postalDetails'].get('streetName').setValidators(null)
-    //     this.HFormGroup1.controls['postalDetails'].get('suburb').setValidators(null)
-    //     this.HFormGroup1.controls['postalDetails'].get('stateId').setValidators(null)
-    //     this.HFormGroup1.controls['postalDetails'].get('postCode').setValidators(null)
-    //   }
-    //   this.HFormGroup1.controls['postalDetails'].get('streetNumber').updateValueAndValidity()
-    //   this.HFormGroup1.controls['postalDetails'].get('streetName').updateValueAndValidity()
-    //   this.HFormGroup1.controls['postalDetails'].get('suburb').updateValueAndValidity()
-    //   this.HFormGroup1.controls['postalDetails'].get('stateId').updateValueAndValidity()
-    //   this.HFormGroup1.controls['postalDetails'].get('postCode').updateValueAndValidity()
-    // })
+
   }
 
   compareTwoDates() {
     setTimeout(() => {
-      //  console.log(this.stDate)
-      // console.log(this.enDate)
-      //  console.log('hiddddd')
       this.error = { isError: false, errorMessage: '' }
       // console.log(this.error)
       var show = document.getElementById('closebtntr')
@@ -1358,89 +922,7 @@ export class NewStudentComponent implements OnInit {
   exists(item) {
     return this.selected.indexOf(item) > -1;
   };
-  // toggleAll(event: MatCheckboxChange) {
-  //   if (event.checked) {
-  //     for (let i = 0; i < this.HFormGroup7.get('Rows')['controls'].length; i++) {
-  //       ((this.HFormGroup7.get('Rows') as FormArray).at(i) as FormGroup).get('statusCheck').patchValue(true);
-  //     }
-  //     this.isCheckedAll = true
-  //   }
-  // else {
-  //   for (let i = 0; i < this.HFormGroup7.get('Rows')['controls'].length; i++) {
-  //     ((this.HFormGroup7.get('Rows') as FormArray).at(i) as FormGroup).get('statusCheck').patchValue(false);
-  //   }
-  //   this.isCheckedAll = false
-  // }
-  // }
 
-  // updateAll(){
-  //   this.selection.selected.forEach(s => {
-  //     for (let i = 0; i < this.unitRows.length; i++) {
-  //       if(this.allStatusCheck = true) {
-  //         this.setStatusCheck[s.rowID] = false;
-  //         this.allStatusCheck = false;
-  //         ((this.HFormGroup3.get('unitRows') as FormArray).at(i) as FormGroup).get('statusCheck').patchValue(false)
-  //       }
-  //       else{
-  //         this.setStatusCheck[s.rowID] = true;
-  //         this.allStatusCheck = true;
-  //         ((this.HFormGroup3.get('unitRows') as FormArray).at(i) as FormGroup).get('statusCheck').patchValue(true)
-  //       }
-  //     }
-  //   })
-  // }
-  // updateChkbxArray() {
-  //   this.selection.selected.forEach(s => {
-  //     for (let i = 0; i < this.unitRows.length; i++) {
-  //       if (s.rowID == this.unitRows.at(i).value.rowID) {
-  //         this.setStatusCheck[s.rowID] = false;
-  //         ((this.HFormGroup3.get('unitRows') as FormArray).at(i) as FormGroup).get('statusCheck').patchValue(false)
-  //       }
-  //     }
-  //   });
-  //   console.log(this.unitRows)
-  // }
-  // allComplete: boolean = true;
-
-  // updateAllComplete() {
-  //   this.HFormGroup3.value.unitRows.every(s => {
-  //     // console.log('rowidvalue',this.HFormGroup3.value.unitRows[s.rowID].statusCheck)
-  //     if (this.HFormGroup3.value.unitRows[s.rowID].statusCheck == true) {
-  //       this.setStatusCheck[s.rowID] = false;
-  //       ((this.HFormGroup3.get('unitRows') as FormArray).at(s.rowID) as FormGroup).get('statusCheck').patchValue(false)
-  //     }
-  //     else {
-  //       this.setStatusCheck[s.rowID] = true;
-  //       ((this.HFormGroup3.get('unitRows') as FormArray).at(s.rowID) as FormGroup).get('statusCheck').patchValue(true)
-  //     }
-  //   })
-  //   this.allComplete = this.HFormGroup3.value.unitRows != null && this.HFormGroup3.value.unitRows.every((t) => t.statusCheck);
-  //   console.log('updateval', this.HFormGroup3.value.unitRows)
-  // }
-  // someComplete(): boolean {
-  //   if (this.HFormGroup3.value.unitRows == null) {
-  //     return false;
-  //   }
-  //   return this.HFormGroup3.value.unitRows.filter(s => s.statusCheck).length > 0 && !this.allComplete;
-  // }
-
-  // setAll() {
-  //   if (this.allComplete == true) {
-  //     for (let i = 0; i < this.HFormGroup3.get('unitRows')['controls'].length; i++) {
-  //       ((this.HFormGroup3.get('unitRows') as FormArray).at(i) as FormGroup).get('statusCheck').patchValue(false);
-  //       console.log('hformgroup3', this.HFormGroup3.value.unitRows)
-  //     }
-  //     this.allComplete = false
-  //   }
-  //   else {
-  //     for (let i = 0; i < this.HFormGroup3.get('unitRows')['controls'].length; i++) {
-  //       ((this.HFormGroup3.get('unitRows') as FormArray).at(i) as FormGroup).get('statusCheck').patchValue(true);
-  //       console.log('hformgroup3', this.HFormGroup3.value.unitRows)
-  //     }
-  //     this.allComplete = true
-  //   }
-
-  // }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
@@ -1522,13 +1004,6 @@ export class NewStudentComponent implements OnInit {
     this.setAVETMISSVal[rid] = rVal;
     ((this.HFormGroup3.get('unitRows') as FormArray).at(rid) as FormGroup).get('AVETMISS ').patchValue(rVal)
   }
-  // getCourses() {
-  //   this.apiService.getAPI('getcourse').subscribe((data) => {
-  //     this.courses = data['data']
-  //     this.dataSource.data = this.courses
-  //     return data
-  //   })
-  // }
   createFilter1(): (data: any, filter: string) => boolean {
     let filterFunction = function (data, filter): boolean {
       let searchTerms = JSON.parse(filter);
@@ -1543,9 +1018,6 @@ export class NewStudentComponent implements OnInit {
   get Rows(): FormArray {
     return this.HFormGroup6.get("Rows") as FormArray
   }
-  // get unitRow(): FormArray {
-  //   return this.HFormGroup6.get("Rows") as FormArray
-  // }
   unitArr() {
     return this.fb.group({
       rowID: '',
@@ -1679,36 +1151,9 @@ export class NewStudentComponent implements OnInit {
 
       this.dataSource1.sort = this.tableTwoSort
       this.masterToggle()
-      // this.dataSource1.filterPredicate = this.createFilter1();
-      // this.unitCodeFilter.valueChanges.subscribe(unitCode => {
-      //   this.filteredValues1.unitCode = unitCode
-      //   this.dataSource1.filter = JSON.stringify(this.filteredValues1)
-      // })
+
     })
-    // this.apiService.getAPI(`getunitsbyclasssetup?courseIntakeDateId=${this.courseIntakeID}`).subscribe((data) => {
-    //   // console.log(data['data'])
-    //   this.unitsByClassSetup = Object.values(data['data']);
-    //   (this.HFormGroup7.get('Rows') as FormArray).removeAt(0);
-    //   for (let i = 0; i < this.unitsByClassSetup.length; i++) {
-    //     let rowData = this.fb.group({
-    //       trainingActivityId: '',
-    //       statusCheck: 1,
-    //       unitId: this.unitsByClassSetup[i].unitId,
-    //       unitCode: this.unitsByClassSetup[i].unitCode,
-    //       unitName: this.unitsByClassSetup[i].unitCode + ' - ' +this.unitsByClassSetup[i].unitName,
-    //       unitType: '',
-    //       vetFlag: '',
-    //       AVETMISS : '',
-    //       classSetupId: this.unitsByClassSetup[i].classSetupId,
-    //       outcomeNationalId: '',
-    //       outcomeTrainingOrgId: '',
-    //       startDate: this.unitsByClassSetup[i].startDate,
-    //       endDate: this.unitsByClassSetup[i].endDate,
-    //       hoursAttended: '0'
-    //     });
-    //     (this.HFormGroup7.get('Rows') as FormArray).push(rowData)
-    //   }
-    // })
+
     //stateService
     this.state.changeCourseIntakeDateId(this.courseIntakeID);
     const body = this.HFormGroup2.value
@@ -1720,43 +1165,9 @@ export class NewStudentComponent implements OnInit {
       this.stepLabel++
       stepper.next()
     }
-    //EditTrainingActivity
-    // this.apiService.getAPI(`gettrainingactivity?id=${this.studentEnrolID}`).subscribe((data) => {
-    //   console.log(data['data'])
-    //   let Rows
-    //   Rows = data['data']
-    //   this.editTraning = Rows
-    //   console.log(this.editTraning)
-    //   this.HFormGroup7.setControl('Rows', this.fb.array((this.editTraning || []).map((x) => this.fb.group(x))))
-    //   console.log(this.HFormGroup7.get('Rows').value)
-    // })
+
   }
-  // outComeChange(val) {
-  //   // console.log(val)
-  //   for (let i = 0; i < this.Rows.length; i++) {
-  //     ((this.HFormGroup7.get('Rows') as FormArray).at(i) as FormGroup).get('outcomeNationalId').patchValue(val);
-  //     // ((this.HFormGroup7.get('Rows') as FormArray).at(i) as FormGroup).get('outcomeTrainingOrgId').patchValue(val);
-  //   }
-  // }
-  // sDateChange(val) {
-  //   for (let i = 0; i < this.Rows.length; i++) {
-  //     //    console.log(val);
-  //     ((this.HFormGroup7.get('Rows') as FormArray).at(i) as FormGroup).get('startDate').patchValue(val);
-  //     //   console.log(this.Rows.at(i).value.startDate)
-  //   }
-  // }
-  // eDateChange(val) {
-  //   this.error = { isError: false, errorMessage: '' }
-  //   for (let i = 0; i <= this.Rows.length; i++) {
-  //     ((this.HFormGroup7.get('Rows') as FormArray).at(i) as FormGroup).get('endDate').patchValue(val);
-  //   }
-  //   console.log(this.error)
-  // }
-  // hourChange(val) {
-  //   for (let i = 0; i <= this.Rows.length; i++) {
-  //     ((this.HFormGroup7.get('Rows') as FormArray).at(i) as FormGroup).get('hoursAttended').patchValue(val);
-  //   }
-  // }
+
   newDocArr() {
     return this.fb.group({
       documentName: [''],
@@ -1787,7 +1198,6 @@ export class NewStudentComponent implements OnInit {
     // console.log(this.stepLabel)
   }
   onStudentSubmmit(stepper: MatStepper) {
-
     this.show_msg = false
     this.show_msg2 = false
     const body = this.HFormGroup1.value
@@ -1795,32 +1205,18 @@ export class NewStudentComponent implements OnInit {
     if (body.lastName == null) {
       body.lastName = '.'
     }
-    // if (this.apiTest) {
-    //   body.stateId = this.stateName
-    // }
-    // body.stateId_postal = this.difStateName
     console.log('bodydata', body)
-    // console.log('usistatus',this.usiStatus)
 
     if (this.usiStatusCheck.UsiStatus == 'Valid' || this.usiStatusCheckForSingleName.UsiStatus == 'Valid') {
       body.usiNo = this.usiNo
       body.usiVerificationStatus = this.verifyStatus
-      // console.log('usistatus',this.usiStatus)
     }
     else {
       body.usiNo = ''
       body.usiVerificationStatus = ''
     }
 
-    // body.nationalityId = "@@@@"
-    // if (body.studentOriginId == 2) {
-    //   body.mobile = this.mobile1
-    // }
-    // if (body.studentOriginId == 1) {
-    //   body.postCode = "@@@@"
-    //   body.stateId = "@@"
-    //   body.suburb = "@@@@"
-    // }
+
     if (this.HFormGroup1.value.differentPostalAddress === 'N') {
       body.stateId_postal = null
     }
@@ -1855,30 +1251,21 @@ export class NewStudentComponent implements OnInit {
             window.scroll(0, 0);
             this.errors = { isError: true, errorMessage: this.err_msg };
           }
+          // console.log('prior ea', this.HFormGroup1.value.priorDetail)
+          if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
+            const tempData = this.HFormGroup1.value.priorDetail
+            const priorEABody = {
+              userId: this.userInfo.userid,
+              studentId: this.studentID,
+              QualificationRows: tempData.QualificationId.map(id => ({ QualificationId: id }))
+            }
+            this.apiService.postAPI('addprioreducationalachievement', priorEABody).subscribe((data1) => {
+              console.log('submission status', data1)
+            })
+          }
+
         }
-        // console.log(this.studentID)
-        // if (this.HFormGroup1.value.stillInSecSchool === 'N') {
-        //   body.schoolTypeId == ''
-        // }
-        // const disabilitybody = this.HFormGroup1.value.disabilityDetails
-        // if (this.HFormGroup1.value.disability === 'Y') {
-        //   disabilitybody.disabilityId = this.HFormGroup1.value.disabilityDetails.disabilityId.toString()
-        //   // console.log(disabilitybody.disabilityId)
-        //   this.apiService.postAPI(`editstudentdisability?studentId=${this.studentID}`, this.HFormGroup1.value.disabilityDetails).subscribe((data) => {
-        //     // console.log('Disabilities Successfully Created: ', data['data'])
-        //   })
-        // }
-        // else {
-        //   disabilitybody.disabilityId == ''
-        // }
-        // const postalbody = this.HFormGroup1.value.postalDetails
-        // if (this.HFormGroup1.value.differentPostalAddress === 'Y') {
-        //   postalbody.studentId = this.studentID
-        //   postalbody.stateId = this.difStateName
-        //   this.apiService.postAPI('addstudentpostaldetails', postalbody).subscribe((data) => {
-        //     // console.log('Different Postal Address Successfully Created: ', data['data'])
-        //   })
-        // }
+
         if (!err) {
           this.stepLabel++
           stepper.next();
@@ -1893,15 +1280,7 @@ export class NewStudentComponent implements OnInit {
       }
     }
   }
-  // onClickDefault() {
-  //   // console.log('here')
-  //   this.show = true;
-  //   this.fullScreen = true;
-  //   this.template = ``
-  //   setTimeout(() => {
-  //     this.show = false
-  //   }, 5000);
-  // }
+
   move() {
     setInterval(() => {
       if (this.progress < 99) {
@@ -1982,57 +1361,7 @@ export class NewStudentComponent implements OnInit {
       }, 10000);
     }
   }
-  // getUnits() {
-  //   let courseUnits = this.units
-  //   this.apiService.getAPI('getunit').subscribe((data) => {
-  //     this.AllUnits = Object.values(data['data']);
-  //     const matchingIndices: number[] = [];
-  //     courseUnits.forEach((courseUnit) => {
-  //       const matchingIndex = this.AllUnits.findIndex((AllUnits) => AllUnits.unitid === courseUnit.unitid);
-  //       if (matchingIndex !== -1) {
-  //         matchingIndices.push(matchingIndex);
-  //       }
-  //     });
-  //     matchingIndices.sort((a, b) => b - a); // Sort indices in descending order
-  //     matchingIndices.forEach((index) => this.AllUnits.splice(index, 1));
 
-  //     // Merge the rows into a single object
-  //     const mergedRow = matchingIndices.reduce((result, index) => Object.assign(result, this.AllUnits[index]), {});
-
-  //     // Add the merged row back to the Rows array
-  //     this.AllUnits.unshift(mergedRow);
-  //     console.log(this.AllUnits);
-  //     (this.HFormGroup3.get('Rows_units') as FormArray).removeAt(0);
-  //     for (let i = 0; i < this.AllUnits.length; i++) {
-  //       let rowData = this.fb.group({
-  //         rowID: i,
-  //         statusCheck: 0,
-  //         courseId: this.courseId,
-  //         unitId: this.AllUnits[i].unitid,
-  //         unitCode: this.AllUnits[i].unitcode,
-  //         unitName: this.AllUnits[i].unitname,
-  //         unitType: '',
-  //         classSetupId: '',
-  //         vetFlag: 'Y',
-  //         AVETMISS: 'Y',
-  //         startDate: '',
-  //         endDate: '',
-  //         hoursAttended: []
-  //       });
-  //       (this.HFormGroup3.get('Rows_units') as FormArray).push(rowData)
-  //     }
-  //     console.log('rows_unit', this.HFormGroup3.value.Rows_units);
-  //     this.dataSource2 = new MatTableDataSource() // create new object
-  //     this.dataSource2.data = this.HFormGroup3.value.Rows_units
-  //     this.dataSource2.paginator = this.tableThreePaginator
-  //     this.dataSource2.sort = this.tableThreeSort
-  //     this.dataSource2.filterPredicate = this.createFilter1();
-  //     this.unitCodeFilter.valueChanges.subscribe(unitCode => {
-  //       this.filteredValues1.unitCode = unitCode
-  //       this.dataSource2.filter = JSON.stringify(this.filteredValues1)
-  //     })
-  //   })
-  // }
   addMoreUnits() {
     let tempDirection;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -2086,9 +1415,6 @@ export class NewStudentComponent implements OnInit {
     for (let i = 0; i < rows.length; i++) {
       unitBody[rows[i]].statusCheck = 1
     }
-    // console.log('courseintakeid', this.courseIntakeID)
-    // this.apiService.getAPI(`getunitsbyclasssetup?courseIntakeDateId=${this.courseIntakeID}`).subscribe((data) => {
-    //   this.unitsByClassSetup = Object.values(data['data']);
     (this.HFormGroup6.get('Rows') as FormArray).removeAt(0);
     for (let i = 0; i < unitBody.length; i++) {
       if (unitBody[i].statusCheck == 1) {
@@ -2112,30 +1438,7 @@ export class NewStudentComponent implements OnInit {
       }
     }
     console.log('hformgroup6 Value', this.HFormGroup6.value)
-    // (this.HFormGroup7.get('Rows') as FormArray).removeAt(0);
-    // for (let i = 0; i < unitBody.length; i++) {
-    //   if (unitBody[i].statusCheck == 1) {
-    //     let rowData = this.fb.group({
-    //       trainingActivityId: '',
-    //       statusCheck: 1,
-    //       unitId: unitBody[i].unitId,
-    //       unitCode: unitBody[i].unitCode,
-    //       unitName: unitBody[i].unitName,
-    //       unitType: unitBody[i].unitType,
-    //       vetFlag: unitBody[i].vetFlag,
-    //       AVETMISS : unitBody[i].AVETMISS ,
-    //       classSetupId: unitBody[i].classSetupId,
-    //       outcomeNationalId: '',
-    //       outcomeTrainingOrgId: '',
-    //       startDate: unitBody[i].startDate,
-    //       endDate: unitBody[i].endDate,
-    //       hoursAttended: '0'
-    //     });
-    //     (this.HFormGroup7.get('Rows') as FormArray).push(rowData)
-    //   }
-    // }
-    // console.log('hform6value', this.HFormGroup7.value)
-    // })
+
     this.stepLabel++
     stepper.next();
   }
@@ -2165,17 +1468,6 @@ export class NewStudentComponent implements OnInit {
         }
         // console.log('Enrolment Successfully Created: ', data['data'])
         this.studentEnrolID = data['data'][0].studentenrolmentid;
-        // console.log('enrolsubmit',data['data'])
-        // this.studentEnrolID = this.studentEnrolID[0].studentEnrolmentId;
-        // console.log(this.studentEnrolID)
-
-        const priorBody = this.HFormGroup4.value.priorDetail
-        if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
-          priorBody.studentEnrolmentId = this.studentEnrolID
-          this.apiService.postAPI('addprioreducationalachievement', this.HFormGroup4.value.priorDetail).subscribe((data) => {
-            //  console.log('Prior Educatiaon Successfully Created: ', data['data'])
-          })
-        }
         //stateService
         console.log(err)
         this.state.changeErnrolmentId(this.studentEnrolID)
@@ -2219,7 +1511,7 @@ export class NewStudentComponent implements OnInit {
         formData.append('uploadfolder', 'StudentsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false
@@ -2242,117 +1534,4 @@ export class NewStudentComponent implements OnInit {
   back() {
     this.stepLabel--
   }
-  // onTrainingSubmmit(stepper: MatStepper) {
-  //   // const trainingBody = this.HFormGroup7.value
-  //   this.stDate = this.datePipe.transform(this.stDate, 'yyyy-MM-dd')
-  //   this.enDate = this.datePipe.transform(this.enDate, 'yyyy-MM-dd')
-  //   // console.log('enrolid',this.studentEnrolID)
-  //   // trainingBody.studentEnrolmentId = this.studentEnrolID
-  //   this.HFormGroup7.get('studentEnrolmentId').setValue(this.studentEnrolID)
-  //   var show = document.getElementById('closebtntr')
-  //   for (let i = 0; i < this.Rows.length; i++) {
-  //     this.Rows.at(i).value.outcomeTrainingOrgId = this.Rows.at(i).value.outcomeNationalId
-  //     this.Rows.at(i).value.startDate = this.datePipe.transform(this.Rows.at(i).value.startDate, 'yyyy-MM-dd')
-  //     this.Rows.at(i).value.endDate = this.datePipe.transform(this.Rows.at(i).value.endDate, 'yyyy-MM-dd')
-  //   }
-  //   console.log('Form Value', this.HFormGroup7.value)
-  //   // console.log(this.error.isError)
-  //   if (this.error.isError == false) {
-  //     this.apiService.postAPI('addtrainingactivity', this.HFormGroup7.value).subscribe((data) => {
-  //       // console.log('Training Acvtivity Successfully Created: ', data['data'])
-  //     })
-
-  //     stepper.next();
-  //     // this.apiService.getAPI(`generatecertificate?id=${this.studentID}`).subscribe((data) => {
-  //     //   this.certificates = data['data']
-  //     //   console.log('certificates', data)
-  //     // })
-  //     //this.router.navigate(['/admin/enrolment/all-student'])
-  //   }
-  //   else {
-  //     window.scroll(0, 0)
-  //     if (show) {
-  //       show.style.display = 'block'
-  //     }
-  //   }
-  // }
-
-
-  // getCertificate() {
-  //   this.show_msg = false
-  //   this.show_msg2 = false
-  //   const certificateBody = this.HFormGroup8.value
-  //   certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd')
-  //   certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd')
-  //   certificateBody.studentEnrolmentId = this.studentEnrolID
-  //   certificateBody.userId = 1
-  //   console.log('formvalue6', certificateBody)
-  //   // console.log('enrolmentidcertificate',this.studentEnrolID)
-  //   this.apiService.getAPI(`gettrainingactivity?id=${this.studentEnrolID}`).subscribe((data) => {
-  //     this.trainingActId = data['data'][0].trainingActivityId
-  //     certificateBody.trainingActivityId = this.trainingActId
-  //     // console.log('Form Value', certificateBody)
-  //     var show = document.getElementById('closebtn')
-  //     if (this.HFormGroup8.valid) {
-  //       this.errorsReq = { isError: false, errorMessage: '' }
-  //       this.apiService.postAPI('addcertificate', certificateBody).subscribe((data) => {
-  //         // console.log('addcertificate', data['data'])
-  //         // console.log('postenrolid', this.studentEnrolID)
-  //         this.apiService.getAPI(`generatecertificate?id=${this.studentEnrolID}`).subscribe((data) => {
-  //           // console.log('certificate', data['data'])
-  //           // console.log('enrolmentid', this.studentEnrolID)
-  //           this.certificate = data['data']
-  //           this.baseApi = "https://api.wonderit.com.au:5000/"
-  //           // this.link = this.baseApi.concat(this.certificate.toString())
-  //           // console.log('link',this.link)
-  //           window.open(this.baseApi + data['data'])
-  //         })
-  //       })
-  //     }
-  //     else {
-  //       this.errorsReq = { isError: true, errorMessage: 'Please, fill up all required fields with proper value!' }
-  //       window.scroll(0, 0)
-  //       if (show) {
-  //         show.style.display = 'block'
-  //       }
-  //     }
-  //   })
-
-  // }
-
-  // onCertificateSubmit() {
-  //   if (this.HFormGroup8.value.Issuedflag == 'N') {
-  //     this.show_msg = false
-  //     this.show_msg2 = false
-  //     const certificateBody = this.HFormGroup8.value
-  //     certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd')
-  //     if (certificateBody.Issuedflag == 'Y') {
-  //       certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd')
-  //     }
-  //     certificateBody.studentEnrolmentId = this.studentEnrolID
-  //     certificateBody.userId = 1
-  //     this.apiService.getAPI(`gettrainingactivity?id=${this.studentEnrolID}`).subscribe((data) => {
-  //       this.trainingActId = data['data'][0].trainingActivityId
-  //       certificateBody.trainingActivityId = this.trainingActId
-  //       var show = document.getElementById('closebtn')
-  //       if (this.HFormGroup8.value) {
-  //         console.log('formvalue7', this.HFormGroup8.value)
-
-  //         this.errorsReq = { isError: false, errorMessage: '' }
-  //         this.apiService.postAPI('addcertificate', certificateBody).subscribe((data) => {
-  //           console.log('certificatesubmit', data['data'])
-  //         })
-  //       }
-  //       else {
-  //         this.errorsReq = { isError: true, errorMessage: 'Please, fill up all required fields with proper value!' }
-  //         window.scroll(0, 0)
-  //         if (show) {
-  //           show.style.display = 'block'
-  //         }
-  //       }
-
-  //     })
-  //   }
-  //   this.router.navigate(['/admin/enrolment/all-student'])
-  // }
 }

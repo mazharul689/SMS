@@ -293,7 +293,6 @@ export class NewStudentComponent implements OnInit {
     postCode: '',
     pobox: ''
   }
-  disable: boolean
   verifyStatus: string
   progress = 0
   userInfo: any
@@ -306,7 +305,8 @@ export class NewStudentComponent implements OnInit {
   allAmounts: any
   apiTest = false
   offerLetterNumber
-  retry: boolean
+  retry = false
+  disable = false
 
   // editTraning = [{
   //   trainingActivityId: '',
@@ -491,6 +491,7 @@ export class NewStudentComponent implements OnInit {
       englishSpeakingStatusId: [1],
       englishSpeakingScoreTypeId: [1],
       englishSpeakingScore: [0],
+      englishSpeakingScoreExpdate: [null],
       employmentStatusId: [9],
       indigenousStatusId: [5, [Validators.required]],
       stillInSecSchool: ['N'],
@@ -526,6 +527,11 @@ export class NewStudentComponent implements OnInit {
       pobox_postal: ['', [Validators.maxLength(22)]],
       disabilityDetails: this.fb.group({
         disabilityId: [''],
+      }),
+      priorDetail: this.fb.group({
+        userId: [this.userInfo.userid],
+        studentEnrolmentId: [''],
+        QualificationId: ['']
       }),
       usiDetails: this.fb.group({
         usi: [null, [Validators.maxLength(10)]],
@@ -844,11 +850,7 @@ export class NewStudentComponent implements OnInit {
       agentCommission: [null, [Validators.required]],
       offerLetterNumber: [0, [Validators.required]],
       gst: 'Y',
-      priorDetail: this.fb.group({
-        userId: [this.userInfo.userid],
-        studentEnrolmentId: [''],
-        QualificationId: ['']
-      })
+
     })
     this.apiService.getAPI('getofferletternumber').subscribe((data) => {
       const offerLetterString = data['data']; // e.g., "OfferLetterNumber: 5"
@@ -1780,6 +1782,17 @@ export class NewStudentComponent implements OnInit {
             this.errors = { isError: true, errorMessage: this.err_msg };
           }
         }
+        if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
+          const tempData = this.HFormGroup1.value.priorDetail
+          const priorEABody = {
+            userId: this.userInfo.userid,
+            studentId: this.studentID,
+            QualificationRows: tempData.QualificationId.map(id => ({ QualificationId: id }))
+          }
+          this.apiService.postAPI('addprioreducationalachievement', priorEABody).subscribe((data1) => {
+            console.log('submission status', data1)
+          })
+        }
         // console.log(this.studentID)
         // if (this.HFormGroup1.value.stillInSecSchool === 'N') {
         //   body.schoolTypeId == ''
@@ -2026,7 +2039,7 @@ export class NewStudentComponent implements OnInit {
         formData.append('uploadfolder', 'StudentsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false
@@ -2109,7 +2122,7 @@ export class NewStudentComponent implements OnInit {
   //           // console.log('certificate', data['data'])
   //           // console.log('enrolmentid', this.studentEnrolID)
   //           this.certificate = data['data']
-  //           this.baseApi = "https://api.wonderit.com.au:5000/"
+  //           this.baseApi = "https://api.wonderit.com.au:5023/"
   //           // this.link = this.baseApi.concat(this.certificate.toString())
   //           // console.log('link',this.link)
   //           window.open(this.baseApi + data['data'])

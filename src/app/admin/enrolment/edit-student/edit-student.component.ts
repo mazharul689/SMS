@@ -235,6 +235,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     visaexpdate: '',
     englishspeakingscoretypeid: '',
     englishspeakingscore: '',
+    englishspeakingscoreexpdate: '',
     passportno: '',
     passportexpdate: '',
     emergencycontactname: '',
@@ -396,6 +397,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
   allAmounts: any
   allStates: any
   retry: boolean
+  DocumentType: any
 
 
   fNameChange(newValue) {
@@ -492,7 +494,6 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
-
     this.editable = true
     this.stepLabel = 1
     this.HFormGroup1 = this.fb.group({
@@ -528,6 +529,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       englishSpeakingStatusId: [1],
       englishSpeakingScoreTypeId: [1],
       englishSpeakingScore: [0],
+      englishSpeakingScoreExpdate: [null],
       employmentStatusId: [9],
       indigenousStatusId: [5, [Validators.required]],
       stillInSecSchool: ['N'],
@@ -563,6 +565,11 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       pobox_postal: ['', [Validators.maxLength(22)]],
       disabilityDetails: this.fb.group({
         disabilityId: [''],
+      }),
+      priorDetail: this.fb.group({
+        userId: [this.userInfo.userid],
+        studentEnrolmentId: [''],
+        QualificationId: ['']
       }),
       usiDetails: this.fb.group({
         usi: [null, [Validators.maxLength(10)]],
@@ -610,11 +617,6 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       agentCommission: [null, [Validators.required]],
       offerLetterNumber: [0, [Validators.required]],
       gst: 'Y',
-      priorDetail: this.fb.group({
-        userId: [this.userInfo.userid],
-        studentEnrolmentId: [''],
-        QualificationId: ['']
-      })
     })
 
     //Document
@@ -664,6 +666,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     this.englishSpeakingScoreType = this.getAll[0].EnglishSpeakingScoreType
     this.getVisa = this.getAll[0].VisaStatus
     this.allStates = this.getAll[0].State
+    this.DocumentType = this.getAll[0].DocumentType
 
 
     if (!window.localStorage.getItem('studentOrigins')) {
@@ -827,6 +830,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           englishSpeakingStatusId: this.editStudent.englishspeakingstatusid,
           englishSpeakingScoreTypeId: this.editStudent.englishspeakingscoretypeid,
           englishSpeakingScore: this.editStudent.englishspeakingscore,
+          englishSpeakingScoreExpdate: this.editStudent.englishspeakingscoreexpdate,
           employmentStatusId: this.editStudent.employmentstatusid,
           indigenousStatusId: this.editStudent.indigenousstatusid,
           stillInSecSchool: this.editStudent.stillinsecschool,
@@ -1025,12 +1029,13 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           })
           //console.log('check', this.HFormGroup4.value)
           if (this.HFormGroup1.value.PriorEducationalAchievementFlag != '@') {
-            this.apiService.getAPI(`getprioreducationalachievement?id=${this.enrolemntID}`).subscribe((data) => {
-              this.priorDetails = data['data'][0]
-              this.HFormGroup4.get('priorDetail').patchValue({
-                userId: this.priorDetails.userid,
-                studentEnrolmentId: this.priorDetails.studentenrolmentid,
-                QualificationId: this.priorDetails.qualificationid
+            this.apiService.getAPI(`getprioreducationalachievement?id=${this.studentID}`).subscribe((data) => {
+              let tempdata = data['data']; // Store the entire array
+              const qualificationIds = tempdata.map(item => item.qualificationid);
+              this.HFormGroup1.get('priorDetail').patchValue({
+                userId: this.userInfo.userid,
+                studentId: this.studentID,
+                QualificationId: qualificationIds
               })
             })
           }
@@ -1652,6 +1657,17 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       else {
         disabilitybody.disabilityId == ''
       }
+      if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
+        const tempData = this.HFormGroup1.value.priorDetail
+        const priorEABody = {
+          userId: this.userInfo.userid,
+          studentId: this.studentID,
+          QualificationRows: tempData.QualificationId.map(id => ({ QualificationId: id }))
+        }
+        this.apiService.postAPI('editprioreducationalachievement', priorEABody).subscribe((data1) => {
+          console.log('submission status', data1)
+        })
+      }
 
       const postalbody = this.HFormGroup1.value.postalDetails
       if (this.HFormGroup1.value.differentPostalAddress === 'Y') {
@@ -1851,12 +1867,12 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         this.apiService.postAPI('addstudentenrolment', enrolBody).subscribe((data) => {
           this.studentEnrolID = data['data']['msg'][0].studentEnrolmentId;
 
-          const priorBody = this.HFormGroup4.value.priorDetail
-          if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
-            priorBody.studentEnrolmentId = this.studentEnrolID
-            this.apiService.postAPI('addprioreducationalachievement', this.HFormGroup4.value.priorDetail).subscribe((data) => {
-            })
-          }
+          // const priorBody = this.HFormGroup4.value.priorDetail
+          // if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
+          //   priorBody.studentEnrolmentId = this.studentEnrolID
+          //   this.apiService.postAPI('addprioreducationalachievement', this.HFormGroup4.value.priorDetail).subscribe((data) => {
+          //   })
+          // }
           this.state.changeErnrolmentId(this.studentEnrolID)
         })
       }
@@ -1883,11 +1899,11 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       // if (this.HFormGroup4.valid) {
       this.apiService.postAPI(`editstudentenrolment?id=${this.enrolemntID}`, this.HFormGroup4.value).subscribe((data) => {
         const priorBody = this.HFormGroup4.value.priorDetail
-        if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
-          priorBody.studentEnrolmentId = this.enrolemntID
-          this.apiService.postAPI(`editprioreducationalachievement?id=${this.enrolemntID}`, this.HFormGroup4.value.priorDetail).subscribe((data) => {
-          })
-        }
+        // if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
+        //   priorBody.studentEnrolmentId = this.enrolemntID
+        //   this.apiService.postAPI(`editprioreducationalachievement?id=${this.enrolemntID}`, this.HFormGroup4.value.priorDetail).subscribe((data) => {
+        //   })
+        // }
         //stateService
         this.state.changeErnrolmentId(this.enrolemntID)
       })
@@ -1913,7 +1929,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
             //console.log('response', data.data)
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
+            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
                 valid = false

@@ -198,9 +198,6 @@ export class AllStudentComponent implements OnInit {
         this.students[i].rowID = i
         this.students[i].startDate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
         this.students[i].endDate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
-        if (this.students[i].certificatepath != null) {
-          this.students[i].doc = this.students[i].certificatepath.replace('https://api.wonderit.com.au:5000/tmp/StudentsCertificate/', '')
-        }
         if (this.students[i].certificatepath == "") {
           this.students[i].certificatepath = null
         }
@@ -259,7 +256,7 @@ export class AllStudentComponent implements OnInit {
     if (clid) {
       queryParams.push(`clientid=${clid}`);
     }
-    if(uid){
+    if (uid) {
       queryParams.push(`usiNo=${uid}`);
     }
     if (name) {
@@ -285,6 +282,20 @@ export class AllStudentComponent implements OnInit {
           let students = data['data']
           for (let i in students) {
             students[i].fullname = students[i].firstname + " " + students[i].lastname;
+            students[i].startDate = this.datePipe.transform(students[i].startdate, 'dd/MM/yyyy')
+            students[i].endDate = this.datePipe.transform(students[i].enddate, 'dd/MM/yyyy')
+            if (students[i].certificatepath == "") {
+              students[i].certificatepath = null
+            }
+            if (students[i].certificatetype == "C") {
+              students[i].certificateFlag = true
+            }
+            else if (students[i].certificatetype == "S") {
+              students[i].attainmentFlag = true
+            }
+            else if (students[i].certificatetype == "R") {
+              students[i].sorFlag = true
+            }
           }
           this.dataSource.data = students; // on data receive populate dataSource.data array
 
@@ -360,12 +371,19 @@ export class AllStudentComponent implements OnInit {
       this.enrolledCourses = data['data']
     })
   }
-  editStudent(id) {
+  editStudent(data) {
     var step = 'S'
-    this.router.navigate([`/admin/certificate/certificate/${step}/${id}`]);
+    if(data.certificateid){
+      step = 'C'
+      this.router.navigate([`/admin/certificate/certificate/${step}/${data.certificateid}/${data.studentenrolmentid}`]);
+    }
+    else{
+      step = 'E'
+      this.router.navigate([`/admin/certificate/certificate/${step}/${data.studentenrolmentid}`]);
+    }
   }
-  deleteCertificate(id) {
-    var step = 'S'
+  deleteCertificate(eid,id) {
+    var step = eid
     this.router.navigate([`/admin/certificate/delete-certificate/${step}/${id}`]);
   }
   editEnrCourse(id) {
@@ -375,22 +393,14 @@ export class AllStudentComponent implements OnInit {
   addEnrCourse(id) {
     this.router.navigate([`/admin/enrolment/new-student/enrol-course/${id}`]);
   }
-  downloadCertificate(row) {
-    // console.log('id',id)
-    // window.open(this.students[id].certificatepath)
-    // if (row.rtotype == 'C') {
-    //   window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=cricoscertificate&sid=${row.studentenrolmentid}&_token=${this.userInfo.refresh_token}`)
-    // }
-    // else {
-      window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${row.studentenrolmentid}&_token=${this.userInfo.refresh_token}`)
-    // }
-
+  downloadCertificate(id) {
+    window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${id}&_token=${this.userInfo.refresh_token}`)
   }
   downloadAttainment(id) {
     window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${id}`)
 
   }
-  downloadResult(id){
+  downloadResult(id) {
     window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${id}`)
   }
   // clearCache(): void {

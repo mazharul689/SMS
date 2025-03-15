@@ -81,6 +81,7 @@ export class DeleteCertificateComponent implements OnInit {
   certificateIssueNumber = "loading..."
   certificateType = "loading..."
   Issuedflag = "loading..."
+  certificateId
   public issuedFlagChange(newValue) {
     if (newValue == 'Y') {
       this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
@@ -120,9 +121,9 @@ export class DeleteCertificateComponent implements OnInit {
     private actRoute: ActivatedRoute,
     private router: Router
   ) {
-    this.enrolemntID = this.actRoute.snapshot.params.id;
-    this.step = this.actRoute.snapshot.params.step;
-    this.getStudentInfo()
+    this.certificateId = this.actRoute.snapshot.params.id;
+    this.enrolemntID = this.actRoute.snapshot.params.step;
+    this.getStudentInfo(this.enrolemntID)
   }
 
   ngOnInit(): void {
@@ -139,10 +140,12 @@ export class DeleteCertificateComponent implements OnInit {
     //   this.editEnrolment = data['data'][0]
     //   this.enrolemntID = data['data'][0]['studentEnrolmentId']
     // //console.log(this.enrolemntID)
-    this.apiService.getAPI(`getcertificate?id=${this.enrolemntID}`).subscribe((data) => {
+    this.apiService.getAPI(`getcertificate?id=${this.certificateId}`).subscribe((data) => {
       // console.log(data['data'])
       if (!data['data'].msg) {
         this.editCertificate = data['data'][0]
+
+
         this.completionDate = new Date(this.editCertificate.completiondate)
         this.certificateIssueDate = new Date(this.editCertificate.certificateissuedate)
         this.certificateIssueNumber = this.editCertificate.certificateissuenumber
@@ -157,37 +160,37 @@ export class DeleteCertificateComponent implements OnInit {
           Issuedflag: this.editCertificate.issuedflag
         })
       }
-      else {
-        this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
-          this.issueNumber = data['data']
-          this.issueNumber = this.issueNumber.split(" ")
-          this.issueNumber = this.issueNumber[1]
-          this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
-          this.HFormGroup1.patchValue({
-            certificateIssueNumber: this.issueNumber
-          })
-        })
-      }
+      // else {
+      //   this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
+      //     this.issueNumber = data['data']
+      //     this.issueNumber = this.issueNumber.split(" ")
+      //     this.issueNumber = this.issueNumber[1]
+      //     this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
+      //     this.HFormGroup1.patchValue({
+      //       certificateIssueNumber: this.issueNumber
+      //     })
+      //   })
+      // }
     })
 
-    this.apiService.getAPI(`verifyoutcomeforcertificate?id=${this.enrolemntID}`).subscribe((data) => {
-      this.outcomeCheck = data['data']
-      //console.log('outcomecheck', this.outcomeCheck)
-      var show = document.getElementById('closebtn')
-      this.error = { isError: false, errorMessage: '' }
-      if (!this.outcomeCheck.msg) {
-        this.error = { isError: true, errorMessage: this.outcomeCheck[0].error_msg }
-        window.scroll(0, 0)
-        if (show) {
-          show.style.display = 'block'
-        }
-      }
-    })
+    // this.apiService.getAPI(`verifyoutcomeforcertificate?id=${this.enrolemntID}`).subscribe((data) => {
+    //   this.outcomeCheck = data['data']
+    //   //console.log('outcomecheck', this.outcomeCheck)
+    //   var show = document.getElementById('closebtn')
+    //   this.error = { isError: false, errorMessage: '' }
+    //   if (!this.outcomeCheck.msg) {
+    //     this.error = { isError: true, errorMessage: this.outcomeCheck[0].error_msg }
+    //     window.scroll(0, 0)
+    //     if (show) {
+    //       show.style.display = 'block'
+    //     }
+    //   }
+    // })
 
-    this.apiService.getAPI(`gettrainingactivity?id=${this.enrolemntID}`).subscribe((data) => {
-      // this.trainingActId = data['data'][0].trainingActivityId
-      this.trainingActId = data['data']
-    })
+    // this.apiService.getAPI(`gettrainingactivity?id=${this.enrolemntID}`).subscribe((data) => {
+    //   // this.trainingActId = data['data'][0].trainingActivityId
+    //   this.trainingActId = data['data']
+    // })
     // })
 
   }
@@ -217,8 +220,8 @@ export class DeleteCertificateComponent implements OnInit {
       }
     }
   }
-  getStudentInfo() {
-    this.apiService.getAPI(`getstudentenrolmentbystudentenrolmentid?id=${this.enrolemntID}`).subscribe((data) => {
+  getStudentInfo(id) {
+    this.apiService.getAPI(`getstudentenrolmentbystudentenrolmentid?id=${id}`).subscribe((data) => {
       this.student = data['data'][0]
       this.name = this.student.firstName + " " + this.student.lastName
       this.courseName = this.student.courseName

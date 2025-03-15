@@ -16,6 +16,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface allUnits {
   rowID,
@@ -158,6 +159,7 @@ export class EditCourseIntakeDateComponent implements OnInit {
     private datePipe: DatePipe,
     private router: Router,
     private actRoute: ActivatedRoute,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -367,7 +369,14 @@ export class EditCourseIntakeDateComponent implements OnInit {
     //   })
     // })
   }
-
+  showNotification(colorName, text, placementFrom, placementAlign) {
+    this.snackBar.open(text, '', {
+      duration: 10000,
+      verticalPosition: placementFrom,
+      horizontalPosition: placementAlign,
+      panelClass: [colorName, 'custom-snackbar']
+    });
+  }
   courseName(val){
     const selectedCourse = this.courses.find(course => course.courseid === val);
     console.log(selectedCourse.coursename)
@@ -761,6 +770,7 @@ export class EditCourseIntakeDateComponent implements OnInit {
           // console.log('Course Intake Date Submission: ', data['data'].msg)
           if (data['data'].msg) {
             // stepper.next()
+            this.showNotification('black','Record Updated','bottom','center')
           }
           let err
           if (data[0] && data[0]['error']) {

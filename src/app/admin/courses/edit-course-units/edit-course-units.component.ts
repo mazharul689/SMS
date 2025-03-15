@@ -281,6 +281,7 @@ export class EditCourseUnitsComponent implements OnInit {
               data.statusCheck = true;
             }
           });
+          console.log('check',this.previousData)
         }
         else {
           this.units.forEach((data, index) => {
@@ -298,7 +299,7 @@ export class EditCourseUnitsComponent implements OnInit {
           // }
           let rowData1 = this.fb.group({
             rowID: i,
-            statusCheck: this.units[i].statuscheck,
+            statusCheck: this.units[i].statusCheck,
             courseId: this.units[i].courseid,
             courseUnitId: this.units[i].courseunitid,
             unitId: this.units[i].unitid,

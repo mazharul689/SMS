@@ -530,6 +530,15 @@
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
+                            <mat-label>English Speaking Score Expire Date</mat-label>
+                            <input matInput [matDatepicker]="engexpdate" formControlName="englishSpeakingScoreExpdate" [readonly]="editable">
+                            <mat-datepicker-toggle matSuffix [for]="engexpdate">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #engexpdate [disabled]="editable"></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
                             <mat-label>Employment Status</mat-label>
                             <mat-select formControlName="employmentStatusId" required>
                               <mat-option *ngFor="let empStatus of employmentStatus"
@@ -542,20 +551,7 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Indigenous Status</mat-label>
-                            <mat-select formControlName="indigenousStatusId" required>
-                              <mat-option *ngFor="let indigStatus of indigStatusAll"
-                                [value]="indigStatus.indigenousstatusid" [disabled]="editable">
-                                {{indigStatus.indigenousstatusname}}
-                              </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="HFormGroup1.get('indigenousStatusId').hasError('required')">
-                              Indigenous status is required
-                            </mat-error>
-                          </mat-form-field>
-                        </div>
+
 
                       </div>
 
@@ -581,6 +577,20 @@
 
                                             </div> -->
                       <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Indigenous Status</mat-label>
+                            <mat-select formControlName="indigenousStatusId" required>
+                              <mat-option *ngFor="let indigStatus of indigStatusAll"
+                                [value]="indigStatus.indigenousstatusid" [disabled]="editable">
+                                {{indigStatus.indigenousstatusname}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('indigenousStatusId').hasError('required')">
+                              Indigenous status is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
                           <!-- <section class="example-section"> -->
                           <label class="example col-lg-5 col-md-3 col-sm-4">Still In
@@ -606,6 +616,10 @@
                             </mat-select>
                           </mat-form-field>
                         </div>
+
+                      </div>
+
+                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12" style="padding-top: 10px">
                           <section class="example-section">
                             <label class="example col-lg-2 col-md-4 col-sm-5">Prior
@@ -625,25 +639,6 @@
                             </mat-radio-group>
                           </section>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 mb-2 schl"
-                          [ngClass]="HFormGroup1.get('stillInSecSchool').value == 'Y' ? 'd-block' : 'd-none'">
-                          <mat-form-field class="example-full-width">
-                            <mat-label>School Type *</mat-label>
-                            <mat-select formControlName="schoolTypeId">
-                              <mat-option *ngFor="let schlType of schoolTypeAll" [value]="schlType.schooltypeid"
-                                [readonly]="editable">
-                                {{schlType.schooltypename}}
-                              </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="HFormGroup1.get('schoolTypeId').hasError('required')">
-                              School Type is required
-                            </mat-error>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12" style="padding-top: 10px">
                           <section class="example-section">
                             <label class="example col-lg-2.5 col-md-2.5 col-sm-2.5">Disability</label>
@@ -677,13 +672,43 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div formGroupName="disabilityDetails" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2 dis"
+                        <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 mb-2 schl"
+                          [ngClass]="HFormGroup1.get('stillInSecSchool').value == 'Y' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>School Type *</mat-label>
+                            <mat-select formControlName="schoolTypeId">
+                              <mat-option *ngFor="let schlType of schoolTypeAll" [value]="schlType.schooltypeid"
+                                [readonly]="editable">
+                                {{schlType.schooltypename}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('schoolTypeId').hasError('required')">
+                              School Type is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div formGroupName="priorDetail" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                        [ngClass]="HFormGroup1.get('PriorEducationalAchievementFlag').value == 'Y' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Qualification</mat-label>
+                            <mat-select formControlName="QualificationId" multiple>
+                              <mat-option *ngFor="let qualification of qualifications"
+                                [value]="qualification.qualificationid" [disabled]="editable">
+                                {{qualification.qualificationcode}} -
+                                {{qualification.qualificationname}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div formGroupName="disabilityDetails" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
                           [ngClass]="HFormGroup1.get('disability').value == 'Y' ? 'd-block' : 'd-none'">
                           <mat-form-field class="example-full-width">
                             <mat-label>Disability *</mat-label>
                             <mat-select formControlName="disabilityId" multiple>
                               <mat-option *ngFor="let disability of disabilities" [value]="disability.disabilityid"
-                                [readonly]="editable">
+                                [disabled]="editable">
                                 {{disability.disabilityname}}
                               </mat-option>
                             </mat-select>
@@ -1884,36 +1909,6 @@
                     </div>
                   </div>
 
-                  <div formGroupName="priorDetail" class="priorInfo"
-                    [ngClass]="HFormGroup1.get('PriorEducationalAchievementFlag').value =='Y' ? 'd-block' : 'd-none'">
-                    <div class="row">
-                      <span class="section-heading">
-                        <i class='fas fa-bars'></i>
-                        Prior Educational Achievement Flag
-                      </span>
-                    </div>
-                    <!-- <span class="section-heading"><i class='fas fa-bars'></i>Prior Educational
-                                            Achievement Flag</span> -->
-                    <div class="section-content">
-                      <div class="row" *ngIf="qualifications?.length > 0">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Qualification</mat-label>
-                            <mat-select formControlName="QualificationId">
-                              <mat-option *ngFor="let qualification of qualifications"
-                                [value]="qualification.qualificationid" [disabled]="editable">
-                                {{qualification.qualificationcode}} -
-                                {{qualification.qualificationname}}
-                              </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="HFormGroup4.get('priorDetail.QualificationId').hasError('required')">
-                              Qualification is required
-                            </mat-error>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
                   <div class="text-end">
                     <button mat-raised-button class="msr-5" color="primary" [disabled]="editable"

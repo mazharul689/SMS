@@ -11,7 +11,7 @@
                   <strong>Warning!</strong> {{ errorsReq.errorMessage }}
                 </div>
               </div>
-              <div class="materialTableHeader" style="height: 140px !important">
+              <div class="materialTableHeader" style="height: 120px !important;">
                 <div class="row m-auto">
                   <div class="col-3">
                     <div class="search row">
@@ -154,7 +154,7 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
                     <span
-                      style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.coursename}}</span>
+                      style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.coursecode}}</span>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="className">
@@ -238,12 +238,11 @@
                       (click)="assignUnits(row.studentenrolmentid)">
                       <span class="material-icons" style="
                           font-size: 19px;
-                          color: white;
-                      ">edit_document</span>
+                      " [ngStyle]="{'color': row.count_trainingactivityid ? 'white' : 'yellow'}">edit_document</span>
                     </button>
                     <button mat-icon-button class="btn-tbl-edit" title="Assign in Class"
                       (click)="classAsign(row.expectedcompletiondate,row.commencementdate,row.studentenrolmentid)">
-                      <mat-icon aria-label="Edit" class="col-white">schedule</mat-icon>
+                      <mat-icon aria-label="Edit" [ngStyle]="{'color': row.count_classsetupid ? 'white' : 'yellow'}">schedule</mat-icon>
                     </button>
                     <button mat-icon-button class="btn-tbl-edit" title="Student Payment Schedule"
                       (click)="paymentSchedule(row.studentenrolmentid)">

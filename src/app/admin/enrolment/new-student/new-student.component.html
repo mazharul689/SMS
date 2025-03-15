@@ -88,7 +88,7 @@
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
-                            <mat-label>First name</mat-label>
+                            <mat-label>First Name</mat-label>
                             <input matInput formControlName="firstName" (ngModelChange)="fNameChange($event)" required>
                             <mat-error *ngIf="HFormGroup1.get('firstName').hasError('required')">
                               First name is required
@@ -100,7 +100,7 @@
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Middle name</mat-label>
+                            <mat-label>Middle Name</mat-label>
                             <input matInput formControlName="middleName">
                             <mat-error *ngIf="HFormGroup1.get('middleName').hasError('maxlength')">
                               Maximum length is 40 characters
@@ -111,7 +111,7 @@
                       <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Last name</mat-label>
+                            <mat-label>Last Name</mat-label>
                             <input matInput formControlName="lastName" (ngModelChange)="lNameChange($event)">
                             <mat-error *ngIf="HFormGroup1.get('lastName').hasError('maxlength')">
                               Maximum length is 40 characters
@@ -482,6 +482,15 @@
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
+                            <mat-label>English Speaking Score Expire Date</mat-label>
+                            <input matInput [matDatepicker]="engexpdate" formControlName="englishSpeakingScoreExpdate" >
+                            <mat-datepicker-toggle matSuffix [for]="engexpdate">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #engexpdate></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
                             <mat-label>Employment Status</mat-label>
                             <mat-select formControlName="employmentStatusId">
                               <mat-option *ngFor="let empStatus of employmentStatus"
@@ -494,20 +503,7 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Indigenous Status</mat-label>
-                            <mat-select formControlName="indigenousStatusId" required>
-                              <mat-option *ngFor="let indigStatus of indigStatusAll"
-                                [value]="indigStatus.indigenousstatusid">
-                                {{indigStatus.indigenousstatusname}}
-                              </mat-option>
-                            </mat-select>
-                            <mat-error *ngIf="HFormGroup1.get('indigenousStatusId').hasError('required')">
-                              Indigenous status is required
-                            </mat-error>
-                          </mat-form-field>
-                        </div>
+
                       </div>
                       <!-- <div class="row">
                         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
@@ -525,6 +521,20 @@
                         </div>
                       </div> -->
                       <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Indigenous Status</mat-label>
+                            <mat-select formControlName="indigenousStatusId" required>
+                              <mat-option *ngFor="let indigStatus of indigStatusAll"
+                                [value]="indigStatus.indigenousstatusid">
+                                {{indigStatus.indigenousstatusname}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('indigenousStatusId').hasError('required')">
+                              Indigenous status is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
                           <section class="example-full-width mb-3">
                             <label class="example col-lg-5 col-md-5 col-sm-4">Still In School</label>
@@ -548,6 +558,9 @@
                             </mat-select>
                           </mat-form-field>
                         </div>
+
+                      </div>
+                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12" style="padding-top: 10px">
                           <section class="example-full-width mb-3">
                             <label class="example col-lg-2 col-md-3 col-sm-6">Prior EA</label>
@@ -565,8 +578,6 @@
                             </mat-radio-group>
                           </section>
                         </div>
-                      </div>
-                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12" style="padding-top: 10px">
                           <section class="example-section">
                             <label class="example col-lg-2.5 col-md-2.5 col-sm-2.5">Disability</label>
@@ -598,7 +609,20 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div formGroupName="disabilityDetails" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2 dis"
+                        <div formGroupName="priorDetail" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                        [ngClass]="HFormGroup1.get('PriorEducationalAchievementFlag').value == 'Y' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Qualification</mat-label>
+                            <mat-select formControlName="QualificationId" multiple>
+                              <mat-option *ngFor="let qualification of qualifications"
+                                [value]="qualification.qualificationid">
+                                {{qualification.qualificationcode}} -
+                                {{qualification.qualificationname}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div formGroupName="disabilityDetails" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
                           [ngClass]="HFormGroup1.get('disability').value == 'Y' ? 'd-block' : 'd-none'">
                           <mat-form-field class="example-full-width">
                             <mat-label>Disability *</mat-label>
@@ -630,37 +654,7 @@
                         </div>
                       </div>
 
-                      <!-- <div class="row d-none">
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Statistical Area Level 1</mat-label>
-                            <input matInput formControlName="statisticalAreaLevel1Id">
-                            <mat-error *ngIf="HFormGroup1.get('statisticalAreaLevel1Id').hasError('maxlength')">
-                              Maximum length is 11 characters
-                            </mat-error>
-                          </mat-form-field>
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Statistical Area Level 2</mat-label>
-                            <input matInput formControlName="statisticalAreaLevel2Id">
-                            <mat-error *ngIf="HFormGroup1.get('statisticalAreaLevel2Id').hasError('maxlength')">
-                              Maximum length is 9 characters
-                            </mat-error>
-                          </mat-form-field>
-                        </div>
-                      </div>
-                      <div class="row d-none">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Signatory Text</mat-label>
-                            <input matInput formControlName="signatoryText">
-                            <mat-error *ngIf="HFormGroup1.get('signatoryText').hasError('maxlength')">
-                              Maximum length is 200 characters
-                            </mat-error>
-                          </mat-form-field>
-                        </div>
-                      </div> -->
+
                     </div>
                   </div>
 
@@ -1096,42 +1090,6 @@
                           </mat-form-field>
                         </div>
                       </div>
-                      <!-- <div class="row">
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
-                          [ngClass]="HFormGroup1.get('studentOriginId').value == '5' ? 'd-block' : 'd-none'">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Suburb</mat-label>
-                            <input matInput formControlName="suburb" [readonly]="suburbDisable">
-                            <mat-error *ngIf="HFormGroup1.get('postalDetails.suburb').hasError('maxlength')">
-                              Maximum length is 50 characters
-                            </mat-error>
-                          </mat-form-field>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
-                          [ngClass]="HFormGroup1.get('studentOriginId').value == '5' ? 'd-block' : 'd-none'">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>State</mat-label>
-                            <mat-select formControlName="stateId">
-                              <mat-option *ngFor="let state1 of states1" [value]="state1.stateid">
-                                {{state1.statename}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
-                          [ngClass]="HFormGroup1.get('studentOriginId').value == '5' ? 'd-block' : 'd-none'">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Postcode</mat-label>
-                            <input matInput formControlName="postCode">
-                            <mat-error *ngIf="HFormGroup1.get('postalDetails.postCode').hasError('minlength')">
-                              Minimum length is 4 characters
-                            </mat-error>
-                            <mat-error *ngIf="HFormGroup1.get('postalDetails.postCode').hasError('maxlength')">
-                              Maximum length is 4 characters
-                            </mat-error>
-                          </mat-form-field>
-                        </div>
-                      </div> -->
                     </div>
                   </div>
                   <div>
@@ -1714,36 +1672,6 @@
                     </div>
                   </div>
 
-                  <div formGroupName="priorDetail" class="priorInfo"
-                    [ngClass]="HFormGroup1.get('PriorEducationalAchievementFlag').value =='Y' ? 'd-block' : 'd-none'">
-                    <div class="row">
-                      <span class="section-heading">
-                        <i class='fas fa-bars'></i>
-                        Prior Educational Achievement Flag
-                      </span>
-                    </div>
-                    <!-- <span class="section-heading"><i class='fas fa-bars'></i>Prior Educational
-                      Achievement Flag</span> -->
-                    <div class="section-content">
-                      <div class="row">
-                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-                          <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Qualification</mat-label>
-                            <mat-select formControlName="QualificationId">
-                              <mat-option *ngFor="let qualification of qualifications"
-                                [value]="qualification.qualificationid">
-                                {{qualification.qualificationcode}} -
-                                {{qualification.qualificationname}}
-                              </mat-option>
-                            </mat-select>
-                            <!-- <mat-error *ngIf="HFormGroup4.get('priorDetail.QualificationId').hasError('required')">
-                              Qualification is required
-                            </mat-error> -->
-                          </mat-form-field>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
 
                   <div>
                     <!-- <button mat-raised-button matStepperPrevious color="warn" class="msr-3">Back</button> -->

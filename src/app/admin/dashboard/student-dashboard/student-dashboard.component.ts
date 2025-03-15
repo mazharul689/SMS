@@ -50,6 +50,11 @@ export interface Document {
   fileName: string
   docActions
 }
+export interface Certificate {
+  certificateType: string
+  issueDate: Date
+  certCourseCode: string
+}
 @Component({
   selector: 'app-student-dashboard',
   templateUrl: './student-dashboard.component.html',
@@ -71,11 +76,13 @@ export class StudentDashboardComponent implements OnInit {
   displayedColumns2: string[] = ['type', 'subject', 'message', 'attachments', 'date', 'actions1']
   displayedColumns3: string[] = ['dashboardUnits', 'outcomeNational', 'outcomeSTD', 'outcomeEND', 'hours']
   displayedColumns4: string[] = ['docName', 'fileName', 'docActions']
+  displayedColumns5: string[] = ['certificateType','certCourseCode', 'issueDate', 'certActions']
   dataSource1: MatTableDataSource<courses>
   dataSource3: MatTableDataSource<units>
   dataSource2: MatTableDataSource<Message>
   dataSource4: MatTableDataSource<Outcome>
   dataSource5: MatTableDataSource<Document>
+  dataSource6: MatTableDataSource<Certificate>
 
   @ViewChild('tableOnePaginator', { static: true }) tableOnePaginator: MatPaginator;
   @ViewChild('sort', { static: true }) sort: MatSort;
@@ -88,6 +95,8 @@ export class StudentDashboardComponent implements OnInit {
   @ViewChild('tableFourSort', { static: true }) tableFourSort: MatSort
   @ViewChild('tableFivePaginator', { static: true }) tableFivePaginator: MatPaginator
   @ViewChild('tableFiveSort', { static: true }) tableFiveSort: MatSort
+  @ViewChild('tableSixPaginator', { static: true }) tableSixPaginator: MatPaginator
+  @ViewChild('tableSixSort', { static: true }) tableSixSort: MatSort
   HFormGroup1: FormGroup
   enrolemntID: any
   fullName = "loading..."
@@ -127,6 +136,7 @@ export class StudentDashboardComponent implements OnInit {
   invoicedDueAmount = 0
   totalAmountPaid = 0
   totalFee = 0
+  userInfo: any
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -146,6 +156,8 @@ export class StudentDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
+
     this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
     this.dataSource3 = new MatTableDataSource() // create new object
     this.dataSource3.paginator = this.tableOnePaginator
@@ -167,6 +179,10 @@ export class StudentDashboardComponent implements OnInit {
     this.dataSource5.paginator = this.tableFivePaginator
     this.dataSource5.sort = this.tableFiveSort
 
+    this.dataSource6 = new MatTableDataSource() // create new object
+    this.dataSource6.paginator = this.tableSixPaginator
+    this.dataSource6.sort = this.tableSixSort
+
     this.HFormGroup1 = this.fb.group({
       Id: [''],
       documentLoc: ['']
@@ -180,11 +196,12 @@ export class StudentDashboardComponent implements OnInit {
       this.cob = this.getAll[0].Country[this.student.birthcountryid - 1].countryname
       this.usi = this.student.usino
       this.phone = this.student.mobile
-      if (this.student.usiverificationstatus.length > 0) {
-        this.status = 'valid'
+      console.log('status check', this.student.usiverificationstatus)
+      if (!this.student.usiverificationstatus) {
+        this.status = 'Not Verified'
       }
       else {
-        this.status = 'Not Verified'
+        this.status = 'valid'
       }
       if (this.student.disability == '@') {
         this.student.disability = 'Not Specified'
@@ -216,26 +233,8 @@ export class StudentDashboardComponent implements OnInit {
       else {
         this.student.gender = 'Other'
       }
-      // this.apiService.getAPI(`getstudentdocument?id=${this.student.studentid}`).subscribe((data) => {
-      //   if (data['data'].msg) {
-      //     this.error = data['data'].msg
-      //     this.documentCount = 0
-      //   }
-      //   else {
-      //     this.documentCount = data['data'].length
-      //     this.documents = data['data']
-      //     for (var i in this.documents) {
-      //       this.documents[i].rowID = parseInt(i) + 1
-      //     }
-      //   }
-      // })
-      //need to update certificate
-
     })
   }
-  // shouldShowSeeMoreButton(contentContainer: HTMLSpanElement): boolean {
-  //   return contentContainer.scrollHeight > contentContainer.clientHeight;
-  // }
   shouldShowSeeMoreButton(row, i, flag) {
     if (row.length > 50 && !flag) {
       this.shortMsg = row.substring(0, 50) + '...';
@@ -255,13 +254,16 @@ export class StudentDashboardComponent implements OnInit {
   getStudentInvoice() {
     this.apiService.getAPI(`getstudentinvoicetotal?id=${this.enrolemntID}`).subscribe((data) => {
       console.log(data['data'])
-      this.invoicedDueAmount = data['data'][0].invoiceddueamount
-      if (data['data'][0].totalamountpaid) {
+      if (!data['data'].msg) {
+        this.invoicedDueAmount = data['data'][0].invoiceddueamount
         this.totalAmountPaid = data['data'][0].totalamountpaid
         this.invoicedDueAmount = data['data'][0].invoiceddueamount
         this.totalFee = data['data'][0].totalfee
       }
-      this.totalFee = data['data'][0].totalfee
+      // if (data['data'][0].totalamountpaid) {
+
+      // }
+      // this.totalFee = data['data'][0].totalfee
     })
   }
   getDocuments(id) {
@@ -286,6 +288,24 @@ export class StudentDashboardComponent implements OnInit {
       }
     })
   }
+  getCertificate() {
+    this.apiService.getAPI(`getcertificatebystudentid?id=${this.studentID}`).subscribe((data) => {
+      if (data['data'].msg) {
+        this.errorCertificate = data['data'].msg
+      }
+      else {
+        this.certificateCount = data['data'].length
+        this.certificate = data['data']
+        for (var i in this.certificate) {
+          this.certificate[i].rowID = parseInt(i) + 1
+        }
+        this.dataSource6.data = this.certificate
+        this.dataSource6.paginator = this.tableSixPaginator
+        this.dataSource6.sort = this.tableSixSort
+        return data;
+      }
+    })
+  }
   getMessage() {
     if (this.email != "loading...") {
       this.apiService.getAPI(`getemailinbox?id=${this.studentID}&email=${this.email}`).subscribe((data) => {
@@ -301,38 +321,6 @@ export class StudentDashboardComponent implements OnInit {
             this.messages[i].shortMsg = this.messages[i].bodyPreview.substring(0, 50) + '...';
           }
         }
-        // for (let i = 0; i < this.messages.length; i++) {
-        //   this.messages[i].rowID = i
-        //   this.messages[i].msg = this.messages[i].html_body.replace(/(<([^>]+)>)/ig, '')
-        //   this.messages[i].shortMsg = ''
-        //   if (this.messages[i].msg.length > 50) {
-        //     this.messages[i].shortMsg = this.messages[i].msg.substring(0, 50) + '...';
-        //   }
-        //   this.messages[i].date = this.datePipe.transform(this.messages[i].date, 'dd/MM/yyyy')
-        //   // this.messages[i].flag[i] = false
-        //   // if (this.messages[i].email_attachment) {
-        //   //   this.messages[i].fileName = this.messages[i].email_attachment.slice(48)
-        //   // }
-        // }
-        // for (let i = 0; i < this.messages.length; i++) {
-        //   if (this.messages[i].attachment) {
-        //     this.messages[i].attachment = this.messages[i].email_attachment
-        //     this.messages[i].attachment = this.messages[i].email_attachment.split(";")
-        //     // console.log('check', this.messages[i].email_attachment)
-        //     for (let j = 0; j < this.messages[i].attachment.length; j++) {
-        //       this.messages[i].attachment[j] = this.messages[i].attachment[j].split("/")
-        //       this.messages[i].attachment[j] = decodeURIComponent(this.messages[i].attachment[j][this.messages[i].attachment[j].length - 1])
-        //       // console.log('check',this.messages[i].email_attachment[j].splice(15))
-        //     }
-        //   }
-
-        // }
-        // this.messages.forEach((item) => {
-        //   if (item.attachment && item.attachment.length > 0) {
-        //     item.attachment = item.attachment.map((attachment) => attachment.substring(17));
-        //   }
-        // });
-
         console.log('message', this.messages)
         this.dataSource2.data = this.messages
         this.dataSource2.paginator = this.tableThreePaginator
@@ -353,29 +341,7 @@ export class StudentDashboardComponent implements OnInit {
       return data
     })
   }
-  getCertificate() {
-    // this.apiService.getAPI(`getstudent?id=${this.studentID}`).subscribe((data) => {
-    //   this.certificateLength = data['data'].length
-    //   this.students = data['data']
-    //   for (var i in this.students) {
-    this.apiService.getAPI(`getcertificate?id=${this.enrolemntID}`).subscribe((data) => {
-      if (data['data'].msg) {
-        this.errorCertificate = data['data'].msg
-      }
-      else {
-        this.certificateCount++
-        this.certificate = data['data'][0]
-        this.certificateLink = this.certificate.certificatepath
-        this.certificate.certificatePath = this.certificate.certificatepath.replace('https://api.wonderit.com.au:5000/tmp/StudentsCertificate/', '')
-        const certificate = this.certificate.certificatePath
-        const certificateLink = this.certificateLink
-        const rowID = this.certificateCount
-        this.certificates.push({ certificate, certificateLink, rowID });
-      }
-    })
-    //   }
-    // })
-  }
+
   getUnits(row) {
     this.unitFlag = true
     this.courseName = row.coursename
@@ -406,11 +372,21 @@ export class StudentDashboardComponent implements OnInit {
   downloadDocument(row) {
     window.open(row.documentloc)
   }
-  downloadCertificate(link) {
-    window.open(link)
+  downloadCertificate(row) {
+    let temp
+    if (row.certificatetype == 'S') {
+      temp = 'attainment'
+    }
+    else if (row.certificatetype == 'R') {
+      temp = 'sor'
+    }
+    else if (row.certificatetype == 'C') {
+      temp = 'certificate'
+    }
+    window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=${temp}&sid=${row.studentenrolmentid}`)
   }
   download(link) {
-    let baseApi = "https://api.wonderit.com.au:5000/"
+    let baseApi = "https://api.wonderit.com.au:5023/"
     // console.log(this.messages[rowID].attachment[i])
     window.open(baseApi + link)
   }

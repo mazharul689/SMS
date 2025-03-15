@@ -43,7 +43,7 @@
                 <div class="row">
                   <div *ngIf="duplCourseIntakeErr" class="alert alert-danger col-4 m-auto" id="closebtn">
                     <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                    <strong>Warning!</strong> {{ duplCourseIntakeErrMsg }}
+                    <p style="text-align: center;"><strong>Warning!</strong> {{ duplCourseIntakeErrMsg }}</p>
                   </div>
                 </div>
                 <form [formGroup]="HFormGroup1" (ngSubmit)="onCourseIntakeSubmmit(stepper)">
@@ -188,12 +188,12 @@
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
                           <mat-checkbox (change)="$event ? masterToggle() : null"
                             [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()" disabled>
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
                           </mat-checkbox>
                         </mat-header-cell>
                         <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
                           <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)" disabled>
+                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
                           </mat-checkbox>
                         </mat-cell>
                       </ng-container>

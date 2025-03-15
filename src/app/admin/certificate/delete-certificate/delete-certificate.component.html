@@ -67,10 +67,10 @@
                                 <div class="section-content">
                                     <div class="row">
                                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                                            <span ><strong>Student's Name:</strong>&emsp;{{this.name}}</span>
+                                            <span ><strong>Student's Name:</strong>&emsp;{{ student?.firstname ? student.firstname : 'loading...' }}</span>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                                            <span><strong>Course Name:</strong>&emsp;{{this.courseName}}</span>
+                                            <span><strong>Course Name:</strong>&emsp;{{ student?.coursecode ? student.coursecode : 'loading...' }} - {{ student?.coursename ? student.coursename : 'loading...' }}</span>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                                             <span *ngIf="this.certificateType == 'loading...'"><strong>Certificate Type:</strong>&emsp;{{this.certificateType}}</span>
@@ -83,10 +83,10 @@
                                             <span><strong>Issued Number:</strong>&emsp;{{this.certificateIssueNumber}}</span>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                                            <span><strong>Completion Date:</strong>&emsp;{{this.completionDate | date:'mediumDate' }}</span>
+                                            <span><strong>Completion Date:</strong>&emsp;{{this.completionDate | date:'dd/MM/yyyy'}}</span>
                                         </div>
                                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                                            <span><strong>Issued Date:</strong>&emsp;{{this.certificateIssueDate | date:'mediumDate' }}</span>
+                                            <span><strong>Issued Date:</strong>&emsp;{{this.certificateIssueDate | date:'dd/MM/yyyy'}}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -177,7 +177,7 @@
                                                     <mat-header-cell *matHeaderCellDef style="min-height: unset;">
                                                         <mat-label>Units</mat-label>
                                                     </mat-header-cell>
-                                                    <mat-cell *matCellDef="let row"data-toggle="tooltip" 
+                                                    <mat-cell *matCellDef="let row"data-toggle="tooltip"
                                                         data-placement="right">{{row.unitCode}} - {{row.unitName}}
                                                     </mat-cell>
                                                 </ng-container>
@@ -186,7 +186,7 @@
                                                         <mat-label>Outcome National</mat-label>
                                                     </mat-header-cell>
                                                     <mat-cell *matCellDef="let row"
-                                                        data-toggle="tooltip" 
+                                                        data-toggle="tooltip"
                                                         data-placement="right">{{row.outcomeNationalName}}
                                                     </mat-cell>
                                                 </ng-container>
@@ -194,7 +194,7 @@
                                                     <mat-header-cell *matHeaderCellDef>
                                                             <mat-label>Start Date</mat-label>
                                                     </mat-header-cell>
-                                                    <mat-cell *matCellDef="let row" data-toggle="tooltip" 
+                                                    <mat-cell *matCellDef="let row" data-toggle="tooltip"
                                                         data-placement="right">{{row.startDate}}
                                                     </mat-cell>
                                                 </ng-container>
@@ -202,7 +202,7 @@
                                                     <mat-header-cell *matHeaderCellDef>
                                                             <mat-label>End Date</mat-label>
                                                     </mat-header-cell>
-                                                    <mat-cell *matCellDef="let row" data-toggle="tooltip" 
+                                                    <mat-cell *matCellDef="let row" data-toggle="tooltip"
                                                         data-placement="right">{{row.endDate}}
                                                     </mat-cell>
                                                 </ng-container>
@@ -210,7 +210,7 @@
                                                     <mat-header-cell *matHeaderCellDef style="text-align: center;">
                                                         <mat-label>Hours Attended</mat-label>
                                                     </mat-header-cell>
-                                                    <mat-cell *matCellDef="let row" data-toggle="tooltip" 
+                                                    <mat-cell *matCellDef="let row" data-toggle="tooltip"
                                                         data-placement="right" style="justify-content:center;">{{row.hoursAttended}}
                                                     </mat-cell>
                                                 </ng-container>

@@ -16,6 +16,10 @@ const routes: Routes = [
     component: CertificateComponent
   },
   {
+    path: 'certificate/:step/:id/:eid',
+    component: CertificateComponent
+  },
+  {
     path: 'delete-certificate/:step/:id',
     component: DeleteCertificateComponent
   },
