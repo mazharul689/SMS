@@ -25,6 +25,8 @@ import { MatDialog, MatDialogConfig } from "@angular/material/dialog"
 import { SelectionModel } from '@angular/cdk/collections'
 import { StepperSelectionEvent } from '@angular/cdk/stepper'
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
 const moment = _rollupMoment || _moment;
@@ -340,6 +342,7 @@ export class NewStudentComponent implements OnInit {
   allStates: any
   apiTest = false
   offerLetterNumber
+  DocumentType: any
   fNameChange(newValue) {
     this.fname = newValue;
   }
@@ -484,6 +487,8 @@ export class NewStudentComponent implements OnInit {
     this.englishSpeakingScoreType = this.getAll[0].EnglishSpeakingScoreType
     this.getVisa = this.getAll[0].VisaStatus
     this.allStates = this.getAll[0].State
+    this.DocumentType = this.getAll[0].DocumentType
+
     //New Student
     this.stepLabel = 1
     this.HFormGroup1 = this.fb.group({
@@ -1167,9 +1172,19 @@ export class NewStudentComponent implements OnInit {
     }
 
   }
+  docType(val: string, index: number) {
+
+    const docRowsArray = this.HFormGroup5.get('docRows') as FormArray;
+    const row = docRowsArray.at(index) as FormGroup;
+
+    if (row) {
+      row.patchValue({ documentName: val !== 'Other' ? val : '' });
+    }
+  }
 
   newDocArr() {
     return this.fb.group({
+      documentType: '',
       documentName: [''],
       doc: [''],
       documentLoc: ['']
@@ -1177,7 +1192,7 @@ export class NewStudentComponent implements OnInit {
   }
   fileChangeEvent(files: FileList, index) {
     this.selectedFiles[index] = files.item(0);
-    ((this.HFormGroup5.get('docRows') as FormArray).at(index) as FormGroup).get('documentName').patchValue(this.selectedFiles[index].name);
+    // ((this.HFormGroup5.get('docRows') as FormArray).at(index) as FormGroup).get('documentName').patchValue(this.selectedFiles[index].name);
   }
   get docRows(): FormArray {
     return this.HFormGroup5.get("docRows") as FormArray
@@ -1500,36 +1515,47 @@ export class NewStudentComponent implements OnInit {
     })
   }
   onDocumentSubmit(stepper: MatStepper) {
-    let valid = true
-    this.HFormGroup5.get('studentId').setValue(this.studentID)
-    if (this.selectedFiles[0]) {
-      for (let i = 0; i < this.docRows.length; i++) {
-        let file: File = this.selectedFiles[i]
-        this.file = file.name
-        let formData: FormData = new FormData();
-        formData.append('inputfile', file, file.name);
-        formData.append('uploadfolder', 'StudentsDocuments')
-        if (file) {
-          this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
-            for (let i = 0; i < this.docRows.length; i++) {
-              if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
-                valid = false
-              }
-            }
-            if (valid == true) {
-              if (i + 1 == this.docRows.length) {
-                this.apiService.postAPI('addstudentdocument', this.HFormGroup5.value).subscribe((data) => {
-                })
-              }
-            }
-          })
-        }
+    this.HFormGroup5.get('studentId').setValue(this.studentID);
+
+    if (!this.selectedFiles.length) return;
+
+    const docRowsArray = this.HFormGroup5.get('docRows') as FormArray;
+    const uploadPromises: Observable<any>[] = [];
+
+    this.selectedFiles.forEach((file: File, index: number) => {
+      const formData = new FormData();
+      formData.append('inputfile', file, file.name);
+      formData.append('uploadfolder', 'StudentsDocuments');
+
+      const uploadRequest = this.apiService.postAPI('fileupload', formData).pipe(
+        map((data: any) => {
+          docRowsArray.at(index).patchValue({
+            documentLoc: `https://api.wonderit.com.au:5000/${data.data}`
+          });
+        })
+      );
+
+      uploadPromises.push(uploadRequest);
+    });
+
+    // Wait for all uploads to complete
+    forkJoin(uploadPromises).subscribe(() => {
+      // Validate all required fields
+      const isValid = docRowsArray.controls.every(row =>
+        row.get('documentName')?.value && row.get('documentLoc')?.value
+      );
+
+      if (!isValid) {
+        console.error('Validation failed: Document Name and Document Location are required.');
+        return;
       }
-    }
-    this.stepLabel++
-    // stepper.next()
-    this.router.navigate(['/admin/enrolment/all-student'])
+
+      // Submit the final form
+      this.apiService.postAPI('addstudentdocument', this.HFormGroup5.value).subscribe(() => {
+        this.stepLabel++;
+        this.router.navigate(['/admin/enrolment/all-student']);
+      });
+    });
   }
   back() {
     this.stepLabel--

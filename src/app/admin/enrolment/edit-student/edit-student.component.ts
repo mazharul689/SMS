@@ -24,6 +24,8 @@ import { default as _rollupMoment } from 'moment';
 import { SelectionModel } from '@angular/cdk/collections'
 import { ConfigurationServicePlaceholders } from 'aws-sdk/lib/config_service_placeholders'
 import { StepperSelectionEvent } from '@angular/cdk/stepper'
+import { forkJoin, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AddMoreUnitsComponent } from '../new-student/dialog/add-more-units/add-more-units.component'
 import { DeleteStudentDocumentComponent } from '../../dashboard/dialogs/delete-student-document/delete-student-document.component'
 const moment = _rollupMoment || _moment;
@@ -1108,6 +1110,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
               for (let i = 0; i < this.editDocs.length; i++) {
                 let rowData1 = this.fb.group({
                   documentLoc: this.editDocs[i].documentloc,
+                  documentType: null,
                   documentName: this.editDocs[i].documentname,
                   fileName: this.editDocs[i].filename.slice(15),
                   doc: this.editDocs[i].doc
@@ -1505,9 +1508,20 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     }
   }
 
+  docType(val: string, index: number) {
+
+    const docRowsArray = this.HFormGroup5.get('docRows') as FormArray;
+    const row = docRowsArray.at(index) as FormGroup;
+
+    if (row ) {
+      row.patchValue({ documentName: val !== 'Other' ? val : '' });
+    }
+  }
+
   newDocArr() {
     return this.fb.group({
       documentLoc: '',
+      documentType: '',
       documentName: '',
       fileName: '',
       doc: ''
@@ -1517,7 +1531,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     this.selectedFiles[index] = files.item(0);
 
     //console.log('file', this.selectedFiles[index].name);
-    ((this.HFormGroup5.get('docRows') as FormArray).at(index) as FormGroup).get('documentName').patchValue(this.selectedFiles[index].name);
+    // ((this.HFormGroup5.get('docRows') as FormArray).at(index) as FormGroup).get('documentName').patchValue(this.selectedFiles[index].name);
 
   }
   get docRows(): FormArray {
@@ -1913,55 +1927,67 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
 
   }
   onDocumentUpdate() {
-    this.HFormGroup5.get('studentId').setValue(this.studentID)
-    if (this.docLength == undefined) {
+    this.HFormGroup5.get('studentId')?.setValue(this.studentID);
+
+    if (this.docLength === undefined) {
       this.docLength = 0;
     }
-    //console.log(this.docLength)
-    for (let i = this.docLength; i <= this.docRows.length; i++) {
-      if (this.selectedFiles) {
-        let valid = true
-        let file: File = this.selectedFiles[i]
-        //console.log('file', file)
-        let formData: FormData = new FormData();
-        formData.append('inputfile', file, file.name);
-        formData.append('uploadfolder', 'StudentsDocuments')
-        if (file) {
-          this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            //console.log('response', data.data)
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5023/" + data.data
-            for (let i = 0; i < this.docRows.length; i++) {
-              if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
-                valid = false
-                //console.log(valid)
-              }
-            }
-            if (valid == true) {
-              if (i + 1 == this.docRows.length) {
-                //console.log('Form Value', this.HFormGroup5.value)
-                this.apiService.postAPI('editstudentdocument', this.HFormGroup5.value).subscribe((data) => {
-                })
-              }
-            }
-          })
-        }
-        else {
-          let valid = true
-          for (let i = 0; i < this.docRows.length; i++) {
-            if (this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
-              valid = false
-              //console.log(valid)
-            }
-          }
-          if (i + 1 == this.docRows.length) {
-            this.apiService.postAPI('editstudentdocument', this.HFormGroup5.value).subscribe((data) => {
-            })
-          }
-        }
 
+    const docRowsArray = this.HFormGroup5.get('docRows') as FormArray;
+    const uploadRequests: Observable<any>[] = [];
+
+    for (let i = this.docLength; i < this.docRows.length; i++) {
+      let file: File | undefined = this.selectedFiles ? this.selectedFiles[i] : undefined;
+
+      if (file) {
+        let formData = new FormData();
+        formData.append('inputfile', file, file.name);
+        formData.append('uploadfolder', 'StudentsDocuments');
+
+        const uploadRequest = this.apiService.postAPI('fileupload', formData).pipe(
+          map((data: any) => {
+            docRowsArray.at(i).patchValue({
+              documentLoc: `https://api.wonderit.com.au:5000/${data.data}`
+            });
+          })
+        );
+
+        uploadRequests.push(uploadRequest);
       }
     }
+
+    // Execute all uploads, then validate and submit the form
+    if (uploadRequests.length > 0) {
+      forkJoin(uploadRequests).subscribe(
+        () => {
+          this.validateAndSubmit();
+        },
+        (error) => {
+          console.error('File upload failed:', error);
+        }
+      );
+    } else {
+      // No files to upload, directly validate and submit
+      this.validateAndSubmit();
+    }
   }
+
+  private validateAndSubmit() {
+    const docRowsArray = this.HFormGroup5.get('docRows') as FormArray;
+    const isValid = docRowsArray.controls.every(row =>
+      row.get('documentName')?.value && row.get('documentLoc')?.value
+    );
+
+    if (!isValid) {
+      console.error('Validation failed: Document Name and Document Location are required.');
+      return;
+    }
+
+    this.apiService.postAPI('editstudentdocument', this.HFormGroup5.value).subscribe(() => {
+      console.log('Document updated successfully!');
+    });
+  }
+
   onConfirmationUpdate() {
     const trainingBody = this.HFormGroup6.value
 

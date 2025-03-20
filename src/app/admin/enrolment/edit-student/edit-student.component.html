@@ -1931,14 +1931,24 @@
                     <div formArrayName="docRows"
                       *ngFor="let item of HFormGroup5.get('docRows')['controls']; let i = index;  let last = last;">
                       <div class="row" [formGroupName]="i">
-                        <div class="col-5">
+                        <div class="col-3">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Document Type</mat-label>
+                            <mat-select formControlName="documentType" (ngModelChange)="docType($event, i)">
+                              <mat-option *ngFor="let type of DocumentType" [value]="type.documentname"
+                                [disabled]="editable">
+                                {{ type.documentname }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-3">
                           <mat-form-field class="example-full-width">
                             <mat-label>Document Name</mat-label>
                             <input matInput formControlName="documentName" [readonly]="editable">
                           </mat-form-field>
                         </div>
-
-                        <div class="col-4">
+                        <div class="col-3">
                           <mat-form-field class="example-full-width">
                             <ngx-mat-file-input formControlName="doc" placeholder="Choose File"
                               (change)="fileChangeEvent($event.target.files, i)" [disabled]="editable">
@@ -1962,13 +1972,6 @@
                             <mat-icon>plus_one</mat-icon>
                           </button>
                         </div>
-                        <!-- <div class="col-1" *ngIf="i == 0">
-                          <button type="button" mat-mini-fab color="warn"
-                            aria-label="Example icon button with a plus one icon" (click)="resetDocs(i)"
-                            [disabled]="editable">
-                            <mat-icon>exposure_neg_1</mat-icon>
-                          </button>
-                        </div> -->
                         <div class="col-1">
                           <button type="button" mat-mini-fab color="warn"
                             aria-label="Example icon button with a plus one icon" (click)="removeDocs(i)"
@@ -1976,7 +1979,6 @@
                             <mat-icon>delete</mat-icon>
                           </button>
                         </div>
-
                       </div>
                     </div>
                   </div>

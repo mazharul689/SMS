@@ -427,38 +427,82 @@ export class StudentsPaymentsComponent implements OnInit {
     });
   }
 
+  // getStudentPayments() {
+  //   this.apiService.getAPI('getstudentinvoicetotal').subscribe((data) => {
+  //     this.allStudentPayments = data['data'];
+  //     for (var i in this.allStudentPayments) {
+  //       this.allStudentPayments[i].invoicedate = this.datePipe.transform(this.allStudentPayments[i].invoicedate, "dd/MM/yyyy");
+  //       this.allStudentPayments[i].paymentplaninstalmentduedate = this.datePipe.transform(this.allStudentPayments[i].paymentplaninstalmentduedate, "dd/MM/yyyy");
+  //       this.allStudentPayments[i].extendedduedate = this.datePipe.transform(this.allStudentPayments[i].extendedduedate, "dd/MM/yyyy");
+  //       this.allStudentPayments[i].invoiceddueamount = this.allStudentPayments[i].totalfee - this.allStudentPayments[i].totalamountpaid
+  //     }
+  //     this.allStudentPayments = this.allStudentPayments.sort((a, b) => {
+  //       if (a.firstname > b.firstname) {
+  //         return 1;
+  //       } else if (a.firstname < b.firstname) {
+  //         return -1;
+  //       }
+  //     });
+  //     // Create a copy of the original data for modification
+  //     let allData = JSON.parse(JSON.stringify(data['data'])); // Deep copy to avoid reference issues
+  //     for (let i = 0; i < allData.length; i++) {
+  //       allData[i].name = `${allData[i].firstname || ''} ${allData[i].middlename || ''} ${allData[i].lastname || ''} `
+  //     }
+  //     allData = allData.sort((a, b) => {
+  //       if (a.firstname > b.firstname) {
+  //         return 1;
+  //       } else if (a.firstname < b.firstname) {
+  //         return -1;
+  //       }
+  //     });
+  //     // console.log(allData);  // Remains unchanged
+  //     this.dataSource.data = allData;       // Contains the 'name' field for display or further use
+  //     return data;
+  //   })
+  // }
+
   getStudentPayments() {
     this.apiService.getAPI('getstudentinvoicetotal').subscribe((data) => {
-      this.allStudentPayments = data['data'];
-      for (var i in this.allStudentPayments) {
-        this.allStudentPayments[i].invoicedate = this.datePipe.transform(this.allStudentPayments[i].invoicedate, "dd/MM/yyyy");
-        this.allStudentPayments[i].paymentplaninstalmentduedate = this.datePipe.transform(this.allStudentPayments[i].paymentplaninstalmentduedate, "dd/MM/yyyy");
-        this.allStudentPayments[i].extendedduedate = this.datePipe.transform(this.allStudentPayments[i].extendedduedate, "dd/MM/yyyy");
-        this.allStudentPayments[i].invoiceddueamount = this.allStudentPayments[i].totalfee - this.allStudentPayments[i].totalamountpaid
-      }
-      this.allStudentPayments = this.allStudentPayments.sort((a, b) => {
-        if (a.firstname > b.firstname) {
-          return 1;
-        } else if (a.firstname < b.firstname) {
-          return -1;
-        }
+      // Transform the data
+      this.allStudentPayments = data['data'].map((student) => {
+        // Format dates using datePipe
+        student.invoicedate = this.datePipe.transform(student.invoicedate, 'dd/MM/yyyy');
+        student.paymentplaninstalmentduedate = this.datePipe.transform(student.paymentplaninstalmentduedate, 'dd/MM/yyyy');
+        student.extendedduedate = this.datePipe.transform(student.extendedduedate, 'dd/MM/yyyy');
+
+        // Calculate invoiceddueamount
+        student.invoiceddueamount = student.totalfee - (student.totalamountpaid || 0);
+
+        return student;
       });
+
+      // Sort the data by clientid and paymentplaninstalmentduedate
+      this.allStudentPayments.sort((a, b) => {
+        // Sort by clientid (trimmed to avoid issues with trailing spaces)
+        if (a.clientid.trim() !== b.clientid.trim()) {
+          return a.clientid.trim().localeCompare(b.clientid.trim());
+        }
+
+        // Sort by paymentplaninstalmentduedate
+        const dateA = new Date(a.paymentplaninstalmentduedate.split('/').reverse().join('-'));
+        const dateB = new Date(b.paymentplaninstalmentduedate.split('/').reverse().join('-'));
+        return dateA.getTime() - dateB.getTime();
+      });
+
       // Create a copy of the original data for modification
-      let allData = JSON.parse(JSON.stringify(data['data'])); // Deep copy to avoid reference issues
-      for (let i = 0; i < allData.length; i++) {
-        allData[i].name = `${allData[i].firstname || ''} ${allData[i].middlename || ''} ${allData[i].lastname || ''} `
-      }
-      allData = allData.sort((a, b) => {
-        if (a.firstname > b.firstname) {
-          return 1;
-        } else if (a.firstname < b.firstname) {
-          return -1;
-        }
+      let allData = JSON.parse(JSON.stringify(this.allStudentPayments)); // Deep copy to avoid reference issues
+
+      // Add a 'name' field for display purposes
+      allData = allData.map((student) => {
+        student.name = `${student.firstname || ''} ${student.middlename || ''} ${student.lastname || ''}`.trim();
+        return student;
       });
-      // console.log(allData);  // Remains unchanged
-      this.dataSource.data = allData;       // Contains the 'name' field for display or further use
+
+      // Assign the processed data to the data source
+      this.dataSource.data = allData;
+
       return data;
-    })
+    });
   }
 
 }

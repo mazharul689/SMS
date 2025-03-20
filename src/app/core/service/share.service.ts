@@ -5,9 +5,9 @@ import { BehaviorSubject } from 'rxjs'
 })
 export class ShareService {
   // cliLogo = 'assets/images/banner/HMILogo.png'
-  // cliLogo = 'assets/images/banner/wonsmsLogo6.png'
+  cliLogo = 'assets/images/banner/wonsmsLogo6.png'
   // cliLogo = 'assets/images/banner/pacificBigLogo.png'
-  cliLogo = 'assets/images/banner/ALITBigLogo.png'
+  // cliLogo = 'assets/images/banner/ALITBigLogo.png'
   // cliLogo = 'assets/images/banner/PICBigLogo.png'
   // cliLogo = 'assets/images/banner/ETCBigLogo.png'
   // cliLogo = 'assets/images/banner/bibeBigLogo.png'

@@ -1691,13 +1691,23 @@
                     <div formArrayName="docRows"
                       *ngFor="let item of HFormGroup5.get('docRows')['controls']; let i = index;  let last = last">
                       <div class="row" [formGroupName]="i">
-                        <div class="col-5">
+                        <div class="col-3">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Document Type</mat-label>
+                            <mat-select formControlName="documentType" (ngModelChange)="docType($event, i)">
+                              <mat-option *ngFor="let type of DocumentType" [value]="type.documentname">
+                                {{ type.documentname }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-3">
                           <mat-form-field class="example-full-width">
                             <mat-label>Document Name</mat-label>
                             <input matInput formControlName="documentName">
                           </mat-form-field>
                         </div>
-                        <div class="col-4">
+                        <div class="col-3">
                           <mat-form-field class="example-full-width">
                             <ngx-mat-file-input formControlName="doc" placeholder="Choose File"
                               (change)="fileChangeEvent($event.target.files, i)">
