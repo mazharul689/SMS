@@ -27,8 +27,11 @@
         <!-- <li class="rto_name">
           <h3>{{ this.userInfo.collegename }}</h3>
         </li> -->
-        <li class="logoImg">
-          <img src="{{img}}" alt="" />
+        <li *ngIf="isSpecialLogo">
+          <img class="specialLogoImg" src="{{bigimg}}" alt="" />
+        </li>
+        <li *ngIf="!isSpecialLogo">
+          <img class="logoImg" src="{{bigimg}}" alt="" />
         </li>
         <!-- Full Screen Button -->
         <li class="fullscreen">

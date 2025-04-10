@@ -68,20 +68,36 @@ export class EditStaffComponent implements OnInit {
   userInfo: any
   getAll: any
   editable = true
+  suburbDisable = false
+  apiTest = false
+  allStates: any
   public stateIdChange(newValue) {
     this.stateIdChanges = newValue
   }
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue
-    if (this.postCodeChanges.length == 4) {
+    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC') {
+      this.suburbDisable = false
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
         this.suburbs = data
+        this.apiTest = true
         this.states = data[0].state.name
         this.stateAbbr = this.suburbs[0].state.abbreviation
         this.apiService.getAPI(`getstateid?id=${this.stateAbbr}`).subscribe((data) => {
-          this.stateName = data['data'][0].stateId
+          this.stateName = data['data'][0].stateid
+          this.HFormGroup1.patchValue({
+            stateId: this.stateName
+          })
         })
       })
+    }
+    else if (this.postCodeChanges.length == 4 || this.postCodeChanges == '0000' || this.postCodeChanges == '@@@@' || this.postCodeChanges == 'OSPC') {
+      this.states = null
+      this.stateName = null
+      this.HFormGroup1.patchValue({
+        suburb: 'Not specified'
+      })
+      this.suburbDisable = true
     }
   }
   constructor(
@@ -101,6 +117,7 @@ export class EditStaffComponent implements OnInit {
   ngOnInit() {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
     this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
+    this.allStates = this.getAll[0].State
     this.stepLabel = 1
     this.HFormGroup1 = this.fb.group({
       title: ['', [Validators.required]],

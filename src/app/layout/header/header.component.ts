@@ -37,6 +37,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   bigimg: any;
   flag = false;
   userInfo: any;
+  isSpecialLogo = false
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private renderer: Renderer2,
@@ -126,7 +127,16 @@ export class HeaderComponent implements OnInit, AfterViewInit {
       this.flagvalue = val.map((element) => element.flag);
     }
     this.shared.logoSouce.subscribe((image) => (this.img = image))
-    this.shared.logoSouce1.subscribe((image) => (this.bigimg = image))
+    // this.shared.logoSouce1.subscribe((image) => (this.bigimg = image))
+    this.shared.logoSouce1.subscribe((image) => {
+      this.bigimg = image;
+      const specialLogos = [
+        'assets/images/banner/pacificBigLogo.png',
+        'assets/images/banner/ALITBigLogo.png',
+        'assets/images/banner/ftiBigLogo.png',
+      ];
+      this.isSpecialLogo = specialLogos.includes(image);
+    });
     this.shared.messageSource.subscribe((message) => (this.message = message))
   }
   ngAfterViewInit() {

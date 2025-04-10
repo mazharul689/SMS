@@ -15,10 +15,10 @@ const routes: Routes = [
      // { path: '', redirectTo: '/auth/signin', pathMatch: 'full' },
       {
         path: 'admin',
-        // canActivate: [AuthGuard],
-        // data: {
-        //   role: Role.Admin,
-        // },
+        canActivate: [AuthGuard],
+        data: {
+          role: Role.Admin,
+        },
         loadChildren: () =>
           import('./admin/admin.module').then((m) => m.AdminModule),
       },
@@ -33,10 +33,10 @@ const routes: Routes = [
       },
       {
         path: 'student',
-        // canActivate: [AuthGuard],
-        // data: {
-        //   role: Role.Student,
-        // },
+        canActivate: [AuthGuard],
+        data: {
+          role: Role.Student,
+        },
         loadChildren: () =>
           import('./student/student.module').then((m) => m.StudentModule),
       },

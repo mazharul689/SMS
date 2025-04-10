@@ -1,6 +1,8 @@
 import { RouteInfo } from './sidebar.metadata';
 const role = JSON.parse(localStorage.getItem('allRoleMenu'))
 const userInfo = JSON.parse(localStorage.getItem('currentUser'))
+const userRole = userInfo?.role || '';
+console.log(userRole)
 export const ROUTES: RouteInfo[] = [
   // {
   //   path: '',
@@ -28,7 +30,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: role && role['Dashboard'] ? role['Dashboard'] : [''],
+    role: 'Admin',
     submenu: [
       // {
       //   path: '/admin/dashboard/main',
@@ -110,7 +112,7 @@ export const ROUTES: RouteInfo[] = [
         groupTitle: false,
         badge: '',
         badgeClass: '',
-        role: [''],
+        role: userRole === 'Student' ? [] : ['Admin'],
         submenu: [],
       },
       {
@@ -1523,7 +1525,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['student'],
+    role: role && role['Dashboard'] ? role['Dashboard'] : [''],
     submenu: [],
   },
   {
@@ -1536,7 +1538,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['student'],
+    role: role && role['Homework'] ? role['Homework'] : [''],
     submenu: [],
   },
   {
@@ -1549,7 +1551,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['student'],
+    role: role && role['Leave-Request'] ? role['Leave-Request'] : [''],
     submenu: [],
   },
   {
@@ -1562,7 +1564,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['student'],
+    role: role && role['Timetable'] ? role['Timetable'] : [''],
     submenu: [],
   },
   {
@@ -1575,7 +1577,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['student'],
+    role: role && role['Settings'] ? role['Settings'] : [''],
     submenu: [],
   },
 

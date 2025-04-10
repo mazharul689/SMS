@@ -66,20 +66,37 @@ export class AddStaffComponent implements OnInit {
   errorsReq: any = { isError: false, errorMessage: '' };
   userInfo: any
   getAll: any
+  countries: any
+  allStates: any
+  suburbDisable = false
+  apiTest = false
   public stateIdChange(newValue) {
     this.stateIdChanges = newValue
   }
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue
-    if (this.postCodeChanges.length == 4) {
+    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC') {
+      this.suburbDisable = false
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
         this.suburbs = data
+        this.apiTest = true
         this.states = data[0].state.name
         this.stateAbbr = this.suburbs[0].state.abbreviation
         this.apiService.getAPI(`getstateid?id=${this.stateAbbr}`).subscribe((data) => {
           this.stateName = data['data'][0].stateid
+          this.HFormGroup1.patchValue({
+            stateId: this.stateName
+          })
         })
       })
+    }
+    else if (this.postCodeChanges.length == 4 || this.postCodeChanges == '0000' || this.postCodeChanges == '@@@@' || this.postCodeChanges == 'OSPC') {
+      this.states = null
+      this.stateName = null
+      this.HFormGroup1.patchValue({
+        suburb: 'Not specified'
+      })
+      this.suburbDisable = true
     }
   }
   constructor(
@@ -96,10 +113,12 @@ export class AddStaffComponent implements OnInit {
     private router: Router,
     private spinnerService: NgxSpinnerService) {
   }
+
+
   ngOnInit() {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
     this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
-
+    this.allStates = this.getAll[0].State
     this.stepLabel = 1
     this.HFormGroup1 = this.fb.group({
       title: ['', [Validators.required]],
@@ -188,45 +207,66 @@ export class AddStaffComponent implements OnInit {
         })
       }
       else {
-        window.scroll(0, 0)
-        this.errorsReq = { isError: true, errorMessage: "Did not upload Profile Picture" }
+        // window.scroll(0, 0)
+        // this.errorsReq = { isError: true, errorMessage: "Did not upload Profile Picture" }
       }
     }
     else {
-      window.scroll(0, 0)
-      this.errorsReq = { isError: true, errorMessage: "Did not upload Profile Picture" }
+      let staffBody = this.HFormGroup1.value
+      staffBody.stateId = this.stateName
+      staffBody = this.HFormGroup1.value
+      console.log('formvalue', staffBody)
+      var show = document.getElementById('closebtn')
+      this.apiService.postAPI('addstaff', staffBody).subscribe((data) => {
+        if (data['data'][0] && data['data'][0]['error']) {
+          window.scroll(0, 0)
+          this.errorsReq = { isError: true, errorMessage: data['data'][0].error_msg }
+          show.style.display = 'block'
+        }
+        else {
+          this.staffId = data['data'][0].staffid
+          this.stepLabel++
+          stepper.next();
+        }
+      })
     }
   }
   onDocumentSubmit() {
     let valid = true
     this.HFormGroup2.get('staffId').setValue(this.staffId)
     // if(this.docRows.length > 1){
-    for (let i = 0; i < this.docRows.length; i++) {
-      if (this.selectedFiles) {
-        let file: File = this.selectedFiles[i]
-        this.file = file.name
-        let formData: FormData = new FormData();
-        formData.append('inputfile', file, file.name);
-        formData.append('uploadfolder', 'StaffsDocuments')
-        if (file) {
-          this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
-            for (let i = 0; i < this.docRows.length; i++) {
-              if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
-                valid = false
+    if(this.selectedFiles[0]){
+      for (let i = 0; i < this.docRows.length; i++) {
+        if (this.selectedFiles) {
+          let file: File = this.selectedFiles[i]
+          this.file = file.name
+          let formData: FormData = new FormData();
+          formData.append('inputfile', file, file.name);
+          formData.append('uploadfolder', 'StaffsDocuments')
+          if (file) {
+            this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
+              this.docRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
+              for (let i = 0; i < this.docRows.length; i++) {
+                if (!this.docRows.at(i).value.documentName && !this.docRows.at(i).value.documentLoc) {
+                  valid = false
+                }
               }
-            }
-            if (valid == true) {
-              if (i + 1 == this.docRows.length) {
-                console.log('formvalue2', this.HFormGroup2.value)
-                this.apiService.postAPI('addstaffdocument', this.HFormGroup2.value).subscribe((data) => {
-                  this.router.navigate([`/admin/staff/all-staff`]);
-                })
+              if (valid == true) {
+                if (i + 1 == this.docRows.length) {
+                  console.log('formvalue2', this.HFormGroup2.value)
+                  this.apiService.postAPI('addstaffdocument', this.HFormGroup2.value).subscribe((data) => {
+                    this.router.navigate([`/admin/staff/all-staff`]);
+                  })
+                }
               }
-            }
-          })
+            })
+          }
         }
       }
+    }
+    else{
+      this.router.navigate([`/admin/staff/all-staff`]);
+
     }
     // }
   }

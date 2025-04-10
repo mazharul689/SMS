@@ -40,6 +40,7 @@ export class SigninComponent implements OnInit {
   userInfo: any;
   roles: any;
   allRoleMenu: any;
+  isSpecialLogo = false
   // model: Login = { username: "admin@admin.com", password: "12345678" }                                //Demo 5000
   // model: Login = { username: "edwardbusinesscollege@gmail.com", password: "CI6IkpXVCJ9.eyJmcmV" }     //Edward 5001
   // model: Login = { username: "myqbvet@gmail.com", password: "eyJhbGciO" }                             //Kingsway 5002
@@ -74,10 +75,24 @@ export class SigninComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.shared.clientLogo.subscribe((image) => (this.img = image))
+    // this.shared.clientLogo.subscribe((image) => (this.img = image))
+    this.shared.clientLogo.subscribe((image) => {
+      this.img = image;
+      const specialLogos = [
+        'assets/images/banner/pacificBigLogo.png',
+        'assets/images/banner/ALITBigLogo.png',
+        'assets/images/banner/ftiBigLogo.png',
+      ];
+      this.isSpecialLogo = specialLogos.includes(image);
+    });
     if (JSON.parse(localStorage.getItem('currentUser'))) {
-      this.router.navigate(['/admin/dashboard/main'])
       this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
+      if(this.userInfo.role == 'Admin'){
+        this.router.navigate(['/admin/dashboard/main'])
+      }
+      else{
+        this.router.navigate(['/student/dashboard'])
+      }
       this.authService.storeUserData(this.userInfo.token)
     }
     else {
@@ -155,7 +170,12 @@ export class SigninComponent implements OnInit {
               let token = data.access_token;
               this.authService.storeUserData(token);
               // Navigate only after both API calls complete
-              this.router.navigate(['/admin/dashboard/main']);
+              if (data.role == 'Admin') {
+                this.router.navigate(['/admin/dashboard/main']);
+              }
+              else{
+                this.router.navigate(['/student/dashboard']);
+              }
               window.location.reload();
             });
           } else {

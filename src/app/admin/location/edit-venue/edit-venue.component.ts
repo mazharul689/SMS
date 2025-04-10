@@ -90,7 +90,7 @@ export class EditVenueComponent implements OnInit {
       postCode: ['', [Validators.required, Validators.max(9999)]],
       countryId: ['', [Validators.required]],
       contactNo: ['', [Validators.required, Validators.maxLength(100)]],
-      ABN: ['', [Validators.maxLength(100)]],
+      ABN: ['', [Validators.required, Validators.maxLength(100)]],
       effectiveDateFrom: [''],
       effectiveDateTo: ['']
     })
@@ -100,9 +100,9 @@ export class EditVenueComponent implements OnInit {
     // this.apiService.getAPI('getcountry').subscribe((data) => {
     //   this.countries = data['data'];
     // })
-    this.apiService.getAPI('gettrainingOrg').subscribe((data) => {
-      this.trainingOrgs = data['data'];
-    })
+    // this.apiService.getAPI('gettrainingOrg').subscribe((data) => {
+    //   this.trainingOrgs = data['data'];
+    // })
     this.apiService.getAPI(`getvenue?id=${this.venueID}`).subscribe((data) => {
       console.log(data['data']);
       this.location = data['data'][0]
@@ -118,7 +118,7 @@ export class EditVenueComponent implements OnInit {
         postCode: this.location.postcode,
         countryId: this.location.countryid,
         contactNo: this.location.contactno,
-        ABN: this.location.ABN,
+        ABN: this.location.abn,
         effectiveDateFrom: this.location.effectivedatefrom,
         effectiveDateTo: this.location.effectivedateto
       })

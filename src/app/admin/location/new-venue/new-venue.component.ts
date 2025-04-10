@@ -91,7 +91,7 @@ export class NewVenueComponent implements OnInit {
       postCode: ['', [Validators.required, Validators.max(9999)]],
       countryId: [1, [Validators.required]],
       contactNo: ['', [Validators.required, Validators.maxLength(100)]],
-      ABN: ['', [Validators.maxLength(100)]],
+      ABN: ['', [Validators.required, Validators.maxLength(100)]],
       effectiveDateFrom: [''],
       effectiveDateTo: ['']
     })

@@ -37,6 +37,9 @@ import { EditAgentComponent } from './edit-agent/edit-agent.component';
 import { AllEmailComponent } from './all-email/all-email.component';
 import { AddEmailComponent } from './add-email/add-email.component';
 import { EditEmailComponent } from './edit-email/edit-email.component';
+import { AllOrganizationComponent } from './all-organization/all-organization.component';
+import { NewOrganizationComponent } from './new-organization/new-organization.component';
+import { EditOrganizationComponent } from './edit-organization/edit-organization.component';
 
 
 @NgModule({
@@ -53,7 +56,10 @@ import { EditEmailComponent } from './edit-email/edit-email.component';
     EditAgentComponent,
     AllEmailComponent,
     AddEmailComponent,
-    EditEmailComponent
+    EditEmailComponent,
+    AllOrganizationComponent,
+    NewOrganizationComponent,
+    EditOrganizationComponent
   ],
   imports: [
     UsersRoutingModule,
