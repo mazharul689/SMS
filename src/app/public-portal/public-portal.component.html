@@ -1,0 +1,56 @@
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1 class="hero-title">Welcome to Our Student Portal</h1>
+      <p class="hero-subtitle">Access resources, announcements, and important information</p>
+      <div class="hero-actions">
+        <a routerLink="/authentication/signin" class="btn btn-primary">Submit Application</a>
+        <a routerLink="/contact" class="btn btn-outline">Edit Application</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="assets/images/banner/wonsmsLogo6.png" alt="Wonder SMS">
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+  <div class="container">
+    <h2 class="section-title">What We Offer</h2>
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features">
+        <div class="feature-icon">
+          <mat-icon>{{feature.icon}}</mat-icon>
+        </div>
+        <h3>{{feature.title}}</h3>
+        <p>{{feature.description}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Announcements Section -->
+<section class="announcements" *ngIf="announcements.length">
+  <div class="container">
+    <h2 class="section-title">Latest Announcements</h2>
+    <div class="announcements-list">
+      <div class="announcement-card" *ngFor="let item of announcements">
+        <div class="announcement-date">{{item.date | date}}</div>
+        <h3>{{item.title}}</h3>
+        <p>{{item.summary}}</p>
+        <a href="#" class="read-more">Read more →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta">
+  <div class="container">
+    <h2>Ready to get started?</h2>
+    <p>Join thousands of students already using our platform</p>
+    <a routerLink="/authentication/signup" class="btn btn-primary">Create Account</a>
+  </div>
+</section>

@@ -31,6 +31,7 @@ import {
   HTTP_INTERCEPTORS,
   HttpClient,
 } from '@angular/common/http';
+import { PublicPortalComponent } from './public-portal/public-portal.component';
 // import { ReplacePipe } from './replace.pipe';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -51,6 +52,7 @@ export function createTranslateLoader(http: HttpClient): any {
     RightSidebarComponent,
     AuthLayoutComponent,
     MainLayoutComponent,
+    PublicPortalComponent,
     // ReplacePipe,
   ],
   imports: [

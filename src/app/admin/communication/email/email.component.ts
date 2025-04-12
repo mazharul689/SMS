@@ -269,13 +269,13 @@ export class EmailComponent implements OnInit {
           this.errorsReq = { isError: true, errorMessage: data["data"].msg };
           this.dataSource.data = [];
         } else {
-          let students = data["data"];
-          for (let i in students) {
-            students[i].rowID = i;
-            students[i].fullname =
-              students[i].firstname + " " + students[i].lastname;
+          this.students = data["data"];
+          for (let i in this.students) {
+            this.students[i].rowID = i;
+            this.students[i].fullname =
+            this.students[i].firstname + " " + this.students[i].lastname;
           }
-          this.dataSource.data = students; // on data receive populate dataSource.data array
+          this.dataSource.data = this.students; // on data receive populate dataSource.data array
           // console.log(this.dataSource.data);
           return data;
         }
@@ -526,6 +526,7 @@ export class EmailComponent implements OnInit {
   }
 
   prepareAndSendEmails() {
+    console.log(this.dataSource.data)
     const rows = this.sendSelectedNumbers();
     const studentPromises = rows.map((rowIndex) =>
       this.getAllDataOfStudent(this.students[rowIndex])

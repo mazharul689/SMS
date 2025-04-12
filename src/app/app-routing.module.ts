@@ -5,7 +5,12 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guard/auth.guard';
 import { Role } from './core/models/role';
+import { PublicPortalComponent } from './public-portal/public-portal.component';
 const routes: Routes = [
+  {
+    path: 'student-portal',
+    component: PublicPortalComponent
+  },
   {
     path: '',
     component: MainLayoutComponent,
