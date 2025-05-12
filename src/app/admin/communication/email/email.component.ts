@@ -188,7 +188,7 @@ export class EmailComponent implements OnInit {
 
     this.HFormGroup2 = this.fb.group({
       docRows: this.fb.array([this.newDocArr()]),
-      agentsCheck: ["Y"],
+      agentsCheck: ["N"],
       altEmailCheck: ["Y"],
     });
 
@@ -234,7 +234,8 @@ export class EmailComponent implements OnInit {
     });
   }
   search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any) {
-    // this.selection = new SelectionModel<Students>(true, []);
+    // this.selection.clear
+    this.selection = new SelectionModel<Students>(true, []);
     let queryParams = [];
 
     // Build query string based on available parameters

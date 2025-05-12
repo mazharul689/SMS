@@ -29,7 +29,7 @@ export class AuthService {
     private router: Router
   ) {
     this.currentUserSubject = new BehaviorSubject<User>(
-      JSON.parse(localStorage.getItem('currentUser'))
+      JSON.parse(localStorage.getItem('currentUser')!)
     );
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -59,7 +59,11 @@ export class AuthService {
     return this.http.post<any>(`${environment.testURL}/login`, { username, password }).pipe(map((user) => {
       // user.role = 'Admin'
       // store user details and jwt token in local storage to keep user logged in between page refreshes
-      localStorage.setItem('currentUser', JSON.stringify(user));
+      if(user.role){
+        localStorage.setItem('currentUser', JSON.stringify(user));
+        // alert(user.role)
+
+      }
       this.currentUserSubject.next(user);
       // console.log('user', user)
       return user;
@@ -67,11 +71,7 @@ export class AuthService {
   }
 
   storeUserData(token) {
-    this.timeout = +this.jwtHelper.getTokenExpirationDate(token).valueOf() - +new Date().valueOf();
-    // this.timeout = 2000
-    // console.log('time',this.timeout)
-    // sessionStorage.setItem("id_token", token);
-    // this.authToken = token;
+    this.timeout = +this.jwtHelper.getTokenExpirationDate(token)!.valueOf() - +new Date().valueOf();
     this.expirationCounter(this.timeout);
   }
 

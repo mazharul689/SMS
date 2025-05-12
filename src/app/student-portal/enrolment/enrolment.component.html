@@ -1,0 +1,2003 @@
+<!-- <section class="content"> -->
+  <div class="container-fluid">
+    <div class="row clearfix newStudent">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header" style="justify-content: center;">
+            <h2>Student Enrolment Form</h2>
+          </div>
+          <div class="body" [hidden]="process">
+            <mat-horizontal-stepper [linear]="isLinear" #stepper>
+              <mat-step [stepControl]="HFormGroup1" completed="isCompleted">
+                <div class="row">
+                  <div *ngIf="errors.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtn">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ errors.errorMessage }}
+                  </div>
+                </div>
+                <div class="row">
+                  <div *ngIf="errorsReq.isError" class="col-6 alert alert-danger m-auto text-center" id="closebtn">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ errorsReq.errorMessage }}
+                  </div>
+                </div>
+                <form [formGroup]="HFormGroup1" (ngSubmit)="onStudentSubmmit(stepper)">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '1' ? 'highlight' : 'nonHighlight'">
+                      Student Information
+                    </span>
+                  </ng-template>
+                  <div class="personalInfo">
+                    <!-- <div class="row">
+                      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mx-auto my-4">
+                        <section class="example-section">
+                          <label class="col-md-2 col-sm-2">Student Origin</label>
+                          <mat-radio-group class="col-md-11 col-sm-11 mx-auto" formControlName="studentOriginId"
+                            style="padding-top: 7px">
+                            <mat-radio-button class="example-margin d-block c-origin"
+                              *ngFor="let origins of studentOrigins" [value]="origins.studentoriginid">
+                              {{origins.originname}}
+                            </mat-radio-button>
+                          </mat-radio-group>
+                        </section>
+                      </div>
+                    </div> -->
+                    <div class="row">
+                      <span class="section-heading"><i class='fas fa-bars'></i> Personal
+                        Information</span>
+                    </div>
+                    <div class="section-content">
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Title</mat-label>
+                            <mat-select formControlName="title">
+                              <mat-option [value]="'Mr'">
+                                Mr.
+                              </mat-option>
+                              <mat-option [value]="'Ms'">
+                                Ms.
+                              </mat-option>
+                              <mat-option [value]="'Mrs'">
+                                Mrs.
+                              </mat-option>
+                              <mat-option [value]="'other'">
+                                Other
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>First Name</mat-label>
+                            <input matInput formControlName="firstName" (ngModelChange)="fNameChange($event)" required>
+                            <mat-error *ngIf="HFormGroup1.get('firstName').hasError('required')">
+                              First name is required
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('firstName').hasError('maxlength')">
+                              Maximum length is 40 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Middle Name</mat-label>
+                            <input matInput formControlName="middleName">
+                            <mat-error *ngIf="HFormGroup1.get('middleName').hasError('maxlength')">
+                              Maximum length is 40 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Last Name</mat-label>
+                            <input matInput formControlName="lastName" (ngModelChange)="lNameChange($event)">
+                            <mat-error *ngIf="HFormGroup1.get('lastName').hasError('maxlength')">
+                              Maximum length is 40 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Email</mat-label>
+                            <input matInput formControlName="email" required>
+                            <mat-error
+                              *ngIf="HFormGroup1.get('email').hasError('required') || HFormGroup1.get('email').touched">
+                              Please enter a valid email address
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('email').hasError('maxlength')">
+                              Maximum length is 80 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Alternative Email</mat-label>
+                            <input matInput formControlName="altEmail">
+                            <mat-error *ngIf="HFormGroup1.get('altEmail').hasError('maxlength')">
+                              Maximum length is 80 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Mobile Phone</mat-label>
+                            <input matInput formControlName="mobile" type="tel" (ngModelChange)="mobileChange($event)">
+                            <!-- <mat-error *ngIf="HFormGroup1.get('mobile').hasError('maxlength')">
+                              Maximum length is 20 characters
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('mobile').hasError('minlength')">
+                              Minimum length is 10 characters
+                            </mat-error> -->
+                            <mat-hint align="start"><strong>Note: For avetmiss - Please enter australian mobile number
+                                start with 04(total 10 digit)</strong> </mat-hint>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Date of Birth</mat-label>
+                            <input matInput [matDatepicker]="basicDatepicker" formControlName="dob" required>
+                            <mat-datepicker-toggle matSuffix [for]="basicDatepicker">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #basicDatepicker></mat-datepicker>
+                            <mat-error *ngIf="HFormGroup1.get('dob').hasError('required')">
+                              Please select date of birth
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Country of Birth</mat-label>
+                            <mat-select formControlName="birthcountryId">
+                              <mat-option *ngFor="let countries of getcountry" [value]="countries.countryid">
+                                {{ countries.countryname }}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('birthcountryId').hasError('required')">
+                              Please select country of birth
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+
+                        <!-- <div  [ngClass]="HFormGroup1.get('studentOriginId').value == '1' ? 'col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2' : 'col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2'">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Nationality</mat-label>
+                            <mat-select formControlName="nationalityId">
+                              <mat-option *ngFor="let nationalities of getnationality"
+                                [value]="nationalities.nationalityId">
+                                {{nationalities.nationalityName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div> -->
+                        <!-- <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
+                          [ngClass]="HFormGroup1.get('studentOriginId').value == '3' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Mobile Phone</mat-label>
+                            <input matInput formControlName="mobile" type="tel" (ngModelChange)="mobileChange($event)">
+                            <mat-error *ngIf="HFormGroup1.get('mobile').hasError('pattern')">
+                              Must be start with '04'
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('mobile').hasError('maxlength')">
+                              Maximum length is 10 characters
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('mobile').hasError('minlength')">
+                              Minimum length is 10 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
+                          [ngClass]="HFormGroup1.get('studentOriginId').value == '2' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Mobile Phone</mat-label>
+                            <input matInput formControlName="mobile1" type="tel" (ngModelChange)="mobileChange($event)">
+                            <mat-error *ngIf="HFormGroup1.get('mobile').hasError('maxlength')">
+                              Maximum length is 10 characters
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('mobile').hasError('minlength')">
+                              Minimum length is 10 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div> -->
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
+                          <!-- <section class="example-section mb-7"> -->
+                          <label class="asterisk">Gender</label>
+                          <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                          <mat-radio-group class="col-lg-12 col-md-12 col-sm-12" formControlName="gender">
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="M">M</mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="F">F</mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="O">OTH</mat-radio-button>
+                            <mat-radio-button
+                              class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                              value="@">N/S</mat-radio-button>
+                          </mat-radio-group>
+                          <mat-error *ngIf="HFormGroup1.get('gender').hasError('required')">
+                            Gender is required
+                          </mat-error>
+                          <!-- </section> -->
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Passport Number</mat-label>
+                            <input matInput formControlName="passportNo">
+                            <mat-error *ngIf="HFormGroup1.get('passportNo').hasError('maxlength')">
+                              Maximum length is 100 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Passport Expire Date</mat-label>
+                            <input matInput [matDatepicker]="passDpicker" formControlName="passportExpdate">
+                            <mat-datepicker-toggle matSuffix [for]="passDpicker"></mat-datepicker-toggle>
+                            <mat-datepicker #passDpicker></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <!-- <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" style="padding-top : 10px">
+                          <section class="example-section mb-4">
+                            <label class="example col-lg-5 col-md-4 col-sm-5">Australian
+                              PR</label>
+                            <mat-radio-group class="col-lg-7 col-md-8 col-sm-7" formControlName="australianPr">
+                              <mat-radio-button
+                                class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-block d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div> -->
+                      </div>
+                      <!-- <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <section class="example-section mb-4">
+                            <label class="example col-md-1 col-sm-2">Gender</label>
+                            <mat-radio-group class="col-md-11 col-sm-10" formControlName="gender">
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="M">Male</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="F">Female</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="O">Other</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="@">Not specified</mat-radio-button>
+                            </mat-radio-group>
+                            <mat-error *ngIf="HFormGroup1.get('gender').hasError('required')">
+                              Gender is required
+                            </mat-error>
+                          </section>
+                        </div>
+                      </div> -->
+                      <!-- <div class="row">
+
+                      </div> -->
+                      <div class="row">
+                        <div class="visa-section">
+                          <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width mb-3">
+                                <mat-label>Visa Number</mat-label>
+                                <input matInput formControlName="visaNo">
+                                <mat-error *ngIf="HFormGroup1.get('visaNo').hasError('maxlength')">
+                                  Maximum length is 100 characters
+                                </mat-error>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width mb-3">
+                                <mat-label>Visa Status</mat-label>
+                                <mat-select formControlName="visaStatusId">
+                                  <mat-option *ngFor="let visas of getVisa" [value]="visas.visastatusid">
+                                    {{visas.visastatusname}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width mb-3">
+                                <mat-label>Visa Expire Date</mat-label>
+                                <input matInput [matDatepicker]="visaDpicker" formControlName="visaExpdate">
+                                <mat-datepicker-toggle matSuffix [for]="visaDpicker">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #visaDpicker></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="emercencyContactInfo">
+                    <div class="row">
+                      <span class="section-heading">
+                        <i class='fas fa-bars'></i>
+                        Emergency Contact Information
+                      </span>
+                    </div>
+                    <!-- <span class="section-heading"><i class='fas fa-bars'></i> Enrolment
+                      Information</span> -->
+                    <div class="section-content">
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Emergency Contact Name</mat-label>
+                            <input matInput formControlName="emergencyContactName">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Emergency Contact Relationship</mat-label>
+                            <input matInput formControlName="emergencyContactRelationship">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Emergency Contact Mobile</mat-label>
+                            <input matInput formControlName="emergencyContactMobile">
+                            <!-- <mat-error *ngIf="HFormGroup1.get('emergencyContactMobile').hasError('maxlength')">
+                              Maximum length is 20 characters
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('emergencyContactMobile').hasError('minlength')">
+                              Minimum length is 10 characters
+                            </mat-error> -->
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Emergency Contact Address</mat-label>
+                            <input matInput formControlName="emergencyContactAddress">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="enrolmentInfo">
+                    <div class="row">
+                      <span class="section-heading"><i class='fas fa-bars'></i> Enrolment
+                        Information</span>
+                    </div>
+                    <!-- <span class="section-heading"><i class='fas fa-bars'></i> Enrolment
+                      Information</span> -->
+                    <div class="section-content">
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Home Language</mat-label>
+                            <mat-select formControlName="homeLanguageId" required>
+                              <mat-option *ngFor="let homeLang of getHomeLang" [value]="homeLang.languageid">
+                                {{homeLang.languagename}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('homeLanguageId').hasError('required')">
+                              Home language is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-4">
+                          <!-- <section class="example-section">
+                            <label class="example col-lg-3 col-md-3 col-sm-4">English Spoken
+                              Status</label>
+                            <mat-radio-group class="col-lg-10 col-md-9 col-sm-8"
+                              formControlName="englishSpeakingStatusId">
+                              <mat-radio-button class="example-margin d-block d-md-inline-block d-lg-inline-block"
+                                *ngFor="let engStatus of engStatusAll" [value]="engStatus.englishSpeakingStatusId">
+                                {{engStatus.englishSpeakingStatus}}</mat-radio-button>
+                            </mat-radio-group>
+                          </section> -->
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>English Spoken Status</mat-label>
+                            <mat-select formControlName="englishSpeakingStatusId">
+                              <mat-option *ngFor="let engStatus of engStatusAll"
+                                [value]="engStatus.englishspeakingstatusid">
+                                {{engStatus.englishspeakingstatus}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>English Score Type</mat-label>
+                            <mat-select formControlName="englishSpeakingScoreTypeId">
+                              <mat-option *ngFor="let scoreType of englishSpeakingScoreType"
+                                [value]="scoreType.englishspeakingscoretypeid">
+                                {{scoreType.englishspeakingscoretype}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <!-- <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-4">
+                          <section class="example-section">
+                            <label class="example col-lg-2 col-md-3 col-sm-4">English Spoken
+                              Status</label>
+                            <mat-radio-group class="col-lg-10 col-md-9 col-sm-8"
+                              formControlName="englishSpeakingStatusId">
+                              <mat-radio-button class="example-margin d-block d-md-inline-block d-lg-inline-block"
+                                *ngFor="let engStatus of engStatusAll" [value]="engStatus.englishSpeakingStatusId">
+                                {{engStatus.englishSpeakingStatus}}</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                      </div> -->
+                      <!-- <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Employment Status</mat-label>
+                            <mat-select formControlName="employmentStatusId">
+                              <mat-option *ngFor="let empStatus of employmentStatus"
+                                [value]="empStatus.employmentStatusId">
+                                {{empStatus.EmploymentStatusName}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('employmentStatusId').hasError('required')">
+                              Employment status is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div> -->
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>English Speaking Score</mat-label>
+                            <input matInput formControlName="englishSpeakingScore">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>English Speaking Score Expire Date</mat-label>
+                            <input matInput [matDatepicker]="engexpdate" formControlName="englishSpeakingScoreExpdate" >
+                            <mat-datepicker-toggle matSuffix [for]="engexpdate">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #engexpdate></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Employment Status</mat-label>
+                            <mat-select formControlName="employmentStatusId">
+                              <mat-option *ngFor="let empStatus of employmentStatus"
+                                [value]="empStatus.employmentstatusid">
+                                {{empStatus.employmentstatusname}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('employmentStatusId').hasError('required')">
+                              Employment status is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+
+                      </div>
+                      <!-- <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Survey Contact Status</mat-label>
+                            <mat-select formControlName="surveyContactStatusId" required>
+                              <mat-option *ngFor="let survey of surveyStatus" [value]="survey.surveyContactStatusId">
+                                {{survey.surveyContactStatusName}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('surveyContactStatusId').hasError('required')">
+                              Survey contact status is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div> -->
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Indigenous Status</mat-label>
+                            <mat-select formControlName="indigenousStatusId" required>
+                              <mat-option *ngFor="let indigStatus of indigStatusAll"
+                                [value]="indigStatus.indigenousstatusid">
+                                {{indigStatus.indigenousstatusname}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('indigenousStatusId').hasError('required')">
+                              Indigenous status is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
+                          <section class="example-full-width mb-3">
+                            <label class="example col-lg-5 col-md-5 col-sm-4">Still In School</label>
+                            <mat-radio-group class="col-lg-7 col-md-9 col-sm-8" formControlName="stillInSecSchool">
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Completed School Level</mat-label>
+                            <mat-select formControlName="completedSchoolLevelId">
+                              <mat-option *ngFor="let schlLevel of schoolLevel" [value]="schlLevel.schoollevelid">
+                                {{schlLevel.schoollevelname}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12" style="padding-top: 10px">
+                          <section class="example-full-width mb-3">
+                            <label class="example col-lg-2 col-md-3 col-sm-6">Prior EA</label>
+                            <mat-radio-group class="col-lg-10 col-md-9 col-sm-6"
+                              formControlName="PriorEducationalAchievementFlag">
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="@">N/S</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12" style="padding-top: 10px">
+                          <section class="example-section">
+                            <label class="example col-lg-2.5 col-md-2.5 col-sm-2.5">Disability</label>
+                            <mat-radio-group class="col-lg-9.5 col-md-9.5 col-sm-9.5" formControlName="disability">
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="@">N/S</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Survey Contact Status</mat-label>
+                            <mat-select formControlName="surveyContactStatusId" required>
+                              <mat-option *ngFor="let survey of surveyStatus" [value]="survey.surveycontactstatusid">
+                                {{survey.surveycontactstatusname}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('surveyContactStatusId').hasError('required')">
+                              Survey contact status is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div formGroupName="priorDetail" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                        [ngClass]="HFormGroup1.get('PriorEducationalAchievementFlag').value == 'Y' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Qualification</mat-label>
+                            <mat-select formControlName="QualificationId" multiple>
+                              <mat-option *ngFor="let qualification of qualifications"
+                                [value]="qualification.qualificationid">
+                                {{qualification.qualificationcode}} -
+                                {{qualification.qualificationname}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div formGroupName="disabilityDetails" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                          [ngClass]="HFormGroup1.get('disability').value == 'Y' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Disability *</mat-label>
+                            <mat-select formControlName="disabilityId" multiple>
+                              <mat-option *ngFor="let disability of disabilities" [value]="disability.disabilityid">
+                                {{disability.disabilityname}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('disabilityDetails.disabilityId').hasError('required')">
+                              Disability is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 mb-2 schl"
+                          [ngClass]="HFormGroup1.get('stillInSecSchool').value == 'Y' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>School Type *</mat-label>
+                            <mat-select formControlName="schoolTypeId">
+                              <mat-option *ngFor="let schlType of schoolTypeAll" [value]="schlType.schooltypeid">
+                                {{schlType.schooltypename}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('schoolTypeId').hasError('required')">
+                              School Type is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+
+                    </div>
+                  </div>
+
+
+
+                  <div class="usiInfo">
+                    <div class="row">
+                      <span class="section-heading">
+                        <i class='fas fa-bars'></i>
+                        USI
+                      </span>
+                    </div>
+                    <!-- <span class="section-heading"><i class='fas fa-bars'></i> USI</span> -->
+                    <div class="section-content">
+                      <div class="row">
+                        <div formGroupName="usiDetails" class="col-xl-7 col-lg-7 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>USI Number</mat-label>
+                            <input matInput formControlName="usi" (ngModelChange)="usiChange($event)"
+                              oninput="this.value = this.value.toUpperCase()">
+                            <mat-error *ngIf="HFormGroup1.get('usiDetails.usi').hasError('minlength')">
+                              Minimum length is 10 character
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('usiDetails.usi').hasError('maxlength')">
+                              Maximum length is 10 character
+                            </mat-error>
+                          </mat-form-field>
+                          <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2 text-center" style="padding-top: 5px;"
+                              [ngClass]="this.retry == true ? 'd-block' : 'd-none'">
+                              <button type='button' mat-raised-button color="primary" (click)="onVerifyUsi()"
+                                [disabled]="this.disable">Retry Verify</button>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2 text-center" style="padding-top: 5px;"
+                              [ngClass]="this.retry == false ? 'd-block' : 'd-none'">
+                              <button type='button' mat-raised-button color="primary" (click)="onVerifyUsi()"
+                                [disabled]="this.disable">Verify</button>
+                            </div>
+                            <div class="col-8 col-sm-8 col-md-8 col-xl-8"
+                              [ngClass]="this.retry == true ? 'd-block' : 'd-none'">
+                              <progress-bar class="custom-progress-bar-failed" [progress]="progress"></progress-bar>
+                            </div>
+                            <div class="col-8 col-sm-8 col-md-8 col-xl-8"
+                              [ngClass]="this.retry == false ? 'd-block' : 'd-none'">
+                              <progress-bar class="custom-progress-bar" [progress]="progress"></progress-bar>
+                            </div>
+                          </div>
+                          <!-- <div class="row" *ngIf="usiCount %2 == 0">
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 mb-2 text-center" style="padding-top: 5px;">
+                              <button type='button' mat-raised-button color="primary" (click)="onVerifyUsi()"
+                                [disabled]="this.disable">Retry Verify</button>
+                            </div>
+                            <div class="col-8 col-sm-8 col-md-8 col-xl-8">
+                              <progress-bar class="custom-progress-bar-failed" [progress]="progress"></progress-bar>
+                            </div>
+                          </div> -->
+                        </div>
+                        <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 mb-2 text-center"
+                        *ngIf="this.HFormGroup1.value.lastName != '.' && this.HFormGroup1.value.lastName != '' && this.HFormGroup1.value.lastName != null">
+                          <h6>USI Verification Status</h6>
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-sm" align="left">
+                                <span>USI status</span>
+                              </div>
+                              <div class="col-sm">
+                                <span>:</span>
+                              </div>
+                              <div class="col-sm" *ngIf="usiStatusCheck.UsiStatus=='Not Checked'">
+                                <span>{{usiStatusCheck.UsiStatus}}</span>
+                              </div>
+                              <div class="col-sm usi-alert" *ngIf="usiStatusCheck.UsiStatus=='Invalid'">
+                                <span>{{usiStatusCheck.UsiStatus}}</span>
+                              </div>
+                              <div class="col-sm usi-pass" *ngIf="usiStatusCheck.UsiStatus=='Valid'">
+                                <span>{{usiStatusCheck.UsiStatus}}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-sm" align="left">
+                                <span>First name</span>
+                              </div>
+                              <div class="col-sm">
+                                <span>:</span>
+                              </div>
+                              <div class="col-sm" *ngIf="usiStatusCheck.FirstName=='Not Checked'">
+                                <span>{{usiStatusCheck.FirstName}}</span>
+                              </div>
+                              <div class="col-sm usi-alert" *ngIf="usiStatusCheck.FirstName=='NoMatch'">
+                                <span>{{usiStatusCheck.FirstName}}</span>
+                              </div>
+                              <div class="col-sm usi-pass" *ngIf="usiStatusCheck.FirstName=='Match'">
+                                <span>{{usiStatusCheck.FirstName}}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-sm" align="left">
+                                <span>Family name</span>
+                              </div>
+                              <div class="col-sm">
+                                <span>:</span>
+                              </div>
+                              <div class="col-sm" *ngIf="usiStatusCheck.FamilyName=='Not Checked'">
+                                <span>{{usiStatusCheck.FamilyName}}</span>
+                              </div>
+                              <div class="col-sm usi-alert" *ngIf="usiStatusCheck.FamilyName=='NoMatch'">
+                                <span>{{usiStatusCheck.FamilyName}}</span>
+                              </div>
+                              <div class="col-sm usi-pass" *ngIf="usiStatusCheck.FamilyName=='Match'">
+                                <span>{{usiStatusCheck.FamilyName}}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-sm" align="left">
+                                <span>Date of birth</span>
+                              </div>
+                              <div class="col-sm">
+                                <span>:</span>
+                              </div>
+                              <div class="col-sm" *ngIf="usiStatusCheck.DateOfBirth=='Not Checked'">
+                                <span>{{usiStatusCheck.DateOfBirth}}</span>
+                              </div>
+                              <div class="col-sm usi-alert" *ngIf="usiStatusCheck.DateOfBirth=='NoMatch'">
+                                <span>{{usiStatusCheck.DateOfBirth}}</span>
+                              </div>
+                              <div class="col-sm usi-pass" *ngIf="usiStatusCheck.DateOfBirth=='Match'">
+                                <span>{{usiStatusCheck.DateOfBirth}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 mb-2 text-center"
+                        *ngIf="this.HFormGroup1.value.lastName == '.' || this.HFormGroup1.value.lastName == '' || this.HFormGroup1.value.lastName == null">
+                          <h6>Usi Verification Status</h6>
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-sm" align="left">
+                                <span>Usi status</span>
+                              </div>
+                              <div class="col-sm">
+                                <span>:</span>
+                              </div>
+                              <div class="col-sm" *ngIf="usiStatusCheckForSingleName.UsiStatus=='Not Checked'">
+                                <span>{{usiStatusCheckForSingleName.UsiStatus}}</span>
+                              </div>
+                              <div class="col-sm usi-alert" *ngIf="usiStatusCheckForSingleName.UsiStatus=='Invalid'">
+                                <span>{{usiStatusCheckForSingleName.UsiStatus}}</span>
+                              </div>
+                              <div class="col-sm usi-pass" *ngIf="usiStatusCheckForSingleName.UsiStatus=='Valid'">
+                                <span>{{usiStatusCheckForSingleName.UsiStatus}}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-sm" align="left">
+                                <span>Single name</span>
+                              </div>
+                              <div class="col-sm">
+                                <span>:</span>
+                              </div>
+                              <div class="col-sm" *ngIf="usiStatusCheckForSingleName.SingleName=='Not Checked'">
+                                <span>{{usiStatusCheckForSingleName.SingleName}}</span>
+                              </div>
+                              <div class="col-sm usi-alert" *ngIf="usiStatusCheckForSingleName.SingleName=='NoMatch'">
+                                <span>{{usiStatusCheckForSingleName.SingleName}}</span>
+                              </div>
+                              <div class="col-sm usi-pass" *ngIf="usiStatusCheckForSingleName.SingleName=='Match'">
+                                <span>{{usiStatusCheckForSingleName.SingleName}}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="container">
+                            <div class="row">
+                              <div class="col-sm" align="left">
+                                <span>Date of birth</span>
+                              </div>
+                              <div class="col-sm">
+                                <span>:</span>
+                              </div>
+                              <div class="col-sm usi-alert" *ngIf="usiStatusCheckForSingleName.DateOfBirth=='NoMatch'">
+                                <span>{{usiStatusCheckForSingleName.DateOfBirth}}</span>
+                              </div>
+                              <div class="col-sm usi-pass" *ngIf="usiStatusCheckForSingleName.DateOfBirth=='Match'">
+                                <span>{{usiStatusCheckForSingleName.DateOfBirth}}</span>
+                              </div>
+                              <div class="col-sm" *ngIf="usiStatusCheckForSingleName.DateOfBirth=='Not Checked'">
+                                <span>{{usiStatusCheckForSingleName.DateOfBirth}}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="container" style="position: relative;">
+                        <ngx-loader [show]="show" [fullScreen] = "fullScreen" [template]="template"> Loading... </ngx-loader>
+                      </div> -->
+                    </div>
+                    <!-- <div class="row">
+                      <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 mb-2 text-center">
+                        <button type='button' mat-raised-button color="primary" (click)="onVerifyUsi()">Verify</button>
+                      </div>
+                    </div> -->
+                  </div>
+                  <div class="currentAddr">
+                    <div class="row">
+                      <span class="section-heading">
+                        <i class='fas fa-bars'></i>
+                        Current Address
+                      </span>
+                    </div>
+                    <!-- <span class="section-heading"><i class='fas fa-bars'></i> Current Address</span> -->
+                    <div class="section-content">
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Flat/ Unit Details</mat-label>
+                            <input matInput formControlName="flatUnitDetails">
+                            <mat-error *ngIf="HFormGroup1.get('flatUnitDetails').hasError('maxlength')">
+                              Maximum length is 30 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Street Number</mat-label>
+                            <input matInput formControlName="streetNumber" required>
+                            <mat-error *ngIf="HFormGroup1.get('streetNumber').hasError('required')">
+                              Street number is required
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('streetNumber').hasError('maxlength')">
+                              Maximum length is 15 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Street Name</mat-label>
+                            <input matInput formControlName="streetName" required>
+                            <mat-error *ngIf="HFormGroup1.get('streetName').hasError('required')">
+                              Street name is required
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('streetName').hasError('maxlength')">
+                              Maximum length is 70 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Postcode</mat-label>
+                            <input matInput list="postcode" (ngModelChange)="postCodeChange($event)"
+                              formControlName="postCode" required>
+                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('required')">
+                              Postcode is required
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('minlength')">
+                              Minimum length is 4 characters
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('maxlength')">
+                              Maximum length is 4 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>State</mat-label>
+                            <!-- <input matInput formControlName="stateId" [value]="states" readonly > -->
+                            <mat-select (ngModelChange)="stateIdChange($event)" formControlName="stateId" required>
+                              <mat-option *ngFor="let state of allStates" [value]="state.stateid">
+                                {{state.statename}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Suburb</mat-label>
+                            <input matInput list="suburb" formControlName="suburb" [readonly]="suburbDisable" required>
+                            <datalist id="suburb">
+                              <option *ngFor="let suburb of suburbs">{{suburb.name}} </option>
+                            </datalist>
+                            <mat-error *ngIf="HFormGroup1.get('suburb').hasError('required')">
+                              Suburb is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <!-- <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
+                          [ngClass]="HFormGroup1.get('studentOriginId').value == '5' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Suburb</mat-label>
+                            <input matInput formControlName="suburb" required>
+                            <mat-error *ngIf="HFormGroup1.get('suburb').hasError('required')">
+                              Suburb is required
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('suburb').hasError('maxlength')">
+                              Maximum length is 50 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
+                          [ngClass]="HFormGroup1.get('studentOriginId').value == '5' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>State</mat-label>
+                            <mat-select formControlName="stateId" required>
+                              <mat-option *ngFor="let state1 of states1" [value]="state1.stateid">
+                                {{state1.statename}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('stateId').hasError('required')">
+                              State is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2"
+                          [ngClass]="HFormGroup1.get('studentOriginId').value == '5' ? 'd-block' : 'd-none'">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Postcode</mat-label>
+                            <input matInput formControlName="postCode" required>
+                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('required')">
+                              Postcode is required
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('minlength')">
+                              Minimum length is 4 characters
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('maxlength')">
+                              Maximum length is 4 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div> -->
+                      <div class="row">
+                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
+                          <section class="example-section">
+                            <label class="example col-xl-2 col-lg-3 col-md-3 col-sm-4">Different
+                              Postal Address</label>
+                            <mat-radio-group class="col-xl-10 col-lg-9 col-md-9 col-sm-8"
+                              formControlName="differentPostalAddress">
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="postalAddr"
+                    [ngClass]="HFormGroup1.get('differentPostalAddress').value =='Y' ? 'd-block' : 'd-none'">
+                    <div class="row">
+                      <span class="section-heading">
+                        <i class='fas fa-bars'></i>
+                        Postal Address
+                      </span>
+                    </div>
+                    <div class="section-content">
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Flat/ Unit Details</mat-label>
+                            <input matInput formControlName="flatUnitDetails_postal">
+                            <mat-error *ngIf="HFormGroup1.get('flatUnitDetails_postal').hasError('maxlength')">
+                              Maximum length is 30 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Street Number</mat-label>
+                            <input matInput formControlName="streetNumber_postal">
+                            <mat-error *ngIf="HFormGroup1.get('streetNumber_postal').hasError('maxlength')">
+                              Maximum length is 15 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Street Name</mat-label>
+                            <input matInput formControlName="streetName_postal">
+                            <mat-error *ngIf="HFormGroup1.get('streetName_postal').hasError('maxlength')">
+                              Maximum length is 70 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Postcode</mat-label>
+                            <input matInput list="postcode" (ngModelChange)="difPostCodeChange($event)"
+                              formControlName="postCode_postal">
+                            <mat-error *ngIf="HFormGroup1.get('postCode_postal').hasError('minlength')">
+                              Minimum length is 4 characters
+                            </mat-error>
+                            <mat-error *ngIf="HFormGroup1.get('postCode_postal').hasError('maxlength')">
+                              Maximum length is 4 characters
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>State</mat-label>
+                            <!-- <input matInput formControlName="stateId_postal" [value]="difStates" readonly> -->
+                            <mat-select formControlName="stateId_postal" required>
+                              <mat-option *ngFor="let state of allStates" [value]="state.stateid">
+                                {{state.statename}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('stateId_postal').hasError('required')">
+                              State is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Suburb</mat-label>
+                            <input matInput list="suburb" formControlName="suburb_postal" [readonly]="difSuburbDisable">
+                            <datalist id="suburb">
+                              <option *ngFor="let suburb of difSuburbs">{{suburb.name}} </option>
+                            </datalist>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button mat-raised-button color="primary">Save & Next</button>
+                  </div>
+                </form>
+              </mat-step>
+
+              <mat-step [stepControl]="HFormGroup2">
+                <form [formGroup]="HFormGroup2">
+                  <input type="hidden" formControlName="courseIntakeDateId">
+                  <!-- <ng-template matStepLabel>Course</ng-template> -->
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '2' ? 'highlight' : 'nonHighlight'">
+                      Course
+                    </span>
+                  </ng-template>
+                  <!-- <mat-tab-group>
+                    <mat-tab> -->
+                  <!-- <ng-template mat-tab-label class="float-right">
+                        <i class="material-icons-two-tone psr-3">list_alt</i>
+                      </ng-template> -->
+                  <div class="mt-4">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="card">
+                        <div class="body">
+                          <div class="table-responsive">
+                            <div class="mat-elevation-z8">
+                              <table class="table table-striped" mat-table [dataSource]="dataSource" matSort>
+                                <ng-container matColumnDef="courseCode">
+                                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <mat-label style="color: white; font-size: 15px">Course Code</mat-label>
+                                  </th>
+                                  <td mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                                    title="click to view unit details" (click)="showUnits(row)">
+                                    {{row.coursecode}}
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="courseName">
+                                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <mat-label style="color: white; font-size: 15px">Course Name</mat-label>
+                                  </th>
+                                  <td mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                                    title="click to view unit details" (click)="showUnits(row)">
+                                    {{row.coursename}}
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="className">
+                                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <mat-label style="color: white; font-size: 15px">Class Name</mat-label>
+                                  </th>
+                                  <td mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                                    title="click to view unit details" (click)="showUnits(row)">
+                                    {{row.classname}}
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="startDate">
+                                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <mat-label style="color: white; font-size: 15px">Start Date</mat-label>
+                                  </th>
+                                  <td mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                                    title="click to view unit details" (click)="showUnits(row)">
+                                    {{row.startdate | date:'mediumDate' }}
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="endDate">
+                                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <mat-label style="color: white; font-size: 15px">End Date</mat-label>
+                                  </th>
+                                  <td mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
+                                    title="click to view unit details" (click)="showUnits(row)">
+                                    {{row.enddate | date:'mediumDate' }}
+                                  </td>
+                                </ng-container>
+                                <ng-container matColumnDef="action">
+                                  <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                    <mat-label style="color: white; font-size: 15px">Action</mat-label>
+                                  </th>
+                                  <td mat-cell *matCellDef="let row">
+                                    <button type="button" mat-raised-button color="primary"
+                                      (click)="getCourseIntakeID(row, stepper)">Next</button>
+                                  </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns" [style.cursor]="'pointer'"
+                                  matRipple></tr>
+                                <tr class="mat-row" *matNoDataRow>
+                                  <td class="mat-cell" colspan="4">No data matching the filter</td>
+                                </tr>
+                              </table>
+                              <mat-paginator #paginator [length]="dataSource.filter.length" [pageIndex]="0"
+                                [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
+                              </mat-paginator>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- </mat-tab>
+                    <mat-tab> -->
+                  <!-- <ng-template mat-tab-label class="float-right">
+                        <i class="material-icons-two-tone psr-3">grid_on</i>
+                      </ng-template> -->
+                  <!-- <div class="row mt-4 mx-0">
+                        <div class="col-md-4" *ngFor="let course of courses ; let i = index">
+                          <div class="card border-apply">
+                            <div class="m-b-20">
+                              <div class="contact-grid">
+                                <div class="profile-header l-bg-purple-dark">
+                                  <div class="course-name">{{ course.courseName }}</div>
+                                  <div class="course-code">{{ course.courseCode }}</div>
+                                </div>
+                                <div class="course-detail">
+                                  <p>Duration: {{course.startDate | date:'mediumDate' }} - {{course.endDate |
+                                    date:'mediumDate' }}</p>
+                                </div>
+                                <div class="profile-userbuttons">
+                                  <button mat-raised-button matStepperNext color="primary">Save & Next</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+                  </mat-tab-group> -->
+                </form>
+              </mat-step>
+              <!-- <mat-step [stepControl]="HFormGroup3">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mx-auto my-4 text-end" >
+                  <button type="button" style="margin-bottom: 20px;" mat-raised-button color="primary" (click)="addMoreUnits()">
+                    Add More Units
+                  </button>
+                </div>
+                <form [formGroup]="HFormGroup3" (ngSubmit)="onUnitSubmit(stepper)">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '3' ? 'highlight' : 'nonHighlight'">
+                      Units
+                    </span>
+                  </ng-template>
+                  <div class="newCourseUnit">
+                    <mat-table #table [dataSource]="dataSource1" matSort class="mat-cell" formArrayName="unitRows">
+                      <ng-container matColumnDef="rowID">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                          <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                          </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                          <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                          </mat-checkbox>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="unitCode">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size: 15px;">Unit
+                            Code</mat-label>
+                        </mat-header-cell>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
+                          <span class="ml-2">{{row.unitCode}}</span>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="unitName">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size: 15px;">Unit
+                            Name</mat-label>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i">
+                          <input matInput type="text" name="" id="" value="{{row.unitId}}" formControlName="unitId"
+                            hidden>
+                          {{row.unitName}}
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="unitType">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <section class="example-section">
+                            <div class="row">
+                              <mat-label style="color: white; font-size: 15px;">Unit
+                                Type</mat-label>
+                              <div class="col-sm-12">
+                                <div class="group">
+                                  <input type="radio" id="unitTypeId" name="unit" value="C" [(ngModel)]="bulkUnitType"
+                                    [ngModelOptions]="{standalone: true}" (change)="UnitBulkSet()"> <label>Core</label>
+                                  <input type="radio" id="unitTypeId" name="unit" value="E" [(ngModel)]="bulkUnitType"
+                                    [ngModelOptions]="{standalone: true}" (change)="UnitBulkSet()">
+                                  <label>Elective</label>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                          <section class="example-section unitsRadio">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <div class="col-sm-12">
+                                  <div class="group">
+                                    <input type="radio" id="unitTypeId{{row.rowID}}" name="unittype{{row.rowID}}"
+                                      value="C" [attr.data-rowid]="row.rowID" [checked]="row.unitType == 'C'"
+                                      (change)="UnitRowChange($event)">
+                                    <label class="pr-3">Core</label>
+                                    <input type="radio" id="unitTypeId{{row.rowID}}" name="unittype{{row.rowID}}"
+                                      value="E" [attr.data-rowid]="row.rowID" [checked]="row.unitType == 'E'"
+                                      (change)="UnitRowChange($event)">
+                                    <label>Elective</label>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </section>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="vetFlag">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <section class="example-section">
+                            <div class="row">
+                              <mat-label style="color: white; font-size: 15px;">VET
+                                Flag</mat-label>
+                              <div class="col-sm-12">
+                                <input type="radio" id="vetFlagId" name="vetFlag" value="Y" [(ngModel)]="bulkVetFlag"
+                                  [ngModelOptions]="{standalone: true}" (change)="vetFlagBulkSet()">
+                                <label>Yes</label>
+                                <input type="radio" id="vetFlagId" name="vetFlag" value="N" [(ngModel)]="bulkVetFlag"
+                                  [ngModelOptions]="{standalone: true}" (change)="vetFlagBulkSet()">
+                                <label>No</label>
+                              </div>
+                            </div>
+                          </section>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                          <section class="example-section">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <input type="radio" id="vetFlagId{{row.rowID}}" name="vettlag{{row.rowID}}" value="Y"
+                                  [attr.data-rowid]="row.rowID" [checked]="row.vetFlag == 'Y'"
+                                  (change)="vetFlagRowChange($event)">
+                                <label>Yes</label>
+                                <input type="radio" id="vetFlagId{{row.rowID}}" name="vettlag{{row.rowID}}" value="N"
+                                  [attr.data-rowid]="row.rowID" [checked]="row.vetFlag == 'N'"
+                                  (change)="vetFlagRowChange($event)">
+                                <label>No</label>
+                              </div>
+                            </div>
+                          </section>
+                        </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="AVETMISS ">
+                        <mat-header-cell class="pr-0" *matHeaderCellDef>
+                          <section class="example-section">
+                            <div class="row">
+                              <mat-label style="color: white; font-size: 15px;">Avetmiss
+                                Report</mat-label>
+                              <div class="col-sm-12">
+                                <input type="radio" id="AVETMISSId" name="AVETMISS " value="Y"
+                                  [(ngModel)]="bulkAVETMISS" [ngModelOptions]="{standalone: true}"
+                                  (change)="AVETMISSBulkSet()">
+                                <label>Yes</label>
+                                <input type="radio" id="AVETMISSId" name="AVETMISS " value="N"
+                                  [(ngModel)]="bulkAVETMISS" [ngModelOptions]="{standalone: true}"
+                                  (change)="AVETMISSBulkSet()">
+                                <label>No</label>
+                              </div>
+                            </div>
+                          </section>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
+                          <section class="example-section">
+                            <div class="row">
+                              <div class="col-sm-12">
+                                <input type="radio" id="AVETMISSId{{row.rowID}}" name="AVETMISS {{row.rowID}}" value="Y"
+                                  [attr.data-rowid]="row.rowID" [checked]="row.AVETMISS  == 'Y'"
+                                  (change)="AVETMISSRowChange($event)">
+                                  <label>Yes</label>
+                                  <input type="radio" id="AVETMISSId{{row.rowID}}" name="AVETMISS {{row.rowID}}"
+                                  value="N" [attr.data-rowid]="row.rowID" [checked]="row.AVETMISS  == 'N'"
+                                  (change)="AVETMISSRowChange($event)">
+                                  <label>No</label>
+                              </div>
+                            </div>
+                          </section>
+                        </mat-cell>
+                      </ng-container>
+
+                      <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+                      <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns1;"
+                        [style.cursor]="'pointer'" matRipple>
+                      </mat-row>
+                    </mat-table>
+                    <mat-paginator #TableTwoPaginator [length]="dataSource.filteredData.length" [pageIndex]="0"
+                      [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+                  </div>
+                  <div>
+                    <button mat-raised-button color="primary">Next</button>
+                  </div>
+                </form>
+              </mat-step> -->
+              <mat-step [stepControl]="HFormGroup4">
+                <div class="row">
+                  <div *ngIf="errorsReqEn.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtn">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ errorsReqEn.errorMessage }}
+                  </div>
+                </div>
+                <form [formGroup]="HFormGroup4" (ngSubmit)="onEnrolemntSubmit(stepper)">
+                  <!-- <ng-template matStepLabel>Enrolment</ng-template> -->
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '3' ? 'highlight' : 'nonHighlight'">
+                      Enrolment
+                    </span>
+                  </ng-template>
+                  <div class="enrolInfo">
+                    <div class="row">
+                      <span class="section-heading">
+                        <i class='fas fa-bars'></i>
+                        Enrolment Information
+                      </span>
+                    </div>
+                    <!-- <span class="section-heading"><i class='fas fa-bars'></i> Enrolment
+                      Information</span> -->
+                    <div class="section-content">
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Agent</mat-label>
+                            <mat-select formControlName="agentId" (ngModelChange)="getAgentId($event)" required>
+                              <mat-option *ngFor="let agent of agents" [value]="agent.agentid">
+                                {{agent.agencyname}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup4.get('agentId').hasError('required')">
+                              Please select date of agentId
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Agent Commission Type</mat-label>
+                            <mat-select formControlName="amountTypeId" required>
+                              <mat-option *ngFor="let amount of allAmounts" [value]="amount.amounttypeid">
+                                {{amount.amounttype}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup4.get('amountTypeId').hasError('required')">
+                              Please select amount type
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Agent Commission</mat-label>
+                            <input matInput type="number" formControlName="agentCommission" required>
+                            <mat-error *ngIf="HFormGroup4.get('agentCommission').hasError('required')">
+                              Please select date of birth
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <section class="example-section mb-4">
+                            <label class="example col-md-5 col-sm-4">GST</label>
+                            <mat-radio-group class="col-md-7 col-sm-8" formControlName="gst">
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Application Status</mat-label>
+                            <mat-select formControlName="applicationStatusId" required>
+                              <mat-option *ngFor="let appStatus of applicationStatus"
+                                [value]="appStatus.applicationstatusid">
+                                {{appStatus.applicationstatusname}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup4.get('applicationStatusId').hasError('required')">
+                              Application Status is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Delivery Mode</mat-label>
+                            <mat-select formControlName="deliveryModeId">
+                              <mat-option *ngFor="let delmode of deliveryMode" [value]="delmode.deliverymodeid">
+                                {{delmode.deliverymodecode}} -
+                                {{delmode.deliverymodename}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Specific Funding</mat-label>
+                            <mat-select formControlName="specificFundingId">
+                              <mat-option *ngFor="let specFunding of specificFunding"
+                                [value]="specFunding.specificfundingid">
+                                {{specFunding.specificfundingcode}} -
+                                {{specFunding.specificfundingname}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Funding Source National</mat-label>
+                            <mat-select formControlName="fundingSourceNationalId" required>
+                              <mat-option *ngFor="let funSourceNat of fundingSourceNational"
+                                [value]="funSourceNat.fundingsourcenationalid">
+                                {{ funSourceNat.fundingsourcenationalcode }} - {{
+                                funSourceNat.fundingsourcenationalname }}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup4.get('fundingSourceNationalId').hasError('required')">
+                              Funding Source National is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Funding Source State</mat-label>
+                            <mat-select formControlName="fundingSourceStateId">
+                              <mat-option *ngFor="let fundSrcState of fundingSourceState"
+                                [value]="fundSrcState.fundingsourcestateid">
+                                {{fundSrcState.fundingsourcestatecode}} -
+                                {{fundSrcState.fundingsourcestatename}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Commencing Program</mat-label>
+                            <mat-select formControlName="commencingProgramId" required>
+                              <mat-option *ngFor="let comncngPrgrm of commencingProgram"
+                                [value]="comncngPrgrm.commencingprogramid">
+                                {{comncngPrgrm.commencingprogramcode}} -
+                                {{comncngPrgrm.commencingprogramname}}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup4.get('commencingProgramId').hasError('required')">
+                              Commencing Program is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Training Contract</mat-label>
+                            <mat-select formControlName="trainingContractid">
+                              <mat-option *ngFor="let trainCont of trainingContract"
+                                [value]="trainCont.trainingcontractid">
+                                {{trainCont.trainingcontractcode}} -
+                                {{trainCont.trainingcontractname}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Reason Taking Course</mat-label>
+                            <mat-select formControlName="reasonTakingCourseId" required>
+                              <mat-option *ngFor="let reasontaking of reasonTakingCourse"
+                                [value]="reasontaking.reasontakingcourseid">
+                                {{reasontaking.reasoncode}} - {{ reasontaking.reasonname
+                                }}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup4.get('reasonTakingCourseId').hasError('required')">
+                              Reason taking course is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Offer Letter Number</mat-label>
+                            <input matInput formControlName="offerLetterNumber" type="number" required>
+                              <mat-error *ngIf="HFormGroup4.get('offerLetterNumber').hasError('required')">
+                                Offer letter number is required
+                              </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
+                          <section class="example-section mb-4">
+                            <label class="example col-md-4 col-sm-3">Apply For RPL</label>
+                            <mat-radio-group class="col-md-8 col-sm-9" formControlName="applyForRPL">
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Enrolment Date</mat-label>
+                            <input matInput [matDatepicker]="enroleDatepicker" formControlName="studentEnrolmentDate" required>
+                            <mat-datepicker-toggle matSuffix [for]="enroleDatepicker">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #enroleDatepicker></mat-datepicker>
+                            <mat-error *ngIf="HFormGroup4.get('studentEnrolmentDate').hasError('required')">
+                              Please select enrolment date
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Tuition Fee</mat-label>
+                            <input matInput type="number" formControlName="TuitionFee" required>
+                            <mat-error *ngIf="HFormGroup4.get('TuitionFee').hasError('required')">
+                              Tuition Fee is required
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Commencement Date</mat-label>
+                            <input matInput [matDatepicker]="commenementDatepicker" formControlName="commencementDate" required>
+                            <mat-datepicker-toggle matSuffix [for]="commenementDatepicker">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #commenementDatepicker></mat-datepicker>
+                            <mat-error *ngIf="HFormGroup4.get('commencementDate').hasError('required')">
+                              Please select commencement date
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
+                          <section class="example-section mb-4">
+                            <label class="example col-md-4 col-sm-3 asterisk">Course Duration Type</label>
+                            <mat-radio-group class="col-md-8 col-sm-9" formControlName="courseDurationType"
+                              (ngModelChange)="setExpectedCompletion($event)">
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="D">Day</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-block d-sm-inline-block  d-md-inline-block d-lg-inline-block"
+                                value="W">Week</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Course Duration</mat-label>
+                            <input matInput formControlName="courseDuration"
+                              (ngModelChange)="setExpectedCompletion($event)">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Expected Completion Date</mat-label>
+                            <input matInput [matDatepicker]="ECDatepicker" formControlName="expectedCompletionDate" required>
+                            <mat-datepicker-toggle matSuffix [for]="ECDatepicker">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #ECDatepicker></mat-datepicker>
+                            <mat-error *ngIf="HFormGroup4.get('expectedCompletionDate').hasError('required')">
+                              Please select expected completion date
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div>
+                    <!-- <button mat-raised-button matStepperPrevious color="warn" class="msr-3">Back</button> -->
+                    <button mat-raised-button color="primary">Save & Next</button>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step [stepControl]="HFormGroup5">
+                <form [formGroup]="HFormGroup5" (ngSubmit)="onDocumentSubmit(stepper)">
+                  <!-- <ng-template matStepLabel>Document</ng-template> -->
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '4' ? 'highlight' : 'nonHighlight'">
+                      Document
+                    </span>
+                  </ng-template>
+                  <div class="row">
+                    <div formArrayName="docRows"
+                      *ngFor="let item of HFormGroup5.get('docRows')['controls']; let i = index;  let last = last">
+                      <div class="row" [formGroupName]="i">
+                        <div class="col-3">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Document Type</mat-label>
+                            <mat-select formControlName="documentType" (ngModelChange)="docType($event, i)">
+                              <mat-option *ngFor="let type of DocumentType" [value]="type.documentname">
+                                {{ type.documentname }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-3">
+                          <mat-form-field class="example-full-width">
+                            <mat-label>Document Name</mat-label>
+                            <input matInput formControlName="documentName">
+                          </mat-form-field>
+                        </div>
+                        <div class="col-3">
+                          <mat-form-field class="example-full-width">
+                            <ngx-mat-file-input formControlName="doc" placeholder="Choose File"
+                              (change)="fileChangeEvent($event.target.files, i)">
+                            </ngx-mat-file-input>
+                            <mat-icon matSuffix [style.cursor]="'pointer'">cloud_upload</mat-icon>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-1" *ngIf="last">
+                          <button type="button" mat-mini-fab color="accent"
+                            aria-label="Example icon button with a plus one icon" (click)="addDocs()">
+                            <mat-icon>plus_one</mat-icon>
+                          </button>
+                        </div>
+                        <div class="col-1">
+                          <button *ngIf="i > 0" type="button" mat-mini-fab color="warn"
+                            aria-label="Example icon button with a plus one icon" (click)="removeDocs(i)">
+                            <mat-icon>exposure_neg_1</mat-icon>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button mat-raised-button matStepperPrevious color="warn" (click)="back()"
+                      class="msr-4">Back</button>
+                    <button mat-raised-button color="primary">Save</button>
+                  </div>
+                </form>
+              </mat-step>
+              <!-- <mat-step [stepControl]="HFormGroup6">
+                <form [formGroup]="HFormGroup6" (ngSubmit)="onConfirmationSubmit(stepper)">
+                  <ng-template matStepLabel>
+                    <span [ngClass]="this.stepLabel == '6' ? 'highlight' : 'nonHighlight'">
+                      Confirmation
+                    </span>
+                  </ng-template>
+                  <div class="mt-4">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="card">
+                        <div class="body table-responsive unitArray">
+                          <div class="table table-striped">
+                            <div class="table-head row">
+                              <div class="head-col-unit">
+                                <mat-checkbox aria-label="Select All" checked="checked">
+                                  <mat-label style="color: white; font-size: 15px;">Unit Code</mat-label>
+                                </mat-checkbox>
+                              </div>
+                              <div class="head-col-unitName1">
+                                <span style="color: #fff; font-size: 15px;">Unit Name</span>
+                              </div>
+                            </div>
+                            <div formArrayName="Rows">
+                              <div *ngFor="let row of HFormGroup6.get('Rows')['controls']; let i=index">
+                                <div class="table-body row" [formGroupName]="i">
+                                  <div class="body-col-unit">
+                                    <mat-checkbox (click)="$event.stopPropagation()" checked="checked"
+                                      (change)="$event ? toggle(row, $event) : null" formControlName="statusCheck">
+                                      {{row.get('unitCode').value}}
+                                    </mat-checkbox>
+                                  </div>
+                                  <div class="body-col-unitName1">
+                                    <span>{{row.get('unitName').value}}</span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <button mat-raised-button matStepperPrevious color="warn" (click)="back()"
+                        class="msr-4">Back</button>
+                      <button mat-raised-button color="primary" class="msr-4">Confirm Enrolment & Exit</button>
+                      <button mat-raised-button type="button" color="accent" (click)="onConfirmationAndAsignClass()">Confirm Enrolment & Assign in Class</button>
+                    </div>
+                  </div>
+                </form>
+              </mat-step> -->
+
+
+
+              <!-- <mat-step [stepControl]="HFormGroup7">
+                <div class="row">
+                  <div *ngIf="error.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtntr">
+                    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                    <strong>Warning!</strong> {{ error.errorMessage }}
+                  </div>
+                </div>
+                <form [formGroup]="HFormGroup7" (ngSubmit)="onTrainingSubmmit(stepper)">
+                  <ng-template matStepLabel>Training Activity</ng-template>
+                  <div class="mt-4">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <div class="card">
+                        <div class="body table-responsive trainingAct">
+                          <div class="table table-striped">
+                            <div class="table-head row">
+                              <div class="head-col-unit">
+                                <mat-checkbox aria-label="Select All" checked="checked"
+                                  (change)="$event ? toggleAll($event) : null">
+                                  Units
+                                </mat-checkbox>
+                              </div>
+                              <div class="head-col-outc">
+                                <mat-form-field class="example-full-width mb-3">
+                                  <mat-label>Outcome National</mat-label>
+                                  <mat-select (ngModelChange)="outComeChange($event)" [(ngModel)]="outcome"
+                                    [ngModelOptions]="{standalone: true}">
+                                    <mat-option *ngFor="let outNational of outcomenational"
+                                      [value]="outNational.outcomeNationalId">
+                                      {{ outNational.outcomeNationalCode }} - {{ outNational.outcomeNationalName }}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </div>
+                              <div class="head-col-date">
+                                <mat-form-field class="example-full-width mb-3">
+                                  <mat-label>Start Date</mat-label>
+                                  <input matInput [matDatepicker]="thSdPicker" (ngModelChange)="sDateChange($event)"
+                                    [(ngModel)]="stDate" [ngModelOptions]="{standalone: true}">
+                                  <mat-datepicker-toggle matSuffix [for]="thSdPicker">
+                                  </mat-datepicker-toggle>
+                                  <mat-datepicker #thSdPicker></mat-datepicker>
+                                </mat-form-field>
+                              </div>
+                              <div class="head-col-date">
+                                <mat-form-field class="example-full-width mb-3">
+                                  <mat-label>End Date</mat-label>
+                                  <input matInput [matDatepicker]="thEdPicker" (ngModelChange)="eDateChange($event)"
+                                    [(ngModel)]="enDate" [min]="stDate" [ngModelOptions]="{standalone: true}">
+                                  <mat-datepicker-toggle matSuffix [for]="thEdPicker">
+                                  </mat-datepicker-toggle>
+                                  <mat-datepicker #thEdPicker></mat-datepicker>
+                                </mat-form-field>
+                              </div>
+                              <div class="head-col-hr">
+                                <mat-form-field class="example-full-width mb-3">
+                                  <mat-label>Hours</mat-label>
+                                  <input matInput type="number" min="1" max="4" (ngModelChange)="hourChange($event)"
+                                    [(ngModel)]="hour" [ngModelOptions]="{standalone: true}">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                            <div formArrayName="Rows">
+                              <div *ngFor="let row of HFormGroup7.get('Rows')['controls']; let i=index">
+                                <div class="table-body row" [formGroupName]="i"> -->
+              <!-- <input type="text" name="" [attr.data-id]="row.classSetupId" hidden> -->
+              <!-- <div class="body-col-unit">
+                                    <mat-checkbox (click)="$event.stopPropagation()" checked="checked"
+                                      (change)="$event ? toggle(row, $event) : null" formControlName="statusCheck">
+                                      {{row.get('unitCode').value}} - {{row.get('unitName').value }}
+                                    </mat-checkbox>
+                                  </div>
+                                  <div class="body-col-outc">
+                                    <mat-form-field class="example-full-width mb-3">
+                                      <mat-label>Outcome National</mat-label>
+                                      <mat-select formControlName="outcomeNationalId" [value]="outcome">
+                                        <mat-option *ngFor="let outNational of outcomenational"
+                                          [value]="outNational.outcomeNationalId">
+                                          {{ outNational.outcomeNationalCode }} - {{ outNational.outcomeNationalName }}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class="body-col-date">
+                                    <mat-form-field class="example-full-width mb-3">
+                                      <mat-label>Start Date</mat-label>
+                                      <input matInput [matDatepicker]="sDpicker" formControlName="startDate"
+                                        [value]="stDate">
+                                      <mat-datepicker-toggle matSuffix [for]="sDpicker">
+                                      </mat-datepicker-toggle>
+                                      <mat-datepicker #sDpicker></mat-datepicker>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class="body-col-date">
+                                    <mat-form-field class="example-full-width mb-3">
+                                      <mat-label>End Date</mat-label>
+                                      <input matInput [matDatepicker]="eDpicker" formControlName="endDate"
+                                        [value]="enDate" (ngModelChange)="compareTwoDates()">
+                                      <mat-datepicker-toggle matSuffix [for]="eDpicker">
+                                      </mat-datepicker-toggle>
+                                      <mat-datepicker #eDpicker></mat-datepicker>
+                                    </mat-form-field>
+                                  </div>
+                                  <div class="body-col-hr">
+                                    <mat-form-field class="example-full-width mb-3">
+                                      <mat-label>Hours</mat-label>
+                                      <input matInput formControlName="hoursAttended" min="1" max="4" type="number"
+                                        [value]="hour">
+                                    </mat-form-field>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <button mat-raised-button matStepperPrevious color="warn" class="msr-4">Back</button>
+                    <button mat-raised-button color="primary">Save & Next</button>
+                  </div>
+                </form>
+              </mat-step>
+
+              <mat-step [stepControl]="HFormGroup8">
+                <form [formGroup]="HFormGroup8">
+                  <ng-template matStepLabel>Certificate</ng-template>
+                  <div class="row">
+                    <div *ngIf="error.isError" class="col-4 alert alert-danger m-auto text-center" id="closebtntr">
+                      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                      <strong>Warning!</strong> {{ error.errorMessage }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="row">
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
+                        <label class="example col-lg-3 col-md-2 col-sm-3">Certificate Type</label>
+                        <mat-radio-group class="col-lg-9 col-md-10 col-sm-9" formControlName="certificateType">
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="c">Certificate</mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="s">Statement of Attainment</mat-radio-button>
+                        </mat-radio-group>
+                      </div>
+                      <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
+                        <label class="example col-lg-4 col-md-2 col-sm-3">Issued Flag</label>
+                        <mat-radio-group class="col-lg-8 col-md-10 col-sm-9" formControlName="Issuedflag"
+                          (ngModelChange)="issuedFlagChange($event)">
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="Y">Yes</mat-radio-button>
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="N">No</mat-radio-button>
+                        </mat-radio-group>
+                      </div>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Completion Date</mat-label>
+                        <input matInput [matDatepicker]="basicDatepicker1" formControlName="completionDate" required>
+                        <mat-datepicker-toggle matSuffix [for]="basicDatepicker1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #basicDatepicker1></mat-datepicker>
+                        <mat-error *ngIf="HFormGroup8.get('completionDate').hasError('required')">
+                          Please select completion date
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Issue Date</mat-label>
+                        <input matInput [matDatepicker]="basicDatepicker2" formControlName="certificateIssueDate"
+                          [readonly]="HFormGroup8.value.Issuedflag == 'N'">
+                        <mat-datepicker-toggle matSuffix [for]="basicDatepicker2">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #basicDatepicker2></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Issue Number</mat-label>
+                        <input matInput formControlName="certificateIssueNumber" readonly="true">
+                        <mat-error *ngIf="HFormGroup8.get('certificateIssueNumber').hasError('maxlength')">
+                          Maximum length is 10 characters
+                        </mat-error>
+                      </mat-form-field>
+                    </div> -->
+              <!-- <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Issue Flag Number</mat-label>
+                        <input matInput formControlName="Issuedflag">
+                        <mat-error *ngIf="HFormGroup8.get('Issuedflag').hasError('maxlength')">
+                          Maximum length is 10 characters
+                        </mat-error>
+                      </mat-form-field>
+                    </div> -->
+              <!-- </div> -->
+
+              <!-- <div class="row">
+                    <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
+                      <label class="example col-lg-4 col-md-2 col-sm-3">Certificate Type</label>
+                      <mat-radio-group class="col-lg-8 col-md-10 col-sm-9" formControlName="certificateType">
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="c">Certificate</mat-radio-button>
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="s">Statement of Attainment</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                  </div> -->
+              <!-- <div>
+                    <button mat-raised-button matStepperPrevious color="warn" class="msr-4">Back</button>
+                    <button mat-raised-button type="button" color="success" (click)="getCertificate()"
+                      [ngClass]="HFormGroup8.get('Issuedflag').value == 'Y' ? 'msr-4' : 'd-none'">Download
+                      Certificate</button>
+                    <button mat-raised-button (click)="onCertificateSubmit()" color="primary">Save</button>
+                  </div>
+                </form>
+              </mat-step> -->
+            </mat-horizontal-stepper>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- </section> -->

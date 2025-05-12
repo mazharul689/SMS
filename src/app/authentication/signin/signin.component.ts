@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AuthService } from 'src/app/core/service/auth.service';
-import { Role } from 'src/app/core/models/role';
+import { ApiService } from '../../api/api.service'
+import { AuthService } from '../../core/service/auth.service'
+import { Role } from '../../core/models/role';
 import { MatProgressButtonOptions } from 'mat-progress-buttons';
 import { ShareService } from '../../core/service/share.service'
 import { first } from 'rxjs/operators';
@@ -10,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { HttpClient } from '@angular/common/http';
-import { ApiService } from 'src/app/api/api.service';
+// import { ApiService } from 'src/app/api/api.service';
 import { forkJoin } from 'rxjs';
 export interface Login {
   username: string | null;
@@ -86,12 +87,11 @@ export class SigninComponent implements OnInit {
       this.isSpecialLogo = specialLogos.includes(image);
     });
     if (JSON.parse(localStorage.getItem('currentUser'))) {
+
       this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
+      // alert('checked')
       if(this.userInfo.role == 'Admin'){
         this.router.navigate(['/admin/dashboard/main'])
-      }
-      else{
-        this.router.navigate(['/student/dashboard'])
       }
       this.authService.storeUserData(this.userInfo.token)
     }
@@ -171,10 +171,8 @@ export class SigninComponent implements OnInit {
               this.authService.storeUserData(token);
               // Navigate only after both API calls complete
               if (data.role == 'Admin') {
+                // alert(data.role)
                 this.router.navigate(['/admin/dashboard/main']);
-              }
-              else{
-                this.router.navigate(['/student/dashboard']);
               }
               window.location.reload();
             });
@@ -186,41 +184,5 @@ export class SigninComponent implements OnInit {
           }
         }
       });
-    // this.authService
-    //   .login(this.f.username.value, this.f.password.value)
-    //   .pipe(first())
-    //   .subscribe({
-    //     next: (data) => {
-    //       let token
-    //       if (!data.status) {
-    //         this.apiService.getAPI('getrolemenu').subscribe((data1) => {
-    //           this.allRoleMenu = data1
-    //           window.localStorage.setItem('allRoleMenu', JSON.stringify(this.allRoleMenu));
-    //         })
-    //         this.apiService.getAPI('getroles').subscribe((data2) => {
-    //           this.roles = data2['data']
-    //           for (let i in this.roles) {
-    //             if (this.roles[i].roleid == data.roleid) {
-    //               data.role = this.roles[i].rolename
-    //             }
-    //           }
-    //           localStorage.setItem('currentUser', JSON.stringify(data));
-    //           window.location.reload();
-    //           if (window.localStorage.getItem('currentUser')) {
-    //             this.router.navigate(['/admin/dashboard/main'])
-    //             token = data.access_token
-    //             this.authService.storeUserData(token)
-    //           }
-    //         })
-
-    //       }
-    //       else {
-    //         this.error = data.message
-    //         this.spinnerButtonOptions.active = false;
-    //         this.loading = false;
-    //         this.spinner.hide();
-    //       }
-    //     },
-    //   });
   }
 }

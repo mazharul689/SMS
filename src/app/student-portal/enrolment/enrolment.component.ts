@@ -3,21 +3,18 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, } from '@angular/material-moment-adapter'
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core'
 import { DatePipe } from '@angular/common'
-import { ApiService } from '../../../api/api.service'
+import { ApiService } from '../../api/api.service'
+import { AuthService } from '../../core/service/auth.service'
+import { StateService } from '../../services/state.service'
 import { ReplaySubject, Subscription } from 'rxjs'
 import { MatPaginator } from '@angular/material/paginator'
 import { MatSort } from '@angular/material/sort'
+import { UnitsDialogComponent } from './dialog/units-dialog/units-dialog.component'
 import { MatTableDataSource } from '@angular/material/table'
 import { AddMoreUnitsComponent } from './dialog/add-more-units/add-more-units.component'
-//import { MatDialog } from '@angular/material/dialog';
-import { UnitsDialogComponent } from './dialog/units-dialog/units-dialog.component'
-import { UsiDialogComponent } from './usi-dialog/usi-dialog.component'
 import { HttpClient } from '@angular/common/http'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { MatCheckboxChange } from '@angular/material/checkbox';
-import { UploadService } from '../../../services/upload.service'
-import { StateService } from '../../../services/state.service'
-import { DownloadFileService } from '../../../download-file.service'
 import { MatStepper } from '@angular/material/stepper'
 import { ActivatedRoute, RouterModule } from '@angular/router'
 import { Router } from '@angular/router';
@@ -26,6 +23,7 @@ import { SelectionModel } from '@angular/cdk/collections'
 import { StepperSelectionEvent } from '@angular/cdk/stepper'
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { forkJoin, Observable } from 'rxjs';
+import { first } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
@@ -60,11 +58,10 @@ export interface allUnits1 {
   AVETMISS
 }
 const ELEMENT_DATA: allUnits[] = []
-
 @Component({
-  selector: 'app-new-student',
-  templateUrl: './new-student.component.html',
-  styleUrls: ['./new-student.component.sass'],
+  selector: 'app-enrolment',
+  templateUrl: './enrolment.component.html',
+  styleUrls: ['./enrolment.component.sass'],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'en-gb' },
     {
@@ -76,11 +73,10 @@ const ELEMENT_DATA: allUnits[] = []
     DatePipe
   ],
 })
-export class NewStudentComponent implements OnInit {
+export class EnrolmentComponent implements OnInit {
   displayedColumns: string[] = ['courseCode', 'courseName', 'className', 'startDate', 'endDate', 'action']
-  dataSource: MatTableDataSource<CourseData>
-  units
   displayedColumns1: string[] = ['rowID', 'unitCode', 'unitName', 'unitType', 'vetFlag', 'AVETMISS ']
+  dataSource: MatTableDataSource<CourseData>
   dataSource1: MatTableDataSource<allUnits>
   dataSource2: MatTableDataSource<allUnits1>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator
@@ -88,15 +84,9 @@ export class NewStudentComponent implements OnInit {
   @ViewChild('TableTwoPaginator', { static: true }) tableTwoPaginator: MatPaginator
   @ViewChild('TableTwoSort', { static: true }) tableTwoSort: MatSort
   @ViewChild('TableThreePaginator', { static: true }) tableThreePaginator: MatPaginator
-
   @ViewChild('TableThreeSort', { static: true }) tableThreeSort: MatSort
   @ViewChild('filter', { static: true }) filter: ElementRef
   @ViewChild('stepper') stepper: MatStepper
-  // HFormGroup1: FormGroup
-
-  // @ViewChild(MatPaginator) paginator: MatPaginator
-  // @ViewChild(MatSort) sort: MatSort
-  // @ViewChild('stepper') stepper: MatStepper;
 
   stdForm: FormGroup
   isLinear = true
@@ -110,14 +100,13 @@ export class NewStudentComponent implements OnInit {
   HFormGroup5: FormGroup
   HFormGroup6: FormGroup
   UnitFormGroup: FormGroup
-  // HFormGroup7: FormGroup
-  // HFormGroup8: FormGroup
   subscription: Subscription
 
   bulkUnitType
   bulkVetFlag
   bulkAVETMISS
   file
+  units
   unitCodeFilter = new FormControl('')
   filteredValues1 = {
     unitCode: '',
@@ -135,14 +124,10 @@ export class NewStudentComponent implements OnInit {
   setUnitTypeVal1 = []
   setVetFlagVal1 = []
   setAVETMISSVal1 = []
-  //Checkbox
   checked = false
   unitCheck = true
   indeterminate = false
   stepLabel
-  // flag = false
-
-  //New Student
   studentOrigins
   clientID
   getcountry
@@ -179,14 +164,10 @@ export class NewStudentComponent implements OnInit {
   y
   m
   d
-
-  //Course
   courses
   course: CourseData | null
   courseIntakeID = 0
   courseIntakeDateId = 0
-
-  //Enrolment
   agents
   applicationStatus
   deliveryMode
@@ -206,11 +187,8 @@ export class NewStudentComponent implements OnInit {
   difStateAbbr
   difStateName
   usiDetails
-  //Document
   selectedFiles = []
   docLoc
-
-  //Training Activity
   unitsByClassSetup: any[] = []
   outcomenational
   allSelected: any[] = []
@@ -233,20 +211,9 @@ export class NewStudentComponent implements OnInit {
     DateOfBirth: 'Not Checked',
   }
   regexp: RegExp = /(04)\d{8}$/;
-
-  //Certificates
   certificate
   baseApi
   link
-  // editCertificates = {
-  //   completionDate: '',
-  //   certificateIssueDate: '',
-  //   certificateIssueNumber: '',
-  //   Issuedflag: ''
-  // }
-
-
-  //Get Student
   editStudent = {
     userId: '',
     clientId: '',
@@ -411,342 +378,337 @@ export class NewStudentComponent implements OnInit {
   selectedUserId
   selectedDisableType = []
   selectedUsiType = []
-
-  error: any = { isError: false, errorMessage: '' };
   errorM = false
+  error: any = { isError: false, errorMessage: '' };
   errors: any = { isError: false, errorMessage: '' };
   errorsReq: any = { isError: false, errorMessage: '' };
   errorsReqEn: any = { isError: false, errorMessage: '' };
-
-  // errors = false
   err_msg
   show_msg = false
   show_msg2 = false
   getAll
-
   constructor(
+    private authService: AuthService,
     private fb: FormBuilder,
     private apiService: ApiService,
     private datePipe: DatePipe,
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private uploadService: UploadService,
     private state: StateService,
+    private snackBar: MatSnackBar,
     private actRoute: ActivatedRoute,
-    private downloadFileService: DownloadFileService,
     private router: Router,
     private spinnerService: NgxSpinnerService
-  ) {
-    this.studentID = this.actRoute.snapshot.params.id;
-    //  console.log(this.studentID)
-    // this.getStudentInfo()
-  }
+  ) { }
+  // getLooksUp() {
+  //   this.apiService.getAPI(`getlookupsall`).subscribe((data) => {
+  //     this.getAll = data['data']
+  //     console.log(this.getAll)
+  //   })
+  // }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser')!)
     this.getAll = JSON.parse(window.localStorage.getItem('getAll')!)
 
-    this.dataSource1 = new MatTableDataSource() // create new object
-    this.dataSource1.paginator = this.tableTwoPaginator
-    this.dataSource1.sort = this.tableTwoSort
+      this.dataSource1 = new MatTableDataSource() // create new object
+      this.dataSource1.paginator = this.tableTwoPaginator
+      this.dataSource1.sort = this.tableTwoSort
 
-    this.dataSource2 = new MatTableDataSource() // create new object
-    this.dataSource2.paginator = this.tableThreePaginator
-    this.dataSource2.sort = this.tableThreeSort
-    // console.log('getall',this.getAll)
-    this.getcountry = this.getAll[0].Country
-    this.getcountry = this.getcountry.sort((a, b) => {
-      if (a.countryname > b.countryname) {
-        return 1;
-      } else if (a.countryname < b.countryname) {
-        return -1;
-      } else {
-        return 0;
+      this.dataSource2 = new MatTableDataSource() // create new object
+      this.dataSource2.paginator = this.tableThreePaginator
+      this.dataSource2.sort = this.tableThreeSort
+      // console.log('getall',this.getAll)
+      this.getcountry = this.getAll[0].Country
+      this.getcountry = this.getcountry.sort((a, b) => {
+        if (a.countryname > b.countryname) {
+          return 1;
+        } else if (a.countryname < b.countryname) {
+          return -1;
+        } else {
+          return 0;
+        }
+      });
+      this.getnationality = this.getAll[0].Nationality
+      this.getHomeLang = this.getAll[0].Language
+      this.getHomeLang = this.getHomeLang.sort((a, b) => a.languagename.localeCompare(b.languagename));
+      this.engStatusAll = this.getAll[0].EnglishSpeakingStatus
+      this.employmentStatus = this.getAll[0].EmploymentStatus
+      this.indigStatusAll = this.getAll[0].IndigenousStatus
+      this.schoolTypeAll = this.getAll[0].SchoolType
+      this.schoolLevel = this.getAll[0].SchoolLevel
+      this.disabilities = this.getAll[0].Disability
+      this.surveyStatus = this.getAll[0].SurveyContactStatus
+      this.states1 = this.getAll[0].State
+      this.applicationStatus = this.getAll[0].ApplicationStatus
+      this.deliveryMode = this.getAll[0].DeliveryMode
+      this.specificFunding = this.getAll[0].SpecificFunding
+      this.fundingSourceNational = this.getAll[0].FundingSourceNational
+      this.fundingSourceState = this.getAll[0].FundingSourceState
+      this.commencingProgram = this.getAll[0].CommencingProgram
+      this.reasonTakingCourse = this.getAll[0].ReasonTakingCourse
+      this.qualifications = this.getAll[0].Qualification
+      this.englishSpeakingScoreType = this.getAll[0].EnglishSpeakingScoreType
+      this.getVisa = this.getAll[0].VisaStatus
+      this.allStates = this.getAll[0].State
+      this.DocumentType = this.getAll[0].DocumentType
+
+      //New Student
+      this.stepLabel = 1
+      this.HFormGroup1 = this.fb.group({
+        userId: [this.userInfo.userid],
+        clientId: [''],
+        studentOriginId: [1],
+        title: [''],
+        firstName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.maxLength(40)]],
+        middleName: ['', [Validators.maxLength(40)]],
+        lastName: [null, [Validators.maxLength(40)]],
+        email: ['', [Validators.required, Validators.email, Validators.minLength(5), Validators.maxLength(80)]],
+        altEmail: ['', [Validators.maxLength(80)]],
+        dob: ['', [Validators.required]],
+        birthcountryId: [2],
+        nationalityId: [null],
+        gender: ['@', [Validators.required]],
+        telHome: ['', [Validators.maxLength(20)]],
+        telWork: ['', [Validators.maxLength(20)]],
+        mobile: [''],
+        mobile1: [''],
+        australianPr: ['Y'],
+        visaNo: [null, [Validators.maxLength(100)]],
+        visaStatusId: [null],
+        visaExpdate: [''],
+        passportNo: ['', [Validators.maxLength(100)]],
+        passportExpdate: [''],
+        emergencyContactName: [''],
+        emergencyContactRelationship: [''],
+        emergencyContactMobile: [''],
+        emergencyContactAddress: [''],
+        homeLanguageId: [16, [Validators.required]],
+        englishSpeakingStatusId: [1],
+        englishSpeakingScoreTypeId: [1],
+        englishSpeakingScore: [0],
+        englishSpeakingScoreExpdate: [null],
+        employmentStatusId: [9],
+        indigenousStatusId: [5, [Validators.required]],
+        stillInSecSchool: ['N'],
+        schoolTypeId: [null],
+        completedSchoolLevelId: [7, [Validators.required]],
+        PriorEducationalAchievementFlag: ['@', [Validators.required]],
+        disability: ['@', [Validators.required]],
+        surveyContactStatusId: [1, [Validators.required]],
+        statisticalAreaLevel1Id: ['', [Validators.maxLength(11)]],
+        statisticalAreaLevel2Id: ['', [Validators.maxLength(9)]],
+        signatoryText: ['', [Validators.maxLength(200)]],
+        usiNo: [null, [Validators.maxLength(10)]],
+        usiVerificationStatus: ['', [Validators.maxLength(100)]],
+        flatUnitDetails: ['', [Validators.maxLength(30)]],
+        streetNumber: ['', [Validators.required, Validators.maxLength(15)]],
+        streetName: ['', [Validators.required, Validators.maxLength(70)]],
+        buildingName: ['', [Validators.maxLength(50)]],
+        suburb: ['', [Validators.required]],
+        stateId: ['New South Wales'],
+        postCode: ['', [Validators.required, Validators.maxLength(4)]],
+        differentPostalAddress: ['N'],
+        flatUnitDetails_postal: ['', [Validators.maxLength(30)]],
+        streetNumber_postal: ['', [Validators.maxLength(15)]],
+        streetName_postal: ['', [Validators.maxLength(70)]],
+        buildingName_postal: ['', [Validators.maxLength(50)]],
+        suburb_postal: [''],
+        stateId_postal: ['New South Wales'],
+        postCode_postal: ['', [Validators.maxLength(4)]],
+        pobox_postal: ['', [Validators.maxLength(22)]],
+        disabilityDetails: this.fb.group({
+          disabilityId: [''],
+        }),
+        priorDetail: this.fb.group({
+          userId: [this.userInfo.userid],
+          studentId: [''],
+          QualificationId: ['']
+        }),
+        usiDetails: this.fb.group({
+          usi: [null, [Validators.maxLength(10)]],
+          firstName: ['', [Validators.pattern('[a-zA-Z ]*'), Validators.maxLength(20)]],
+          lastName: ['', [Validators.maxLength(20)]],
+          dobyyyy: ['', [Validators.maxLength(4)]],
+          dobmm: ['', [Validators.maxLength(2)]],
+          dobdd: ['', [Validators.maxLength(2)]],
+        })
+      })
+      if (!window.localStorage.getItem('studentOrigins')) {
+        this.apiService.getAPI(`getstudentorigin`).subscribe((data) => {
+          // console.log('postcodes',data)
+          this.studentOrigins = data['data']
+          window.localStorage.setItem("studentOrigins", JSON.stringify(this.studentOrigins))
+        })
       }
-    });
-    this.getnationality = this.getAll[0].Nationality
-    this.getHomeLang = this.getAll[0].Language
-    this.getHomeLang = this.getHomeLang.sort((a, b) => a.languagename.localeCompare(b.languagename));
-    this.engStatusAll = this.getAll[0].EnglishSpeakingStatus
-    this.employmentStatus = this.getAll[0].EmploymentStatus
-    this.indigStatusAll = this.getAll[0].IndigenousStatus
-    this.schoolTypeAll = this.getAll[0].SchoolType
-    this.schoolLevel = this.getAll[0].SchoolLevel
-    this.disabilities = this.getAll[0].Disability
-    this.surveyStatus = this.getAll[0].SurveyContactStatus
-    this.states1 = this.getAll[0].State
-    this.applicationStatus = this.getAll[0].ApplicationStatus
-    this.deliveryMode = this.getAll[0].DeliveryMode
-    this.specificFunding = this.getAll[0].SpecificFunding
-    this.fundingSourceNational = this.getAll[0].FundingSourceNational
-    this.fundingSourceState = this.getAll[0].FundingSourceState
-    this.commencingProgram = this.getAll[0].CommencingProgram
-    this.reasonTakingCourse = this.getAll[0].ReasonTakingCourse
-    this.qualifications = this.getAll[0].Qualification
-    this.englishSpeakingScoreType = this.getAll[0].EnglishSpeakingScoreType
-    this.getVisa = this.getAll[0].VisaStatus
-    this.allStates = this.getAll[0].State
-    this.DocumentType = this.getAll[0].DocumentType
+      else {
+        this.studentOrigins = JSON.parse(window.localStorage.getItem('studentOrigins')!)
+      }
+      this.apiService.getAPI('getclientid').subscribe((data) => {
+        // console.log(data);
+        this.clientID = data['data']
+        this.clientID = this.clientID.replace('clientId: \"', '')
+        this.clientID = this.clientID.slice(0, -1)
+      })
 
-    //New Student
-    this.stepLabel = 1
-    this.HFormGroup1 = this.fb.group({
-      userId: [this.userInfo.userid],
-      clientId: [''],
-      studentOriginId: [1],
-      title: [''],
-      firstName: ['', [Validators.required, Validators.pattern('[a-zA-Z ]*'), Validators.maxLength(40)]],
-      middleName: ['', [Validators.maxLength(40)]],
-      lastName: [null, [Validators.maxLength(40)]],
-      email: ['', [Validators.required, Validators.email, Validators.minLength(5), Validators.maxLength(80)]],
-      altEmail: ['', [Validators.maxLength(80)]],
-      dob: ['', [Validators.required]],
-      birthcountryId: [2],
-      nationalityId: [null],
-      gender: ['@', [Validators.required]],
-      telHome: ['', [Validators.maxLength(20)]],
-      telWork: ['', [Validators.maxLength(20)]],
-      mobile: [''],
-      mobile1: [''],
-      australianPr: ['Y'],
-      visaNo: [null, [Validators.maxLength(100)]],
-      visaStatusId: [null],
-      visaExpdate: [''],
-      passportNo: ['', [Validators.maxLength(100)]],
-      passportExpdate: [''],
-      emergencyContactName: [''],
-      emergencyContactRelationship: [''],
-      emergencyContactMobile: [''],
-      emergencyContactAddress: [''],
-      homeLanguageId: [16, [Validators.required]],
-      englishSpeakingStatusId: [1],
-      englishSpeakingScoreTypeId: [1],
-      englishSpeakingScore: [0],
-      englishSpeakingScoreExpdate: [null],
-      employmentStatusId: [9],
-      indigenousStatusId: [5, [Validators.required]],
-      stillInSecSchool: ['N'],
-      schoolTypeId: [null],
-      completedSchoolLevelId: [7, [Validators.required]],
-      PriorEducationalAchievementFlag: ['@', [Validators.required]],
-      disability: ['@', [Validators.required]],
-      surveyContactStatusId: [1, [Validators.required]],
-      statisticalAreaLevel1Id: ['', [Validators.maxLength(11)]],
-      statisticalAreaLevel2Id: ['', [Validators.maxLength(9)]],
-      signatoryText: ['', [Validators.maxLength(200)]],
-      usiNo: [null, [Validators.maxLength(10)]],
-      usiVerificationStatus: ['', [Validators.maxLength(100)]],
-      flatUnitDetails: ['', [Validators.maxLength(30)]],
-      streetNumber: ['', [Validators.required, Validators.maxLength(15)]],
-      streetName: ['', [Validators.required, Validators.maxLength(70)]],
-      buildingName: ['', [Validators.maxLength(50)]],
-      suburb: ['', [Validators.required]],
-      stateId: ['New South Wales'],
-      postCode: ['', [Validators.required, Validators.maxLength(4)]],
-      differentPostalAddress: ['N'],
-      flatUnitDetails_postal: ['', [Validators.maxLength(30)]],
-      streetNumber_postal: ['', [Validators.maxLength(15)]],
-      streetName_postal: ['', [Validators.maxLength(70)]],
-      buildingName_postal: ['', [Validators.maxLength(50)]],
-      suburb_postal: [''],
-      stateId_postal: ['New South Wales'],
-      postCode_postal: ['', [Validators.maxLength(4)]],
-      pobox_postal: ['', [Validators.maxLength(22)]],
-      disabilityDetails: this.fb.group({
-        disabilityId: [''],
-      }),
-      priorDetail: this.fb.group({
+      //Course
+      this.HFormGroup2 = this.fb.group({
+        courseIntakeDateId: ['', [Validators.required]]
+      })
+      this.dataSource = new MatTableDataSource() // create new object
+      this.getCourses()
+      this.dataSource.paginator = this.paginator
+      this.dataSource.sort = this.sort
+      //Units
+      this.HFormGroup3 = this.fb.group({
+        unitRows: this.fb.array([this.unitArr()])
+      })
+
+      //Enrolment
+      this.HFormGroup4 = this.fb.group({
         userId: [this.userInfo.userid],
         studentId: [''],
-        QualificationId: ['']
-      }),
-      usiDetails: this.fb.group({
-        usi: [null, [Validators.maxLength(10)]],
-        firstName: ['', [Validators.pattern('[a-zA-Z ]*'), Validators.maxLength(20)]],
-        lastName: ['', [Validators.maxLength(20)]],
-        dobyyyy: ['', [Validators.maxLength(4)]],
-        dobmm: ['', [Validators.maxLength(2)]],
-        dobdd: ['', [Validators.maxLength(2)]],
-      })
-    })
-    if (!window.localStorage.getItem('studentOrigins')) {
-      this.apiService.getAPI(`getstudentorigin`).subscribe((data) => {
-        // console.log('postcodes',data)
-        this.studentOrigins = data['data']
-        window.localStorage.setItem("studentOrigins", JSON.stringify(this.studentOrigins))
-      })
-    }
-    else {
-      this.studentOrigins = JSON.parse(window.localStorage.getItem('studentOrigins')!)
-    }
-    this.apiService.getAPI('getclientid').subscribe((data) => {
-      // console.log(data);
-      this.clientID = data['data']
-      this.clientID = this.clientID.replace('clientId: \"', '')
-      this.clientID = this.clientID.slice(0, -1)
-    })
-
-    //Course
-    this.HFormGroup2 = this.fb.group({
-      courseIntakeDateId: ['', [Validators.required]]
-    })
-    this.dataSource = new MatTableDataSource() // create new object
-    this.getCourses()
-    this.dataSource.paginator = this.paginator
-    this.dataSource.sort = this.sort
-    //Units
-    this.HFormGroup3 = this.fb.group({
-      unitRows: this.fb.array([this.unitArr()])
-    })
-
-    //Enrolment
-    this.HFormGroup4 = this.fb.group({
-      userId: [this.userInfo.userid],
-      studentId: [''],
-      studentOriginId: [''],
-      courseIntakeDateId: [''],
-      agentId: [null, [Validators.required]],
-      applicationStatusId: [2, [Validators.required]],
-      deliveryModeId: [1],
-      specificFundingId: [null],
-      fundingSourceNationalId: [4, [Validators.required]],
-      fundingSourceStateId: [null],
-      commencingProgramId: [1, [Validators.required]],
-      commencementDate: [new Date(), [Validators.required]],
-      courseDuration: [null],
-      courseDurationType: ['W', [Validators.required]],
-      expectedCompletionDate: [null, [Validators.required]],
-      trainingContractid: [null],
-      reasonTakingCourseId: [2, [Validators.required]],
-      applyForRPL: ['N'],
-      studentEnrolmentDate: [new Date(), [Validators.required]],
-      TuitionFee: ['0', [Validators.required]],
-      amountTypeId: [null, [Validators.required]],
-      agentCommission: [null, [Validators.required]],
-      offerLetterNumber: [this.offerLetterNumber, [Validators.required]],
-      gst: 'Y',
-
-    })
-    this.apiService.getAPI('getofferletternumber').subscribe((data) => {
-      const offerLetterString = data['data']; // e.g., "OfferLetterNumber: 5"
-      this.offerLetterNumber = parseInt(offerLetterString.split(':')[1].trim(), 10);
-      // console.log(this.offerLetterNumber)
-      this.HFormGroup4.patchValue({
-        offerLetterNumber: this.offerLetterNumber
+        studentOriginId: [''],
+        courseIntakeDateId: [''],
+        agentId: [null, [Validators.required]],
+        applicationStatusId: [2, [Validators.required]],
+        deliveryModeId: [1],
+        specificFundingId: [null],
+        fundingSourceNationalId: [4, [Validators.required]],
+        fundingSourceStateId: [null],
+        commencingProgramId: [1, [Validators.required]],
+        commencementDate: [new Date(), [Validators.required]],
+        courseDuration: [null],
+        courseDurationType: ['W', [Validators.required]],
+        expectedCompletionDate: [null, [Validators.required]],
+        trainingContractid: [null],
+        reasonTakingCourseId: [2, [Validators.required]],
+        applyForRPL: ['N'],
+        studentEnrolmentDate: [new Date(), [Validators.required]],
+        TuitionFee: ['0', [Validators.required]],
+        amountTypeId: [null, [Validators.required]],
+        agentCommission: [null, [Validators.required]],
+        offerLetterNumber: [this.offerLetterNumber, [Validators.required]],
+        gst: 'Y',
 
       })
-    })
-    // this.apiService.getAPI('getagent').subscribe((data) => {
-    //   this.agents = data['data']
-    // })
-    if (!window.localStorage.getItem('agents')) {
-      this.apiService.getAPI(`getagent`).subscribe((data) => {
-        // console.log('postcodes',data)
-        this.agents = data['data']
-        window.localStorage.setItem("agents", JSON.stringify(this.agents))
+      this.apiService.getAPI('getofferletternumber').subscribe((data) => {
+        const offerLetterString = data['data']; // e.g., "OfferLetterNumber: 5"
+        this.offerLetterNumber = parseInt(offerLetterString.split(':')[1].trim(), 10);
+        // console.log(this.offerLetterNumber)
+        this.HFormGroup4.patchValue({
+          offerLetterNumber: this.offerLetterNumber
+
+        })
       })
-    }
-    else {
-      this.agents = JSON.parse(window.localStorage.getItem('agents')!)
-      // console.log('agents',this.agents)
-    }
-
-    if (!window.localStorage.getItem('amounts')) {
-      this.apiService.getAPI(`getamounttype`).subscribe((data) => {
-        this.allAmounts = data['data']
-        window.localStorage.setItem("amounts", JSON.stringify(this.allAmounts))
-      })
-    }
-    else {
-      this.allAmounts = JSON.parse(window.localStorage.getItem('amounts')!)
-    }
-
-    if (!window.localStorage.getItem('trainingContract')) {
-      this.apiService.getAPI(`gettrainingcontract`).subscribe((data) => {
-        // console.log('postcodes',data)
-        this.trainingContract = data['data']
-        window.localStorage.setItem("trainingContract", JSON.stringify(this.trainingContract))
-      })
-    }
-    else {
-      this.trainingContract = JSON.parse(window.localStorage.getItem('trainingContract')!)
-    }
-
-    //Confirmation
-    this.HFormGroup6 = this.fb.group({
-      userId: [this.userInfo.userid],
-      studentEnrolmentId: [],
-      Rows: this.fb.array([this.newTAarrays()]),
-    })
-    //Document
-    this.HFormGroup5 = this.fb.group({
-      studentId: [''],
-      userId: [this.userInfo.userid],
-      docRows: this.fb.array([this.newDocArr()])
-    });
-
-
-    if (!window.localStorage.getItem('outcomenational')) {
-      this.apiService.getAPI(`getoutcomenational`).subscribe((data) => {
-        // console.log('postcodes',data)
-        this.outcomenational = data['data']
-        window.localStorage.setItem("outcomenational", JSON.stringify(this.outcomenational))
-      })
-    }
-    else {
-      this.outcomenational = JSON.parse(window.localStorage.getItem('outcomenational')!)
-    }
-
-
-
-    const control1 = <FormControl>this.HFormGroup1.get('stillInSecSchool')
-    const control2 = <FormControl>this.HFormGroup1.get('disability')
-    const control3 = <FormControl>this.HFormGroup1.get('usiDetails.usi')
-    const control4 = <FormControl>this.HFormGroup1.get('differentPostalAddress')
-
-    this.subscription = control1.valueChanges.subscribe(value => {
-      if (value == 'Y') {
-        this.HFormGroup1.controls["schoolTypeId"].setValidators([Validators.required])
+      // this.apiService.getAPI('getagent').subscribe((data) => {
+      //   this.agents = data['data']
+      // })
+      if (!window.localStorage.getItem('agents')) {
+        this.apiService.getAPI(`getagent`).subscribe((data) => {
+          // console.log('postcodes',data)
+          this.agents = data['data']
+          window.localStorage.setItem("agents", JSON.stringify(this.agents))
+        })
       }
       else {
-        this.HFormGroup1.controls["schoolTypeId"].setValidators(null)
+        this.agents = JSON.parse(window.localStorage.getItem('agents')!)
+        // console.log('agents',this.agents)
       }
-      this.HFormGroup1.controls["schoolTypeId"].updateValueAndValidity()
-    })
-    this.subscription = control2.valueChanges.subscribe(value => {
-      if (value == 'Y') {
-        this.HFormGroup1.controls['disabilityDetails'].get('disabilityId')!.setValidators([Validators.required])
-      }
-      else {
-        this.HFormGroup1.controls['disabilityDetails'].get('disabilityId')!.setValidators(null)
-      }
-      this.HFormGroup1.controls['disabilityDetails'].get('disabilityId')!.updateValueAndValidity()
-    })
-    this.subscription = control3.valueChanges.subscribe(value => {
-      if (value == 'Y') {
-        this.HFormGroup1.controls['usiDetails'].get('firstName')!.setValidators([Validators.required])
-        this.HFormGroup1.controls['usiDetails'].get('lastName')!.setValidators([Validators.required])
-        this.HFormGroup1.controls['usiDetails'].get('dobyyyy')!.setValidators([Validators.required])
-        this.HFormGroup1.controls['usiDetails'].get('dobmm')!.setValidators([Validators.required])
-        this.HFormGroup1.controls['usiDetails'].get('dobdd')!.setValidators([Validators.required])
-      }
-      else {
-        this.HFormGroup1.controls['usiDetails'].get('firstName')!.setValidators(null)
-        this.HFormGroup1.controls['usiDetails'].get('lastName')!.setValidators(null)
-        this.HFormGroup1.controls['usiDetails'].get('dobyyyy')!.setValidators(null)
-        this.HFormGroup1.controls['usiDetails'].get('dobmm')!.setValidators(null)
-        this.HFormGroup1.controls['usiDetails'].get('dobdd')!.setValidators(null)
-      }
-      this.HFormGroup1.controls['usiDetails'].get('firstName')!.updateValueAndValidity()
-      this.HFormGroup1.controls['usiDetails'].get('lastName')!.updateValueAndValidity()
-      this.HFormGroup1.controls['usiDetails'].get('dobyyyy')!.updateValueAndValidity()
-      this.HFormGroup1.controls['usiDetails'].get('dobmm')!.updateValueAndValidity()
-      this.HFormGroup1.controls['usiDetails'].get('dobdd')!.updateValueAndValidity()
-    })
 
+      if (!window.localStorage.getItem('amounts')) {
+        this.apiService.getAPI(`getamounttype`).subscribe((data) => {
+          this.allAmounts = data['data']
+          window.localStorage.setItem("amounts", JSON.stringify(this.allAmounts))
+        })
+      }
+      else {
+        this.allAmounts = JSON.parse(window.localStorage.getItem('amounts')!)
+      }
+
+      if (!window.localStorage.getItem('trainingContract')) {
+        this.apiService.getAPI(`gettrainingcontract`).subscribe((data) => {
+          // console.log('postcodes',data)
+          this.trainingContract = data['data']
+          window.localStorage.setItem("trainingContract", JSON.stringify(this.trainingContract))
+        })
+      }
+      else {
+        this.trainingContract = JSON.parse(window.localStorage.getItem('trainingContract')!)
+      }
+
+      //Confirmation
+      this.HFormGroup6 = this.fb.group({
+        userId: [this.userInfo.userid],
+        studentEnrolmentId: [],
+        Rows: this.fb.array([this.newTAarrays()]),
+      })
+      //Document
+      this.HFormGroup5 = this.fb.group({
+        studentId: [''],
+        userId: [this.userInfo.userid],
+        docRows: this.fb.array([this.newDocArr()])
+      });
+
+
+      if (!window.localStorage.getItem('outcomenational')) {
+        this.apiService.getAPI(`getoutcomenational`).subscribe((data) => {
+          // console.log('postcodes',data)
+          this.outcomenational = data['data']
+          window.localStorage.setItem("outcomenational", JSON.stringify(this.outcomenational))
+        })
+      }
+      else {
+        this.outcomenational = JSON.parse(window.localStorage.getItem('outcomenational')!)
+      }
+
+
+
+      const control1 = <FormControl>this.HFormGroup1.get('stillInSecSchool')
+      const control2 = <FormControl>this.HFormGroup1.get('disability')
+      const control3 = <FormControl>this.HFormGroup1.get('usiDetails.usi')
+      const control4 = <FormControl>this.HFormGroup1.get('differentPostalAddress')
+
+      this.subscription = control1.valueChanges.subscribe(value => {
+        if (value == 'Y') {
+          this.HFormGroup1.controls["schoolTypeId"].setValidators([Validators.required])
+        }
+        else {
+          this.HFormGroup1.controls["schoolTypeId"].setValidators(null)
+        }
+        this.HFormGroup1.controls["schoolTypeId"].updateValueAndValidity()
+      })
+      this.subscription = control2.valueChanges.subscribe(value => {
+        if (value == 'Y') {
+          this.HFormGroup1.controls['disabilityDetails'].get('disabilityId')!.setValidators([Validators.required])
+        }
+        else {
+          this.HFormGroup1.controls['disabilityDetails'].get('disabilityId')!.setValidators(null)
+        }
+        this.HFormGroup1.controls['disabilityDetails'].get('disabilityId')!.updateValueAndValidity()
+      })
+      this.subscription = control3.valueChanges.subscribe(value => {
+        if (value == 'Y') {
+          this.HFormGroup1.controls['usiDetails'].get('firstName')!.setValidators([Validators.required])
+          this.HFormGroup1.controls['usiDetails'].get('lastName')!.setValidators([Validators.required])
+          this.HFormGroup1.controls['usiDetails'].get('dobyyyy')!.setValidators([Validators.required])
+          this.HFormGroup1.controls['usiDetails'].get('dobmm')!.setValidators([Validators.required])
+          this.HFormGroup1.controls['usiDetails'].get('dobdd')!.setValidators([Validators.required])
+        }
+        else {
+          this.HFormGroup1.controls['usiDetails'].get('firstName')!.setValidators(null)
+          this.HFormGroup1.controls['usiDetails'].get('lastName')!.setValidators(null)
+          this.HFormGroup1.controls['usiDetails'].get('dobyyyy')!.setValidators(null)
+          this.HFormGroup1.controls['usiDetails'].get('dobmm')!.setValidators(null)
+          this.HFormGroup1.controls['usiDetails'].get('dobdd')!.setValidators(null)
+        }
+        this.HFormGroup1.controls['usiDetails'].get('firstName')!.updateValueAndValidity()
+        this.HFormGroup1.controls['usiDetails'].get('lastName')!.updateValueAndValidity()
+        this.HFormGroup1.controls['usiDetails'].get('dobyyyy')!.updateValueAndValidity()
+        this.HFormGroup1.controls['usiDetails'].get('dobmm')!.updateValueAndValidity()
+        this.HFormGroup1.controls['usiDetails'].get('dobdd')!.updateValueAndValidity()
+      })
   }
-
   compareTwoDates() {
     setTimeout(() => {
       this.error = { isError: false, errorMessage: '' }
@@ -1553,7 +1515,8 @@ export class NewStudentComponent implements OnInit {
       // Submit the final form
       this.apiService.postAPI('addstudentdocument', this.HFormGroup5.value).subscribe(() => {
         this.stepLabel++;
-        this.router.navigate(['/admin/enrolment/all-student']);
+        alert('Enrolment Form Submitted')
+        this.router.navigate(['/student-portal']);
       });
     });
   }

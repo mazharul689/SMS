@@ -1,170 +1,206 @@
-img{
-	width: 100%;
+/* Base Styles */
+.login {
+  height: 100vh;
+  width: 100%;
+  background: radial-gradient(#f5f4f7, #3F51B5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
-.paragraph{
+
+.login_box {
+  width: 100%;
+  max-width: 1000px;
+  height: auto;
+  min-height: 500px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 1px 4px 22px -8px #0004;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @media (min-width: 992px) {
+    height: 550px;
+    flex-direction: row;
+  }
+}
+
+/* Left Section */
+.left {
+  width: 100%;
+  padding: 57px 25px;
+  background: linear-gradient(-45deg, #dcd7e0, #fff);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  @media (min-width: 992px) {
+    width: 41%;
+    height: 100%;
+    padding: 25px;
+  }
+}
+
+.contact {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+
+  @media (min-width: 992px) {
+    width: 73%;
+  }
+}
+
+/* Right Section */
+.right {
+  display: none;
+  background: url(Banner.png) center/cover no-repeat;
+
+  @media (min-width: 992px) {
+    display: block;
+    width: 59%;
+    height: 100%;
+  }
+}
+
+/* Form Elements */
+.welcome {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-weight: 800;
+  text-align: center;
+  color: #333;
+  font-size: 2.2rem;
+  line-height: 1.2;
+  margin-bottom: 30px;
+
+  @media (min-width: 768px) {
+    font-size: 3rem;
+    line-height: 0.8;
+  }
+}
+
+input {
+  border: none;
+  width: 100%;
+  margin: 15px 0;
+  border-bottom: 1px solid #4f30677d;
+  padding: 12px 0;
+  background: transparent;
+  font-weight: 500;
+  font-size: 14px;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: #3F51B5;
+  }
+}
+
+/* Buttons */
+.submit {
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  width: 100%;
+  margin: 30px auto 0;
+  background: #583672;
+  color: #fff;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0px 9px 15px -11px rgba(88,54,114,1);
+
+  &:hover {
+    background: #3F51B5;
+    transform: translateY(-2px);
+  }
+
+  @media (min-width: 768px) {
+    padding: 15px 70px;
+    width: auto;
+    display: block;
+  }
+}
+
+.loading {
+  @extend .submit;
+  background: #3F51B5;
+}
+
+/* Images & Logos */
+.logoimg {
+  width: 120px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px;
+
+  @media (min-width: 768px) {
+    width: 150px;
+  }
+}
+
+.specialLogoimg {
+  width: 250px;
+  height: auto;
+  display: block;
+  margin: 0 auto 20px;
+
+  @media (min-width: 768px) {
+    width: 300px;
+  }
+}
+
+/* Error Message */
+.paragraph {
   text-align: center;
   color: red;
-  padding-top: 30px;
+  padding-top: 15px;
+  font-size: 14px;
+  margin: 0;
 }
+
+/* Spinner */
 .spinner-border {
   color: #fff;
   border-top-color: rgba(255, 255, 255, 0.2);
   border-right-color: rgba(255, 255, 255, 0.2);
   border-bottom-color: rgba(255, 255, 255, 0.2);
   border-left-color: #fff;
-}
-.login {
-    height: 100vh;
-    width: 100%;
-    background: radial-gradient(#f5f4f7, #3F51B5);
-    //#3F51B5 logo color
-    position: relative;
-}
-// @media screen and (max-width: 768px) {
-//   .login {
-//       height: 625; /* Change height to 'auto' when screen size is 768px or less */
-//   }
-// }
-.welcome {
-  text-rendering: optimizelegibility;
-  font-weight: 800;
-  color: inherit;
-  text-align: center;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  font-size: 3rem;
-  line-height: 0rem;
-  padding-top: 30px;
-}
-.login_box {
-    width: 1000px;
-    height: 550px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 1px 4px 22px -8px #0004;
-    display: flex;
-    overflow: hidden;
-}
-.login_box .left{
-  width: 41%;
-  height: 100%;
-  padding: 25px 25px;
-
-}
-.login_box .right{
-  width: 59%;
-  height: 100%
-}
-.left .top_link a {
-    color: #452A5A;
-    font-weight: 400;
-}
-.left .top_link{
-  height: 20px
-}
-.left .contact{
-	display: flex;
-    align-items: center;
-    justify-content: center;
-    align-self: center;
-    height: 100%;
-    width: 73%;
-    margin: auto;
-}
-.left h3{
-  text-align: center;
-  margin-bottom: 40px;
-}
-.left input {
-    border: none;
-    width: 80%;
-    margin: 15px 0px;
-    border-bottom: 1px solid #4f30677d;
-    padding: 7px 9px;
-    width: 100%;
-    overflow: hidden;
-    background: transparent;
-    font-weight: 500;
-    font-size: 14px;
-}
-.left{
-	background: linear-gradient(-45deg, #dcd7e0, #fff);
-}
-.submit {
-    border: none;
-    padding: 15px 70px;
-    border-radius: 8px;
-    display: block;
-    margin: auto;
-    margin-top: 30px;
-    background: #583672;
-    color: #fff;
-    font-weight: bold;
-    -webkit-box-shadow: 0px 9px 15px -11px rgba(88,54,114,1);
-    -moz-box-shadow: 0px 9px 15px -11px rgba(88,54,114,1);
-    box-shadow: 0px 9px 15px -11px rgba(88,54,114,1);
+  width: 1rem;
+  height: 1rem;
 }
 
-.loading {
-  border: none;
-  padding: 15px 30px;
-  border-radius: 8px;
-  display: block;
-  margin: auto;
-  // margin-top: 30px;
-  background: #3F51B5;
-  color: #fff;
-  font-weight: bold;
-  -webkit-box-shadow: 0px 9px 15px -11px #3F51B5;
-  -moz-box-shadow: 0px 9px 15px -11px #3F51B5;
-  box-shadow: 0px 9px 15px -11px #3F51B5;
+/* Mobile Optimizations */
+@media (max-width: 480px) {
+  .login {
+    padding: 15px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .login_box {
+    min-height: 400px;
+  }
+
+  .left {
+    padding: 20px 15px;
+  }
+
+  .welcome {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+  }
+
+  input {
+    padding: 10px 0;
+    margin: 10px 0;
+  }
+
+  .submit {
+    margin-top: 20px;
+    padding: 12px;
+  }
 }
-
-
-
-.right {
-	background: url(Banner.png);
-	color: #fff;
-	position: relative;
-}
-
-.right .right-text{
-  height: 100%;
-  position: relative;
-  transform: translate(0%, 45%);
-}
-.right-text h2{
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 50px;
-  font-weight: 500;
-}
-.right-text h5{
-  display: block;
-  width: 100%;
-  text-align: center;
-  font-size: 19px;
-  font-weight: 400;
-}
-
-.right .right-inductor{
-  position: absolute;
-  width: 70px;
-  height: 7px;
-  background: #fff0;
-  left: 50%;
-  bottom: 70px;
-  transform: translate(-50%, 0%);
-}
-.top_link img {
-    width: 28px;
-    padding-right: 7px;
-    margin-top: -3px;
-}
-
-
-

@@ -5,11 +5,16 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './core/guard/auth.guard';
 import { Role } from './core/models/role';
-import { PublicPortalComponent } from './public-portal/public-portal.component';
 const routes: Routes = [
   {
     path: 'student-portal',
-    component: PublicPortalComponent
+    loadChildren: () =>
+      import('./student-portal/student-portal.module').then((m) => m.StudentPortalModule),
+  },
+  {
+    path: 'charts',
+    loadChildren: () =>
+      import('./charts/charts.module').then((m) => m.ChartsModule),
   },
   {
     path: '',
@@ -20,10 +25,10 @@ const routes: Routes = [
      // { path: '', redirectTo: '/auth/signin', pathMatch: 'full' },
       {
         path: 'admin',
-        canActivate: [AuthGuard],
-        data: {
-          role: Role.Admin,
-        },
+        // canActivate: [AuthGuard],
+        // data: {
+        //   role: Role.Admin,
+        // },
         loadChildren: () =>
           import('./admin/admin.module').then((m) => m.AdminModule),
       },
@@ -38,10 +43,10 @@ const routes: Routes = [
       },
       {
         path: 'student',
-        canActivate: [AuthGuard],
-        data: {
-          role: Role.Student,
-        },
+        // canActivate: [AuthGuard],
+        // data: {
+        //   role: Role.Student,
+        // },
         loadChildren: () =>
           import('./student/student.module').then((m) => m.StudentModule),
       },
@@ -96,11 +101,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./media/media.module').then((m) => m.MediaModule),
       },
-      {
-        path: 'charts',
-        loadChildren: () =>
-          import('./charts/charts.module').then((m) => m.ChartsModule),
-      },
+      // {
+      //   path: 'charts',
+      //   loadChildren: () =>
+      //     import('./charts/charts.module').then((m) => m.ChartsModule),
+      // },
       {
         path: 'timeline',
         loadChildren: () =>
