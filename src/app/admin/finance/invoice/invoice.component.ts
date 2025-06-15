@@ -65,6 +65,7 @@ export class InvoiceComponent implements OnInit {
   paymentScheduleDetails: any;
   showRows = false
   allItem: any;
+  allRuleType: any;
   filteredItems: any[];
   enableSaveButton: any;
   userInfo: any;
@@ -145,11 +146,17 @@ export class InvoiceComponent implements OnInit {
       this.allItem = data['data']
       this.filteredItems = this.allItem.slice();
     }))
+    this.apiService.getAPI('getruletype').subscribe((data => {
+      this.allRuleType = data['data']
+      for (let i in this.allRuleType) {
+        this.allRuleType[i].ruletype = this.allRuleType[i].ruletype.replace(/<\/?p>/g, ' ');
+      }
+    }))
     console.log('hform1', this.HFormGroup1.value)
 
   }
   assignInitialData() {
-    this.apiService.getAPI('getinvoicenumber').subscribe((data => {
+    this.apiService.getAPI(`getinvoicenumber?id=${this.studentEnrolementId}`).subscribe((data => {
       const clientIdMatch = data['data'].match(/clientId: \"(.*?)\"/);
 
 
@@ -491,7 +498,8 @@ export class InvoiceComponent implements OnInit {
         gstAmount: 0,
         agentCommission: 0,
         amount: form1Value.AdditionalItem[0].Rowsrules[j].amount,
-        paidAmount: 0
+        paidAmount: 0,
+        isPaid: 'N'
       });
 
       // Add ruleData to the array
@@ -536,7 +544,7 @@ export class InvoiceComponent implements OnInit {
       paymentDesc: form1Value.AdditionalItem[0].paymentDesc,
       totalAgentCommission: form1Value.AdditionalItem[0].totalAgentCommission,
       totalgst: form1Value.AdditionalItem[0].totalgst,
-      Rows: form1Value.AdditionalItem[0].Rowsrules,
+      Rows: this.fb.array(invoiceItemDetailsArray).value,
       financeItemId: form1Value.AdditionalItem[0].financeItemId,
       studentEnrolmentId: this.studentEnrolementId
     })

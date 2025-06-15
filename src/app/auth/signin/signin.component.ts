@@ -79,7 +79,7 @@ export class SigninComponent implements OnInit {
       // this.apiService.authPostAPI(`login`, this.authForm).subscribe((data)=>{
       //   console.log(data)
       // });
-      this.authService.login(this.f.username.value, this.f.password.value).subscribe(
+      this.authService.login(this.f.username.value, this.f.password.value, window.location.href).subscribe(
           (res) => {
             if (res) {
               setTimeout(() => {

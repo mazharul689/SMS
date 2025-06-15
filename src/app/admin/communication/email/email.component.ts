@@ -18,7 +18,9 @@ import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
 } from "@angular/material/core";
-import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import * as ClassicEditor from 'src/assets/ckeditor/build/ckeditor';
+
 import {
   ChangeEvent,
   FocusEvent,
@@ -132,6 +134,21 @@ export class EmailComponent implements OnInit {
   applicationStatusFilter = new FormControl(6);
   usiFilter = new FormControl();
   studentNameFilter = new FormControl();
+  paymentStatusFilter = new FormControl();
+  allPaymentStatus = [
+    {
+      status: 'Paid',
+      id: 'paid'
+    },
+    {
+      status: 'Unpaid',
+      id: 'unpaid'
+    },
+    {
+      status: 'Over Due',
+      id: 'overdue'
+    }
+  ]
   constructor(
     private fb: FormBuilder,
     public httpClient: HttpClient,
@@ -233,7 +250,7 @@ export class EmailComponent implements OnInit {
       from_email_address: this.fromEmails[id - 1].from_email_address,
     });
   }
-  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any) {
+  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, pstatus: any) {
     // this.selection.clear
     this.selection = new SelectionModel<Students>(true, []);
     let queryParams = [];
@@ -256,6 +273,9 @@ export class EmailComponent implements OnInit {
     }
     if (name) {
       queryParams.push(`studentname=${name}`);
+    }
+    if (pstatus) {
+      queryParams.push(`paymentstatus=${pstatus}`);
     }
     // console.log(queryParams)
     // If there are any query parameters, make the API call

@@ -4,7 +4,8 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { ApiService } from 'src/app/api/api.service'
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, } from '@angular/material-moment-adapter'
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core'
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from 'src/assets/ckeditor/build/ckeditor';
 import { ChangeEvent, FocusEvent, BlurEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 import Adapter from './ckeditorAdapter';
 import { MatTableDataSource } from '@angular/material/table';

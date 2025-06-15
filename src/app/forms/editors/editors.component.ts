@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from 'src/assets/ckeditor/build/ckeditor';
+
 // import Editor from 'ckeditor5-custom-build-mazhar/build/ckeditor';
 
 @Component({

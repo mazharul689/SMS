@@ -1936,7 +1936,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     const docRowsArray = this.HFormGroup5.get('docRows') as FormArray;
     const uploadRequests: Observable<any>[] = [];
 
-    for (let i = this.docLength; i < this.docRows.length; i++) {
+    for (let i = 0; i < this.docRows.length; i++) {
       let file: File | undefined = this.selectedFiles ? this.selectedFiles[i] : undefined;
 
       if (file) {

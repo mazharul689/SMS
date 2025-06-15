@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/api/api.service';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from 'src/assets/ckeditor/build/ckeditor';
+
 import { ChangeEvent, FocusEvent, BlurEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 import Adapter from './ckeditorAdapter';
 import { Router } from '@angular/router';

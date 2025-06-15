@@ -7,7 +7,9 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter'
 import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from 'src/assets/ckeditor/build/ckeditor';
+
 import { ChangeEvent, FocusEvent, BlurEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 import Adapter from './ckeditorAdapter';
 const moment = _rollupMoment || _moment;

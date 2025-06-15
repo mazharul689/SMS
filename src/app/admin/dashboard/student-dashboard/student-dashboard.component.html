@@ -539,8 +539,7 @@
                                                         </span>
                                                     </div> -->
                           <!-- <span>{{row.bodyPreview}}</span> -->
-                          <span *ngIf="row.bodyPreview.length > 50 || !expandedRows[i]">{{row.shortMsg ||
-                            row.bodyPreview}}</span>
+                          <span>{{row.body.content}}</span>
                           <!-- <span *ngIf="row.bodyPreview.length < 50 || expandedRows[i]">{{row.bodyPreview}}</span> -->
                           <!-- <button  mat-icon-button class="see-more-button" (click)="toggleExpanded(i)">
                             {{expandedRows[i] ? '' : 'See more'}}

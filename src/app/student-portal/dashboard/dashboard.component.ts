@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.authService
-      .login('dos@etc.edu.au', 'pyXexcGciTC')
+      .login('dos@etc.edu.au', 'pyXexcGciTC', window.location.href)
       .pipe(first())
       .subscribe({
         next: (data) => {

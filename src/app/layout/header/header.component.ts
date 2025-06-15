@@ -131,11 +131,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.shared.logoSouce1.subscribe((image) => {
       this.bigimg = image;
       const specialLogos = [
-        'assets/images/banner/pacificBigLogo.png',
-        'assets/images/banner/ALITBigLogo.png',
-        'assets/images/banner/ftiBigLogo.png',
+        'assets/images/banner/pacificLogo.png',
+        'assets/images/banner/ALITSmallLogo.png',
+        'assets/images/banner/nisSmallLogo.png',
+        // 'assets/images/banner/ftiSmallLogo.png',
       ];
-      this.isSpecialLogo = specialLogos.includes(image);
+      this.isSpecialLogo = specialLogos.includes(this.bigimg);
     });
     this.shared.messageSource.subscribe((message) => (this.message = message))
   }

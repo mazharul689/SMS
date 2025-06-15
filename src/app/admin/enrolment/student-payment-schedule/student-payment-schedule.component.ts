@@ -13,7 +13,9 @@ import { default as _rollupMoment } from 'moment';
 const moment = _rollupMoment || _moment;
 import { MatDialog } from '@angular/material/dialog'
 import { ChangeDetectorRef } from '@angular/core';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from 'src/assets/ckeditor/build/ckeditor';
+
 import { ChangeEvent, FocusEvent, BlurEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 import Adapter from './ckeditorAdapter';
 import { DeleteStudentPaymentScheduleDialogComponent } from './delete-student-payment-schedule-dialog/delete-student-payment-schedule-dialog.component';

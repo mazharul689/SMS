@@ -53,6 +53,7 @@ export class ShareService {
     '5029': { cliLogo: 'assets/images/banner/bibeBigLogo.png', logoSrc1: 'assets/images/banner/bibeSmallLogo.png' },
     '5033': { cliLogo: 'assets/images/banner/ftiBigLogo.png', logoSrc1: 'assets/images/banner/ftiSmallLogo.png' },
     '5035': { cliLogo: 'assets/images/banner/gcmBigLogo.png', logoSrc1: 'assets/images/banner/gcmSmallLogo.png' },
+    '5038': { cliLogo: 'assets/images/banner/nisBigLogo.png', logoSrc1: 'assets/images/banner/nisSmallLogo.png' },
   };
 
   private defaultLogos = {

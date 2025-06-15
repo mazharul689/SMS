@@ -78,7 +78,8 @@
                 </div>
               </div> -->
               <div *ngIf="!this.errorsEncounter.isError">
-                <div class="row" style="padding-bottom: 20px" *ngIf="enableSaveButton == 'N'">
+                <div class="row" style="padding-bottom: 20px">
+                  <!-- <div class="row" style="padding-bottom: 20px" *ngIf="enableSaveButton == 'N'"> -->
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 text-end">
                     <div class="example-button-row">
                       <button class="btn-space" mat-raised-button color="primary" (click)="addItem()">
@@ -241,8 +242,8 @@
                         </mat-cell>
                       </ng-container>
                       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                      <mat-row class="table-row" [class.requiredSave]="enableSaveButton == 'Y'" [class.focus]="row.isPaid == 'F'" [class.partial]="row.isPaid == 'P'"
-                        *matRowDef="
+                      <mat-row class="table-row" [class.requiredSave]="enableSaveButton == 'Y'"
+                        [class.focus]="row.isPaid == 'F'" [class.partial]="row.isPaid == 'P'" *matRowDef="
                           let row;
                           let i = index;
                           columns: displayedColumns
@@ -333,9 +334,17 @@
                         ">
                         <div class="row" [formGroupName]="j">
                           <div class="col-2">
-                            <mat-form-field class="example-full-width" appearance="outline">
+                            <!-- <mat-form-field class="example-full-width" appearance="outline">
                               <mat-label>Item Name</mat-label>
                               <input matInput formControlName="itemName" />
+                            </mat-form-field> -->
+                            <mat-form-field class="example-full-width mb-3" appearance="outline">
+                              <mat-label>Rule Type</mat-label>
+                              <mat-select formControlName="itemName">
+                                <mat-option *ngFor="let item of allRuleType" [value]="item.ruletype">
+                                  {{ item.ruletype }}
+                                </mat-option>
+                              </mat-select>
                             </mat-form-field>
                           </div>
                           <div class="col-2">

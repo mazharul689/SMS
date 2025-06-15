@@ -16,6 +16,7 @@ import { forkJoin } from 'rxjs';
 export interface Login {
   username: string | null;
   password: string;
+  url: string | null;
 }
 @Component({
   selector: 'app-signin',
@@ -83,6 +84,7 @@ export class SigninComponent implements OnInit {
         'assets/images/banner/pacificBigLogo.png',
         'assets/images/banner/ALITBigLogo.png',
         'assets/images/banner/ftiBigLogo.png',
+        'assets/images/banner/nisBigLogo.png',
       ];
       this.isSpecialLogo = specialLogos.includes(image);
     });
@@ -111,7 +113,9 @@ export class SigninComponent implements OnInit {
     this.authForm = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
+      url: window.location.href
     });
+    // console.log(this.authForm)
     this.shared.messageSource.subscribe((message) => (this.message = message))
     this.shared.logoSouce.subscribe((logo) => (this.logo = logo))
   }
@@ -146,7 +150,7 @@ export class SigninComponent implements OnInit {
     this.spinner.show();
     // Make login request here
     this.authService
-      .login(this.f.username.value, this.f.password.value)
+      .login(this.f.username.value, this.f.password.value, this.f.url.value)
       .pipe(first())
       .subscribe({
         next: (data) => {

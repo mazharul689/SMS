@@ -1,6 +1,7 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject, OnInit } from '@angular/core';
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from 'src/assets/ckeditor/build/ckeditor';
 import { ApiService } from 'src/app/api/api.service';
 import { Router } from '@angular/router';
 import Adapter from '../../email/ckeditorAdapter';

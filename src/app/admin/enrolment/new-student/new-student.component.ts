@@ -1517,7 +1517,9 @@ export class NewStudentComponent implements OnInit {
   onDocumentSubmit(stepper: MatStepper) {
     this.HFormGroup5.get('studentId').setValue(this.studentID);
 
-    if (!this.selectedFiles.length) return;
+    if (!this.selectedFiles.length){
+        this.router.navigate(['/admin/enrolment/all-student']);
+    }
 
     const docRowsArray = this.HFormGroup5.get('docRows') as FormArray;
     const uploadPromises: Observable<any>[] = [];

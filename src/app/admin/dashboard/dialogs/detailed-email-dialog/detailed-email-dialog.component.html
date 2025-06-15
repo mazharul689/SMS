@@ -49,7 +49,7 @@
                         </div>
                         <div class="col-10">
                             <ckeditor [editor]="Editor" (ready)="onReady($event)" [disabled]="true"
-                        data={{data.bodyPreview}} ></ckeditor>
+                        data={{data.body.content}} ></ckeditor>
                         </div>
                     </div>
                     <div class="row info" *ngIf="data.email_attachment">

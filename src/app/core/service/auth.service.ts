@@ -55,8 +55,8 @@ export class AuthService {
   //     );
   // }
 
-  login(username: string, password: string) {
-    return this.http.post<any>(`${environment.testURL}/login`, { username, password }).pipe(map((user) => {
+  login(username: string, password: string, url:string) {
+    return this.http.post<any>(`${environment.testURL}/login`, { username, password, url }).pipe(map((user) => {
       // user.role = 'Admin'
       // store user details and jwt token in local storage to keep user logged in between page refreshes
       if(user.role){

@@ -4,7 +4,9 @@ import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@ang
 import { ApiService } from 'src/app/api/api.service'
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, } from '@angular/material-moment-adapter'
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core'
-import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import * as ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import * as ClassicEditor from 'src/assets/ckeditor/build/ckeditor';
+
 import { ChangeEvent, FocusEvent, BlurEvent } from '@ckeditor/ckeditor5-angular/ckeditor.component';
 import Adapter from './ckeditorAdapter';
 import { MatTableDataSource } from '@angular/material/table';
@@ -35,9 +37,27 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class EditEmailTemplateComponent implements OnInit {
   HFormGroup1: FormGroup
   public Editor = ClassicEditor;
+  // public editorConfig = {
+  //   toolbar: [],  // This disables the toolbar by providing an empty array.
+  //   // You can add any other configuration options if needed.
+  // };
   public editorConfig = {
-    toolbar: [],  // This disables the toolbar by providing an empty array.
-    // You can add any other configuration options if needed.
+    htmlSupport: {
+      allow: [
+        {
+          name: /.*/,
+          attributes: true,
+          classes: true,
+          styles: true
+        }
+      ]
+    },
+    // Preserve whitespace and formatting
+    enterMode: 'paragraph', // Creates <p> on Enter
+    shiftEnterMode: 'br',    // Creates <br> on Shift+Enter
+    // Force HTML output
+    forcePasteAsPlainText: false,
+    
   };
   public componentEvents: string[] = [];
   emailTemplateId: any;
