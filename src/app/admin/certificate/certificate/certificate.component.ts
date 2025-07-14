@@ -351,7 +351,7 @@ export class CertificateComponent implements OnInit {
     this.errorsReqEn = { isError: false, errorMessage: '' };
     this.errorsReq = { isError: false, errorMessage: '' }
     //console.log('row', rows)
-    if (this.outcomeCheck.msg) {
+    if (this.outcomeCheck.msg || certificateBody.certificateType == 'S') {
       this.apiService.postAPI('addcertificate', certificateBody).subscribe((data) => {
         this.disabled = false
         // //console.log('passed',data['data'])

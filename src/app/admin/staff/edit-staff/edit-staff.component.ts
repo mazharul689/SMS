@@ -135,6 +135,7 @@ export class EditStaffComponent implements OnInit {
       isactive: ['Y'],
       positionTitleId: [1],
       profilePicLoc: [''],
+      staffId: [null],
       // roleId: [1],
       userId: [this.userInfo.userid]
     })
@@ -152,6 +153,7 @@ export class EditStaffComponent implements OnInit {
       this.stateName = staff.stateid
       this.HFormGroup1.patchValue({
         title: staff.title,
+        staffId: staff.staffid,
         firstName: staff.firstname,
         lastName: staff.lastname,
         countryId: staff.countryid,
@@ -214,7 +216,7 @@ export class EditStaffComponent implements OnInit {
           staffBody = this.HFormGroup1.value
           console.log('formvalue', staffBody)
           var show = document.getElementById('closebtn')
-          this.apiService.postAPI('editstaff', staffBody).subscribe((data) => {
+          this.apiService.postAPI(`editstaff?id=${this.staffId}`, staffBody).subscribe((data) => {
             if (data['data'][0] && data['data'][0]['error']) {
               window.scroll(0, 0)
               this.errorsReq = { isError: true, errorMessage: data['data'][0].error_msg }
@@ -238,7 +240,7 @@ export class EditStaffComponent implements OnInit {
       staffBody.stateId = this.stateName
       console.log('formvalue',staffBody)
       var show = document.getElementById('closebtn')
-      this.apiService.postAPI('editstaff', staffBody).subscribe((data) => {
+      this.apiService.postAPI(`editstaff?id=${this.staffId}`, staffBody).subscribe((data) => {
         if (data['data'][0] && data['data'][0]['error']) {
           window.scroll(0, 0)
           this.errorsReq = { isError: true, errorMessage: data['data'][0].error_msg }

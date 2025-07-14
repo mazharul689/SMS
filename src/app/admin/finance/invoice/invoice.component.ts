@@ -157,13 +157,14 @@ export class InvoiceComponent implements OnInit {
   }
   assignInitialData() {
     this.apiService.getAPI(`getinvoicenumber?id=${this.studentEnrolementId}`).subscribe((data => {
-      const clientIdMatch = data['data'].match(/clientId: \"(.*?)\"/);
+      const clientIdMatch = data['data'].match(/invoiceNumber:\s*(\w+)/);
+      // console.log(data['data'].match(/invoiceNumber:\s*(\w+)/))
 
 
       if (clientIdMatch && clientIdMatch[1]) {
         this.invNo = clientIdMatch[1];
       }
-
+      console.log('inv',this.invNo)
       this.AdditionalItem.clear();
       let invoiceItemDetailsArray: FormGroup[] = [];
       let ruleData = this.fb.group({
@@ -195,6 +196,7 @@ export class InvoiceComponent implements OnInit {
       });
       (this.HFormGroup1.get('AdditionalItem') as FormArray).push(rowData)
     }))
+
   }
   filterItems(value: any): any[] {
     if (value) {

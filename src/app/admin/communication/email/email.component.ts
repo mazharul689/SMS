@@ -39,6 +39,8 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
+import * as ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 export interface Students {
   // highlighted?: boolean
   rowID;
@@ -92,7 +94,8 @@ export class EmailComponent implements OnInit {
   lastNameFilter = new FormControl("");
   courseNameFilter = new FormControl("");
   emailFilter = new FormControl("");
-
+  due_start_dateFilter = new FormControl("");
+  due_end_dateFilter = new FormControl("");
   filteredValues = {
     courseIntakeDateId: "",
     clientid: "",
@@ -250,7 +253,8 @@ export class EmailComponent implements OnInit {
       from_email_address: this.fromEmails[id - 1].from_email_address,
     });
   }
-  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, pstatus: any) {
+  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, pstatus: any, dsdate: any, dedate: any) {
+    console.log(dsdate)
     // this.selection.clear
     this.selection = new SelectionModel<Students>(true, []);
     let queryParams = [];
@@ -277,6 +281,14 @@ export class EmailComponent implements OnInit {
     if (pstatus) {
       queryParams.push(`paymentstatus=${pstatus}`);
     }
+    if(dsdate){
+      dsdate = this.datePipe.transform(dsdate,'yyyy-MM-dd');
+      queryParams.push(`due_start_date=${dsdate}`);
+    }
+    if(dedate){
+      dedate = this.datePipe.transform(dedate,'yyyy-MM-dd');
+      queryParams.push(`due_end_date=${dedate}`);
+    }
     // console.log(queryParams)
     // If there are any query parameters, make the API call
     if (queryParams.length > 0) {
@@ -294,7 +306,7 @@ export class EmailComponent implements OnInit {
           for (let i in this.students) {
             this.students[i].rowID = i;
             this.students[i].fullname =
-            this.students[i].firstname + " " + this.students[i].lastname;
+              this.students[i].firstname + " " + this.students[i].lastname;
           }
           this.dataSource.data = this.students; // on data receive populate dataSource.data array
           // console.log(this.dataSource.data);
@@ -459,7 +471,7 @@ export class EmailComponent implements OnInit {
     data: { [key: string]: string | number | null }
   ): string {
     let result = template;
-    console.log('check',data);
+    console.log('check', data);
     // Iterate over each key-value pair in the data object
     for (const [key, value] of Object.entries(data)) {
       const placeholder = `{${key}}`; // Placeholder format, e.g., {TotalFee}
@@ -606,4 +618,214 @@ export class EmailComponent implements OnInit {
   }
   onPaste($event: any): void { }
   onDrop(ev) { }
+  testByMazhar() {
+    const title = 'Students List';
+    const headers = [
+      "Client Id",
+      "Name",
+      "Course Code",
+      "Course Name",
+      "Class Name",
+      "Email",
+      "Alt.Email",
+      "Commencement Date",
+      "Expected Completion Date",
+      "Enrollment Status",
+      "Address Line 1",
+      "Address Line 2",
+      "Agent Contact Email",
+      "Agent ID",
+      "Application Status ID",
+      "Building Name Postal",
+      "Course ID",
+      "Course Total Fee",
+      "Current Date",
+      "Different Postal Address",
+      "Date of Birth",
+      "Due Amount (Current Term)",
+      "Due Amount (Last Term)",
+      "Emergency Contact Address",
+      "Emergency Contact Mobile",
+      "Emergency Contact Name",
+      "Emergency Contact Relationship",
+      "End Date",
+      "English Speaking Score",
+      "English Speaking Score Expiry",
+      "English Speaking Score Type",
+      "English Speaking Status",
+      "First Name",
+      "Flat/Unit Details Postal",
+      "Gender",
+      "Last Name",
+      "Middle Name",
+      "Mobile",
+      "Passport Expiry Date",
+      "Passport No",
+      "Payment Plan Due Date (Current Term)",
+      "PO Box Postal",
+      "Postcode Postal",
+      "Start Date",
+      "State ID Postal",
+      "Street Name Postal",
+      "Street Number Postal",
+      "Student Enrolment Date",
+      "Student Enrolment ID",
+      "Student ID",
+      "Suburb Postal",
+      "Tel Home",
+      "Tel Work",
+      "Title",
+      "Total Paid (Current Term)",
+      "Total Paid (Last Term)",
+      "Total Fee (Current Term)",
+      "Total Fee (Last Term)",
+      "USI No",
+      "USI Verification Status"
+    ];
+
+    const data = this.students.map(student => [
+      student.clientid,
+      student.studentname,
+      student.coursecode,
+      student.coursename,
+      student.classname,
+      student.email,
+      student.altemail,
+      student.commencementdate,
+      student.expectedcompletiondate,
+      student.applicationstatusname,
+      student.address_line_1,
+      student.address_line_2,
+      student.agent_contactemail,
+      student.agentid,
+      student.applicationstatusid,
+      student.buildingname_postal,
+      student.courseid,
+      student.coursetotalfee,
+      student.currentdate,
+      student.differentpostaladdress,
+      student.dob,
+      student.dueamount_upto_current_term,
+      student.dueamount_upto_last_term,
+      student.emergencycontactaddress,
+      student.emergencycontactmobile,
+      student.emergencycontactname,
+      student.emergencycontactrelationship,
+      student.enddate,
+      student.englishspeakingscore,
+      student.englishspeakingscoreexpdate,
+      student.englishspeakingscoretype,
+      student.englishspeakingstatus,
+      student.firstname,
+      student.flatunitdetails_postal,
+      student.gender,
+      student.lastname,
+      student.middlename,
+      student.mobile,
+      student.passportexpdate,
+      student.passportno,
+      student.paymentplaninstalmentduedate_upto_current_term,
+      student.pobox_postal,
+      student.postcode_postal,
+      student.startdate,
+      student.stateid_postal,
+      student.streetname_postal,
+      student.streetnumber_postal,
+      student.studentenrolmentdate,
+      student.studentenrolmentid,
+      student.studentid,
+      student.suburb_postal,
+      student.telhome,
+      student.telwork,
+      student.title,
+      student.totalamountpaid_upto_current_term,
+      student.totalamountpaid_upto_last_term,
+      student.totalfee_upto_current_term,
+      student.totalfee_upto_last_term,
+      student.usino,
+      student.usiverificationstatus
+    ]);
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Students');
+
+    const titleRow = worksheet.addRow([title]);
+    titleRow.font = {
+      family: 4,
+      size: 16,
+      bold: true
+    };
+    titleRow.alignment = { horizontal: 'center', vertical: 'middle' };
+    worksheet.mergeCells('A1:BH2');
+    const headerRow = worksheet.addRow(headers);
+    headerRow.eachCell((cell, number) => {
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' }
+      };
+      cell.font = {
+        family: 4,
+        size: 12,
+        bold: true,
+        color: { argb: 'FFFFFFFF' } // White font color
+      };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF000000' } // Black background color
+      };
+    });
+    worksheet.autoFilter = {
+      from: 'A3', // Starting cell of the header row
+      to: 'BH3'    // Ending cell of the header row (adjust based on your last column)
+    };
+    data.forEach(d => {
+      const row = worksheet.addRow(d);
+      const qty = row.getCell(5);
+
+    });
+    worksheet.eachRow({ includeEmpty: true }, (row) => {
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        };
+      });
+    });
+    // worksheet.getColumn(1).width = 13
+    // worksheet.getColumn(2).width = 17;
+    // worksheet.getColumn(3).width = 15;
+    // worksheet.getColumn(4).width = 45;
+    // worksheet.getColumn(5).width = 15;
+    // worksheet.getColumn(6).width = 28;
+    // worksheet.getColumn(7).width = 25;
+    // worksheet.getColumn(8).width = 25;
+    // worksheet.getColumn(9).width = 28;
+    // worksheet.getColumn(10).width = 20;
+    worksheet.columns.forEach(column => {
+      let maxLength = 0;
+      column.eachCell({ includeEmpty: true }, cell => {
+        // Calculate cell value length
+        const columnLength = cell.value ? cell.value.toString().length : 0;
+        if (columnLength > maxLength) {
+          maxLength = columnLength;
+        }
+      });
+      // Add some padding and set column width
+      // The width is approximately the length of the string in characters * some factor
+      column.width = Math.min(Math.max(maxLength + 2, 10), 50); // Minimum width 10, maximum 50
+    });
+
+    workbook.xlsx.writeBuffer().then((data: any) => {
+      const blob = new Blob([data], {
+        type:
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+      saveAs.saveAs(blob, 'Students List.xlsx');
+    });
+  }
 }

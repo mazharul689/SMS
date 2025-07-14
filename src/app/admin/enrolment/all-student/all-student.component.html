@@ -242,7 +242,8 @@
                     </button>
                     <button mat-icon-button class="btn-tbl-edit" title="Assign in Class"
                       (click)="classAsign(row.expectedcompletiondate,row.commencementdate,row.studentenrolmentid)">
-                      <mat-icon aria-label="Edit" [ngStyle]="{'color': row.count_classsetupid ? 'white' : 'yellow'}">schedule</mat-icon>
+                      <mat-icon aria-label="Edit"
+                        [ngStyle]="{'color': row.count_classsetupid ? 'white' : 'yellow'}">schedule</mat-icon>
                     </button>
                     <button mat-icon-button class="btn-tbl-edit" title="Student Payment Schedule"
                       (click)="paymentSchedule(row.studentenrolmentid)">
