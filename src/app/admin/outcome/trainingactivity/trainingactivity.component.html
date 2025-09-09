@@ -15,46 +15,73 @@
                             </div>
                         </div>
                         <div class="row">
-                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
-                            <span><strong>Student's Name</strong></span>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                            <span>:&emsp;{{ studentDetails?.fullname ? studentDetails.fullname : 'loading...' }}</span>
-                          </div>
-                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
-                            <span><strong>Email</strong></span>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                            <span>:&emsp;{{ studentDetails?.email ? studentDetails.email : 'loading...' }}</span>
-                          </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <span><strong>Client ID</strong></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                                <span>:&emsp;{{ studentDetails?.clientid ? studentDetails.clientid : 'loading...'}}</span>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <span><strong>Email</strong></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                                <span>:&emsp;{{ studentDetails?.email ? studentDetails.email : 'loading...' }}</span>
+                            </div>
                         </div>
                         <div class="row">
-                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
-                            <span><strong>Date of Birth</strong></span>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                            <span>:&emsp;{{ studentDetails?.dob ? (studentDetails.dob | date:'dd/MM/yyyy') : 'loading...' }}</span>
-                          </div>
-                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
-                            <span><strong>Phone</strong></span>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                            <span>:&emsp;{{ studentDetails?.mobile ? studentDetails.mobile : 'Not Found' }}</span>
-                          </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <span><strong>Student's Name</strong></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                                <span>:&emsp;{{ studentDetails?.fullname ? studentDetails.fullname : 'loading...'}}</span>
+                            </div>
+                            
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <span><strong>Phone</strong></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                                <span>:&emsp;{{ studentDetails?.mobile ? studentDetails.mobile : 'Not Found' }}</span>
+                            </div>
                         </div>
                         <div class="row">
-                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
-                            <span><strong>USI</strong></span>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                            <span>:&emsp;{{ studentDetails?.usino !== null ? studentDetails?.usino : 'Not Found' }}</span>
-                          </div>
-                          <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
-                            <span><strong>USI Status</strong></span>
-                          </div>
-                          <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                            <span>:&emsp;{{ studentDetails?.usiverificationstatus === 'Y' ? 'Valid' : 'Not Verified' }}</span>
-                          </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <span><strong>Course Code</strong></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                                <span>:&emsp;{{ studentDetails?.coursecode ? studentDetails.coursecode : 'loading...'}}</span>
+                            </div>
+                            
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <span><strong>Course Name</strong></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                                <span>:&emsp;{{ studentDetails?.coursename ? studentDetails.coursename : 'Not Found' }}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <span><strong>USI</strong></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                                <span>:&emsp;{{ studentDetails?.usino !== null ? studentDetails?.usino : 'Not Found'
+                                    }}</span>
+                            </div>
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <span><strong>USI Status</strong></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                                <span>:&emsp;{{ studentDetails?.usiverificationstatus === 'Valid Match Match Match' ? 'Valid' : 'Not Verified'
+                                    }}</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                                <span><strong>Date of Birth</strong></span>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                                <span>:&emsp;{{ studentDetails?.dob ? (studentDetails.dob | date:'dd/MM/yyyy') :
+                                    'loading...' }}</span>
+                            </div>
                         </div>
                         <!-- <div class="row">
                                     <div *ngIf="errorAll.isAllerror"
@@ -170,13 +197,15 @@
                                                                     <mat-label>End Date</mat-label>
                                                                     <input matInput [matDatepicker]="eDpicker"
                                                                         formControlName="endDate" [value]="endDate"
-                                                                        (ngModelChange)="compareTwoDates()" [min]="stdDate">
+                                                                        (ngModelChange)="compareTwoDates()"
+                                                                        [min]="stdDate">
                                                                     <mat-datepicker-toggle matSuffix [for]="eDpicker">
                                                                     </mat-datepicker-toggle>
                                                                     <mat-datepicker #eDpicker>
                                                                     </mat-datepicker>
-                                                                    <mat-error *ngIf="error.isError">{{
-                                                                        error.errorMessage }}</mat-error>
+                                                                    <mat-error *ngIf="error.isError"></mat-error>
+                                                                        <!-- <mat-error *ngIf="error.isError">{{
+                                                                        error.errorMessage }}</mat-error> -->
                                                                 </mat-form-field>
                                                                 <!-- <span *ngIf="error.isError">{{ error.errorMessage }}</span> -->
                                                             </div>

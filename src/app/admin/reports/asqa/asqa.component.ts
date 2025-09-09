@@ -61,7 +61,7 @@ export class AsqaComponent implements OnInit {
       console.log('post',asqaBody)
       this.apiService.postAPI('getasqadata', this.HFormGroup1.value).subscribe((data) => {
         console.log('reports',data['data']);
-        this.baseApi = "https://api.wonderit.com.au:5000/"
+        this.baseApi = "https://api.wonderit.com.au:5038/"
         console.log(this.baseApi + data['data'])
         window.open(this.baseApi + data['data'])
         // this.downloadFile = data['data']['msg']

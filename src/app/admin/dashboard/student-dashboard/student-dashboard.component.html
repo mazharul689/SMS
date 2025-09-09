@@ -9,16 +9,32 @@
           <div class="body">
             <div class="row">
               <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
-                <span><strong>Student's Name</strong></span>
+                <span><strong>Client ID</strong></span>
               </div>
               <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                <span>:&emsp;{{this.fullName}}</span>
+                <span>:&emsp;{{this.clientid}}</span>
               </div>
+              
               <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
                 <span><strong>Email</strong></span>
               </div>
               <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
                 <span>:&emsp;{{this.email}}</span>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>Student's Name</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{this.fullName}}</span>
+              </div>
+              
+              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
+                <span><strong>Phone</strong></span>
+              </div>
+              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
+                <span>:&emsp;{{this.phone}}</span>
               </div>
             </div>
             <div class="row">
@@ -29,14 +45,6 @@
                 <span *ngIf="this.dob == 0">:&emsp;Loading...</span>
                 <span *ngIf="this.dob != 0">:&emsp;{{this.dob | date:'dd/MM/yyyy'}}</span>
               </div>
-              <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
-                <span><strong>Phone</strong></span>
-              </div>
-              <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                <span>:&emsp;{{this.phone}}</span>
-              </div>
-            </div>
-            <div class="row">
               <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
                 <span><strong>USI</strong></span>
               </div>
@@ -370,7 +378,7 @@
                             <mat-label style="color: white; font-size:15px;">Start
                               Date</mat-label></mat-header-cell>
                           <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                            {{row.startdate | date:'dd/MM/yyyy'}}
+                            {{row.startdate| date:'MM/dd/yyyy' | date:'dd/MM/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="dashboardEND">
@@ -378,7 +386,7 @@
                             <mat-label style="color: white; font-size:15px;">End
                               Date</mat-label></mat-header-cell>
                           <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                            {{row.enddate | date:'dd/MM/yyyy'}}
+                            {{row.enddate | date:'MM/dd/yyyy' | date:'dd/MM/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -457,7 +465,7 @@
                             <mat-label style="color: white; font-size:15px;">Start
                               Date</mat-label></mat-header-cell>
                           <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                            {{row.startdate | date:'mediumDate'}}
+                            {{row.startdate| date:'MM/dd/yyyy' | date:'mediumDate'}}
                           </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="outcomeEND">
@@ -465,7 +473,7 @@
                             <mat-label style="color: white; font-size:15px;">End
                               Date</mat-label></mat-header-cell>
                           <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                            {{row.enddate | date:'mediumDate'}}
+                            {{row.enddate | date:'MM/dd/yyyy' | date:'mediumDate'}}
                           </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="hours">
@@ -539,7 +547,7 @@
                                                         </span>
                                                     </div> -->
                           <!-- <span>{{row.bodyPreview}}</span> -->
-                          <span>{{row.body.content}}</span>
+                          <span>{{row.bodyPreview}}</span>
                           <!-- <span *ngIf="row.bodyPreview.length < 50 || expandedRows[i]">{{row.bodyPreview}}</span> -->
                           <!-- <button  mat-icon-button class="see-more-button" (click)="toggleExpanded(i)">
                             {{expandedRows[i] ? '' : 'See more'}}

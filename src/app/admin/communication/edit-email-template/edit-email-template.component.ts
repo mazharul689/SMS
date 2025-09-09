@@ -41,23 +41,26 @@ export class EditEmailTemplateComponent implements OnInit {
   //   toolbar: [],  // This disables the toolbar by providing an empty array.
   //   // You can add any other configuration options if needed.
   // };
-  public editorConfig = {
-    htmlSupport: {
-      allow: [
-        {
-          name: /.*/,
-          attributes: true,
-          classes: true,
-          styles: true
-        }
-      ]
-    },
-    // Preserve whitespace and formatting
-    enterMode: 'paragraph', // Creates <p> on Enter
-    shiftEnterMode: 'br',    // Creates <br> on Shift+Enter
-    // Force HTML output
-    forcePasteAsPlainText: false,
+  // public editorConfig = {
+  //   htmlSupport: {
+  //     allow: [
+  //       {
+  //         name: /.*/,
+  //         attributes: true,
+  //         classes: true,
+  //         styles: true
+  //       }
+  //     ]
+  //   },
+  //   // Preserve whitespace and formatting
+  //   enterMode: 'paragraph', // Creates <p> on Enter
+  //   shiftEnterMode: 'br',    // Creates <br> on Shift+Enter
+  //   // Force HTML output
+  //   forcePasteAsPlainText: false,
     
+  // };
+  public editorConfig = {
+    toolbar: [],
   };
   public componentEvents: string[] = [];
   emailTemplateId: any;

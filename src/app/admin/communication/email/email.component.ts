@@ -96,6 +96,7 @@ export class EmailComponent implements OnInit {
   emailFilter = new FormControl("");
   due_start_dateFilter = new FormControl("");
   due_end_dateFilter = new FormControl("");
+  single_enrolment = new FormControl("N");
   filteredValues = {
     courseIntakeDateId: "",
     clientid: "",
@@ -200,6 +201,7 @@ export class EmailComponent implements OnInit {
       from_email_address: [""],
       fromEmailAddressId: ["", [Validators.required]],
       attachmentUrl: ["", [Validators.required]],
+      // single_enrolment: [0],
       Rows: this.fb.array([this.getStudent()]),
     });
     // this.HFormGroup2 = this.fb.group({
@@ -210,6 +212,7 @@ export class EmailComponent implements OnInit {
       docRows: this.fb.array([this.newDocArr()]),
       agentsCheck: ["N"],
       altEmailCheck: ["Y"],
+      // single_enrolment: [0],
     });
 
     // this.HFormGroup3 = this.fb.group({
@@ -253,7 +256,7 @@ export class EmailComponent implements OnInit {
       from_email_address: this.fromEmails[id - 1].from_email_address,
     });
   }
-  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, pstatus: any, dsdate: any, dedate: any) {
+  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, pstatus: any, dsdate: any, dedate: any, senrol: any) {
     console.log(dsdate)
     // this.selection.clear
     this.selection = new SelectionModel<Students>(true, []);
@@ -281,13 +284,16 @@ export class EmailComponent implements OnInit {
     if (pstatus) {
       queryParams.push(`paymentstatus=${pstatus}`);
     }
-    if(dsdate){
-      dsdate = this.datePipe.transform(dsdate,'yyyy-MM-dd');
+    if (dsdate) {
+      dsdate = this.datePipe.transform(dsdate, 'yyyy-MM-dd');
       queryParams.push(`due_start_date=${dsdate}`);
     }
-    if(dedate){
-      dedate = this.datePipe.transform(dedate,'yyyy-MM-dd');
+    if (dedate) {
+      dedate = this.datePipe.transform(dedate, 'yyyy-MM-dd');
       queryParams.push(`due_end_date=${dedate}`);
+    }
+    if (senrol) {
+      queryParams.push(`single_enrolment=${senrol}`);
     }
     // console.log(queryParams)
     // If there are any query parameters, make the API call
@@ -303,6 +309,18 @@ export class EmailComponent implements OnInit {
           this.dataSource.data = [];
         } else {
           this.students = data["data"];
+          this.students = this.students.sort((a, b) => {
+            if (a.clientid < b.clientid) {
+              return 1;
+            } else if (a.clientid > b.clientid) {
+              return -1;
+            } else {
+              // If clientid is the same, sort by commencementdate
+              let dateA = new Date(a.commencementdate).getTime();
+              let dateB = new Date(b.commencementdate).getTime();
+              return dateA - dateB;
+            }
+          });
           for (let i in this.students) {
             this.students[i].rowID = i;
             this.students[i].fullname =
@@ -409,6 +427,18 @@ export class EmailComponent implements OnInit {
   getStudents() {
     this.apiService.getAPI(`getstudent?applicationstatusid=6`).subscribe((data) => {
       this.students = data["data"];
+      this.students = this.students.sort((a, b) => {
+        if (a.clientid < b.clientid) {
+          return 1;
+        } else if (a.clientid > b.clientid) {
+          return -1;
+        } else {
+          // If clientid is the same, sort by commencementdate
+          let dateA = new Date(a.commencementdate).getTime();
+          let dateB = new Date(b.commencementdate).getTime();
+          return dateA - dateB;
+        }
+      });
       // console.log('student',this.students)
       for (var i in this.students) {
         this.students[i].rowID = i;
@@ -593,13 +623,13 @@ export class EmailComponent implements OnInit {
       this.HFormGroup1.value.msg = emailBody.msg;
       this.HFormGroup1.value.attachmentUrl = emailBody.attachmentUrl;
       const formData = this.HFormGroup1.value;
-
+      // formData.single_enrolment = this.HFormGroup2.value.single_enrolment;
       delete formData.email;
       delete formData.subject;
       delete formData.msg;
       delete formData.attachmentUrl;
       delete formData.testFC;
-
+      console.log('check data', this.HFormGroup1.value)
       this.apiService.postAPI(`addstudentcommunication`, this.HFormGroup1.value)
         .subscribe(() => {
           this.router.navigate(["/admin/communication/all-communication"]);
@@ -633,14 +663,14 @@ export class EmailComponent implements OnInit {
       "Enrollment Status",
       "Address Line 1",
       "Address Line 2",
-      "Agent Contact Email",
-      "Agent ID",
-      "Application Status ID",
-      "Building Name Postal",
-      "Course ID",
-      "Course Total Fee",
-      "Current Date",
-      "Different Postal Address",
+      // "Agent Contact Email",
+      // "Agent ID",
+      // "Application Status ID",
+      // "Building Name Postal",
+      // "Course ID",
+      // "Course Total Fee",
+      // "Current Date",
+      // "Different Postal Address",
       "Date of Birth",
       "Due Amount (Current Term)",
       "Due Amount (Last Term)",
@@ -648,39 +678,39 @@ export class EmailComponent implements OnInit {
       "Emergency Contact Mobile",
       "Emergency Contact Name",
       "Emergency Contact Relationship",
-      "End Date",
+      // "End Date",
       "English Speaking Score",
       "English Speaking Score Expiry",
       "English Speaking Score Type",
-      "English Speaking Status",
-      "First Name",
-      "Flat/Unit Details Postal",
+      // "English Speaking Status",
+      // "First Name",
+      // "Flat/Unit Details Postal",
       "Gender",
-      "Last Name",
-      "Middle Name",
+      // "Last Name",
+      // "Middle Name",
       "Mobile",
       "Passport Expiry Date",
       "Passport No",
       "Payment Plan Due Date (Current Term)",
-      "PO Box Postal",
-      "Postcode Postal",
-      "Start Date",
-      "State ID Postal",
-      "Street Name Postal",
-      "Street Number Postal",
+      // "PO Box Postal",
+      // "Postcode Postal",
+      // "Start Date",
+      // "State ID Postal",
+      // "Street Name Postal",
+      // "Street Number Postal",
       "Student Enrolment Date",
-      "Student Enrolment ID",
-      "Student ID",
-      "Suburb Postal",
-      "Tel Home",
-      "Tel Work",
+      // "Student Enrolment ID",
+      // "Student ID",
+      // "Suburb Postal",
+      // "Tel Home",
+      // "Tel Work",
       "Title",
       "Total Paid (Current Term)",
       "Total Paid (Last Term)",
       "Total Fee (Current Term)",
       "Total Fee (Last Term)",
       "USI No",
-      "USI Verification Status"
+      // "USI Verification Status"
     ];
 
     const data = this.students.map(student => [
@@ -696,14 +726,14 @@ export class EmailComponent implements OnInit {
       student.applicationstatusname,
       student.address_line_1,
       student.address_line_2,
-      student.agent_contactemail,
-      student.agentid,
-      student.applicationstatusid,
-      student.buildingname_postal,
-      student.courseid,
-      student.coursetotalfee,
-      student.currentdate,
-      student.differentpostaladdress,
+      // student.agent_contactemail,
+      // student.agentid,
+      // student.applicationstatusid,
+      // student.buildingname_postal,
+      // student.courseid,
+      // student.coursetotalfee,
+      // student.currentdate,
+      // student.differentpostaladdress,
       student.dob,
       student.dueamount_upto_current_term,
       student.dueamount_upto_last_term,
@@ -711,39 +741,39 @@ export class EmailComponent implements OnInit {
       student.emergencycontactmobile,
       student.emergencycontactname,
       student.emergencycontactrelationship,
-      student.enddate,
+      // student.enddate,
       student.englishspeakingscore,
       student.englishspeakingscoreexpdate,
       student.englishspeakingscoretype,
-      student.englishspeakingstatus,
-      student.firstname,
-      student.flatunitdetails_postal,
+      // student.englishspeakingstatus,
+      // student.firstname,
+      // student.flatunitdetails_postal,
       student.gender,
-      student.lastname,
-      student.middlename,
+      // student.lastname,
+      // student.middlename,
       student.mobile,
       student.passportexpdate,
       student.passportno,
       student.paymentplaninstalmentduedate_upto_current_term,
-      student.pobox_postal,
-      student.postcode_postal,
-      student.startdate,
-      student.stateid_postal,
-      student.streetname_postal,
-      student.streetnumber_postal,
+      // student.pobox_postal,
+      // student.postcode_postal,
+      // student.startdate,
+      // student.stateid_postal,
+      // student.streetname_postal,
+      // student.streetnumber_postal,
       student.studentenrolmentdate,
-      student.studentenrolmentid,
-      student.studentid,
-      student.suburb_postal,
-      student.telhome,
-      student.telwork,
+      // student.studentenrolmentid,
+      // student.studentid,
+      // student.suburb_postal,
+      // student.telhome,
+      // student.telwork,
       student.title,
       student.totalamountpaid_upto_current_term,
       student.totalamountpaid_upto_last_term,
       student.totalfee_upto_current_term,
       student.totalfee_upto_last_term,
       student.usino,
-      student.usiverificationstatus
+      // student.usiverificationstatus
     ]);
 
     const workbook = new ExcelJS.Workbook();
@@ -756,7 +786,7 @@ export class EmailComponent implements OnInit {
       bold: true
     };
     titleRow.alignment = { horizontal: 'center', vertical: 'middle' };
-    worksheet.mergeCells('A1:BH2');
+    worksheet.mergeCells('A1:AH2');
     const headerRow = worksheet.addRow(headers);
     headerRow.eachCell((cell, number) => {
       cell.border = {
@@ -779,7 +809,7 @@ export class EmailComponent implements OnInit {
     });
     worksheet.autoFilter = {
       from: 'A3', // Starting cell of the header row
-      to: 'BH3'    // Ending cell of the header row (adjust based on your last column)
+      to: 'AH3'    // Ending cell of the header row (adjust based on your last column)
     };
     data.forEach(d => {
       const row = worksheet.addRow(d);

@@ -15,3 +15,18 @@
   height: 150px;
   width: 300px;
 }
+input {
+  border: none;
+  width: 100%;
+  margin: 15px 0;
+  border-bottom: 1px solid #4f30677d;
+  padding: 12px 0;
+  background: transparent;
+  font-weight: 500;
+  font-size: 14px;
+
+  &:focus {
+    outline: none;
+    border-bottom-color: #3F51B5;
+  }
+}

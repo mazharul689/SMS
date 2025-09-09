@@ -35,8 +35,8 @@
                         <tbody *ngIf="enrolledCourses?.length >= 0 && enrolledCourses && enrolledCourses?.length">
                           <tr *ngFor="let course of enrolledCourses">
                             <td class="course">{{course.coursename}}</td>
-                            <td class="sDate">{{course.startdate}}</td>
-                            <td class="eDate">{{course.enddate}}</td>
+                            <td class="sDate">{{course.startdate | date:'MM/dd/yyyy'}}</td>
+                            <td class="eDate">{{course.enddate | date:'MM/dd/yyyy'}}</td>
                             <td class="action">
                               <button mat-icon-button class="edit" (click)="editEnrCourse(course.studentid)"
                                 aria-label="Example icon button with a vertical three dot icon">
@@ -244,7 +244,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        > {{row.startDate}}
+                        > {{row.startdate| date:'MM/dd/yyyy'}}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="endDate2">
@@ -255,7 +255,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        > {{row.endDate}}
+                        > {{row.enddate | date:'MM/dd/yyyy'}}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="certificateType">

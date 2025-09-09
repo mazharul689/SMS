@@ -19,6 +19,7 @@ const moment = _rollupMoment || _moment;
 
 import { MatDialog } from '@angular/material/dialog';
 import { InvoiceDialogComponent } from './dialog/invoice-dialog/invoice-dialog.component';
+import { DeleteStudentDialogComponent } from './dialog/delete-student-dialog/delete-student-dialog.component';
 export interface PaymentPlanWithRules {
   paymentPlanInstalmentOrder,
   invoiceNo,
@@ -164,7 +165,7 @@ export class InvoiceComponent implements OnInit {
       if (clientIdMatch && clientIdMatch[1]) {
         this.invNo = clientIdMatch[1];
       }
-      console.log('inv',this.invNo)
+      console.log('inv', this.invNo)
       this.AdditionalItem.clear();
       let invoiceItemDetailsArray: FormGroup[] = [];
       let ruleData = this.fb.group({
@@ -272,7 +273,7 @@ export class InvoiceComponent implements OnInit {
             // Add the statuscheck field based on isPaidFound
             plan.statuscheck = isPaidFound ? 'Y' : 'N';
           });
-          console.log('check',allPaymentPlansWithRules)
+          console.log('check', allPaymentPlansWithRules)
           this.enableSaveButton = allPaymentPlansWithRules[0].enablesavebutton
           // this.allpaymentplanwithrulesdata = data['data']
           allPaymentPlansWithRules.sort((a, b) => {
@@ -309,10 +310,10 @@ export class InvoiceComponent implements OnInit {
             allPaymentPlansWithRules[i].totalAmount = temp
             allPaymentPlansWithRules[i].totalPaidAmount = totalPaidAmount
             allPaymentPlansWithRules[i].dueAmount = temp - totalPaidAmount
-            if(allPaymentPlansWithRules[i].statuscheck == 'Y' && temp == totalPaidAmount){
+            if (allPaymentPlansWithRules[i].statuscheck == 'Y' && temp == totalPaidAmount) {
               allPaymentPlansWithRules[i].statuscheck = 'F'
             }
-            else if(allPaymentPlansWithRules[i].statuscheck == 'Y' &&  temp > totalPaidAmount ){
+            else if (allPaymentPlansWithRules[i].statuscheck == 'Y' && temp > totalPaidAmount) {
               allPaymentPlansWithRules[i].statuscheck = 'P'
             }
           }
@@ -603,4 +604,18 @@ export class InvoiceComponent implements OnInit {
     ]);
   }
 
+  deleteInvoice(row) {
+    let tempDirection;
+    if (localStorage.getItem('isRtl') === 'true') {
+      tempDirection = 'rtl';
+    } else {
+      tempDirection = 'ltr';
+    }
+    const dialogRef = this.dialog.open(DeleteStudentDialogComponent, {
+      data: row,
+    });
+    dialogRef.afterClosed().subscribe((data: any) => {
+      this.getStudent(this.studentEnrolementId)
+    });
+  }
 }

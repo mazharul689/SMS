@@ -52,10 +52,41 @@ export class StudentsPaymentsComponent implements OnInit {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild('filter', { static: true }) filter: ElementRef;
-  clientIdFilter = new FormControl('')
+  clientIdFilter0 = new FormControl('')
   nameFilter = new FormControl('')
   courseCodeFilter = new FormControl('')
-  courseNameFilter = new FormControl('')
+  courseNameFilter0 = new FormControl('')
+  clientIdFilter = new FormControl("");
+  firstNameFilter = new FormControl("");
+  lastNameFilter = new FormControl("");
+  courseNameFilter = new FormControl("");
+  emailFilter = new FormControl("");
+  due_start_dateFilter = new FormControl("");
+  due_end_dateFilter = new FormControl("");
+  single_enrolment = new FormControl("N");
+  studentNameFilter = new FormControl();
+  paymentStatusFilter = new FormControl();
+  courseIntakeFilter = new FormControl();
+  agentFilter = new FormControl();
+  specialClientIdFilter = new FormControl();
+  applicationStatusFilter = new FormControl(6);
+  usiFilter = new FormControl();
+  allApplicationStatus: any;
+  getAll
+  allPaymentStatus = [
+    {
+      status: 'Paid',
+      id: 'paid'
+    },
+    {
+      status: 'Unpaid',
+      id: 'unpaid'
+    },
+    {
+      status: 'Over Due',
+      id: 'overdue'
+    }
+  ]
   filteredValues = {
     clientid: '',
     name: '',
@@ -64,6 +95,10 @@ export class StudentsPaymentsComponent implements OnInit {
   }
   allStudentPayments
   error = { isError: false, errorMessage: '' }
+  errorsReq: any = { isError: false, errorMessage: "" };
+  allCourseIntakeDate: any
+  allAgents: any
+
   constructor(
     private apiService: ApiService,
     private datePipe: DatePipe,
@@ -74,11 +109,32 @@ export class StudentsPaymentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getAll = JSON.parse(window.localStorage.getItem("getAll"));
+    this.allApplicationStatus = this.getAll[0].ApplicationStatus;
+    this.allApplicationStatus.push({
+      applicationstatusname: "All",
+      applicationstatusid: 100,
+    });
+    this.apiService.getAPI("getcourse").subscribe((data) => {
+      this.allCourseIntakeDate = data["data"];
+      this.allCourseIntakeDate.push({
+        courseid: 100,
+        coursename: "All",
+      });
+    });
+    this.apiService.getAPI("getagent").subscribe((data) => {
+      this.allAgents = data["data"];
+      this.allAgents.push({
+        agencyname: "All",
+        agentid: 100,
+      });
+      // console.log(this.allAgents);
+    });
     this.dataSource = new MatTableDataSource() // create new object
     this.dataSource.paginator = this.paginator
     this.dataSource.sort = this.sort
     this.dataSource.filterPredicate = this.createFilter();
-    this.clientIdFilter.valueChanges.subscribe(clientid => {
+    this.clientIdFilter0.valueChanges.subscribe(clientid => {
       this.filteredValues.clientid = clientid
       this.dataSource.filter = JSON.stringify(this.filteredValues)
     })
@@ -90,7 +146,7 @@ export class StudentsPaymentsComponent implements OnInit {
       this.filteredValues.coursecode = coursecode
       this.dataSource.filter = JSON.stringify(this.filteredValues)
     })
-    this.courseNameFilter.valueChanges.subscribe(coursename => {
+    this.courseNameFilter0.valueChanges.subscribe(coursename => {
       this.filteredValues.coursename = coursename
       this.dataSource.filter = JSON.stringify(this.filteredValues)
     })
@@ -129,13 +185,14 @@ export class StudentsPaymentsComponent implements OnInit {
   //   const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
   //   saveAs(blob, 'students_data.xlsx');
   // }
+
   downloadAsExcel(data: any) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Students');
 
     // Add a title row and merge the cells across all columns for the heading
     const title = "Students Payment";
-    const lastColumn = 'J'; // You can set this based on how many headers you have
+    const lastColumn = 'J'; // Set this based on how many headers you have
     worksheet.mergeCells(`A1:${lastColumn}2`); // Merge from A1 to last column in row 1
     const titleCell = worksheet.getCell('A1');
     titleCell.value = title; // Set the title text
@@ -503,6 +560,96 @@ export class StudentsPaymentsComponent implements OnInit {
 
       return data;
     });
+  }
+
+  //search function
+  search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, pstatus: any, dsdate: any, dedate: any, senrol: any) {
+    // console.log(dsdate)
+    // this.selection.clear
+    // this.selection = new SelectionModel<Students>(true, []);
+    let queryParams = [];
+
+    // Build query string based on available parameters
+    if (cid && cid != 100) {
+      queryParams.push(`courseid=${cid}`);
+    }
+    if (aid && aid != 100) {
+      queryParams.push(`agentid=${aid}`);
+    }
+    if (asid && asid != 100) {
+      queryParams.push(`applicationstatusid=${asid}`);
+    }
+    if (clid) {
+      queryParams.push(`clientid=${clid}`);
+    }
+    if (uid) {
+      queryParams.push(`usiNo=${uid}`);
+    }
+    if (name) {
+      queryParams.push(`studentname=${name}`);
+    }
+    if (pstatus) {
+      queryParams.push(`paymentstatus=${pstatus}`);
+    }
+    if (dsdate) {
+      dsdate = this.datePipe.transform(dsdate, 'yyyy-MM-dd');
+      queryParams.push(`due_start_date=${dsdate}`);
+    }
+    if (dedate) {
+      dedate = this.datePipe.transform(dedate, 'yyyy-MM-dd');
+      queryParams.push(`due_end_date=${dedate}`);
+    }
+    if (senrol) {
+      queryParams.push(`single_enrolment=${senrol}`);
+    }
+    // console.log(queryParams)
+    // If there are any query parameters, make the API call
+    if (queryParams.length > 0) {
+      const queryString = queryParams.join("&");
+      this.apiService.getAPI(`getstudentinvoicetotal?${queryString}`).subscribe((data) => {
+        this.allStudentPayments = data['data'].map((student) => {
+        // Format dates using datePipe
+        student.invoicedate = this.datePipe.transform(student.invoicedate, 'dd/MM/yyyy');
+        student.paymentplaninstalmentduedate = this.datePipe.transform(student.paymentplaninstalmentduedate, 'dd/MM/yyyy');
+        student.extendedduedate = this.datePipe.transform(student.extendedduedate, 'dd/MM/yyyy');
+
+        // Calculate invoiceddueamount
+        student.invoiceddueamount = student.totalfee - (student.totalamountpaid || 0);
+
+        return student;
+      });
+
+      // Sort the data by clientid and paymentplaninstalmentduedate
+      this.allStudentPayments.sort((a, b) => {
+        // Sort by clientid (trimmed to avoid issues with trailing spaces)
+        if (a.clientid.trim() !== b.clientid.trim()) {
+          return a.clientid.trim().localeCompare(b.clientid.trim());
+        }
+
+        // Sort by paymentplaninstalmentduedate
+        const dateA = new Date(a.paymentplaninstalmentduedate.split('/').reverse().join('-'));
+        const dateB = new Date(b.paymentplaninstalmentduedate.split('/').reverse().join('-'));
+        return dateA.getTime() - dateB.getTime();
+      });
+
+      // Create a copy of the original data for modification
+      let allData = JSON.parse(JSON.stringify(this.allStudentPayments)); // Deep copy to avoid reference issues
+
+      // Add a 'name' field for display purposes
+      allData = allData.map((student) => {
+        student.name = `${student.firstname || ''} ${student.middlename || ''} ${student.lastname || ''}`.trim();
+        return student;
+      });
+
+      // Assign the processed data to the data source
+      this.dataSource.data = allData;
+
+      return data;
+      });
+    } 
+    else {
+      this.getStudentPayments();
+    }
   }
 
 }

@@ -101,6 +101,7 @@ export class StudentDashboardComponent implements OnInit {
   enrolemntID: any
   fullName = "loading..."
   email = "loading..."
+  clientid = "loading..."
   phone = "loading..."
   dob = 0
   cob = "loading..."
@@ -192,6 +193,7 @@ export class StudentDashboardComponent implements OnInit {
       this.fullName = this.student.firstname + ' ' + this.student.middlename + ' ' + this.student.lastname
       this.dob = this.student.dob
       this.email = this.student.email
+      this.clientid = this.student.clientid
       this.getMessage()
       this.cob = this.getAll[0].Country[this.student.birthcountryid - 1].countryname
       this.usi = this.student.usino
@@ -386,7 +388,7 @@ export class StudentDashboardComponent implements OnInit {
     window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=${temp}&sid=${row.studentenrolmentid}`)
   }
   download(link) {
-    let baseApi = "https://api.wonderit.com.au:5000/"
+    let baseApi = "https://api.wonderit.com.au:5038/"
     // console.log(this.messages[rowID].attachment[i])
     window.open(baseApi + link)
   }

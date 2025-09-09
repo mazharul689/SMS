@@ -71,8 +71,8 @@ export class EditAgentComponent implements OnInit {
       contactEmail: ['', [Validators.required, Validators.maxLength(100)]],
       accountsEmail: ['', [Validators.required, Validators.maxLength(100)]],
       ABN: ['', [Validators.required]],
-      amountTypeId: [''],
-      agentCommission: [''],
+      amountTypeId: ['', [Validators.required]],
+      agentCommission: ['', [Validators.required]],
       gst: ['Y'],
       webURL: [''],
       startDate: [''],
@@ -101,14 +101,24 @@ export class EditAgentComponent implements OnInit {
         accountsEmail: this.agentData.accountsemail,
         ABN: this.agentData.abn,
         webURL: this.agentData.weburl,
-        startDate: moment(this.agentData.startdate),
-        endDate: moment(this.agentData.enddate),
+        
         isActive: this.agentData.isactive,
         userId: this.userInfo.userid,
         amountTypeId: this.agentData.amounttypeid,
         agentCommission: this.agentData.agentcommission,
         gst: this.agentData.gst
       })
+      if(this.agentData.startdate != null){
+        this.HFormGroup1.patchValue({
+          startDate: moment(this.agentData.startdate),
+        })
+      }
+      if(this.agentData.enddate != null){
+        this.HFormGroup1.patchValue({
+          endDate: moment(this.agentData.enddate),
+        })
+      }
+      console.log('check',this.HFormGroup1.value)
     })
     this.apiService.getAPI(`getagentdocument?id=${this.agentId}`).subscribe((data) => {
       this.agentsDocuments = data['data']
@@ -167,8 +177,12 @@ export class EditAgentComponent implements OnInit {
 
   updateAgent() {
     let body = this.HFormGroup1.value
-    body.startDate = this.datePipe.transform(body.startDate, 'yyyy-MM-dd')
-    body.endDate = this.datePipe.transform(body.endDate, 'yyyy-MM-dd')
+    if (body.startDate) {
+      body.startDate = this.datePipe.transform(body.startDate, 'yyyy-MM-dd');
+    }
+    if (body.endDate) {
+      body.endDate = this.datePipe.transform(body.endDate, 'yyyy-MM-dd');
+    }
     this.apiService.postAPI(`editagent?id=${this.agentId}`, body).subscribe((data) => {
       console.log(data)
       // this.router.navigate(['/admin/users/all-agents'])
@@ -186,7 +200,7 @@ export class EditAgentComponent implements OnInit {
         formData.append('uploadfolder', 'AgentsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.agentDocumentLoc = "https://api.wonderit.com.au:5000/" + data.data
+            this.docRows.at(i).value.agentDocumentLoc = "https://api.wonderit.com.au:5038/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.agentDocumentName && !this.docRows.at(i).value.agentDocumentLoc) {
                 valid = false

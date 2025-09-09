@@ -151,7 +151,7 @@
                     </mat-form-field>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                    <span [style.color]="i == highlighter ? 'white' : ''">{{row.startdate}}</span>
+                    <span [style.color]="i == highlighter ? 'white' : ''">{{row.startdate| date:'MM/dd/yyyy'}}</span>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="endDate">
@@ -162,7 +162,7 @@
                     </mat-form-field>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                    <span [style.color]="i == highlighter ? 'white' : ''">{{row.enddate}}</span>
+                    <span [style.color]="i == highlighter ? 'white' : ''">{{row.enddate | date:'MM/dd/yyyy'}}</span>
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="actions">
@@ -264,7 +264,7 @@
                   <mat-cell *matCellDef="let row; let i=index">
                     <section class="example-section">
                       <div class="row">
-                        <span>{{row.startdate}}</span>
+                        <span>{{row.startdate| date:'MM/dd/yyyy'}}</span>
                       </div>
                     </section>
                   </mat-cell>
@@ -298,7 +298,7 @@
                   <mat-cell *matCellDef="let row; let i=index" class="pr-0">
                     <section class="example-section">
                       <div class="row">
-                        <span>{{row.enddate}}</span>
+                        <span>{{row.enddate | date:'MM/dd/yyyy'}}</span>
                       </div>
                     </section>
                   </mat-cell>

@@ -19,12 +19,168 @@
         <div class="card">
           <div class="body">
             <div class="table-responsive units">
+              <div class="materialTableHeader" style="height: 140px !important;">
+                      <div class="row m-auto">
+                        <div class="col-2">
+                          <div class="search row">
+                            <div class="col-sm-12">
+                              <mat-form-field class="example-full-width mr-5">
+                                <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Course</mat-label>
+                                <mat-select [formControl]="courseIntakeFilter">
+                                  <mat-option *ngFor="let courseIntake of allCourseIntakeDate"
+                                    [value]="courseIntake.courseid">
+                                    {{ courseIntake.coursecode }} -
+                                    {{ courseIntake.coursename }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-2">
+                          <div class="search row">
+                            <div class="col-sm-10">
+                              <mat-form-field class="example-full-width mr-5">
+                                <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Agent</mat-label>
+                                <mat-select [formControl]="agentFilter">
+                                  <mat-option *ngFor="let agent of allAgents" [value]="agent.agentid">
+                                    {{ agent.agencyname }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-3">
+                          <div class="search row">
+                            <div class="col-sm-12">
+                              <mat-form-field class="example-full-width mr-5">
+                                <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Application Status</mat-label>
+                                <mat-select [formControl]="applicationStatusFilter">
+                                  <mat-option *ngFor="let status of allApplicationStatus"
+                                    [value]="status.applicationstatusid">
+                                    {{ status.applicationstatusname }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-2">
+                          <div class="col-sm-12">
+                            <mat-form-field class="example-full-width mr-5">
+                              <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Client Id</mat-label>
+                              <input matInput type="text" [formControl]="specialClientIdFilter" />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-3">
+                          <div class="search row">
+                            <div class="col-sm-12">
+                              <mat-form-field class="example-full-width mr-5">
+                                <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Usi</mat-label>
+                                <input matInput type="text" [formControl]="usiFilter" />
+                              </mat-form-field>
+                            </div>
+
+                          </div>
+                        </div>
+                        <div class="col-1-5">
+                          <div class="col-sm-12">
+                            <mat-form-field class="example-full-width mr-5">
+                              <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Student Name</mat-label>
+                              <input matInput type="text" [formControl]="studentNameFilter" />
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <div class="col-2">
+                          <div class="search row">
+                            <div class="col-sm-12">
+                              <mat-form-field class="example-full-width mr-5">
+                                <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Payment Status</mat-label>
+                                <mat-select [formControl]="paymentStatusFilter">
+                                  <mat-option *ngFor="let status of allPaymentStatus" [value]="status.id">
+                                    {{ status.status }}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-1-5">
+                          <div class="search row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width mr-5">
+                                <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Due Start Date</mat-label>
+                                <input matInput [matDatepicker]="basicDatepicker1" [formControl]="due_start_dateFilter">
+                                <mat-datepicker-toggle matSuffix [for]="basicDatepicker1">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #basicDatepicker1></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-1-5">
+                          <div class="search row">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                              <mat-form-field class="example-full-width mr-5">
+                                <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Due End Date</mat-label>
+                                <input matInput [matDatepicker]="basicDatepicker2" [formControl]="due_end_dateFilter">
+                                <mat-datepicker-toggle matSuffix [for]="basicDatepicker2">
+                                </mat-datepicker-toggle>
+                                <mat-datepicker #basicDatepicker2></mat-datepicker>
+                              </mat-form-field>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-3">
+                            <section class="example-full-width mb-3">
+                              <label class="example col-lg-5 col-md-5 col-sm-5:">Single Enrolment</label>
+                              <mat-radio-group class="col-lg-7 col-md-7 col-sm-7" [formControl]="single_enrolment">
+                                <mat-radio-button
+                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                  value="Y">Yes</mat-radio-button>
+                                <mat-radio-button
+                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                  value="N">No</mat-radio-button>
+                              </mat-radio-group>
+                            </section>
+                        </div>
+                        <div class="col-1-5">
+                          <div class="search row" style="padding-top: 7px;">
+                            <div class="col-sm-6">
+                              <button mat-mini-fab color="primary"
+                                (click)="search(courseIntakeFilter.value,agentFilter.value,applicationStatusFilter.value,specialClientIdFilter.value,usiFilter.value,studentNameFilter.value,paymentStatusFilter.value,due_start_dateFilter.value,due_end_dateFilter.value,single_enrolment.value)">
+                                <i class="fa fa-search"></i>
+                              </button>
+                            </div>
+                            <div class="col-sm-6">
+                              <button mat-mini-fab color="primary" matTooltip="Download Report"
+                                (click)="testByMazhar()">
+                                <mat-icon class="col-white">receipt</mat-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- <div class="row">
+                        <div class="col-3">
+                          <div class="col-sm-12">
+                            <mat-form-field class="example-full-width mr-5">
+                              <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Student Name</mat-label>
+                               <input matInput type="text" [formControl]="studentNameFilter"/>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div> -->
+                    </div>
               <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
                 <ng-container matColumnDef="clientId">
                   <mat-header-cell class="pr-0" *matHeaderCellDef>
                     <mat-form-field class="filter" floatLabel="never" style="width: 65px;">
                       <mat-label style="color: white; font-size: 15px;">Client Id</mat-label>
-                      <input matInput style="color: white;" class="white-cursor" [formControl]="clientIdFilter">
+                      <input matInput style="color: white;" class="white-cursor" [formControl]="clientIdFilter0">
                     </mat-form-field>
                   </mat-header-cell>
                   <mat-cell class="pr-0" *matCellDef="let row">
@@ -62,7 +218,7 @@
                     <div class="searchcolumn">
                       <mat-form-field class="filter" floatLabel="never" style="width: 255px;">
                         <mat-label style="color: white; font-size: 15px;">Course Name</mat-label>
-                        <input matInput style="color: white;" class="white-cursor" [formControl]="courseNameFilter">
+                        <input matInput style="color: white;" class="white-cursor" [formControl]="courseNameFilter0">
                       </mat-form-field>
                     </div>
                   </mat-header-cell>

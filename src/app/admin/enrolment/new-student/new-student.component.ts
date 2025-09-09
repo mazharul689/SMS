@@ -360,7 +360,7 @@ export class NewStudentComponent implements OnInit {
   }
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue
-    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC') {
+    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC' && this.HFormGroup1.value.birthcountryId == 1) {
       this.suburbDisable = false
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
         this.suburbs = data
@@ -381,12 +381,38 @@ export class NewStudentComponent implements OnInit {
       this.HFormGroup1.patchValue({
         suburb: 'Not specified'
       })
-      this.suburbDisable = true
+      // this.suburbDisable = true
+    }
+  }
+  public countryChange(value){
+    if(value != 1){
+      this.HFormGroup1.patchValue({
+        stateId: 99,
+        postCode: '0000'
+      })
+    }
+    else if(value == 1){
+      this.HFormGroup1.patchValue({
+        stateId: null
+      })
+    }
+  }
+  public difCountryChange(value){
+    if(value != 1){
+      this.HFormGroup1.patchValue({
+        stateId_postal: 99,
+        postCode_postal: '0000'
+      })
+    }
+    else if(value == 1){
+      this.HFormGroup1.patchValue({
+        stateId_postal: null
+      })
     }
   }
   public difPostCodeChange(newValue) {
     this.difPostCodeChanges = newValue
-    if (this.difPostCodeChanges.length == 4 && this.difPostCodeChanges != '0000' && this.difPostCodeChanges != '@@@@' && this.difPostCodeChanges != 'OSPC') {
+    if (this.difPostCodeChanges.length == 4 && this.difPostCodeChanges != '0000' && this.difPostCodeChanges != '@@@@' && this.difPostCodeChanges != 'OSPC' && this.HFormGroup1.value.countryId_postal == 1) {
       this.apiService.getAPI(`getpostcodeapi?id=${this.difPostCodeChanges}`).subscribe((data) => {
         this.difSuburbs = data
         this.difStates = data[0].state.name
@@ -402,10 +428,10 @@ export class NewStudentComponent implements OnInit {
     else if (this.difPostCodeChanges.length == 4 || this.difPostCodeChanges == '0000' || this.difPostCodeChanges == '@@@@' || this.difPostCodeChanges == 'OSPC') {
       this.difStates = null
       this.difStateName = null
-      this.HFormGroup1.patchValue({
-        suburb_postal: 'Not Specified'
-      })
-      this.difSuburbDisable = true
+      // this.HFormGroup1.patchValue({
+      //   suburb_postal: 'Not Specified'
+      // })
+      // this.difSuburbDisable = true
     }
   }
   selectedUserId
@@ -503,6 +529,7 @@ export class NewStudentComponent implements OnInit {
       altEmail: ['', [Validators.maxLength(80)]],
       dob: ['', [Validators.required]],
       birthcountryId: [2],
+      countryId: [1],
       nationalityId: [null],
       gender: ['@', [Validators.required]],
       telHome: ['', [Validators.maxLength(20)]],
@@ -542,13 +569,19 @@ export class NewStudentComponent implements OnInit {
       streetName: ['', [Validators.required, Validators.maxLength(70)]],
       buildingName: ['', [Validators.maxLength(50)]],
       suburb: ['', [Validators.required]],
-      stateId: ['New South Wales'],
-      postCode: ['', [Validators.required, Validators.maxLength(4)]],
+      stateId: [],
+      stateName: '',
+      province: '',
+      zipCode: null,
+      zipCode_postal: null,
+      province_postal: '',
+      postCode: ['', [Validators.required,Validators.minLength(4)]],
       differentPostalAddress: ['N'],
       flatUnitDetails_postal: ['', [Validators.maxLength(30)]],
       streetNumber_postal: ['', [Validators.maxLength(15)]],
       streetName_postal: ['', [Validators.maxLength(70)]],
       buildingName_postal: ['', [Validators.maxLength(50)]],
+      countryId_postal: null,
       suburb_postal: [''],
       stateId_postal: ['New South Wales'],
       postCode_postal: ['', [Validators.maxLength(4)]],
@@ -614,6 +647,7 @@ export class NewStudentComponent implements OnInit {
       fundingSourceStateId: [null],
       commencingProgramId: [1, [Validators.required]],
       commencementDate: [new Date(), [Validators.required]],
+      offerLetterIssueDate: [new Date()],
       courseDuration: [null],
       courseDurationType: ['W', [Validators.required]],
       expectedCompletionDate: [null, [Validators.required]],
@@ -1122,7 +1156,7 @@ export class NewStudentComponent implements OnInit {
       console.log(this.courseIntakeData)
       this.HFormGroup4.patchValue({
         courseDuration: this.courseIntakeData.courseduration,
-        commencementDate: this.courseIntakeData.startdate,
+        // commencementDate: this.courseIntakeData.startdate,
       })
       this.setExpectedCompletion(new Date())
     })
@@ -1465,6 +1499,7 @@ export class NewStudentComponent implements OnInit {
     enrolBody.courseIntakeDateId = this.courseIntakeID
     enrolBody.studentEnrolmentDate = this.datePipe.transform(enrolBody.studentEnrolmentDate, 'yyyy-MM-dd')
     enrolBody.commencementDate = this.datePipe.transform(enrolBody.commencementDate, 'yyyy-MM-dd')
+    enrolBody.offerLetterIssueDate = this.datePipe.transform(enrolBody.offerLetterIssueDate, 'yyyy-MM-dd')
     enrolBody.expectedCompletionDate = this.datePipe.transform(enrolBody.expectedCompletionDate, 'yyyy-MM-dd')
     console.log('Form Value', this.HFormGroup4.value)
     // console.log(this.HFormGroup4.value.priorDetail)
@@ -1532,7 +1567,7 @@ export class NewStudentComponent implements OnInit {
       const uploadRequest = this.apiService.postAPI('fileupload', formData).pipe(
         map((data: any) => {
           docRowsArray.at(index).patchValue({
-            documentLoc: `https://api.wonderit.com.au:5000/${data.data}`
+            documentLoc: `https://api.wonderit.com.au:5038/${data.data}`
           });
         })
       );

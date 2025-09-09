@@ -12,6 +12,7 @@ import { MatSelectModule } from '@angular/material/select'
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatRadioModule } from '@angular/material/radio';
 import { StudentsPaymentsComponent } from './students-payments/students-payments.component';
+import { IssuanceRegisterComponent } from './issuance-register/issuance-register.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
@@ -19,7 +20,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
   declarations: [
     AvetmissComponent,
     AsqaComponent,
-    StudentsPaymentsComponent
+    StudentsPaymentsComponent,
+    IssuanceRegisterComponent
   ],
   imports: [
     CommonModule,

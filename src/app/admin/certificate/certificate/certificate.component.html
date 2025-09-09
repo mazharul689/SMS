@@ -169,14 +169,14 @@
                           <mat-header-cell *matHeaderCellDef>
                             <mat-label>Start Date</mat-label>
                           </mat-header-cell>
-                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.startdate}}
+                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.startdate| date:'MM/dd/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="enDate">
                           <mat-header-cell *matHeaderCellDef>
                             <mat-label>End Date</mat-label>
                           </mat-header-cell>
-                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.enddate}}
+                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.enddate | date:'MM/dd/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="hours">

@@ -112,52 +112,52 @@ export class TrainingactivityComponent implements OnInit {
     //   this.enrolemntID = data['data'][0]['studentEnrolmentId']
 
 
-      //EditTraining
-      this.apiService.getAPI(`gettrainingactivity?id=${this.enrolemntID}`).subscribe((data) => {
-        let trainingArray
-        trainingArray = data['data']
-        trainingArray.sort((a, b) => {
-          if (a.unitorderby < b.unitorderby) {
-            return -1;
-          }
-          if (a.unitorderby > b.unitorderby) {
-            return 1;
-          }
-          return 0;
-        });
-        if (!data['data'].msg) {
-          for (let i = 0; i < trainingArray.length; i++) {
-            trainingArray[i].startdate = moment(trainingArray[i].startdate)
-            trainingArray[i].enddate = moment(trainingArray[i].enddate)
-          }
-          this.editTraning = trainingArray;
-          // this.HFormGroup1.setControl('trainingArray', this.fb.array((this.editTraning || []).map((x) => this.fb.group(x))))
-          (this.HFormGroup1.get('trainingArray') as FormArray).removeAt(0);
-          for (let i = 0; i < this.editTraning.length; i++) {
-            let rowData1 = this.fb.group({
-              trainingActivityId: this.editTraning[i].trainingactivityid,
-              statusCheck: true,
-              unitId: this.editTraning[i].unitid,
-              unitName: this.editTraning[i].unitname,
-              classSetupId: this.editTraning[i].classsetupid,
-              outcomeNationalId: this.editTraning[i].outcomenationalid,
-              outcomeTrainingOrgId: this.editTraning[i].outcomenationalid,
-              startDate: this.editTraning[i].startdate,
-              endDate: this.editTraning[i].enddate,
-              hoursAttended: this.editTraning[i].hoursdttended,
-              unitCode: this.editTraning[i].unitcode,
-              unitType: this.editTraning[i].unittype,
-              vetFlag: this.editTraning[i].vetflag,
-              AVETMISS: this.editTraning[i].avetmiss
-            });
-            (this.HFormGroup1.get('trainingArray') as FormArray).push(rowData1)
-          }
-          console.log('formvalue',this.HFormGroup1.value)
+    //EditTraining
+    this.apiService.getAPI(`gettrainingactivity?id=${this.enrolemntID}`).subscribe((data) => {
+      let trainingArray
+      trainingArray = data['data']
+      trainingArray.sort((a, b) => {
+        if (a.unitorderby < b.unitorderby) {
+          return -1;
         }
-      })
+        if (a.unitorderby > b.unitorderby) {
+          return 1;
+        }
+        return 0;
+      });
+      if (!data['data'].msg) {
+        for (let i = 0; i < trainingArray.length; i++) {
+          trainingArray[i].startdate = moment(trainingArray[i].startdate)
+          trainingArray[i].enddate = moment(trainingArray[i].enddate)
+        }
+        this.editTraning = trainingArray;
+        // this.HFormGroup1.setControl('trainingArray', this.fb.array((this.editTraning || []).map((x) => this.fb.group(x))))
+        (this.HFormGroup1.get('trainingArray') as FormArray).removeAt(0);
+        for (let i = 0; i < this.editTraning.length; i++) {
+          let rowData1 = this.fb.group({
+            trainingActivityId: this.editTraning[i].trainingactivityid,
+            statusCheck: true,
+            unitId: this.editTraning[i].unitid,
+            unitName: this.editTraning[i].unitname,
+            classSetupId: this.editTraning[i].classsetupid,
+            outcomeNationalId: this.editTraning[i].outcomenationalid,
+            outcomeTrainingOrgId: this.editTraning[i].outcomenationalid,
+            startDate: this.editTraning[i].startdate,
+            endDate: this.editTraning[i].enddate,
+            hoursAttended: this.editTraning[i].hoursdttended,
+            unitCode: this.editTraning[i].unitcode,
+            unitType: this.editTraning[i].unittype,
+            vetFlag: this.editTraning[i].vetflag,
+            AVETMISS: this.editTraning[i].avetmiss
+          });
+          (this.HFormGroup1.get('trainingArray') as FormArray).push(rowData1)
+        }
+        console.log('formvalue', this.HFormGroup1.value)
+      }
+    })
     // })
   }
-  getstudent(id){
+  getstudent(id) {
     this.apiService.getAPI(`getstudentenrolmentbystudentenrolmentid?id=${id}`).subscribe((data) => {
       this.studentDetails = data['data'][0]
       this.studentDetails.fullname = this.studentDetails.firstname + ' ' + this.studentDetails.middlename + ' ' + this.studentDetails.lastname
@@ -213,7 +213,7 @@ export class TrainingactivityComponent implements OnInit {
       unitCode: '',
       unitType: '',
       vetFlag: '',
-      AVETMISS : ''
+      AVETMISS: ''
     })
   }
   outComeChange(val) {
@@ -244,10 +244,28 @@ export class TrainingactivityComponent implements OnInit {
     trainingBody.enDate = this.datePipe.transform(this.enDate, 'yyyy-MM-dd')
     this.HFormGroup1.get('studentEnrolmentId').setValue(this.enrolemntID)
     for (let i = 0; i < this.trainingArray.length; i++) {
-      // console.log('end ', this.trainingArray.at(i).value.outcomeNationalId)
-      this.trainingArray.at(i).value.outcomeTrainingOrgId = this.trainingArray.at(i).value.outcomeNationalId
-      this.trainingArray.at(i).value.startDate = this.datePipe.transform(this.trainingArray.at(i).value.startDate, 'yyyy-MM-dd')
-      this.trainingArray.at(i).value.endDate = this.datePipe.transform(this.trainingArray.at(i).value.endDate, 'yyyy-MM-dd')
+      const startDate = this.trainingArray.at(i).value.startDate;
+      const endDate = this.trainingArray.at(i).value.endDate;
+
+      if (!startDate || isNaN(new Date(startDate).getTime())) {
+        this.error = { isError: true, errorMessage: `Start date missing or invalid at index ${i}` };
+        window.scroll(0, 0);
+        return; // exit early
+      }
+
+      else if (!endDate || isNaN(new Date(endDate).getTime())) {
+        this.error = { isError: true, errorMessage: `End date missing or invalid at index ${i}` };
+        window.scroll(0, 0);
+        return;
+      }
+
+      else {
+        // Now safe to transform and assign
+        this.trainingArray.at(i).value.outcomeTrainingOrgId = this.trainingArray.at(i).value.outcomeNationalId;
+        this.trainingArray.at(i).value.startDate = this.datePipe.transform(startDate, 'yyyy-MM-dd');
+        this.trainingArray.at(i).value.endDate = this.datePipe.transform(endDate, 'yyyy-MM-dd');
+      }
+
     }
     console.log('Updated Form Value', this.HFormGroup1.value)
     // if(this.HFormGroup7.valid){

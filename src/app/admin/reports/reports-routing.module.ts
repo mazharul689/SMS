@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AvetmissComponent } from './avetmiss/avetmiss.component'
 import { AsqaComponent} from './asqa/asqa.component'
 import { StudentsPaymentsComponent } from './students-payments/students-payments.component';
-
+import { IssuanceRegisterComponent } from './issuance-register/issuance-register.component';
 const routes: Routes = [
   {
     path: 'avetmiss',
@@ -16,6 +16,10 @@ const routes: Routes = [
   {
     path: 'students-payments',
     component: StudentsPaymentsComponent
+  },
+  {
+    path: 'issuance-register',
+    component: IssuanceRegisterComponent
   }
 ];
 

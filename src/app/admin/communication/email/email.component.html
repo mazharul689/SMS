@@ -183,6 +183,7 @@
                         </mat-radio-group>
                       </section>
                     </div>
+
                   </div>
                   <div class="newCourseUnit">
                     <div class="materialTableHeader" style="height: 140px !important;">
@@ -251,7 +252,7 @@
 
                           </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-1-5">
                           <div class="col-sm-12">
                             <mat-form-field class="example-full-width mr-5">
                               <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Student Name</mat-label>
@@ -273,13 +274,12 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-1-5">
                           <div class="search row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                               <mat-form-field class="example-full-width mr-5">
                                 <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Due Start Date</mat-label>
-                                <input matInput [matDatepicker]="basicDatepicker1"
-                                  [formControl]="due_start_dateFilter">
+                                <input matInput [matDatepicker]="basicDatepicker1" [formControl]="due_start_dateFilter">
                                 <mat-datepicker-toggle matSuffix [for]="basicDatepicker1">
                                 </mat-datepicker-toggle>
                                 <mat-datepicker #basicDatepicker1></mat-datepicker>
@@ -287,13 +287,12 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-1-5">
                           <div class="search row">
                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                               <mat-form-field class="example-full-width mr-5">
                                 <mat-label style="color: rgb(7, 7, 7); font-size: 17px;">Due End Date</mat-label>
-                                <input matInput [matDatepicker]="basicDatepicker1"
-                                  [formControl]="due_end_dateFilter">
+                                <input matInput [matDatepicker]="basicDatepicker2" [formControl]="due_end_dateFilter">
                                 <mat-datepicker-toggle matSuffix [for]="basicDatepicker2">
                                 </mat-datepicker-toggle>
                                 <mat-datepicker #basicDatepicker2></mat-datepicker>
@@ -301,11 +300,24 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-3">
+                            <section class="example-full-width mb-3">
+                              <label class="example col-lg-5 col-md-5 col-sm-5: asterisk">Single Enrolment</label>
+                              <mat-radio-group class="col-lg-7 col-md-7 col-sm-7" [formControl]="single_enrolment">
+                                <mat-radio-button
+                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                  value="Y">Yes</mat-radio-button>
+                                <mat-radio-button
+                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                  value="N">No</mat-radio-button>
+                              </mat-radio-group>
+                            </section>
+                        </div>
+                        <div class="col-1-5">
                           <div class="search row" style="padding-top: 7px;">
                             <div class="col-sm-6">
                               <button mat-mini-fab color="primary"
-                                (click)="search(courseIntakeFilter.value,agentFilter.value,applicationStatusFilter.value,specialClientIdFilter.value,usiFilter.value,studentNameFilter.value,paymentStatusFilter.value,due_start_dateFilter.value,due_end_dateFilter.value)">
+                                (click)="search(courseIntakeFilter.value,agentFilter.value,applicationStatusFilter.value,specialClientIdFilter.value,usiFilter.value,studentNameFilter.value,paymentStatusFilter.value,due_start_dateFilter.value,due_end_dateFilter.value,single_enrolment.value)">
                                 <i class="fa fa-search"></i>
                               </button>
                             </div>

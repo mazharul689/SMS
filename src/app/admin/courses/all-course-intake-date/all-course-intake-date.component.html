@@ -115,7 +115,7 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right"
                     >
-                    {{row.startdate}}
+                    {{row.startdate| date:'MM/dd/yyyy'}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="endDate">
@@ -127,7 +127,7 @@
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right"
                     >
-                    {{row.enddate}}
+                    {{row.enddate | date:'MM/dd/yyyy'}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="actions">

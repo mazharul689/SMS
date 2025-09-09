@@ -255,6 +255,81 @@ export class EditCourseUnitsComponent implements OnInit {
       unitDurationType: '',
     })
   }
+  // unitsByCourses(id) {
+  //   this.courseId = id
+  //   this.apiService.getAPI(`getcourseunitbycourseidall?id=${id}`).subscribe((data) => {
+  //     // this.unitByCourse = data['data'];
+  //     this.units = data['data']
+  //     this.units.sort((a, b) => {
+  //       if (a.unittype < b.unittype) {
+  //         return -1;
+  //       }
+  //       if (a.unittype > b.unittype) {
+  //         return 1;
+  //       }
+  //       return 0;
+  //     });
+  //     this.apiService.getAPI(`getcourseunitbycourseid?id=${id}`).subscribe((data) => {
+  //       this.previousData = data['data']
+  //       if (this.previousData.msg != 'No record found') {
+  //         this.units.forEach((data) => {
+  //           const matchingIndex = this.previousData.findIndex((unit) => unit.unitid === data.unitid);
+  //           if (matchingIndex !== -1) {
+  //             data.unitdurationtype = this.previousData[matchingIndex].unitdurationtype;
+  //             data.unitduration = this.previousData[matchingIndex].unitduration;
+  //             data.unitorderby = this.previousData[matchingIndex].unitorderby;
+  //             data.statusCheck = true;
+  //           }
+  //           else{
+  //             data.statusCheck = false;
+  //           }
+  //         });
+  //         console.log('check',this.previousData)
+  //       }
+  //       else {
+  //         this.units.forEach((data, index) => {
+  //           data.unitdurationtype = 'W';
+  //           data.unitduration = 0;
+  //           data.unitorderby = index;
+  //         });
+  //       }
+
+  //       this.UnitRows.clear();
+  //       (this.HFormGroup1.get('UnitRows') as FormArray).removeAt(0);
+  //       for (let i = 0; i < this.units.length; i++) {
+  //         // if (this.units[i].unitorderby != 0) {
+  //         //   this.dataSource1.data.forEach(i => this.selection.select(i));
+  //         // }
+  //         let rowData1 = this.fb.group({
+  //           rowID: i,
+  //           statusCheck: this.units[i].statusCheck,
+  //           courseId: this.units[i].courseid,
+  //           courseUnitId: this.units[i].courseunitid,
+  //           unitId: this.units[i].unitid,
+  //           unitCode: this.units[i].unitcode,
+  //           unitName: this.units[i].unitname,
+  //           unitType: this.units[i].unittype,
+  //           vetFlag: this.units[i].vetflag,
+  //           AVETMISS: this.units[i].avetmiss,
+  //           unitOrderBy: this.units[i].unitorderby,
+  //           unitDurationType: this.units[i].unitdurationtype,
+  //           unitDuration: this.units[i].unitduration,
+  //         });
+  //         (this.HFormGroup1.get('UnitRows') as FormArray).push(rowData1)
+  //       }
+  //       // console.log('flag',this.UnitRows.value)
+  //       this.dataSource1 = new MatTableDataSource() // create new object
+  //       this.dataSource1.data = this.UnitRows.value
+  //       this.dataSource1.paginator = this.tableTwoPaginator
+  //       this.dataSource1.sort = this.tableTwoSort
+  //       this.dataSource1.filterPredicate = this.createFilter();
+  //       this.masterToggle()
+  //     })
+  //     // console.log('check', this.units)
+
+  //   })
+
+  // }
   unitsByCourses(id) {
     this.courseId = id
     this.apiService.getAPI(`getcourseunitbycourseidall?id=${id}`).subscribe((data) => {
@@ -269,60 +344,87 @@ export class EditCourseUnitsComponent implements OnInit {
         }
         return 0;
       });
+      // console.log('check', this.units)
       this.apiService.getAPI(`getcourseunitbycourseid?id=${id}`).subscribe((data) => {
         this.previousData = data['data']
         if (this.previousData.msg != 'No record found') {
           this.units.forEach((data) => {
             const matchingIndex = this.previousData.findIndex((unit) => unit.unitid === data.unitid);
             if (matchingIndex !== -1) {
-              data.unitdurationtype = this.previousData[matchingIndex].unitdurationtype;
-              data.unitduration = this.previousData[matchingIndex].unitduration;
-              data.unitorderby = this.previousData[matchingIndex].unitorderby;
-              data.statusCheck = true;
+              data.statuscheck = true;
+            }
+            else {
+              data.statuscheck = false;
             }
           });
-          console.log('check',this.previousData)
+          this.UnitRows.clear();
+          (this.HFormGroup1.get('UnitRows') as FormArray).removeAt(0);
+          for (let i = 0; i < this.units.length; i++) {
+            let rowData1 = this.fb.group({
+              rowID: i,
+              statusCheck: this.units[i].statuscheck,
+              courseId: this.units[i].courseid,
+              courseUnitId: this.units[i].courseunitid,
+              unitId: this.units[i].unitid,
+              unitCode: this.units[i].unitcode,
+              unitName: this.units[i].unitname,
+              unitType: this.units[i].unittype,
+              vetFlag: this.units[i].vetflag,
+              AVETMISS: this.units[i].avetmiss,
+              unitOrderBy: this.units[i].unitorderby,
+              unitDurationType: this.units[i].unitdurationtype,
+              unitDuration: this.units[i].unitduration,
+            });
+            (this.HFormGroup1.get('UnitRows') as FormArray).push(rowData1)
+          }
+          // console.log('flag',this.UnitRows.value)
+          this.dataSource1 = new MatTableDataSource() // create new object
+          this.dataSource1.data = this.UnitRows.value
+          console.log('check', this.dataSource1.data)
+          this.dataSource1.paginator = this.tableTwoPaginator
+          this.dataSource1.sort = this.tableTwoSort
+          this.dataSource1.filterPredicate = this.createFilter();
+          // this.unitCodeFilter.valueChanges.subscribe(unitCode => {
+          //   this.filteredValues1.unitCode = unitCode
+          //   this.dataSource1.filter = JSON.stringify(this.filteredValues1)
+          // })
+          this.masterToggle();
         }
         else {
-          this.units.forEach((data, index) => {
-            data.unitdurationtype = 'W';
-            data.unitduration = 0;
-            data.unitorderby = index;
-          });
+          this.UnitRows.clear();
+          (this.HFormGroup1.get('UnitRows') as FormArray).removeAt(0);
+          for (let i = 0; i < this.units.length; i++) {
+            let rowData1 = this.fb.group({
+              rowID: i,
+              statusCheck: this.units[i].statusCheck,
+              courseId: this.units[i].courseid,
+              courseUnitId: this.units[i].courseunitid,
+              unitId: this.units[i].unitid,
+              unitCode: this.units[i].unitcode,
+              unitName: this.units[i].unitname,
+              unitType: this.units[i].unittype,
+              vetFlag: this.units[i].vetflag,
+              AVETMISS: this.units[i].avetmiss,
+              unitOrderBy: this.units[i].unitorderby,
+              unitDurationType: this.units[i].unitdurationtype,
+              unitDuration: this.units[i].unitduration,
+            });
+            (this.HFormGroup1.get('UnitRows') as FormArray).push(rowData1)
+          }
+          // console.log('flag',this.UnitRows.value)
+          this.dataSource1 = new MatTableDataSource() // create new object
+          this.dataSource1.data = this.UnitRows.value
+          console.log('check', this.dataSource1.data)
+          this.dataSource1.paginator = this.tableTwoPaginator
+          this.dataSource1.sort = this.tableTwoSort
+          this.dataSource1.filterPredicate = this.createFilter();
+          // this.unitCodeFilter.valueChanges.subscribe(unitCode => {
+          //   this.filteredValues1.unitCode = unitCode
+          //   this.dataSource1.filter = JSON.stringify(this.filteredValues1)
+          // })
+          this.masterToggle();
         }
-
-        this.UnitRows.clear();
-        (this.HFormGroup1.get('UnitRows') as FormArray).removeAt(0);
-        for (let i = 0; i < this.units.length; i++) {
-          // if (this.units[i].unitorderby != 0) {
-          //   this.dataSource1.data.forEach(i => this.selection.select(i));
-          // }
-          let rowData1 = this.fb.group({
-            rowID: i,
-            statusCheck: this.units[i].statusCheck,
-            courseId: this.units[i].courseid,
-            courseUnitId: this.units[i].courseunitid,
-            unitId: this.units[i].unitid,
-            unitCode: this.units[i].unitcode,
-            unitName: this.units[i].unitname,
-            unitType: this.units[i].unittype,
-            vetFlag: this.units[i].vetflag,
-            AVETMISS: this.units[i].avetmiss,
-            unitOrderBy: this.units[i].unitorderby,
-            unitDurationType: this.units[i].unitdurationtype,
-            unitDuration: this.units[i].unitduration,
-          });
-          (this.HFormGroup1.get('UnitRows') as FormArray).push(rowData1)
-        }
-        // console.log('flag',this.UnitRows.value)
-        this.dataSource1 = new MatTableDataSource() // create new object
-        this.dataSource1.data = this.UnitRows.value
-        this.dataSource1.paginator = this.tableTwoPaginator
-        this.dataSource1.sort = this.tableTwoSort
-        this.dataSource1.filterPredicate = this.createFilter();
-        this.masterToggle()
       })
-      // console.log('check', this.units)
 
     })
 

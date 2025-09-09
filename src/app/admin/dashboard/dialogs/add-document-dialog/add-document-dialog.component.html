@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div>
-                <button mat-raised-button (click)="onDocumentUpdate()" [disabled]="this.selectedFiles.length == 0" color="primary">Save</button>
+                <button mat-raised-button (click)="onDocumentUpdate()" [disabled]="this.selectedFiles.length == 0 || this.flag" color="primary">Save</button>
             </div>
         </form>
     <!-- </div> -->

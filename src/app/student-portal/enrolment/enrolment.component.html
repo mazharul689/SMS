@@ -1133,7 +1133,7 @@
                                   </th>
                                   <td mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
                                     title="click to view unit details" (click)="showUnits(row)">
-                                    {{row.startdate | date:'mediumDate' }}
+                                    {{row.startdate| date:'MM/dd/yyyy' | date:'mediumDate' }}
                                   </td>
                                 </ng-container>
                                 <ng-container matColumnDef="endDate">
@@ -1142,7 +1142,7 @@
                                   </th>
                                   <td mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
                                     title="click to view unit details" (click)="showUnits(row)">
-                                    {{row.enddate | date:'mediumDate' }}
+                                    {{row.enddate | date:'MM/dd/yyyy' | date:'mediumDate' }}
                                   </td>
                                 </ng-container>
                                 <ng-container matColumnDef="action">

@@ -193,7 +193,7 @@
                     </mat-form-field>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right"
-                    title="click to view general info"> {{row.commencementdate
+                    title="click to view general info"> {{row.commencementdate | date:'MM/dd/yyyy'
                     }}
                   </mat-cell>
                 </ng-container>
@@ -206,7 +206,7 @@
                     </mat-form-field>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right"
-                    title="click to view general info"> {{row.expectedcompletiondate
+                    title="click to view general info"> {{row.expectedcompletiondate | date:'MM/dd/yyyy'
                     }}
                   </mat-cell>
                 </ng-container>
@@ -219,7 +219,7 @@
                     </mat-form-field>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right"
-                    title="click to view general info"> {{row.endDate}}
+                    title="click to view general info"> {{row.enddate | date:'MM/dd/yyyy'}}
                   </mat-cell>
                 </ng-container> -->
                 <ng-container matColumnDef="enroledStatus">
@@ -286,12 +286,12 @@
                       (click)="newMessage(row.firstname,row.studentid)">
                       <mat-icon aria-label="Send E-mail" style="color: rgb(255, 255, 255);">email</mat-icon>
                     </button>
-                    <div>
+                    <!-- <div>
                       <button mat-icon-button class="btn-tbl-edit" title="Download Offer Letter"
                         (click)="downloadOfferLetter(row)">
                         <mat-icon style="color: blue;">cloud_download</mat-icon>
                       </button>
-                    </div>
+                    </div> -->
 
                     <!-- <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i> -->
                     <!-- <div class="icon-button-demo">

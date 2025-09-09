@@ -170,7 +170,7 @@
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
-                            <mat-label>Country of Birth</mat-label>
+                            <mat-label>Country</mat-label>
                             <mat-select formControlName="birthcountryId">
                               <mat-option *ngFor="let countries of getcountry" [value]="countries.countryid">
                                 {{ countries.countryname }}
@@ -874,7 +874,20 @@
                     <!-- <span class="section-heading"><i class='fas fa-bars'></i> Current Address</span> -->
                     <div class="section-content">
                       <div class="row">
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Country</mat-label>
+                            <mat-select formControlName="countryId" (ngModelChange)="countryChange($event)">
+                              <mat-option *ngFor="let countries of getcountry" [value]="countries.countryid">
+                                {{ countries.countryname }}
+                              </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="HFormGroup1.get('countryId').hasError('required')">
+                              Please select country of birth
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Flat/ Unit Details</mat-label>
                             <input matInput formControlName="flatUnitDetails">
@@ -883,7 +896,7 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Street Number</mat-label>
                             <input matInput formControlName="streetNumber" required>
@@ -895,7 +908,7 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                        <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Street Name</mat-label>
                             <input matInput formControlName="streetName" required>
@@ -909,7 +922,7 @@
                         </div>
                       </div>
                       <div class="row">
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                        <div *ngIf="this.HFormGroup1.value.countryId == 1" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Postcode</mat-label>
                             <input matInput list="postcode" (ngModelChange)="postCodeChange($event)"
@@ -920,12 +933,15 @@
                             <mat-error *ngIf="HFormGroup1.get('postCode').hasError('minlength')">
                               Minimum length is 4 characters
                             </mat-error>
-                            <mat-error *ngIf="HFormGroup1.get('postCode').hasError('maxlength')">
-                              Maximum length is 4 characters
-                            </mat-error>
                           </mat-form-field>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                        <div *ngIf="this.HFormGroup1.value.countryId != 1" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Zip Code</mat-label>
+                            <input matInput formControlName="zipCode">
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="this.HFormGroup1.value.countryId == 1" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>State</mat-label>
                             <!-- <input matInput formControlName="stateId" [value]="states" readonly > -->
@@ -934,6 +950,12 @@
                                 {{state.statename}}
                               </mat-option>
                             </mat-select>
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="this.HFormGroup1.value.countryId != 1" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Province</mat-label>
+                            <input matInput formControlName="province">
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
@@ -1019,11 +1041,24 @@
                     <div class="row">
                       <span class="section-heading">
                         <i class='fas fa-bars'></i>
-                        Postal Address
+                        Different Postal Address
                       </span>
                     </div>
                     <div class="section-content">
                       <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Country</mat-label>
+                            <mat-select formControlName="countryId_postal" (ngModelChange)="difCountryChange($event)">
+                              <mat-option *ngFor="let countries of getcountry" [value]="countries.countryid">
+                                {{ countries.countryname }}
+                              </mat-option>
+                            </mat-select>
+                            <!-- <mat-error *ngIf="HFormGroup1.get('countryId_oistak').hasError('required')">
+                              Please select country of birth
+                            </mat-error> -->
+                          </mat-form-field>
+                        </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Flat/ Unit Details</mat-label>
@@ -1042,6 +1077,9 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
+                        
+                      </div>
+                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Street Name</mat-label>
@@ -1051,9 +1089,7 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                        <div *ngIf="this.HFormGroup1.value.countryId_postal == 1" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Postcode</mat-label>
                             <input matInput list="postcode" (ngModelChange)="difPostCodeChange($event)"
@@ -1066,7 +1102,13 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                        <div *ngIf="this.HFormGroup1.value.countryId_postal != 1" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Zip Code</mat-label>
+                            <input matInput formControlName="zipCode_postal">
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="this.HFormGroup1.value.countryId_postal == 1"  class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>State</mat-label>
                             <!-- <input matInput formControlName="stateId_postal" [value]="difStates" readonly> -->
@@ -1075,9 +1117,12 @@
                                 {{state.statename}}
                               </mat-option>
                             </mat-select>
-                            <mat-error *ngIf="HFormGroup1.get('stateId_postal').hasError('required')">
-                              State is required
-                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        <div *ngIf="this.HFormGroup1.value.countryId_postal != 1" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Province</mat-label>
+                            <input matInput formControlName="province_postal">
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
@@ -1152,7 +1197,7 @@
                                   </th>
                                   <td mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
                                     title="click to view unit details" (click)="showUnits(row)">
-                                    {{row.startdate | date:'mediumDate' }}
+                                    {{row.startdate| date:'MM/dd/yyyy' | date:'mediumDate' }}
                                   </td>
                                 </ng-container>
                                 <ng-container matColumnDef="endDate">
@@ -1161,7 +1206,7 @@
                                   </th>
                                   <td mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
                                     title="click to view unit details" (click)="showUnits(row)">
-                                    {{row.enddate | date:'mediumDate' }}
+                                    {{row.enddate | date:'MM/dd/yyyy' | date:'mediumDate' }}
                                   </td>
                                 </ng-container>
                                 <ng-container matColumnDef="action">
@@ -1624,7 +1669,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Commencement Date</mat-label>
-                            <input matInput [matDatepicker]="commenementDatepicker" formControlName="commencementDate" required>
+                            <input matInput [matDatepicker]="commenementDatepicker" formControlName="commencementDate" (ngModelChange)="setExpectedCompletion($event)" required>
                             <mat-datepicker-toggle matSuffix [for]="commenementDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #commenementDatepicker></mat-datepicker>
@@ -1633,6 +1678,21 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Offer Letter Date</mat-label>
+                            <input matInput [matDatepicker]="ofDatepicker" formControlName="offerLetterIssueDate" required>
+                            <mat-datepicker-toggle matSuffix [for]="ofDatepicker">
+                            </mat-datepicker-toggle>
+                            <mat-datepicker #ofDatepicker></mat-datepicker>
+                            <mat-error *ngIf="HFormGroup4.get('commencementDate').hasError('required')">
+                              Please select commencement date
+                            </mat-error>
+                          </mat-form-field>
+                        </div>
+                        
+                      </div>
+                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
                           <section class="example-section mb-4">
                             <label class="example col-md-4 col-sm-3 asterisk">Course Duration Type</label>
@@ -1647,8 +1707,6 @@
                             </mat-radio-group>
                           </section>
                         </div>
-                      </div>
-                      <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Course Duration</mat-label>

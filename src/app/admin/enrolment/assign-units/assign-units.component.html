@@ -68,19 +68,17 @@
                       <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
                         <section class="example-section unitsRadio">
                           <div class="row">
-                            <div class="col-sm-12">
                               <div class="col-sm-12">
                                 <div class="group">
-                                  <input type="radio" id="unitTypeId{{row.rowID}}" name="unittype{{row.rowID}}"
+                                  <input type="radio" id="unitTypeId{{row.rowID}}" name="unitType{{row.rowID}}"
                                     value="C" [attr.data-rowid]="row.rowID" [checked]="row.unitType == 'C'"
                                     (change)="UnitRowChange($event)">
-                                  <label class="pr-3">Core</label>
-                                  <input type="radio" id="unitTypeId{{row.rowID}}" name="unittype{{row.rowID}}"
+                                  <label >Core</label>
+                                  <input type="radio" id="unitTypeId{{row.rowID}}" name="unitType{{row.rowID}}"
                                     value="E" [attr.data-rowid]="row.rowID" [checked]="row.unitType == 'E'"
                                     (change)="UnitRowChange($event)">
                                   <label>Elective</label>
                                 </div>
-                              </div>
                             </div>
                           </div>
                         </section>

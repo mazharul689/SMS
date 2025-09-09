@@ -145,7 +145,7 @@
                               <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>
                             </mat-header-cell>
                             <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
-                              <span>{{row.startdate}}
+                              <span>{{row.startdate| date:'MM/dd/yyyy'}}
                               </span>
                             </mat-cell>
                           </ng-container>
@@ -154,7 +154,7 @@
                               <mat-label style="color: white; font-size: 15px;">End Date</mat-label>
                             </mat-header-cell>
                             <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
-                              <span>{{row.enddate}}</span>
+                              <span>{{row.enddate | date:'MM/dd/yyyy'}}</span>
                             </mat-cell>
                           </ng-container>
                           <ng-container matColumnDef="trainer">

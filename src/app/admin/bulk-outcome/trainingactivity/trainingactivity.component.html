@@ -85,7 +85,7 @@
                                                 <mat-cell *matCellDef="let row; let i=index">
                                                     <section class="example-section">
                                                         <div class="row">
-                                                            <span>{{row.startDate}}</span>
+                                                            <span>{{row.startdate| date:'MM/dd/yyyy'}}</span>
                                                         </div>
                                                     </section>
                                                 </mat-cell>
@@ -97,7 +97,7 @@
                                                 <mat-cell *matCellDef="let row; let i=index" class="pr-0">
                                                     <section class="example-section">
                                                         <div class="row">
-                                                            <span>{{row.endDate}}</span>
+                                                            <span>{{row.enddate | date:'MM/dd/yyyy'}}</span>
                                                         </div>
                                                     </section>
                                                 </mat-cell>

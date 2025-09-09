@@ -354,7 +354,7 @@ export class NewStudentComponent implements OnInit {
   }
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue
-    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC') {
+    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC' && this.HFormGroup1.value.birthcountryId == 1) {
       this.suburbDisable = false
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
         this.suburbs = data
@@ -375,12 +375,38 @@ export class NewStudentComponent implements OnInit {
       this.HFormGroup1.patchValue({
         suburb: 'Not specified'
       })
-      this.suburbDisable = true
+      // this.suburbDisable = true
+    }
+  }
+  public countryChange(value){
+    if(value != 1){
+      this.HFormGroup1.patchValue({
+        stateId: 99,
+        postCode: '0000'
+      })
+    }
+    else if(value == 1){
+      this.HFormGroup1.patchValue({
+        stateId: null
+      })
+    }
+  }
+  public difCountryChange(value){
+    if(value != 1){
+      this.HFormGroup1.patchValue({
+        stateId_postal: 99,
+        postCode_postal: '0000'
+      })
+    }
+    else if(value == 1){
+      this.HFormGroup1.patchValue({
+        stateId_postal: null
+      })
     }
   }
   public difPostCodeChange(newValue) {
     this.difPostCodeChanges = newValue
-    if (this.difPostCodeChanges.length == 4 && this.difPostCodeChanges != '0000' && this.difPostCodeChanges != '@@@@' && this.difPostCodeChanges != 'OSPC') {
+    if (this.difPostCodeChanges.length == 4 && this.difPostCodeChanges != '0000' && this.difPostCodeChanges != '@@@@' && this.difPostCodeChanges != 'OSPC' && this.HFormGroup1.value.countryId_postal == 1) {
       this.apiService.getAPI(`getpostcodeapi?id=${this.difPostCodeChanges}`).subscribe((data) => {
         this.difSuburbs = data
         this.difStates = data[0].state.name
@@ -396,10 +422,10 @@ export class NewStudentComponent implements OnInit {
     else if (this.difPostCodeChanges.length == 4 || this.difPostCodeChanges == '0000' || this.difPostCodeChanges == '@@@@' || this.difPostCodeChanges == 'OSPC') {
       this.difStates = null
       this.difStateName = null
-      this.HFormGroup1.patchValue({
-        suburb_postal: 'Not Specified'
-      })
-      this.difSuburbDisable = true
+      // this.HFormGroup1.patchValue({
+      //   suburb_postal: 'Not Specified'
+      // })
+      // this.difSuburbDisable = true
     }
   }
   // public issuedFlagChange(newValue) {
@@ -474,6 +500,7 @@ export class NewStudentComponent implements OnInit {
       altEmail: ['', [Validators.maxLength(80)]],
       dob: ['', [Validators.required]],
       birthcountryId: [2],
+      countryId: [1],
       nationalityId: [null],
       gender: ['@', [Validators.required]],
       telHome: ['', [Validators.maxLength(20)]],
@@ -499,6 +526,10 @@ export class NewStudentComponent implements OnInit {
       indigenousStatusId: [5, [Validators.required]],
       stillInSecSchool: ['N'],
       schoolTypeId: [null],
+      province: '',
+      province_postal: '',
+      zipCode: null,
+      zipCode_postal: null,
       completedSchoolLevelId: [7, [Validators.required]],
       PriorEducationalAchievementFlag: ['@', [Validators.required]],
       disability: ['@', [Validators.required]],
@@ -520,6 +551,7 @@ export class NewStudentComponent implements OnInit {
       stateId: ['New South Wales'],
       postCode: ['', [Validators.required, Validators.maxLength(4)]],
       differentPostalAddress: ['N'],
+      countryId_postal: null,
       flatUnitDetails_postal: ['', [Validators.maxLength(30)]],
       streetNumber_postal: ['', [Validators.maxLength(15)]],
       streetName_postal: ['', [Validators.maxLength(70)]],
@@ -843,6 +875,7 @@ export class NewStudentComponent implements OnInit {
       fundingSourceStateId: [null],
       commencingProgramId: [1, [Validators.required]],
       commencementDate: [new Date(), [Validators.required]],
+      offerLetterIssueDate: [new Date()],
       courseDuration: [null],
       courseDurationType: ['W', [Validators.required]],
       expectedCompletionDate: [null, [Validators.required]],
@@ -1607,7 +1640,7 @@ export class NewStudentComponent implements OnInit {
         this.courseIntakeData = data['data'][0]
         this.HFormGroup4.patchValue({
           courseDuration: this.courseIntakeData.courseduration,
-          commencementDate: this.courseIntakeData.startdate,
+          // commencementDate: this.courseIntakeData.startdate,
         })
         this.setExpectedCompletion(new Date())
       })
@@ -1993,6 +2026,7 @@ export class NewStudentComponent implements OnInit {
     enrolBody.studentOriginId = this.HFormGroup1.value.studentOriginId
     enrolBody.studentEnrolmentDate = this.datePipe.transform(enrolBody.studentEnrolmentDate, 'yyyy-MM-dd')
     enrolBody.commencementDate = this.datePipe.transform(enrolBody.commencementDate, 'yyyy-MM-dd')
+    enrolBody.offerLetterIssueDate = this.datePipe.transform(enrolBody.offerLetterIssueDate, 'yyyy-MM-dd')
     enrolBody.expectedCompletionDate = this.datePipe.transform(enrolBody.expectedCompletionDate, 'yyyy-MM-dd')
     enrolBody.courseIntakeDateId = this.courseIntakeID
     // console.log('Form Value', this.HFormGroup4.value)
@@ -2060,7 +2094,7 @@ export class NewStudentComponent implements OnInit {
       const uploadRequest = this.apiService.postAPI('fileupload', formData).pipe(
         map((data: any) => {
           docRowsArray.at(index).patchValue({
-            documentLoc: `https://api.wonderit.com.au:5000/${data.data}`
+            documentLoc: `https://api.wonderit.com.au:5038/${data.data}`
           });
         })
       );
@@ -2151,7 +2185,7 @@ export class NewStudentComponent implements OnInit {
   //           // console.log('certificate', data['data'])
   //           // console.log('enrolmentid', this.studentEnrolID)
   //           this.certificate = data['data']
-  //           this.baseApi = "https://api.wonderit.com.au:5000/"
+  //           this.baseApi = "https://api.wonderit.com.au:5038/"
   //           // this.link = this.baseApi.concat(this.certificate.toString())
   //           // console.log('link',this.link)
   //           window.open(this.baseApi + data['data'])

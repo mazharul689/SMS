@@ -52,8 +52,8 @@ export class NewAgentsComponent implements OnInit {
       startDate: [''],
       endDate: [''],
       isActive: ['Y', [Validators.required, Validators.maxLength(100)]],
-      amountTypeId: ['', [Validators.required]],
-      agentCommission: ['', [Validators.required]],
+      amountTypeId: [2, [Validators.required]],
+      agentCommission: [0, [Validators.required]],
       gst: ['Y'],
       userId: [this.userInfo.userid]
     })
@@ -118,7 +118,7 @@ export class NewAgentsComponent implements OnInit {
         formData.append('uploadfolder', 'AgentsDocuments')
         if (file) {
           this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.docRows.at(i).value.agentDocumentLoc = "https://api.wonderit.com.au:5000/" + data.data
+            this.docRows.at(i).value.agentDocumentLoc = "https://api.wonderit.com.au:5038/" + data.data
             for (let i = 0; i < this.docRows.length; i++) {
               if (!this.docRows.at(i).value.agentDocumentName && !this.docRows.at(i).value.agentDocumentLoc) {
                 valid = false
@@ -127,7 +127,11 @@ export class NewAgentsComponent implements OnInit {
             if (valid == true) {
               if (i + 1 == this.docRows.length) {
                 this.apiService.postAPI('addagentdocument', this.HFormGroup2.value).subscribe((data) => {
-                  this.router.navigate(['/admin/users/all-agents'])
+                  this.apiService.getAPI(`getagent`).subscribe((data) => {
+                    let agents = data['data']
+                    window.localStorage.setItem("agents", JSON.stringify(agents))
+                    this.router.navigate(['/admin/users/all-agents'])
+                  })
                 })
               }
             }
@@ -135,7 +139,11 @@ export class NewAgentsComponent implements OnInit {
         }
       }
     }
-    this.router.navigate(['/admin/users/all-agents'])
+    this.apiService.getAPI(`getagent`).subscribe((data) => {
+      let agents = data['data']
+      window.localStorage.setItem("agents", JSON.stringify(agents))
+      this.router.navigate(['/admin/users/all-agents'])
+    })
     // this.stepLabel++
     // stepper.next()
   }

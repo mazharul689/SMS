@@ -68,12 +68,22 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-3">
+                    <div class="col-2">
                       <div class="search row">
                         <div class="col-sm-12">
                           <mat-form-field class="example-full-width mr-5">
                             <mat-label style="color: rgb(7, 7, 7); font-size: 15px;">Usi</mat-label>
                             <input matInput type="text" style="color: black" [formControl]="usiFilter" />
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-2">
+                      <div class="search row">
+                        <div class="col-sm-12">
+                          <mat-form-field class="example-full-width mr-5">
+                            <mat-label style="color: rgb(7, 7, 7); font-size: 15px;">Class Name</mat-label>
+                            <input matInput type="text" style="color: black" [formControl]="classFilter" />
                           </mat-form-field>
                         </div>
                       </div>
@@ -94,11 +104,11 @@
                         </mat-form-field>
                       </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-2">
                       <div class="search row" style="padding-top: 7px;">
                         <div class="col-sm-4">
                           <button mat-mini-fab color="primary"
-                            (click)="search(courseIntakeFilter.value,bulkAgentFilter.value,bulkApplicationStatusFilter.value,bulkClientIdFilter.value,usiFilter.value,studentNameFilter.value,emailFilter.value)">
+                            (click)="search(courseIntakeFilter.value,bulkAgentFilter.value,bulkApplicationStatusFilter.value,bulkClientIdFilter.value,usiFilter.value,studentNameFilter.value,emailFilter.value, classFilter.value)">
                             <i class="fa fa-search"></i>
                           </button>
                         </div>
@@ -177,7 +187,7 @@
                       <input matInput [formControl]="enrolmentDateFilter" class="white-cursor">
                     </mat-form-field>
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"> {{row.commencementdate
+                  <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"> {{row.commencementdate | date:'MM/dd/yyyy'
                     }}
                   </mat-cell>
                 </ng-container>
@@ -190,7 +200,7 @@
                     </mat-form-field>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
-                    {{row.expectedcompletiondate
+                    {{row.expectedcompletiondate | date:'MM/dd/yyyy'
                     }}
                   </mat-cell>
                 </ng-container>

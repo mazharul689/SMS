@@ -59,7 +59,7 @@
                         <mat-label style="color: white; font-size: 15px;">Start Date</mat-label>
                       </mat-header-cell>
                       <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
-                        <span class="ml-2">{{row.startDate}}</span>
+                        <span class="ml-2">{{row.startdate| date:'MM/dd/yyyy'}}</span>
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="CAendDate">
@@ -67,7 +67,7 @@
                         <mat-label style="color: white; font-size: 15px;">End Date</mat-label>
                       </mat-header-cell>
                       <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
-                        <span class="ml-2">{{row.endDate}}</span>
+                        <span class="ml-2">{{row.enddate | date:'MM/dd/yyyy'}}</span>
                       </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

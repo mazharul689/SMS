@@ -52,6 +52,7 @@ import { PaymentPlanInstalmentsComponent } from './payment-plan-instalments/paym
 import { AddPaymentPlanInstalmentRuleComponent } from './add-payment-plan-instalment-rule/add-payment-plan-instalment-rule.component';
 import { DeletePaymentPlanComponent } from './dialog/delete-payment-plan/delete-payment-plan.component';
 import { InvoiceDialogComponent } from './invoice/dialog/invoice-dialog/invoice-dialog.component';
+import { DeleteStudentDialogComponent } from './invoice/dialog/delete-student-dialog/delete-student-dialog.component';
 
 
 @NgModule({
@@ -80,6 +81,7 @@ import { InvoiceDialogComponent } from './invoice/dialog/invoice-dialog/invoice-
     AddPaymentPlanInstalmentRuleComponent,
     DeletePaymentPlanComponent,
     InvoiceDialogComponent,
+    DeleteStudentDialogComponent,
 
   ],
   imports: [

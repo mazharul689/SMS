@@ -124,7 +124,7 @@
                         <mat-label>Start Date</mat-label>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row">
-                        {{row.startDate | date:'dd/MM/yyyy'}}
+                        {{row.startdate| date:'MM/dd/yyyy' | date:'dd/MM/yyyy'}}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="add1EndDate">
@@ -132,7 +132,7 @@
                         <mat-label>End Date</mat-label>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row">
-                        {{row.endDate | date:'dd/MM/yyyy'}}
+                        {{row.enddate | date:'MM/dd/yyyy' | date:'dd/MM/yyyy'}}
                       </mat-cell>
                     </ng-container>
                     <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>

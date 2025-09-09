@@ -2,6 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { ApiService } from 'src/app/api/api.service';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-document-dialog',
@@ -22,6 +24,7 @@ export class AddDocumentDialogComponent implements OnInit {
     filename: '',
     doc: ''
   }]
+  flag=false;
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -88,44 +91,106 @@ export class AddDocumentDialogComponent implements OnInit {
   fileChangeEvent(files: FileList, index) {
     this.selectedFiles[index] = files.item(0)
   }
+  // onDocumentUpdate() {
+  //   for (let i = 0; i <= this.preDocRows.length; i++) {
+  //     if (this.selectedFiles) {
+  //       let valid = true
+  //       let file: File = this.selectedFiles[i]
+  //       let formData: FormData = new FormData();
+  //       formData.append('inputfile', file, file.name);
+  //       formData.append('uploadfolder', 'StudentsDocuments')
+  //       if (file) {
+  //         this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
+  //           this.preDocRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5038/" + data.data
+  //           for (let i = 0; i < this.preDocRows.length; i++) {
+  //             if (!this.preDocRows.at(i).value.documentName && !this.preDocRows.at(i).value.documentLoc) {
+  //               valid = false
+  //               // console.log(valid)
+  //             }
+  //           }
+  //           if (valid == true) {
+  //             if (i + 1 == this.preDocRows.length) {
+  //               const doc = this.HFormGroup2.value.preDocRows
+  //               for (let i = this.docLength, j = 0; i < this.docLength + this.preDocRows.length; i++, j++) {
+  //                 let rowData1 = this.fb.group({
+  //                   documentLoc: doc[j].documentLoc,
+  //                   documentName: doc[j].documentName,
+  //                   fileName: '',
+  //                   doc: doc[j].doc
+  //                 });
+  //                 (this.HFormGroup1.get('docRows') as FormArray).push(rowData1)
+  //               }
+  //             }
+  //             // console.log('final form value', this.HFormGroup1.value)
+  //             this.apiService.postAPI('editstudentdocument', this.HFormGroup1.value).subscribe((data) => {
+  //               this.dialogRef.close();
+  //             })
+  //           }
+  //         })
+  //       }
+  //     }
+  //   }
+  // }
   onDocumentUpdate() {
-    for (let i = 0; i <= this.preDocRows.length; i++) {
-      if (this.selectedFiles) {
-        let valid = true
-        let file: File = this.selectedFiles[i]
-        let formData: FormData = new FormData();
-        formData.append('inputfile', file, file.name);
-        formData.append('uploadfolder', 'StudentsDocuments')
-        if (file) {
-          this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-            this.preDocRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
-            for (let i = 0; i < this.preDocRows.length; i++) {
-              if (!this.preDocRows.at(i).value.documentName && !this.preDocRows.at(i).value.documentLoc) {
-                valid = false
-                // console.log(valid)
-              }
-            }
-            if (valid == true) {
-              if (i + 1 == this.preDocRows.length) {
-                const doc = this.HFormGroup2.value.preDocRows
-                for (let i = this.docLength, j = 0; i < this.docLength + this.preDocRows.length; i++, j++) {
-                  let rowData1 = this.fb.group({
-                    documentLoc: doc[j].documentLoc,
-                    documentName: doc[j].documentName,
-                    fileName: '',
-                    doc: doc[j].doc
-                  });
-                  (this.HFormGroup1.get('docRows') as FormArray).push(rowData1)
-                }
-              }
-              // console.log('final form value', this.HFormGroup1.value)
-              this.apiService.postAPI('editstudentdocument', this.HFormGroup1.value).subscribe((data) => {
-                this.dialogRef.close();
-              })
-            }
-          })
-        }
+  this.flag = true
+  if (!this.selectedFiles || this.selectedFiles.length === 0) return;
+
+  const uploadRequests = [];
+
+  for (let i = 0; i < this.selectedFiles.length; i++) {
+    const file = this.selectedFiles[i];
+    const formData: FormData = new FormData();
+    formData.append('inputfile', file, file.name);
+    formData.append('uploadfolder', 'StudentsDocuments');
+
+    uploadRequests.push(
+      this.apiService.postAPI('fileupload', formData).pipe(
+        catchError(err => {
+          console.error('Upload failed for file:', file.name, err);
+          return of(null); // continue forkJoin
+        })
+      )
+    );
+  }
+
+  forkJoin(uploadRequests).subscribe((responses: any[]) => {
+    let allValid = true;
+
+    responses.forEach((response, i) => {
+      if (response && this.preDocRows.at(i)) {
+        this.preDocRows.at(i).patchValue({
+          documentLoc: "https://api.wonderit.com.au:5038/" + response.data
+        });
+      } else {
+        allValid = false;
+      }
+    });
+
+    // Final validation
+    for (let i = 0; i < this.preDocRows.length; i++) {
+      const row = this.preDocRows.at(i).value;
+      if (!row.documentName || !row.documentLoc) {
+        allValid = false;
+        break;
       }
     }
-  }
+
+    if (allValid) {
+      const doc = this.HFormGroup2.value.preDocRows;
+      for (let i = this.docLength, j = 0; i < this.docLength + this.preDocRows.length; i++, j++) {
+        const rowData1 = this.fb.group({
+          documentLoc: doc[j].documentLoc,
+          documentName: doc[j].documentName,
+          fileName: '',
+          doc: doc[j].doc
+        });
+        (this.HFormGroup1.get('docRows') as FormArray).push(rowData1);
+      }
+
+      this.apiService.postAPI('editstudentdocument', this.HFormGroup1.value).subscribe(() => {
+        this.dialogRef.close();
+      });
+    }
+  });
+}
 }

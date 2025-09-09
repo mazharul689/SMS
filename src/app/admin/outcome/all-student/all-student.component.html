@@ -237,7 +237,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info"> {{row.startDate}}
+                        title="click to view general info"> {{row.startdate| date:'MM/dd/yyyy'}}
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="endDateo">
@@ -248,7 +248,7 @@
                         </mat-form-field>
                       </mat-header-cell>
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"
-                        title="click to view general info"> {{row.endDate}}
+                        title="click to view general info"> {{row.enddate | date:'MM/dd/yyyy'}}
                       </mat-cell>
                     </ng-container>
 

@@ -28,6 +28,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AddMoreUnitsComponent } from '../new-student/dialog/add-more-units/add-more-units.component'
 import { DeleteStudentDocumentComponent } from '../../dashboard/dialogs/delete-student-document/delete-student-document.component'
+
 const moment = _rollupMoment || _moment;
 export interface CourseData {
   courseCode: string
@@ -218,6 +219,10 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     studentoriginid: '',
     title: '',
     firstname: '',
+    zipcode: '',
+    zipcode_postal: '',
+    province: '',
+    province_postal: '',
     middlename: '',
     lastname: '',
     email: '',
@@ -225,11 +230,14 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     altemail: '',
     dob: '',
     birthcountryid: '',
+    countryid: '',
     nationalityid: '',
     gender: '',
     telhome: '',
     telwork: '',
     mobile: '',
+    // countryid: '',
+    countryid_postal: '',
     mobile1: '',
     australianpr: '',
     visano: '',
@@ -274,7 +282,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     streetname_postal: '',
     buildingname_postal: '',
     suburb_postal: '',
-    stateid_postal: '',
+    stateid_postal: 99,
     postcode_postal: '',
     pobox_postal: ''
   }
@@ -325,6 +333,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     expectedcompletiondate: '',
     trainingcontractid: '',
     reasontakingcourseid: '',
+    offerletterissuedate: '',
     applyforrpl: '',
     courseduration: '',
     coursedurationtype: '',
@@ -345,7 +354,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     documentloc: '',
     documentname: '',
     filename: '',
-    doc: ''
+    doc: '',
+    studentdocumentid: ''
   }]
   //Edit Unit
   editUnit = [{
@@ -416,7 +426,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
   }
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue
-    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC') {
+    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC' && this.HFormGroup1.value.birthcountryId == 1) {
       this.suburbDisable = false
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
         this.suburbs = data
@@ -442,7 +452,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
   public difPostCodeChange(newValue) {
     this.difPostCodeChanges = newValue
     if (this.difPostCodeChanges != null) {
-      if (this.difPostCodeChanges.length == 4 && this.difPostCodeChanges != '0000' && this.difPostCodeChanges != '@@@@' && this.difPostCodeChanges != 'OSPC') {
+      if (this.difPostCodeChanges.length == 4 && this.difPostCodeChanges != '0000' && this.difPostCodeChanges != '@@@@' && this.difPostCodeChanges != 'OSPC' && this.HFormGroup1.value.countryId_postal == 1) {
         this.apiService.getAPI(`getpostcodeapi?id=${this.difPostCodeChanges}`).subscribe((data) => {
           this.difSuburbs = data
           this.difStates = data[0].state.name
@@ -464,6 +474,32 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       }
     }
 
+  }
+  public countryChange(value){
+    if(value != 1){
+      this.HFormGroup1.patchValue({
+        stateId: 99,
+        postCode: '0000'
+      })
+    }
+    else if(value == 1){
+      this.HFormGroup1.patchValue({
+        stateId: null
+      })
+    }
+  }
+  public difCountryChange(value){
+    if(value != 1){
+      this.HFormGroup1.patchValue({
+        stateId_postal: 99,
+        postCode_postal: '0000'
+      })
+    }
+    else if(value == 1){
+      this.HFormGroup1.patchValue({
+        stateId_postal: null
+      })
+    }
   }
   error: any = { isError: false, errorMessage: '' };
   errorAll: any = { isAllerror: false, errorMsg: '' };
@@ -510,7 +546,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       oldEmail: [''],
       altEmail: ['', [Validators.maxLength(80)]],
       dob: ['', [Validators.required]],
-      birthcountryId: [2],
+      birthcountryId: [1],
+      countryId: [2],
       nationalityId: [null],
       gender: ['@', [Validators.required]],
       telHome: ['', [Validators.maxLength(20)]],
@@ -557,12 +594,18 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       stateId: ['New South Wales'],
       postCode: ['', [Validators.required, Validators.maxLength(4)]],
       differentPostalAddress: ['N'],
+      // countryId: null,
+      countryId_postal: null,
+      zipCode: '',
+      zipCode_postal: '',
+      province: '',
+      province_postal: '',
       flatUnitDetails_postal: ['', [Validators.maxLength(30)]],
       streetNumber_postal: ['', [Validators.maxLength(15)]],
       streetName_postal: ['', [Validators.maxLength(70)]],
       buildingName_postal: ['', [Validators.maxLength(50)]],
       suburb_postal: [''],
-      stateId_postal: ['New South Wales'],
+      stateId_postal: 99,
       postCode_postal: ['', [Validators.maxLength(4)]],
       pobox_postal: ['', [Validators.maxLength(22)]],
       disabilityDetails: this.fb.group({
@@ -607,6 +650,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       fundingSourceStateId: [1],
       commencingProgramId: [1, [Validators.required]],
       commencementDate: [null, [Validators.required]],
+      offerLetterIssueDate: [null],
       courseDuration: [null],
       courseDurationType: ['W', [Validators.required]],
       expectedCompletionDate: [null, [Validators.required]],
@@ -782,7 +826,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       this.apiService.getAPI(`getstudentbystudentid?id=${this.studentID}`).subscribe((data) => {
         //studentinfo part
         this.editStudent = data['data'][0]
-        // console.log('editstudent', this.editStudent)
+        console.log('editstudent', this.editStudent.countryid_postal)
         this.temp = this.editStudent.usiverificationstatus
         if (this.temp != null) {
           this.temp = this.temp.split(" ")
@@ -812,6 +856,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           altEmail: this.editStudent.altemail,
           dob: moment(this.editStudent.dob),
           birthcountryId: this.editStudent.birthcountryid,
+          countryId: this.editStudent.countryid,
           nationalityId: this.editStudent.nationalityid,
           gender: this.editStudent.gender,
           telHome: this.editStudent.telhome,
@@ -848,6 +893,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           usi: this.editStudent.usi,
           usiNo: this.editStudent.usino,
           usiVerificationStatus: this.editStudent.usiverificationstatus,
+          // countryId: this.editStudent.countryid,
+          countryId_postal: this.editStudent.countryid_postal,
           flatUnitDetails: this.editStudent.flatunitdetails,
           streetNumber: this.editStudent.streetnumber,
           streetName: this.editStudent.streetname,
@@ -855,6 +902,10 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           suburb: this.editStudent.suburb,
           stateId: this.editStudent.stateid,
           postCode: this.editStudent.postcode,
+          zipCode: this.editStudent.zipcode,
+          zipCode_postal: this.editStudent.zipcode_postal,
+          province: this.editStudent.province,
+          province_postal: this.editStudent.province_postal,
           differentPostalAddress: this.editStudent.differentpostaladdress,
           flatUnitDetails_postal: this.editStudent.flatunitdetails_postal,
           streetNumber_postal: this.editStudent.streetnumber_postal,
@@ -865,6 +916,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           postCode_postal: this.editStudent.postcode_postal,
           pobox_postal: this.editStudent.pobox_postal
         })
+        console.log('hformgroup1 check', this.HFormGroup1.value)
         if (this.editStudent.passportexpdate != null) {
           this.HFormGroup1.patchValue({
             passportExpdate: moment(this.editStudent.passportexpdate)
@@ -875,7 +927,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
             visaExpdate: moment(this.editStudent.visaexpdate)
           })
         }
-        // console.log('hformgroup1', this.HFormGroup1.value.studentOriginId)
+        console.log('hformgroup1', this.HFormGroup1.value)
       })
     }
     else {
@@ -935,6 +987,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           altEmail: this.editStudent.altemail,
           dob: moment(this.editStudent.dob),
           birthcountryId: this.editStudent.birthcountryid,
+          countryId: this.editStudent.countryid,
           nationalityId: this.editStudent.nationalityid,
           gender: this.editStudent.gender,
           telHome: this.editStudent.telhome,
@@ -976,12 +1029,17 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           buildingName: this.editStudent.buildingname,
           suburb: this.editStudent.suburb,
           stateId: this.editStudent.stateid,
+          zipCode: this.editStudent.zipcode,
+          zipCode_postal: this.editStudent.zipcode_postal,
+          province: this.editStudent.province,
+          province_postal: this.editStudent.province_postal,
           postCode: this.editStudent.postcode,
           differentPostalAddress: this.editStudent.differentpostaladdress,
           flatUnitDetails_postal: this.editStudent.flatunitdetails_postal,
           streetNumber_postal: this.editStudent.streetnumber_postal,
           streetName_postal: this.editStudent.streetname_postal,
           buildingName_postal: this.editStudent.buildingname_postal,
+          countryId_postal: this.editStudent.countryid_postal,
           suburb_postal: this.editStudent.suburb_postal,
           stateId_postal: this.editStudent.stateid_postal,
           postCode_postal: this.editStudent.postcode_postal,
@@ -1016,6 +1074,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
             fundingSourceStateId: this.editEnrolment.fundingsourcestateid,
             commencingProgramId: this.editEnrolment.commencingprogramid,
             commencementDate: moment(this.editEnrolment.commencementdate),
+            offerLetterIssueDate: moment(this.editEnrolment.offerletterissuedate ?? new Date()),
             courseDuration: this.editEnrolment.courseduration,
             courseDurationType: this.editEnrolment.coursedurationtype,
             expectedCompletionDate: moment(this.editEnrolment.expectedcompletiondate),
@@ -1113,7 +1172,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
                   documentType: null,
                   documentName: this.editDocs[i].documentname,
                   fileName: this.editDocs[i].filename.slice(15),
-                  doc: this.editDocs[i].doc
+                  doc: this.editDocs[i].doc,
+                  studentDocumentId: this.editDocs[i].studentdocumentid
                 });
                 (this.HFormGroup5.get('docRows') as FormArray).push(rowData1)
               }
@@ -1513,7 +1573,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     const docRowsArray = this.HFormGroup5.get('docRows') as FormArray;
     const row = docRowsArray.at(index) as FormGroup;
 
-    if (row ) {
+    if (row) {
       row.patchValue({ documentName: val !== 'Other' ? val : '' });
     }
   }
@@ -1524,7 +1584,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       documentType: '',
       documentName: '',
       fileName: '',
-      doc: ''
+      doc: '',
+      studentDocumentId: ''
     })
   }
   fileChangeEvent(files: FileList, index) {
@@ -1544,10 +1605,13 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
   removeDocs(i) {
     if (i > 0) {
       //console.log(this.studentDocuments[i])
-      this.deleteStudentDocument(this.studentDocuments[i], i)
+      this.deleteStudentDocument(i)
     }
   }
-  deleteStudentDocument(item, i) {
+  deleteStudentDocument(i) {
+    let item = this.HFormGroup5.value.docRows[i]
+    console.log('item',item)
+    console.log('formdata', this.HFormGroup5.value.docRows)
     let tempDirection;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -1556,9 +1620,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     }
     const dialogRef = this.dialog.open(DeleteStudentDocumentComponent, {
       data: {
-        Id: item.studentdocumentid,
-        documentLoc: item.documentloc,
-        documentname: item.documentname // Include documentname here
+        Id: item.studentDocumentId,
+        documentLoc: item.documentLoc
       },
       direction: tempDirection,
     });
@@ -1872,9 +1935,11 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       // enrolBody.commencementDate.setDate(enrolBody.commencementDate.getDate() + 1);
       // enrolBody.expectedCompletionDate.setDate(enrolBody.expectedCompletionDate.getDate() + 1);
       enrolBody.commencementDate = this.datePipe.transform(enrolBody.commencementDate, 'yyyy-MM-dd')
+      // enrolBody.offerLetterIssueDate = this.datePipe.transform(enrolBody.offerLetterIssueDate, 'yyyy-MM-dd')
+      // enrolBody.offerLetterIssueDate = null
       enrolBody.expectedCompletionDate = this.datePipe.transform(enrolBody.expectedCompletionDate, 'yyyy-MM-dd')// console.log('check',this.courses)
       enrolBody.courseIntakeDateId = this.courses[0].courseintakedateid
-      // console.log('enrolbody', enrolBody)
+      console.log('enrolbody', enrolBody)
       var show = document.getElementById('closebtn')
       if (this.HFormGroup4.valid) {
         this.errorsReqEn = { isError: false, errorMessage: '' }
@@ -1908,6 +1973,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       // enrolBody.commencementDate.setDate(enrolBody.commencementDate.getDate() + 1);
       // enrolBody.expectedCompletionDate.setDate(enrolBody.expectedCompletionDate.getDate() + 1);
       enrolBody.commencementDate = this.datePipe.transform(enrolBody.commencementDate, 'yyyy-MM-dd')
+      enrolBody.offerLetterIssueDate = this.datePipe.transform(enrolBody.offerLetterIssueDate, 'yyyy-MM-dd')
       enrolBody.expectedCompletionDate = this.datePipe.transform(enrolBody.expectedCompletionDate, 'yyyy-MM-dd')// console.log('check',this.courses)
       var show = document.getElementById('closebtn')
       // if (this.HFormGroup4.valid) {
@@ -1947,7 +2013,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         const uploadRequest = this.apiService.postAPI('fileupload', formData).pipe(
           map((data: any) => {
             docRowsArray.at(i).patchValue({
-              documentLoc: `https://api.wonderit.com.au:5000/${data.data}`
+              documentLoc: `https://api.wonderit.com.au:5038/${data.data}`
             });
           })
         );

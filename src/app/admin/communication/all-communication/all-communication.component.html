@@ -137,7 +137,7 @@
                                                     <input matInput [formControl]="startDateFilter">
                                                 </mat-form-field>
                                             </mat-header-cell>
-                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" title="click to view general info"> {{row.startDate}}
+                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" title="click to view general info"> {{row.startdate| date:'MM/dd/yyyy'}}
                                             </mat-cell>
                                         </ng-container>
                                         <ng-container matColumnDef="endDate">
@@ -147,7 +147,7 @@
                                                     <input matInput [formControl]="endDateFilter">
                                                 </mat-form-field>
                                             </mat-header-cell>
-                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" title="click to view general info"> {{row.endDate}}
+                                            <mat-cell *matCellDef="let row"  data-toggle="tooltip" data-placement="right" title="click to view general info"> {{row.enddate | date:'MM/dd/yyyy'}}
                                             </mat-cell>
                                         </ng-container> -->
 
