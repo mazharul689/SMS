@@ -282,7 +282,7 @@
                       <mat-cell *matCellDef="let row" data-toggle="tooltip" style="text-align: center">
                         <span *ngIf="row.certificateFlag == true"
                           style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                          <button type="button" mat-icon-button color="primary" (click)="downloadCertificate(row.certificateid)">
+                          <button type="button" mat-icon-button color="primary" (click)="downloadCertificate(row.certificateid, row.trainerstatenameshort )">
                             <mat-icon style="color: blue;">cloud_download</mat-icon>
                             <!-- <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i> -->
                           </button>

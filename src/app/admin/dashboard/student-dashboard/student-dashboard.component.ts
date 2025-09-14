@@ -388,7 +388,7 @@ export class StudentDashboardComponent implements OnInit {
     window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=${temp}&sid=${row.studentenrolmentid}`)
   }
   download(link) {
-    let baseApi = "https://api.wonderit.com.au:5038/"
+    let baseApi = "https://api.wonderit.com.au:5000/"
     // console.log(this.messages[rowID].attachment[i])
     window.open(baseApi + link)
   }

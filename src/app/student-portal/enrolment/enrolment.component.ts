@@ -1492,7 +1492,7 @@ export class EnrolmentComponent implements OnInit {
       const uploadRequest = this.apiService.postAPI('fileupload', formData).pipe(
         map((data: any) => {
           docRowsArray.at(index).patchValue({
-            documentLoc: `https://api.wonderit.com.au:5038/${data.data}`
+            documentLoc: `https://api.wonderit.com.au:5000/${data.data}`
           });
         })
       );

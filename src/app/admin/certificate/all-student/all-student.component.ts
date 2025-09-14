@@ -373,16 +373,16 @@ export class AllStudentComponent implements OnInit {
   }
   editStudent(data) {
     var step = 'S'
-    if(data.certificateid){
+    if (data.certificateid) {
       step = 'C'
       this.router.navigate([`/admin/certificate/certificate/${step}/${data.certificateid}/${data.studentenrolmentid}`]);
     }
-    else{
+    else {
       step = 'E'
       this.router.navigate([`/admin/certificate/certificate/${step}/${data.studentenrolmentid}`]);
     }
   }
-  deleteCertificate(eid,id) {
+  deleteCertificate(eid, id) {
     var step = eid
     this.router.navigate([`/admin/certificate/delete-certificate/${step}/${id}`]);
   }
@@ -393,8 +393,19 @@ export class AllStudentComponent implements OnInit {
   addEnrCourse(id) {
     this.router.navigate([`/admin/enrolment/new-student/enrol-course/${id}`]);
   }
-  downloadCertificate(id) {
-    window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${id}&_token=${this.userInfo.refresh_token}`)
+  downloadCertificate(id, temp) {
+    if (this.userInfo.college_id == '23') {
+      if (temp == "NSW" ) {
+        window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw&sid=${id}&_token=${this.userInfo.refresh_token}`)
+      }
+      else {
+        window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${id}&_token=${this.userInfo.refresh_token}`)
+      }
+    }
+    else{
+      window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw&sid=${id}&_token=${this.userInfo.refresh_token}`)
+    }
+
   }
   downloadAttainment(id) {
     window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${id}`)

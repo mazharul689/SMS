@@ -101,7 +101,7 @@ export class AddDocumentDialogComponent implements OnInit {
   //       formData.append('uploadfolder', 'StudentsDocuments')
   //       if (file) {
   //         this.apiService.postAPI('fileupload', formData).subscribe((data: any) => {
-  //           this.preDocRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5038/" + data.data
+  //           this.preDocRows.at(i).value.documentLoc = "https://api.wonderit.com.au:5000/" + data.data
   //           for (let i = 0; i < this.preDocRows.length; i++) {
   //             if (!this.preDocRows.at(i).value.documentName && !this.preDocRows.at(i).value.documentLoc) {
   //               valid = false
@@ -159,7 +159,7 @@ export class AddDocumentDialogComponent implements OnInit {
     responses.forEach((response, i) => {
       if (response && this.preDocRows.at(i)) {
         this.preDocRows.at(i).patchValue({
-          documentLoc: "https://api.wonderit.com.au:5038/" + response.data
+          documentLoc: "https://api.wonderit.com.au:5000/" + response.data
         });
       } else {
         allValid = false;

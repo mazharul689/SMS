@@ -85,7 +85,8 @@ export class CertificateComponent implements OnInit {
     certificateissuenumber: '',
     certificatetype: '',
     issuedflag: '',
-    rtotype: ''
+    rtotype: '',
+    trainerstatenameshort : ''
   }
   dateValidate1 = { isError: false, errorMessage: '' }
   loading: boolean
@@ -159,7 +160,8 @@ export class CertificateComponent implements OnInit {
       certificateType: ['C'],
       rtoType: ['L'],
       trainingActivityId: [''],
-      Issuedflag: ['Y', [Validators.maxLength(10)]]
+      Issuedflag: ['Y', [Validators.maxLength(10)]],
+      trainerStateNameShort : 'VLC'
     })
     // this.apiService.getAPI(`getstudentenrolmentbystudentid?id=${this.studentID}`).subscribe((data) => {
     //   this.editEnrolment = data['data'][0]
@@ -177,7 +179,8 @@ export class CertificateComponent implements OnInit {
             certificateIssueNumber: this.editCertificate.certificateissuenumber,
             certificateType: this.editCertificate.certificatetype,
             Issuedflag: this.editCertificate.issuedflag,
-            rtoType: this.editCertificate.rtotype
+            rtoType: this.editCertificate.rtotype,
+            trainerStateNameShort : this.editCertificate.trainerstatenameshort
           })
         }
         else {
@@ -362,8 +365,12 @@ export class CertificateComponent implements OnInit {
             show.style.display = 'block'
           }
         }
-        if (certificateBody.certificateType == 'C') {
+        if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "VLC") {
           window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
+          this.router.navigate(['/admin/certificate/all-student'])
+        }
+        else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "NSW") {
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw&sid=${data}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }
         else if (certificateBody.certificateType == 'S') {
@@ -476,7 +483,7 @@ export class CertificateComponent implements OnInit {
     //       }
     //     }
     //     else {
-    //       this.baseApi = "https://api.wonderit.com.au:5038/"
+    //       this.baseApi = "https://api.wonderit.com.au:5000/"
     //       window.open(this.baseApi + data)
     //     }
     //   })

@@ -2094,7 +2094,7 @@ export class NewStudentComponent implements OnInit {
       const uploadRequest = this.apiService.postAPI('fileupload', formData).pipe(
         map((data: any) => {
           docRowsArray.at(index).patchValue({
-            documentLoc: `https://api.wonderit.com.au:5038/${data.data}`
+            documentLoc: `https://api.wonderit.com.au:5000/${data.data}`
           });
         })
       );
@@ -2185,7 +2185,7 @@ export class NewStudentComponent implements OnInit {
   //           // console.log('certificate', data['data'])
   //           // console.log('enrolmentid', this.studentEnrolID)
   //           this.certificate = data['data']
-  //           this.baseApi = "https://api.wonderit.com.au:5038/"
+  //           this.baseApi = "https://api.wonderit.com.au:5000/"
   //           // this.link = this.baseApi.concat(this.certificate.toString())
   //           // console.log('link',this.link)
   //           window.open(this.baseApi + data['data'])

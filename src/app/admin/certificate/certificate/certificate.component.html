@@ -76,7 +76,18 @@
                 </div>
                 <div class="section-content">
                   <div class="row">
-                    <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
+                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
+                      <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Template</label>
+                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="trainerStateNameShort">
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="VLC">Victoria</mat-radio-button>
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="NSW">NSW</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
                       <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Certificate
                         Type</label>
                       <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="certificateType">
@@ -91,7 +102,22 @@
                           value="R">Statement of Result</mat-radio-button>
                       </mat-radio-group>
                     </div>
-                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
+                      <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Certificate
+                        Type</label>
+                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="certificateType">
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="C">Certificate</mat-radio-button>
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="S">Statement of Attainment</mat-radio-button>
+                          <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="R">Statement of Result</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
+                    <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Issue Number</mat-label>
                         <input matInput formControlName="certificateIssueNumber" required>
@@ -102,7 +128,16 @@
                     </div>
                   </div>
                   <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Issue Number</mat-label>
+                        <input matInput formControlName="certificateIssueNumber" required>
+                        <mat-error *ngIf="HFormGroup1.get('certificateIssueNumber').hasError('maxlength')">
+                          Maximum length is 25 characters
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Completion Date</mat-label>
                         <input matInput [matDatepicker]="basicDatepicker1" formControlName="completionDate"
@@ -115,7 +150,32 @@
                         </mat-error>
                       </mat-form-field>
                     </div>
-                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Issue Date</mat-label>
+                        <input matInput [matDatepicker]="basicDatepicker2" formControlName="certificateIssueDate"
+                          (ngModelChange)="compareTwoDates1()" [readonly]="HFormGroup1.value.Issuedflag == 'N'"
+                          max="{{getCurrentDate()}}" required>
+                        <mat-datepicker-toggle matSuffix [for]="basicDatepicker2">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #basicDatepicker2
+                          [disabled]="HFormGroup1.value.Issuedflag == 'N'"></mat-datepicker>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Completion Date</mat-label>
+                        <input matInput [matDatepicker]="basicDatepicker1" formControlName="completionDate"
+                          (ngModelChange)="compareTwoDates1()" max="{{getCurrentDate()}}" required>
+                        <mat-datepicker-toggle matSuffix [for]="basicDatepicker1">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #basicDatepicker1></mat-datepicker>
+                        <mat-error *ngIf="HFormGroup1.get('completionDate').hasError('required')">
+                          Please select completion date
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Issue Date</mat-label>
                         <input matInput [matDatepicker]="basicDatepicker2" formControlName="certificateIssueDate"
