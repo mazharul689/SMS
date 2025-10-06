@@ -4,6 +4,7 @@ import { AvetmissComponent } from './avetmiss/avetmiss.component'
 import { AsqaComponent} from './asqa/asqa.component'
 import { StudentsPaymentsComponent } from './students-payments/students-payments.component';
 import { IssuanceRegisterComponent } from './issuance-register/issuance-register.component';
+import { SledReportComponent } from './sled-report/sled-report.component';
 const routes: Routes = [
   {
     path: 'avetmiss',
@@ -20,6 +21,11 @@ const routes: Routes = [
   {
     path: 'issuance-register',
     component: IssuanceRegisterComponent
+  }
+  ,
+  {
+    path: 'sled-report',
+    component: SledReportComponent
   }
 ];
 

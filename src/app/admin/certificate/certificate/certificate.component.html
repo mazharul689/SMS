@@ -94,7 +94,13 @@
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="C">Certificate</mat-radio-button>
-                        <mat-radio-button
+                        <mat-radio-button *ngIf="this.userInfo.college_id == 23"
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="O">SOA Qualification</mat-radio-button>
+                        <mat-radio-button *ngIf="this.userInfo.college_id == 23"
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="S">SOA First AID</mat-radio-button>
+                          <mat-radio-button *ngIf="this.userInfo.college_id != 23"
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="S">Statement of Attainment</mat-radio-button>
                           <mat-radio-button
@@ -189,7 +195,7 @@
                     </div>
                   </div>
                 </div>
-                <div [ngClass]="HFormGroup1.get('certificateType').value == 'S' ? 'd-block' : 'd-none'">
+                <div [ngClass]="HFormGroup1.get('certificateType').value == 'S' || HFormGroup1.get('certificateType').value == 'O' ? 'd-block' : 'd-none'">
                   <div class="row">
                     <span class="section-heading"><i class='fas fa-bars'></i>Outcome</span>
                   </div>

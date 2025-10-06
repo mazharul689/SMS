@@ -195,65 +195,85 @@ export class AddCourseUnitComponent implements OnInit {
   }
   getUnits() {
     this.apiService.getAPI(`getcourseunitbycourseid?id=${this.courseId}`).subscribe((data1) => {
-      let courseUnits = data1['data']
+      let courseUnits = data1['data'];
+
       this.apiService.getAPI('getunit').subscribe((data) => {
         this.units = Object.values(data['data']);
-        const matchingIndices: number[] = [];
-        courseUnits.forEach((courseUnit) => {
-          const matchingIndex = this.units.findIndex((unit) => unit.unitid === courseUnit.unitid);
-          if (matchingIndex !== -1) {
-            matchingIndices.push(matchingIndex);
+        let matchingIndices: number[] = [];
+
+        // ✅ Check if courseUnits is an array or "No record found"
+        if (Array.isArray(courseUnits)) {
+          courseUnits.forEach((courseUnit) => {
+            const matchingIndex = this.units.findIndex((unit) => unit.unitid === courseUnit.unitid);
+            if (matchingIndex !== -1) {
+              matchingIndices.push(matchingIndex);
+            }
+          });
+
+          matchingIndices.sort((a, b) => b - a); // Sort descending
+
+          // Remove matched units
+          matchingIndices.forEach((index) => this.units.splice(index, 1));
+
+          // If you really need to merge matched rows into one object (optional)
+          if (matchingIndices.length > 0) {
+            const mergedRow = matchingIndices.reduce(
+              (result, index) => Object.assign(result, this.units[index]),
+              {}
+            );
+            this.units.unshift(mergedRow);
           }
-        });
-        matchingIndices.sort((a, b) => b - a); // Sort indices in descending order
-        matchingIndices.forEach((index) => this.units.splice(index, 1));
+        }
 
-        // Merge the rows into a single object
-        const mergedRow = matchingIndices.reduce((result, index) => Object.assign(result, this.units[index]), {});
+        // ✅ Reset Rows before repopulating
+        const rowsFormArray = this.HFormGroup1.get('Rows') as FormArray;
+        while (rowsFormArray.length) {
+          rowsFormArray.removeAt(0);
+        }
 
-        // Add the merged row back to the Rows array
-        this.units.unshift(mergedRow);
-        console.log(this.units);
-        (this.HFormGroup1.get('Rows') as FormArray).removeAt(0);
-        for (let i = 0; i < this.units.length; i++) {
-          let rowData = this.fb.group({
+        // ✅ Populate Rows with whatever units are left
+        this.units.forEach((unit, i) => {
+          const rowData = this.fb.group({
             rowID: i,
             statusCheck: false,
             courseId: this.courseId,
-            unitId: this.units[i].unitid,
-            unitCode: this.units[i].unitcode,
-            unitName: this.units[i].unitname,
+            unitId: unit.unitid,
+            unitCode: unit.unitcode,
+            unitName: unit.unitname,
             unitType: '',
             vetFlag: '',
             AVETMISS: '',
           });
-          (this.HFormGroup1.get('Rows') as FormArray).push(rowData)
-          this.setStatusCheck[i] = true
-        }
-        console.log('value', matchingIndices)
-        
+          rowsFormArray.push(rowData);
+          this.setStatusCheck[i] = true;
+        });
 
-        console.log(this.HFormGroup1.value.Rows);
-        this.dataSource1 = new MatTableDataSource() // create new object
-        this.dataSource1.data = this.HFormGroup1.value.Rows
-        this.dataSource1.paginator = this.tableTwoPaginator
-        this.dataSource1.sort = this.tableTwoSort
-        // this.masterToggle()
-        this.bulkUnitType = 'C'
-        this.bulkVetFlag = 'Y'
-        this.bulkAVETMISS = 'Y'
-        this.UnitBulkSet()
-        this.vetFlagBulkSet()
-        this.AVETMISSBulkSet()
+        // ✅ Reinitialize table data source
+        this.dataSource1 = new MatTableDataSource(this.HFormGroup1.value.Rows);
+        this.dataSource1.paginator = this.tableTwoPaginator;
+        this.dataSource1.sort = this.tableTwoSort;
+
+        // ✅ Bulk defaults
+        this.bulkUnitType = 'C';
+        this.bulkVetFlag = 'Y';
+        this.bulkAVETMISS = 'Y';
+        this.UnitBulkSet();
+        this.vetFlagBulkSet();
+        this.AVETMISSBulkSet();
+
+        // ✅ Filtering
         this.dataSource1.filterPredicate = this.createFilter1();
-        this.unitCodeFilter.valueChanges.subscribe(unitCode => {
-          this.filteredValues1.unitCode = unitCode
-          this.dataSource1.filter = JSON.stringify(this.filteredValues1)
-        })
-      })
-    })
+        this.unitCodeFilter.valueChanges.subscribe((unitCode) => {
+          this.filteredValues1.unitCode = unitCode;
+          this.dataSource1.filter = JSON.stringify(this.filteredValues1);
+        });
 
+        // console.log('Final Units:', this.units);
+        // console.log('Final Form Rows:', this.HFormGroup1.value.Rows);
+      });
+    });
   }
+
   onCourseUnitSubmmit() {
     let rows = this.sendSelectedNumbers();
     const unitBody = this.HFormGroup1.value.Rows;

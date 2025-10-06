@@ -15,13 +15,15 @@ import { StudentsPaymentsComponent } from './students-payments/students-payments
 import { IssuanceRegisterComponent } from './issuance-register/issuance-register.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SledReportComponent } from './sled-report/sled-report.component'
 @NgModule({
   declarations: [
     AvetmissComponent,
     AsqaComponent,
     StudentsPaymentsComponent,
-    IssuanceRegisterComponent
+    IssuanceRegisterComponent,
+    SledReportComponent
   ],
   imports: [
     CommonModule,

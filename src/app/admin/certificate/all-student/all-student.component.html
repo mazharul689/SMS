@@ -270,6 +270,7 @@
                         <label *ngIf="row.certificatetype == 'C'">Certificate</label>
                         <label *ngIf="row.certificatetype == 'S'">Statement</label>
                         <label *ngIf="row.certificatetype == 'R'">Result</label>
+                        <label *ngIf="row.certificatetype == 'O'">Statement</label>
                       </mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="certificate">
@@ -300,13 +301,19 @@
                         <span *ngIf="row.sorFlag == true"
                           style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                           <button type="button" mat-icon-button color="primary"
-                            (click)="downloadResult(row.certificateid)">
+                            (click)="downloadResult(row.certificateid, row.trainerstatenameshort)">
                             <mat-icon style="color: blue;">cloud_download</mat-icon>
-                            <!-- <i class="far fa-file-pdf tbl-pdf" style="color: red;"></i> -->
                           </button>
                           Download Result
                         </span>
-                        <!-- </div> -->
+                        <span *ngIf="row.qualificationAttainmentFlag == true"
+                          style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                          <button type="button" mat-icon-button color="primary"
+                            (click)="downloadQualificationAttainment(row.certificateid)">
+                            <mat-icon style="color: blue;">cloud_download</mat-icon>
+                          </button>
+                          Download Qualification Attainment
+                        </span>
                       </mat-cell>
                     </ng-container>
 

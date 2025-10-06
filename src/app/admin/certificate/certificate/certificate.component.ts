@@ -86,7 +86,7 @@ export class CertificateComponent implements OnInit {
     certificatetype: '',
     issuedflag: '',
     rtotype: '',
-    trainerstatenameshort : ''
+    trainerstatenameshort: ''
   }
   dateValidate1 = { isError: false, errorMessage: '' }
   loading: boolean
@@ -133,10 +133,10 @@ export class CertificateComponent implements OnInit {
     private router: Router,
   ) {
     this.step = this.actRoute.snapshot.params.step;
-    if(this.step === 'E'){
+    if (this.step === 'E') {
       this.enrolemntID = this.actRoute.snapshot.params.id;
     }
-    else{
+    else {
       this.certificateId = this.actRoute.snapshot.params.id;
       this.enrolemntID = this.actRoute.snapshot.params.eid;
     }
@@ -161,13 +161,13 @@ export class CertificateComponent implements OnInit {
       rtoType: ['L'],
       trainingActivityId: [''],
       Issuedflag: ['Y', [Validators.maxLength(10)]],
-      trainerStateNameShort : 'VLC'
+      trainerStateNameShort: 'VLC'
     })
     // this.apiService.getAPI(`getstudentenrolmentbystudentid?id=${this.studentID}`).subscribe((data) => {
     //   this.editEnrolment = data['data'][0]
     //   this.enrolemntID = data['data'][0]['studentEnrolmentId']
     // //console.log(this.enrolemntID)
-    if(this.step === 'C'){
+    if (this.step === 'C') {
       this.apiService.getAPI(`getcertificate?id=${this.certificateId}`).subscribe((data) => {
         // //console.log(data['data'])
         if (!data['data'].msg) {
@@ -180,7 +180,7 @@ export class CertificateComponent implements OnInit {
             certificateType: this.editCertificate.certificatetype,
             Issuedflag: this.editCertificate.issuedflag,
             rtoType: this.editCertificate.rtotype,
-            trainerStateNameShort : this.editCertificate.trainerstatenameshort
+            trainerStateNameShort: this.editCertificate.trainerstatenameshort
           })
         }
         else {
@@ -292,8 +292,12 @@ export class CertificateComponent implements OnInit {
       trainingArray = data['data']
       for (var i in trainingArray) {
         trainingArray[i].rowID = i
-        trainingArray[i].startdate = this.datePipe.transform(trainingArray[i].startdate, 'dd/MM/yyyy')
-        trainingArray[i].enddate = this.datePipe.transform(trainingArray[i].enddate, 'dd/MM/yyyy')
+        // if (trainingArray[i].startdate) {
+        //   trainingArray[i].startdate = this.datePipe.transform(trainingArray[i].startdate, 'dd/MM/yyyy')
+        // }
+        // if (trainingArray[i].enddate) {
+        //   trainingArray[i].enddate = this.datePipe.transform(trainingArray[i].enddate, 'dd/MM/yyyy')
+        // }
       }
       this.dataSource.data = trainingArray // on data receive populate dataSource.data array
       return data
@@ -349,15 +353,12 @@ export class CertificateComponent implements OnInit {
     certificateBody.trainingActivityId = nums
     certificateBody.studentEnrolmentId = parseInt(this.enrolemntID, 10)
     certificateBody.userId = this.userInfo.userid
-    //console.log('certificatebody', certificateBody)
     var show = document.getElementById('closebtn')
     this.errorsReqEn = { isError: false, errorMessage: '' };
     this.errorsReq = { isError: false, errorMessage: '' }
-    //console.log('row', rows)
     if (this.outcomeCheck.msg || certificateBody.certificateType == 'S') {
       this.apiService.postAPI('addcertificate', certificateBody).subscribe((data) => {
         this.disabled = false
-        // //console.log('passed',data['data'])
         if (data['data'] && data['data'].msg) {
           this.errorsReqEn = { isError: true, errorMessage: data['data'].msg }
           window.scroll(0, 0)
@@ -365,19 +366,35 @@ export class CertificateComponent implements OnInit {
             show.style.display = 'block'
           }
         }
-        if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "VLC") {
+        else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "VLC" && this.userInfo.college_id == 23) {
           window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }
-        else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "NSW") {
+        else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "NSW" && this.userInfo.college_id == 23) {
           window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw&sid=${data}&_token=${this.userInfo.refresh_token}`)
+          this.router.navigate(['/admin/certificate/all-student'])
+        }
+        else if (certificateBody.certificateType == 'C' && this.userInfo.college_id != 23) {
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }
         else if (certificateBody.certificateType == 'S') {
           window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${data}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }
-        else if (certificateBody.certificateType == 'R') {
+        else if (certificateBody.certificateType == 'O') {
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=qualification_attainment&sid=${data}&_token=${this.userInfo.refresh_token}`)
+          this.router.navigate(['/admin/certificate/all-student'])
+        }
+        else if (certificateBody.certificateType == 'R' && certificateBody.trainerStateNameShort == "VLC" && this.userInfo.college_id == 23) {
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${data}&_token=${this.userInfo.refresh_token}`)
+          this.router.navigate(['/admin/certificate/all-student'])
+        }
+        else if (certificateBody.certificateType == 'R' && certificateBody.trainerStateNameShort == "NSW" && this.userInfo.college_id == 23) {
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor_nsw&sid=${data}&_token=${this.userInfo.refresh_token}`)
+          this.router.navigate(['/admin/certificate/all-student'])
+        }
+        else if (certificateBody.certificateType == 'R' && this.userInfo.college_id !== 23) {
           window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${data}&_token=${this.userInfo.refresh_token}`)
           this.router.navigate(['/admin/certificate/all-student'])
         }

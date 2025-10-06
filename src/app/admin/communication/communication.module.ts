@@ -20,7 +20,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDialogModule } from '@angular/material/dialog';
-import { HtmlEditorService, ImageService, LinkService, RichTextEditorModule, ToolbarService  } from '@syncfusion/ej2-angular-richtexteditor';
+// import { HtmlEditorService, ImageService, LinkService, RichTextEditorModule, ToolbarService  } from '@syncfusion/ej2-angular-richtexteditor';
 import { MailBoxComponent } from './mail-box/mail-box.component';
 import { SentEmailComponent } from './sent-email/sent-email.component';
 import { DetailedEmailDialogComponent } from './dialogs/detailed-email-dialog/detailed-email-dialog.component';
@@ -52,7 +52,7 @@ import { EditEmailTemplateComponent } from './edit-email-template/edit-email-tem
     MatIconModule,
     MatSelectModule,
     MatDatepickerModule,
-    RichTextEditorModule,
+    // RichTextEditorModule,
     CKEditorModule,
     MatPaginatorModule,
     MatTableModule,
@@ -65,7 +65,7 @@ import { EditEmailTemplateComponent } from './edit-email-template/edit-email-tem
   ],
   providers: [
     // {provide: StudentsService},
-    ToolbarService,LinkService,ImageService,HtmlEditorService,
+    // ToolbarService,LinkService,ImageService,HtmlEditorService,
   ]
 })
 export class CommunicationModule { }

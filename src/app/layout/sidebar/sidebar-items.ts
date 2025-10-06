@@ -2,7 +2,7 @@ import { RouteInfo } from './sidebar.metadata';
 const role = JSON.parse(localStorage.getItem('allRoleMenu'))
 const userInfo = JSON.parse(localStorage.getItem('currentUser'))
 const userRole = userInfo?.role || '';
-console.log(userRole)
+// console.log(userRole)
 export const ROUTES: RouteInfo[] = [
   // {
   //   path: '',
@@ -102,19 +102,7 @@ export const ROUTES: RouteInfo[] = [
     badgeClass: '',
     role: role && role['Enrolment'] ? role['Enrolment'] : [''],
     submenu: [
-      {
-        path: '/admin/enrolment/all-cancelled-student',
-        title: 'All Cancelled Student',
-        moduleName: 'enrolment',
-        iconType: '',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        badge: '',
-        badgeClass: '',
-        role: userRole === 'Student' ? [] : ['Admin'],
-        submenu: [],
-      },
+      
       {
         path: '/admin/enrolment/all-student',
         title: 'All Student',
@@ -139,6 +127,19 @@ export const ROUTES: RouteInfo[] = [
         badge: '',
         badgeClass: '',
         role: [''],
+        submenu: [],
+      },
+      {
+        path: '/admin/enrolment/all-cancelled-student',
+        title: 'All Cancelled Student',
+        moduleName: 'enrolment',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: userRole === 'Student' ? [] : ['Admin'],
         submenu: [],
       },
       {
@@ -810,6 +811,19 @@ export const ROUTES: RouteInfo[] = [
       {
         path: '/admin/reports/issuance-register',
         title: 'Issuance Register',
+        moduleName: 'reports',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      },
+      {
+        path: '/admin/reports/sled-report',
+        title: 'Sled Report',
         moduleName: 'reports',
         iconType: '',
         icon: '',

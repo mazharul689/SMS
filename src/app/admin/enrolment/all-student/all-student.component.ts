@@ -261,10 +261,11 @@ export class AllStudentComponent implements OnInit {
         );
         if (this.students[i].coursecode == null) {
           this.students[i].coursename = "";
-        } else {
-          this.students[i].coursename =
-            this.students[i].coursecode;
-        }
+        } 
+        // else {
+        //   this.students[i].coursename =
+        //     this.students[i].coursecode;
+        // }
         this.students[i].fullname =
           this.students[i].firstname + " " + this.students[i].lastname;
       }
