@@ -41,6 +41,7 @@ import { Router } from "@angular/router";
 import { environment } from "src/environments/environment";
 import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
+import { map, finalize } from 'rxjs/operators';
 export interface Students {
   // highlighted?: boolean
   rowID;
@@ -97,6 +98,7 @@ export class EmailComponent implements OnInit {
   due_start_dateFilter = new FormControl("");
   due_end_dateFilter = new FormControl("");
   single_enrolment = new FormControl("N");
+  isLoading = false
   filteredValues = {
     courseIntakeDateId: "",
     clientid: "",
@@ -257,12 +259,11 @@ export class EmailComponent implements OnInit {
     });
   }
   search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, pstatus: any, dsdate: any, dedate: any, senrol: any) {
-    console.log(dsdate)
-    // this.selection.clear
+    console.log(dsdate);
     this.selection = new SelectionModel<Students>(true, []);
     let queryParams = [];
 
-    // Build query string based on available parameters
+    // --- 1. Build query string (your logic is unchanged) ---
     if (cid && cid != 100) {
       queryParams.push(`courseid=${cid}`);
     }
@@ -295,47 +296,84 @@ export class EmailComponent implements OnInit {
     if (senrol) {
       queryParams.push(`single_enrolment=${senrol}`);
     }
-    // console.log(queryParams)
-    // If there are any query parameters, make the API call
+
+    // --- 2. Check if any filters exist ---
     if (queryParams.length > 0) {
+
+      // --- 3. Set loading to TRUE ---
+      this.isLoading = true;
+      const dateLocale = 'en-GB'; // For formatting dates
       const queryString = queryParams.join("&");
-      this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
-        // console.log(data);
-        // if (this.HFormGroup1.valid) {
-        if (data["data"].msg) {
-          // window.scroll(0, 0);
+
+      this.apiService.getAPI(`getstudent?${queryString}`).pipe(
+        // --- 4. Add finalize to set loading to FALSE when done ---
+        finalize(() => {
+          this.isLoading = false;
+        })
+      ).subscribe({
+        // --- 5. Use object-based subscribe (next/error) ---
+        next: (data) => {
+          // Fix: Declare 'show' here so it's in scope for the 'if (show)' check
           var show = document.getElementById("closebtn");
-          this.errorsReq = { isError: true, errorMessage: data["data"].msg };
-          this.dataSource.data = [];
-        } else {
-          this.students = data["data"];
-          this.students = this.students.sort((a, b) => {
-            if (a.clientid < b.clientid) {
-              return 1;
-            } else if (a.clientid > b.clientid) {
-              return -1;
-            } else {
-              // If clientid is the same, sort by commencementdate
-              let dateA = new Date(a.commencementdate).getTime();
-              let dateB = new Date(b.commencementdate).getTime();
-              return dateA - dateB;
-            }
-          });
-          for (let i in this.students) {
-            this.students[i].rowID = i;
-            this.students[i].fullname =
-              this.students[i].firstname + " " + this.students[i].lastname;
+
+          if (data["data"].msg) {
+            // API returned a custom error message
+            this.errorsReq = { isError: true, errorMessage: data["data"].msg };
+            this.dataSource.data = [];
+          } else {
+            let students = data["data"];
+
+            // --- 6. OPTIMIZED: Sort the data ---
+            students.sort((a, b) => {
+              if (a.clientid > b.clientid) return -1;
+              if (a.clientid < b.clientid) return 1;
+
+              // Safer date sort
+              const dateA = a.commencementdate ? new Date(a.commencementdate).getTime() : 0;
+              const dateB = b.commencementdate ? new Date(b.commencementdate).getTime() : 0;
+              return (dateA || 0) - (dateB || 0);
+            });
+
+            // --- 7. OPTIMIZED: Use .map() for transformation ---
+            const processedStudents = students.map((student, index) => {
+
+              // Add date formatting (which was missing)
+              let formattedStartDate = '';
+              let formattedEndDate = '';
+              if (student.commencementdate) {
+                formattedStartDate = new Date(student.commencementdate).toLocaleDateString(dateLocale);
+              }
+              if (student.expectedcompletiondate) {
+                formattedEndDate = new Date(student.expectedcompletiondate).toLocaleDateString(dateLocale);
+              }
+
+              return {
+                ...student,
+                rowID: index,
+                fullname: `${student.firstname} ${student.lastname}`,
+                startDate: formattedStartDate,
+                endDate: formattedEndDate,
+              };
+            });
+
+            this.students = processedStudents;
+            this.dataSource.data = this.students;
           }
-          this.dataSource.data = this.students; // on data receive populate dataSource.data array
-          // console.log(this.dataSource.data);
-          return data;
+
+          if (show) {
+            show.style.display = "block";
+          }
+        },
+        // --- 8. Add HTTP error handling ---
+        error: (err) => {
+          console.error("Search failed:", err);
+          this.errorsReq = { isError: true, errorMessage: "An API error occurred during the search." };
+          this.dataSource.data = [];
         }
-        if (show) {
-          show.style.display = "block";
-        }
-        return data;
       });
     } else {
+      // No filters specified, just get all students
+      // (This function should have its own loading logic)
       this.getStudents();
     }
   }
@@ -425,35 +463,68 @@ export class EmailComponent implements OnInit {
     }
   }
   getStudents() {
-    this.apiService.getAPI(`getstudent?applicationstatusid=6`).subscribe((data) => {
-      this.students = data["data"];
-      this.students = this.students.sort((a, b) => {
-        if (a.clientid < b.clientid) {
-          return 1;
-        } else if (a.clientid > b.clientid) {
-          return -1;
-        } else {
-          // If clientid is the same, sort by commencementdate
-          let dateA = new Date(a.commencementdate).getTime();
-          let dateB = new Date(b.commencementdate).getTime();
-          return dateA - dateB;
-        }
-      });
-      // console.log('student',this.students)
-      for (var i in this.students) {
-        this.students[i].rowID = i;
-        this.students[i].startDate = this.datePipe.transform(
-          this.students[i].startdate,
-          "dd/MM/yyyy"
-        );
-        this.students[i].endDate = this.datePipe.transform(
-          this.students[i].enddate,
-          "dd/MM/yyyy"
-        );
+    // 2. Set loading to TRUE
+    this.isLoading = true;
+    const dateLocale = 'en-GB'; // For 'dd/MM/yyyy' formatting
+
+    this.apiService.getAPI(`getstudent?applicationstatusid=6`).pipe(
+
+      // 3. Optimized: All processing is in the .map() operator
+      map((data: { data: any[] }) => {
+        const students = data['data'];
+
+        // 4. Sort the data first
+        students.sort((a, b) => {
+          // Descending clientid
+          if (a.clientid > b.clientid) return -1;
+          if (a.clientid < b.clientid) return 1;
+
+          // If clientid is same, sort by commencementdate (Ascending)
+          // This logic is safer and handles null/invalid dates
+          const dateA = a.commencementdate ? new Date(a.commencementdate).getTime() : 0;
+          const dateB = b.commencementdate ? new Date(b.commencementdate).getTime() : 0;
+          return (dateA || 0) - (dateB || 0);
+        });
+
+        // 5. Transform the data (replaces your for...in loop)
+        return students.map((student, index) => {
+
+          // 6. Optimized: Use fast native date formatting
+          //    BUG FIX: Use 'commencementdate' and 'expectedcompletiondate'
+          let formattedStartDate = '';
+          let formattedEndDate = '';
+
+          if (student.commencementdate) {
+            formattedStartDate = new Date(student.commencementdate).toLocaleDateString(dateLocale);
+          }
+          if (student.expectedcompletiondate) {
+            formattedEndDate = new Date(student.expectedcompletiondate).toLocaleDateString(dateLocale);
+          }
+
+          return {
+            ...student, // Keep all original properties
+            rowID: index, // Add rowID based on the new sorted index
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+          };
+        });
+      }),
+
+      // 7. Add finalize to set loading to FALSE when done
+      finalize(() => {
+        this.isLoading = false;
+      })
+
+    ).subscribe({
+      // 8. Subscribe block is now clean and just assigns the result
+      next: (processedStudents) => {
+        this.students = processedStudents;
+        this.dataSource.data = this.students;
+      },
+      error: (err) => {
+        console.error("Failed to get students:", err);
+        this.dataSource.data = []; // Clear data on error
       }
-      this.dataSource.data = this.students; // on data receive populate dataSource.data array
-      // console.log(this.dataSource.data)
-      return data;
     });
   }
   createFilter(): (data: any, filter: string) => boolean {

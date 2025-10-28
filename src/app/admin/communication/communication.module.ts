@@ -27,6 +27,7 @@ import { DetailedEmailDialogComponent } from './dialogs/detailed-email-dialog/de
 import { AllEmailTemplateComponent } from './all-email-template/all-email-template.component';
 import { NewEmailTemplateComponent } from './new-email-template/new-email-template.component';
 import { EditEmailTemplateComponent } from './edit-email-template/edit-email-template.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 
@@ -48,6 +49,7 @@ import { EditEmailTemplateComponent } from './edit-email-template/edit-email-tem
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     MatButtonModule,
     MatIconModule,
     MatSelectModule,

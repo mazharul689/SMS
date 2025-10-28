@@ -301,17 +301,17 @@
                           </div>
                         </div>
                         <div class="col-3">
-                            <section class="example-full-width mb-3">
-                              <label class="example col-lg-5 col-md-5 col-sm-5: asterisk">Single Enrolment</label>
-                              <mat-radio-group class="col-lg-7 col-md-7 col-sm-7" [formControl]="single_enrolment">
-                                <mat-radio-button
-                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                                  value="Y">Yes</mat-radio-button>
-                                <mat-radio-button
-                                  class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                                  value="N">No</mat-radio-button>
-                              </mat-radio-group>
-                            </section>
+                          <section class="example-full-width mb-3">
+                            <label class="example col-lg-5 col-md-5 col-sm-5: asterisk">Single Enrolment</label>
+                            <mat-radio-group class="col-lg-7 col-md-7 col-sm-7" [formControl]="single_enrolment">
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="Y">Yes</mat-radio-button>
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="N">No</mat-radio-button>
+                            </mat-radio-group>
+                          </section>
                         </div>
                         <div class="col-1-5">
                           <div class="search row" style="padding-top: 7px;">
@@ -342,93 +342,99 @@
                         </div>
                       </div> -->
                     </div>
-                    <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
-                      <ng-container matColumnDef="rowID">
-                        <mat-header-cell *matHeaderCellDef>
-                          <mat-checkbox (change)="$event ? masterToggle() : null"
-                            [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="
+                    <div *ngIf="isLoading" style="display: flex; justify-content: center; padding: 40px;">
+                      <mat-spinner diameter="50">loading</mat-spinner>
+                    </div>
+
+                    <div *ngIf="!isLoading">
+                      <mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+                        <ng-container matColumnDef="rowID">
+                          <mat-header-cell *matHeaderCellDef>
+                            <mat-checkbox (change)="$event ? masterToggle() : null"
+                              [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="
                               selection.hasValue() && !isAllSelected()
                             ">
-                          </mat-checkbox>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row; let i = index">
-                          <mat-checkbox (click)="$event.stopPropagation()"
-                            (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
-                          </mat-checkbox>
-                        </mat-cell>
-                      </ng-container>
-                      <ng-container matColumnDef="clientId">
-                        <mat-header-cell *matHeaderCellDef style="min-height: unset">
-                          <div class="searchcolumn">
+                            </mat-checkbox>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row; let i = index">
+                            <mat-checkbox (click)="$event.stopPropagation()"
+                              (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+                            </mat-checkbox>
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="clientId">
+                          <mat-header-cell *matHeaderCellDef style="min-height: unset">
+                            <div class="searchcolumn">
+                              <mat-form-field class="filter" floatLabel="never">
+                                <mat-label>Client Id</mat-label>
+                                <input matInput style="color: white" [formControl]="clientIdFilter" />
+                              </mat-form-field>
+                            </div>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
+                            data-placement="right" title="click to view general info">{{ row.clientid }}</mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="firstName">
+                          <mat-header-cell *matHeaderCellDef>
                             <mat-form-field class="filter" floatLabel="never">
-                              <mat-label>Client Id</mat-label>
-                              <input matInput style="color: white" [formControl]="clientIdFilter" />
+                              <mat-label>First Name</mat-label>
+                              <input matInput [formControl]="firstNameFilter" />
                             </mat-form-field>
-                          </div>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
-                          data-placement="right" title="click to view general info">{{ row.clientid }}</mat-cell>
-                      </ng-container>
-                      <ng-container matColumnDef="firstName">
-                        <mat-header-cell *matHeaderCellDef>
-                          <mat-form-field class="filter" floatLabel="never">
-                            <mat-label>First Name</mat-label>
-                            <input matInput [formControl]="firstNameFilter" />
-                          </mat-form-field>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
-                          data-placement="right" title="click to view general info">
-                          {{ row.firstname }}
-                        </mat-cell>
-                      </ng-container>
-                      <ng-container matColumnDef="lastName">
-                        <mat-header-cell *matHeaderCellDef>
-                          <mat-form-field class="filter" floatLabel="never">
-                            <mat-label>Last Name</mat-label>
-                            <input matInput style="color: white" [formControl]="lastNameFilter" />
-                          </mat-form-field>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
-                          data-placement="right" title="click to view general info">
-                          {{ row.lastname }}
-                        </mat-cell>
-                      </ng-container>
-                      <ng-container matColumnDef="courseName">
-                        <mat-header-cell *matHeaderCellDef>
-                          <mat-form-field class="filter" floatLabel="never">
-                            <mat-label>Course Name</mat-label>
-                            <input matInput style="color: white" [formControl]="courseNameFilter" />
-                          </mat-form-field>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
-                          data-placement="right" title="click to view general info">
-                          {{ row.coursename }}
-                        </mat-cell>
-                      </ng-container>
-                      <ng-container matColumnDef="email">
-                        <mat-header-cell *matHeaderCellDef>
-                          <mat-form-field class="filter" floatLabel="never">
-                            <mat-label>Email</mat-label>
-                            <input matInput style="color: white" [formControl]="emailFilter" />
-                          </mat-form-field>
-                        </mat-header-cell>
-                        <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
-                          data-placement="right" title="click to view general info">
-                          {{ row.email }}
-                        </mat-cell>
-                      </ng-container>
-                      <mat-header-row *matHeaderRowDef="displayedColumns">
-                      </mat-header-row>
-                      <mat-row class="table-row" [class.focus]="highlighter === i" tabindex="1" *matRowDef="
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
+                            data-placement="right" title="click to view general info">
+                            {{ row.firstname }}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="lastName">
+                          <mat-header-cell *matHeaderCellDef>
+                            <mat-form-field class="filter" floatLabel="never">
+                              <mat-label>Last Name</mat-label>
+                              <input matInput style="color: white" [formControl]="lastNameFilter" />
+                            </mat-form-field>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
+                            data-placement="right" title="click to view general info">
+                            {{ row.lastname }}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="courseName">
+                          <mat-header-cell *matHeaderCellDef>
+                            <mat-form-field class="filter" floatLabel="never">
+                              <mat-label>Course Name</mat-label>
+                              <input matInput style="color: white" [formControl]="courseNameFilter" />
+                            </mat-form-field>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
+                            data-placement="right" title="click to view general info">
+                            {{ row.coursename }}
+                          </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="email">
+                          <mat-header-cell *matHeaderCellDef>
+                            <mat-form-field class="filter" floatLabel="never">
+                              <mat-label>Email</mat-label>
+                              <input matInput style="color: white" [formControl]="emailFilter" />
+                            </mat-form-field>
+                          </mat-header-cell>
+                          <mat-cell *matCellDef="let row" (click)="showInfo(row)" data-toggle="tooltip"
+                            data-placement="right" title="click to view general info">
+                            {{ row.email }}
+                          </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="displayedColumns">
+                        </mat-header-row>
+                        <mat-row class="table-row" [class.focus]="highlighter === i" tabindex="1" *matRowDef="
                           let row;
                           let i = index;
                           columns: displayedColumns
                         " [style.cursor]="'pointer'" matRipple>
-                      </mat-row>
-                    </mat-table>
-                    <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
-                      [pageSizeOptions]="[5, 10, 25, 100]">
-                    </mat-paginator>
+                        </mat-row>
+                      </mat-table>
+                      <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="5"
+                        [pageSizeOptions]="[5, 10, 25, 100]">
+                      </mat-paginator>
+                    </div>
                   </div>
                   <div>
                     <button mat-raised-button type="button" color="primary" (click)="onDocumentSubmit()">
