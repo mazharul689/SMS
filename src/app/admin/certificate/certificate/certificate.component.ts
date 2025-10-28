@@ -18,6 +18,7 @@ import { MatSort } from '@angular/material/sort'
 import { SelectionModel } from '@angular/cdk/collections'
 import { MatCheckboxChange } from '@angular/material/checkbox'
 const moment = _rollupMoment || _moment;
+import { finalize } from 'rxjs/operators';
 
 export interface outcome {
   // highlighted?: boolean
@@ -146,7 +147,6 @@ export class CertificateComponent implements OnInit {
 
   ngOnInit(): void {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
-
     this.disabled = false
     this.loading = false
     this.dataSource = new MatTableDataSource() // create new object
@@ -328,87 +328,206 @@ export class CertificateComponent implements OnInit {
       }
     })
   }
+  // getCertificate() {
+  //   this.disabled = true
+  //   this.error.isError = false
+  //   this.error.errorMessage = ''
+  //   // //console.log(this.error.isError)
+  //   let rows = this.sendSelectedNumbers();
+  //   var nums: number[] = []
+  //   const certificateBody = this.HFormGroup1.value
+  //   certificateBody.Issuedflag = 'Y'
+  //   certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd')
+  //   certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd')
+  //   if (certificateBody.certificateType == 'C' || certificateBody.certificateType == 'R') {
+  //     for (let i = 0; i < this.trainingActId.length; i++) {
+  //       nums[i] = this.trainingActId[i].trainingactivityid;
+  //     }
+  //   }
+  //   else {
+  //     for (let i = 0; i < rows.length; i++) {
+  //       nums[i] = this.trainingActId[rows[i]].trainingactivityid;
+  //     }
+  //   }
+
+  //   certificateBody.trainingActivityId = nums
+  //   certificateBody.studentEnrolmentId = parseInt(this.enrolemntID, 10)
+  //   certificateBody.userId = this.userInfo.userid
+  //   var show = document.getElementById('closebtn')
+  //   this.errorsReqEn = { isError: false, errorMessage: '' };
+  //   this.errorsReq = { isError: false, errorMessage: '' }
+  //   if (this.outcomeCheck.msg || certificateBody.certificateType == 'S') {
+  //     this.apiService.postAPI('addcertificate', certificateBody).subscribe((data) => {
+  //       this.disabled = false
+  //       if (data['data'] && data['data'].msg) {
+  //         this.errorsReqEn = { isError: true, errorMessage: data['data'].msg }
+  //         window.scroll(0, 0)
+  //         if (show) {
+  //           show.style.display = 'block'
+  //         }
+  //       }
+  //       else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "VLC" && this.userInfo.college_id == 23) {
+  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
+  //         this.router.navigate(['/admin/certificate/all-student'])
+  //       }
+  //       else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "NSW" && this.userInfo.college_id == 23) {
+  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw&sid=${data}&_token=${this.userInfo.refresh_token}`)
+  //         this.router.navigate(['/admin/certificate/all-student'])
+  //       }
+  //       else if (certificateBody.certificateType == 'C' && this.userInfo.college_id != 23) {
+  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
+  //         this.router.navigate(['/admin/certificate/all-student'])
+  //       }
+  //       else if (certificateBody.certificateType == 'S') {
+  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${data}&_token=${this.userInfo.refresh_token}`)
+  //         this.router.navigate(['/admin/certificate/all-student'])
+  //       }
+  //       else if (certificateBody.certificateType == 'O') {
+  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=qualification_attainment&sid=${data}&_token=${this.userInfo.refresh_token}`)
+  //         this.router.navigate(['/admin/certificate/all-student'])
+  //       }
+  //       else if (certificateBody.certificateType == 'R' && certificateBody.trainerStateNameShort == "VLC" && this.userInfo.college_id == 23) {
+  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${data}&_token=${this.userInfo.refresh_token}`)
+  //         this.router.navigate(['/admin/certificate/all-student'])
+  //       }
+  //       else if (certificateBody.certificateType == 'R' && certificateBody.trainerStateNameShort == "NSW" && this.userInfo.college_id == 23) {
+  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor_nsw&sid=${data}&_token=${this.userInfo.refresh_token}`)
+  //         this.router.navigate(['/admin/certificate/all-student'])
+  //       }
+  //       else if (certificateBody.certificateType == 'R' && this.userInfo.college_id !== 23) {
+  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${data}&_token=${this.userInfo.refresh_token}`)
+  //         this.router.navigate(['/admin/certificate/all-student'])
+  //       }
+  //     })
+  //   }
+  //   else {
+  //     this.errorsReq = { isError: true, errorMessage: this.outcomeCheck[0].error_msg }
+  //     //console.log('errorreq', this.outcomeCheck[0].error_msg)
+  //     window.scroll(0, 0)
+  //     if (show) {
+  //       show.style.display = 'block'
+  //     }
+  //   }
+
+  // }
   getCertificate() {
-    this.disabled = true
-    this.error.isError = false
-    this.error.errorMessage = ''
-    // //console.log(this.error.isError)
-    let rows = this.sendSelectedNumbers();
-    var nums: number[] = []
-    const certificateBody = this.HFormGroup1.value
-    certificateBody.Issuedflag = 'Y'
-    certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd')
-    certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd')
-    if (certificateBody.certificateType == 'C' || certificateBody.certificateType == 'R') {
-      for (let i = 0; i < this.trainingActId.length; i++) {
-        nums[i] = this.trainingActId[i].trainingactivityid;
-      }
-    }
-    else {
-      for (let i = 0; i < rows.length; i++) {
-        nums[i] = this.trainingActId[rows[i]].trainingactivityid;
-      }
-    }
-
-    certificateBody.trainingActivityId = nums
-    certificateBody.studentEnrolmentId = parseInt(this.enrolemntID, 10)
-    certificateBody.userId = this.userInfo.userid
-    var show = document.getElementById('closebtn')
+    // 1. Reset state
+    this.disabled = true;
+    this.error.isError = false;
+    this.error.errorMessage = '';
     this.errorsReqEn = { isError: false, errorMessage: '' };
-    this.errorsReq = { isError: false, errorMessage: '' }
-    if (this.outcomeCheck.msg || certificateBody.certificateType == 'S') {
-      this.apiService.postAPI('addcertificate', certificateBody).subscribe((data) => {
-        this.disabled = false
-        if (data['data'] && data['data'].msg) {
-          this.errorsReqEn = { isError: true, errorMessage: data['data'].msg }
-          window.scroll(0, 0)
-          if (show) {
-            show.style.display = 'block'
-          }
-        }
-        else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "VLC" && this.userInfo.college_id == 23) {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
-          this.router.navigate(['/admin/certificate/all-student'])
-        }
-        else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "NSW" && this.userInfo.college_id == 23) {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw&sid=${data}&_token=${this.userInfo.refresh_token}`)
-          this.router.navigate(['/admin/certificate/all-student'])
-        }
-        else if (certificateBody.certificateType == 'C' && this.userInfo.college_id != 23) {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
-          this.router.navigate(['/admin/certificate/all-student'])
-        }
-        else if (certificateBody.certificateType == 'S') {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${data}&_token=${this.userInfo.refresh_token}`)
-          this.router.navigate(['/admin/certificate/all-student'])
-        }
-        else if (certificateBody.certificateType == 'O') {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=qualification_attainment&sid=${data}&_token=${this.userInfo.refresh_token}`)
-          this.router.navigate(['/admin/certificate/all-student'])
-        }
-        else if (certificateBody.certificateType == 'R' && certificateBody.trainerStateNameShort == "VLC" && this.userInfo.college_id == 23) {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${data}&_token=${this.userInfo.refresh_token}`)
-          this.router.navigate(['/admin/certificate/all-student'])
-        }
-        else if (certificateBody.certificateType == 'R' && certificateBody.trainerStateNameShort == "NSW" && this.userInfo.college_id == 23) {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor_nsw&sid=${data}&_token=${this.userInfo.refresh_token}`)
-          this.router.navigate(['/admin/certificate/all-student'])
-        }
-        else if (certificateBody.certificateType == 'R' && this.userInfo.college_id !== 23) {
-          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${data}&_token=${this.userInfo.refresh_token}`)
-          this.router.navigate(['/admin/certificate/all-student'])
-        }
-      })
-    }
-    else {
-      this.errorsReq = { isError: true, errorMessage: this.outcomeCheck[0].error_msg }
-      //console.log('errorreq', this.outcomeCheck[0].error_msg)
-      window.scroll(0, 0)
-      if (show) {
-        show.style.display = 'block'
-      }
+    this.errorsReq = { isError: false, errorMessage: '' };
+
+    // 2. Prepare the payload
+    // Create a copy instead of mutating the form value directly
+    const certificateBody = { ...this.HFormGroup1.value };
+
+    certificateBody.Issuedflag = 'Y';
+    certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd');
+    certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd');
+
+    // Use .map() for cleaner array creation
+    const rows = this.sendSelectedNumbers();
+    let nums: number[] = [];
+    if (certificateBody.certificateType === 'C' || certificateBody.certificateType === 'R') {
+      nums = this.trainingActId.map(act => act.trainingactivityid);
+    } else {
+      nums = rows.map(rowIndex => this.trainingActId[rowIndex].trainingactivityid);
     }
 
+    certificateBody.trainingActivityId = nums;
+    certificateBody.studentEnrolmentId = parseInt(this.enrolemntID, 10);
+    certificateBody.userId = this.userInfo.userid;
+
+    // 3. Check pre-condition
+    if (!this.outcomeCheck.msg && certificateBody.certificateType !== 'S') {
+      this.errorsReq = { isError: true, errorMessage: this.outcomeCheck[0].error_msg };
+      window.scroll(0, 0);
+      this._showErrorUI();
+      this.disabled = false; // Manually re-enable
+      return; // Stop execution
+    }
+
+    // 4. Call the API
+    this.apiService.postAPI('addcertificate', certificateBody).pipe(
+      // finalize() ensures this runs on success OR error
+      finalize(() => this.disabled = false)
+    ).subscribe(
+      (data: any) => {
+        // API call succeeded, check for application error message
+        if (data?.data?.msg) {
+          this.errorsReqEn = { isError: true, errorMessage: data.data.msg };
+          window.scroll(0, 0);
+          this._showErrorUI();
+        } else {
+          // Handle success: open report and navigate
+          this._handleCertificateSuccess(certificateBody, data);
+        }
+      },
+      (apiError) => {
+        // API call failed (e.g., 500 server error)
+        console.error('API Error:', apiError);
+        this.errorsReqEn = { isError: true, errorMessage: 'An unexpected error occurred. Please try again.' };
+        window.scroll(0, 0);
+        this._showErrorUI();
+      }
+    );
+  }
+
+  /**
+   * Helper function to determine the report type string.
+   */
+  private _getCertificateReportType(certificateBody: any): string | null {
+    const { certificateType, trainerStateNameShort } = certificateBody;
+    const { college_id } = this.userInfo;
+    const isCollege23 = (college_id === 23);
+    const isNSW = (trainerStateNameShort === 'NSW');
+    switch (certificateType) {
+      case 'C':
+        if (isCollege23 && isNSW) return 'certificate_nsw';
+        return 'certificate'; // Default for VLC, other states, and other colleges
+
+      case 'S':
+        return 'attainment';
+
+      case 'O':
+        return 'qualification_attainment';
+
+      case 'R':
+        if (isCollege23 && isNSW) return 'sor_nsw';
+        return 'sor'; // Default for VLC, other states, and other colleges
+
+      default:
+        return null; // No report for other types
+    }
+  }
+
+  /**
+   * Helper function to handle the successful API response.
+   */
+  private _handleCertificateSuccess(certificateBody: any, data: any) {
+    const reportType = this._getCertificateReportType(certificateBody);
+
+    if (reportType) {
+      const { college_id, refresh_token } = this.userInfo;
+      const url = `https://api.wonderit.com.au:8000/album/report/?inst_id=${college_id}&type=${reportType}&sid=${data}&_token=${refresh_token}`;
+      window.open(url, '_blank');
+    }
+
+    this.router.navigate(['/admin/certificate/all-student']);
+  }
+
+  /**
+   * Helper function to abstract DOM manipulation.
+   */
+  private _showErrorUI() {
+    // Best Practice: Avoid document.getElementById in Angular.
+    // This should be handled with a boolean property and *ngIf in your template.
+    // Example: <div *ngIf="errorsReq.isError || errorsReqEn.isError" id="closebtn">...</div>
+    const show = document.getElementById('closebtn');
+    if (show) {
+      show.style.display = 'block';
+    }
   }
   getCurrentDate(): string {
     const today = new Date();

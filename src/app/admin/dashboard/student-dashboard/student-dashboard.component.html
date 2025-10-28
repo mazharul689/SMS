@@ -198,8 +198,9 @@
                         <span><strong>State</strong></span>
                       </div>
                       <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 mb-2">
-                        <span>:&emsp;{{this.getAll[0].State[this.student.stateid -
-                          1].statename}}</span>
+
+                        <span *ngIf="this.student.stateid !== 99">:&emsp;{{this.getAll[0].State[this.student.stateid-1].statename}}</span>
+                        <span *ngIf="this.student.stateid === 99">:&emsp;{{this.getAll[0].State[9].statename}}</span>
                       </div>
                     </div>
                     <div class="row" *ngIf="this.student">

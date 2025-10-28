@@ -76,7 +76,7 @@ export class StudentDashboardComponent implements OnInit {
   displayedColumns2: string[] = ['type', 'subject', 'message', 'attachments', 'date', 'actions1']
   displayedColumns3: string[] = ['dashboardUnits', 'outcomeNational', 'outcomeSTD', 'outcomeEND', 'hours']
   displayedColumns4: string[] = ['docName', 'fileName', 'docActions']
-  displayedColumns5: string[] = ['certificateType','certCourseCode', 'issueDate', 'certActions']
+  displayedColumns5: string[] = ['certificateType', 'certCourseCode', 'issueDate', 'certActions']
   dataSource1: MatTableDataSource<courses>
   dataSource3: MatTableDataSource<units>
   dataSource2: MatTableDataSource<Message>
@@ -198,7 +198,7 @@ export class StudentDashboardComponent implements OnInit {
       this.cob = this.getAll[0].Country[this.student.birthcountryid - 1].countryname
       this.usi = this.student.usino
       this.phone = this.student.mobile
-      console.log('status check', this.student.usiverificationstatus)
+
       if (!this.student.usiverificationstatus) {
         this.status = 'Not Verified'
       }
@@ -277,11 +277,10 @@ export class StudentDashboardComponent implements OnInit {
       else {
         this.documentCount = data['data'].length
         this.documents = data['data']
-        for (var i in this.documents) {
-          this.documents[i].rowID = parseInt(i) + 1
-          this.documents[i].filename = this.documents[i].filename.slice(15)
-          // console.log(this.documents[i].filename)
-        }
+        this.documents.forEach((doc, index) => {
+          doc.rowID = index + 1;
+          doc.filename = doc.filename.slice(15);
+        });
         this.dataSource5.data = this.documents
         this.dataSource5.paginator = this.tableFivePaginator
         this.dataSource5.sort = this.tableFiveSort
@@ -298,9 +297,9 @@ export class StudentDashboardComponent implements OnInit {
       else {
         this.certificateCount = data['data'].length
         this.certificate = data['data']
-        for (var i in this.certificate) {
-          this.certificate[i].rowID = parseInt(i) + 1
-        }
+        this.certificate.forEach((cert, index) => {
+          cert.rowID = index + 1;
+        });
         this.dataSource6.data = this.certificate
         this.dataSource6.paginator = this.tableSixPaginator
         this.dataSource6.sort = this.tableSixSort
@@ -318,11 +317,11 @@ export class StudentDashboardComponent implements OnInit {
           const dateB = new Date(b.date);
           return dateB.getTime() - dateA.getTime();
         });
-        for (let i = 0; i < this.messages.length; i++) {
-          if (this.messages[i].bodyPreview.length > 50) {
-            this.messages[i].shortMsg = this.messages[i].bodyPreview.substring(0, 50) + '...';
+        this.messages.forEach(message => {
+          if (message.bodyPreview.length > 50) {
+            message.shortMsg = message.bodyPreview.substring(0, 50) + '...';
           }
-        }
+        });
         console.log('message', this.messages)
         this.dataSource2.data = this.messages
         this.dataSource2.paginator = this.tableThreePaginator
@@ -336,9 +335,12 @@ export class StudentDashboardComponent implements OnInit {
     this.apiService.getAPI(`getstudentenrolmentbystudentid?id=${this.studentID}`).subscribe((data) => {
       this.courseLength = data['data'].length
       this.courses = data['data']
-      for (let i in this.courses) {
-        this.courses[i].rowID = i
-      }
+      this.courses = this.courses.map((course, index) => {
+        return {
+          ...course,  // Copies all original properties from the course
+          rowID: index   // Adds the new rowID property with the numeric index
+        };
+      });
       this.dataSource1.data = this.courses // on data receive populate dataSource1.data array
       return data
     })

@@ -194,27 +194,35 @@ export class AllStudentComponent implements OnInit {
     this.apiService.getAPI('getstudentcertificatelist').subscribe((data) => {
       //console.log(data);
       this.students = data['data']
-      for (var i in this.students) {
-        this.students[i].rowID = i
-        this.students[i].startDate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
-        this.students[i].endDate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
-        if (this.students[i].certificatepath == "") {
-          this.students[i].certificatepath = null
-        }
-        if (this.students[i].certificatetype == "C") {
-          this.students[i].certificateFlag = true
-        }
-        else if (this.students[i].certificatetype == "S") {
-          this.students[i].attainmentFlag = true
-        }
-        else if (this.students[i].certificatetype == "R") {
-          this.students[i].sorFlag = true
-        }
-        else if (this.students[i].certificatetype == "O") {
-          this.students[i].qualificationAttainmentFlag = true
+      this.students.forEach((student, index) => {
+        // 1. Use the numeric index from forEach (safer than a string index from for...in)
+        student.rowID = index;
+
+        // 2. Transform dates
+        student.startDate = this.datePipe.transform(student.startdate, 'dd/MM/yyyy');
+        student.endDate = this.datePipe.transform(student.enddate, 'dd/MM/yyyy');
+
+        // 3. Set null for empty string
+        if (student.certificatepath === "") {
+          student.certificatepath = null;
         }
 
-      }
+        // 4. Use a 'switch' statement for a clean multi-way check
+        switch (student.certificatetype) {
+          case "C":
+            student.certificateFlag = true;
+            break;
+          case "S":
+            student.attainmentFlag = true;
+            break;
+          case "R":
+            student.sorFlag = true;
+            break;
+          case "O":
+            student.qualificationAttainmentFlag = true;
+            break;
+        }
+      });
       // console.log('check', this.students)
       this.students = this.students.sort((a, b) => {
         if (a.clientid < b.clientid) {
@@ -225,9 +233,9 @@ export class AllStudentComponent implements OnInit {
           return 0;
         }
       });
-      for (var i in this.students) {
-        this.students[i].rowID = i
-      }
+      this.students.forEach((student, index) => {
+        student.rowID = index;
+      });
       // console.log('this.students',this.students)
       this.dataSource.data = this.students // on data receive populate dataSource.data array
       return data
@@ -285,27 +293,37 @@ export class AllStudentComponent implements OnInit {
         }
         else {
           let students = data['data']
-          for (let i in students) {
-            students[i].fullname = students[i].firstname + " " + students[i].lastname;
-            students[i].startDate = this.datePipe.transform(students[i].startdate, 'dd/MM/yyyy')
-            students[i].endDate = this.datePipe.transform(students[i].enddate, 'dd/MM/yyyy')
-            if (students[i].certificatepath == "") {
-              students[i].certificatepath = null
+          students.forEach(student => {
+            // 1. Use template literals for cleaner strings
+            student.fullname = `${student.firstname} ${student.lastname}`;
+
+            // 2. Transform dates
+            // (Note: This creates new properties 'startDate' and 'endDate' from lowercase versions)
+            student.startDate = this.datePipe.transform(student.startdate, 'dd/MM/yyyy');
+            student.endDate = this.datePipe.transform(student.enddate, 'dd/MM/yyyy');
+
+            // 3. Set null for empty string
+            if (student.certificatepath === "") {
+              student.certificatepath = null;
             }
-            if (students[i].certificatetype == "C") {
-              students[i].certificateFlag = true
+
+            // 4. Use a 'switch' statement for readability
+            // This is much cleaner than multiple 'else if' blocks
+            switch (student.certificatetype) {
+              case "C":
+                student.certificateFlag = true;
+                break;
+              case "S":
+                student.attainmentFlag = true;
+                break;
+              case "R":
+                student.sorFlag = true;
+                break;
+              case "O":
+                student.qualificationAttainmentFlag = true;
+                break;
             }
-            else if (students[i].certificatetype == "S") {
-              students[i].attainmentFlag = true
-            }
-            else if (students[i].certificatetype == "R") {
-              students[i].sorFlag = true
-            }
-            else if (students[i].certificatetype == "O") {
-              // alert('check')
-              students[i].qualificationAttainmentFlag = true
-            }
-          }
+          });
           this.dataSource.data = students; // on data receive populate dataSource.data array
           // console.log('scheck',this.dataSource.data)
         }
@@ -421,10 +439,10 @@ export class AllStudentComponent implements OnInit {
 
   }
   downloadResult(id, temp) {
-    if(temp == 'NSW'){
+    if (temp == 'NSW') {
       window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor_nsw&sid=${id}&_token=${this.userInfo.refresh_token}`)
     }
-    else{
+    else {
       window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${id}&_token=${this.userInfo.refresh_token}`)
     }
   }

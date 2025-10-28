@@ -19,6 +19,8 @@ import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core'
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter'
+import { map, finalize } from 'rxjs/operators';
+
 const moment = _rollupMoment || _moment;
 export interface Students {
   // highlighted?: boolean
@@ -117,6 +119,7 @@ export class AllStudentComponent implements OnInit {
   getAll: any
   allApplicationStatus: any
   allAgents: any
+  isLoading = false
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -203,27 +206,66 @@ export class AllStudentComponent implements OnInit {
     })
   }
   getStudents() {
-    this.apiService.getAPI('getstudent').subscribe((data) => {
-      //console.log(data);
-      this.students = data['data']
-      for(var i in this.students){
-        this.students[i].startDate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
-        this.students[i].endDate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
-        this.students[i].fullname = this.students[i].firstname + ' ' + this.students[i].lastname
-        this.students[i].coursename = this.students[i].coursecode + ' - ' + this.students[i].coursename
+    // 1. Set loading to TRUE
+    this.isLoading = true;
+    
+    // Define locale for 'dd/MM/yyyy' format
+    const dateLocale = 'en-GB';
+    
+    // 2. Optimized: sqlquery is now a simple string
+    const sqlquery = "a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email";
+
+    this.apiService.getAPI(`getstudent?sqlquery=${sqlquery}`).pipe(
+      
+      // 3. Optimized: All logic is now inside the RxJS map operator
+      map((data: { data: any[] }) => {
+        const students = data['data'];
+
+        // 4. Optimized: Use .map() for fast array transformation
+        return students.map(student => {
+          
+          // 5. Optimized: Use fast native Date formatting
+          //    BUG FIX: Use 'commencementdate' and 'expectedcompletiondate'
+          let formattedStartDate = '';
+          let formattedEndDate = '';
+
+          if (student.commencementdate) {
+            formattedStartDate = new Date(student.commencementdate).toLocaleDateString(dateLocale);
+          }
+          if (student.expectedcompletiondate) {
+            formattedEndDate = new Date(student.expectedcompletiondate).toLocaleDateString(dateLocale);
+          }
+
+          return {
+            ...student, // Keep all original properties
+            // Add/overwrite the new ones
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+            fullname: `${student.firstname} ${student.lastname}`, // Use template literal
+            // BUG FIX: 'coursename' is not in your query, so just use 'coursecode'
+            coursename: student.coursecode || '' 
+          };
+        })
+        // 6. Optimized: Chain .sort() after .map()
+        .sort((a, b) => b.clientid - a.clientid); // Simpler descending sort
+      }),
+      
+      // 7. Add finalize to set loading to FALSE when done
+      finalize(() => {
+        this.isLoading = false;
+      })
+
+    ).subscribe({
+      // 8. Optimized: Subscribe block is now clean and only assigns the final result
+      next: (processedStudents) => {
+        this.students = processedStudents;
+        this.dataSource.data = this.students;
+      },
+      error: (err) => {
+        console.error("Failed to get students:", err);
+        this.dataSource.data = [];
       }
-      this.students = this.students.sort((a, b) => {
-        if (a.clientid < b.clientid) {
-          return 1;
-        } else if (a.clientid > b.clientid) {
-          return -1;
-        } else {
-          return 0;
-        }
-      });
-      this.dataSource.data = this.students // on data receive populate dataSource.data array
-      return data
-    })
+    });
   }
   createFilter(): (data: any, filter: string) => boolean {
       let filterFunction = function (data, filter): boolean {
@@ -231,7 +273,7 @@ export class AllStudentComponent implements OnInit {
         return data.clientid.toLowerCase().toString().indexOf(searchTerms.clientid.toLowerCase()) !== -1
           && data.fullname.toLowerCase().indexOf(searchTerms.fullname.toLowerCase()) !== -1
           // && (data.lastname || '').toLowerCase().indexOf(searchTerms.lastname.toLowerCase()) !== -1
-          && data.applicationstatusname.toLowerCase().indexOf(searchTerms.applicationstatusname.toLowerCase()) !== -1
+          && (data.applicationstatusname || '').toLowerCase().indexOf(searchTerms.applicationstatusname.toLowerCase()) !== -1
           // && (data.coursecode || '').toLowerCase().indexOf(searchTerms.coursecode.toLowerCase()) !== -1
           && (data.coursename || '').toLowerCase().indexOf(searchTerms.coursename.toLowerCase()) !== -1
           && (data.startdate || '').toLowerCase().indexOf(searchTerms.startdate.toLowerCase()) !== -1
@@ -242,7 +284,7 @@ export class AllStudentComponent implements OnInit {
   search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, email: any) {
     let queryParams = [];
 
-    // Build query string based on available parameters
+    // --- 1. Build query string ---
     if (cid && cid != 100) {
       queryParams.push(`courseid=${cid}`);
     }
@@ -255,44 +297,88 @@ export class AllStudentComponent implements OnInit {
     if (clid) {
       queryParams.push(`clientid=${clid}`);
     }
-    if(uid){
+    if (uid) {
       queryParams.push(`usiNo=${uid}`);
     }
-    if(name){
+    if (name) {
       queryParams.push(`studentname=${name}`);
     }
-    if(email){
+    if (email) {
       queryParams.push(`email=${email}`);
     }
-    // console.log(queryParams)
-    // If there are any query parameters, make the API call
-    if (queryParams.length > 0) {
-      const queryString = queryParams.join('&');
-      this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
-        // console.log(data);
-        // if (this.HFormGroup1.valid) {
-        if (data['data'].msg) {
-          // window.scroll(0, 0);
-          var show = document.getElementById('closebtn')
-          this.errorsReq = { isError: true, errorMessage: data['data'].msg }
-          this.dataSource.data = []
-        }
-        else {
-          let students = data['data']
-          for (let i in students) {
-            students[i].fullname = students[i].firstname + " " + students[i].lastname;
-          }
-          this.dataSource.data = students; // on data receive populate dataSource.data array
 
+    // --- 2. BUG FIX: Check length BEFORE adding sqlquery ---
+    // If any filters were added, run the search. Otherwise, get all students.
+    if (queryParams.length > 0) {
+      
+      // --- 3. Set loading to TRUE ---
+      this.isLoading = true;
+      const dateLocale = 'en-GB'; // For date formatting
+
+      // Add sqlquery to the *existing* params
+      const sqlquery = "a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email";
+      queryParams.push(`sqlquery=${sqlquery}`);
+      
+      const queryString = queryParams.join('&');
+
+      this.apiService.getAPI(`getstudent?${queryString}`).pipe(
+        // --- 4. Add finalize to set loading to FALSE when done ---
+        finalize(() => {
+          this.isLoading = false;
+        })
+      ).subscribe({
+        // --- 5. Use object-based subscribe (next/error) ---
+        next: (data) => {
+          var show = document.getElementById('closebtn');
+
+          if (data['data'].msg) {
+            // API returned a custom error message
+            this.errorsReq = { isError: true, errorMessage: data['data'].msg };
+            this.dataSource.data = [];
+          } else {
+            // --- 6. OPTIMIZED: Use .map() for transformation ---
+            const students = data['data'];
+            const processedStudents = students.map(student => {
+              
+              let formattedStartDate = '';
+              let formattedEndDate = '';
+
+              if (student.commencementdate) {
+                formattedStartDate = new Date(student.commencementdate).toLocaleDateString(dateLocale);
+              }
+              if (student.expectedcompletiondate) {
+                formattedEndDate = new Date(student.expectedcompletiondate).toLocaleDateString(dateLocale);
+              }
+
+              return {
+                ...student,
+                startDate: formattedStartDate,
+                endDate: formattedEndDate,
+                fullname: `${student.firstname} ${student.lastname}`,
+                coursename: student.coursecode || ''
+              };
+            });
+            
+            this.dataSource.data = processedStudents;
+            this.students = processedStudents;
+          }
+
+          if (show) {
+            show.style.display = 'block';
+          }
+        },
+        // --- 7. Add HTTP error handling ---
+        error: (err) => {
+          console.error("Search failed:", err);
+          this.errorsReq = { isError: true, errorMessage: "An API error occurred during the search." };
+          this.dataSource.data = [];
         }
-        if (show) {
-          show.style.display = 'block'
-        }
-        return data;
-      })
+      });
     }
     else {
-      this.getStudents()
+      // No filters specified, just get all students
+      // (This function already has its own loading logic)
+      this.getStudents();
     }
   }
   showInfo(row) {

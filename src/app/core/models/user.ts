@@ -9,4 +9,5 @@ export class User {
   lastName: string;
   role: Role;
   access_token?: string;
+  college_id?: number;
 }

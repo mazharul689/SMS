@@ -222,11 +222,14 @@ export class MainComponent implements OnInit {
       }
       else {
         this.totalStudent = this.students.length
-        for (let i in this.students) {
-          this.students[i].firstname = this.students[i].firstname + ' ' + this.students[i].middlename + ' ' + this.students[i].lastname
-          this.students[i].startdate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
-          this.students[i].enddate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
-        }
+        this.students = this.students.map(student => {
+          return {
+            ...student, // Copies all original properties (like id, age, etc.)
+            firstname: `${student.firstname} ${student.middlename} ${student.lastname}`, // Overwrites firstname
+            startdate: this.datePipe.transform(student.startdate, 'dd/MM/yyyy'), // Overwrites startdate
+            enddate: this.datePipe.transform(student.enddate, 'dd/MM/yyyy') // Overwrites enddate
+          };
+        });
         this.dataSource = new MatTableDataSource() // create new object
         this.dataSource.data = this.students
         this.dataSource.paginator = this.tableTwoPaginator
@@ -252,52 +255,52 @@ export class MainComponent implements OnInit {
   getStudents() {
     this.apiService.getAPI('getstudentlist').subscribe((data) => {
       this.students = data['data']
-      if(this.students[0].msg){
+      if (this.students[0].msg) {
         this.totalStudent = 0
       }
-      else{
+      else {
         this.totalStudent = this.students.length
-      for (var i in this.students) {
-        this.students[i].startdate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
-        this.students[i].enddate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
-        this.students[i].firstname = this.students[i].firstname + ' ' + this.students[i].lastname
-        // if(this.students[i].coursecode == null){
-        //   this.students[i].course = '';
-        // }
-        // else{
-        //   this.students[i].course = this.students[i].coursecode + ' - ' + this.students[i].coursename
-        // }
+        for (var i in this.students) {
+          this.students[i].startdate = this.datePipe.transform(this.students[i].startdate, 'dd/MM/yyyy')
+          this.students[i].enddate = this.datePipe.transform(this.students[i].enddate, 'dd/MM/yyyy')
+          this.students[i].firstname = this.students[i].firstname + ' ' + this.students[i].lastname
+          // if(this.students[i].coursecode == null){
+          //   this.students[i].course = '';
+          // }
+          // else{
+          //   this.students[i].course = this.students[i].coursecode + ' - ' + this.students[i].coursename
+          // }
 
-      }
-      this.students = this.students.sort((a, b) => {
-        if (a.clientid < b.clientid) {
-          return 1;
-        } else if (a.clientid > b.clientid) {
-          return -1;
-        } else {
-          return 0;
         }
-      });
-      // this.dataSource.data = this.students // on data receive populate dataSource.data array
-      // console.log('check',this.dataSource.data)
-      this.dataSource = new MatTableDataSource() // create new object
-      this.dataSource.data = this.students
-      this.dataSource.paginator = this.tableTwoPaginator
-      this.dataSource.sort = this.tableTwoSort
-      this.dataSource.filterPredicate = this.createFilter1();
-      this.clientIdFilter.valueChanges.subscribe(clientid => {
-        this.studentFilteredValues.clientid = clientid;
-        this.dataSource.filter = JSON.stringify(this.studentFilteredValues)
-      })
-      this.nameFilter.valueChanges.subscribe(firstname => {
-        this.studentFilteredValues.firstname = firstname;
-        this.dataSource.filter = JSON.stringify(this.studentFilteredValues)
-      })
-      this.emailFilter.valueChanges.subscribe(email => {
-        this.studentFilteredValues.email = email;
-        this.dataSource.filter = JSON.stringify(this.studentFilteredValues)
-      })
-      return data
+        this.students = this.students.sort((a, b) => {
+          if (a.clientid < b.clientid) {
+            return 1;
+          } else if (a.clientid > b.clientid) {
+            return -1;
+          } else {
+            return 0;
+          }
+        });
+        // this.dataSource.data = this.students // on data receive populate dataSource.data array
+        // console.log('check',this.dataSource.data)
+        this.dataSource = new MatTableDataSource() // create new object
+        this.dataSource.data = this.students
+        this.dataSource.paginator = this.tableTwoPaginator
+        this.dataSource.sort = this.tableTwoSort
+        this.dataSource.filterPredicate = this.createFilter1();
+        this.clientIdFilter.valueChanges.subscribe(clientid => {
+          this.studentFilteredValues.clientid = clientid;
+          this.dataSource.filter = JSON.stringify(this.studentFilteredValues)
+        })
+        this.nameFilter.valueChanges.subscribe(firstname => {
+          this.studentFilteredValues.firstname = firstname;
+          this.dataSource.filter = JSON.stringify(this.studentFilteredValues)
+        })
+        this.emailFilter.valueChanges.subscribe(email => {
+          this.studentFilteredValues.email = email;
+          this.dataSource.filter = JSON.stringify(this.studentFilteredValues)
+        })
+        return data
       }
     })
   }

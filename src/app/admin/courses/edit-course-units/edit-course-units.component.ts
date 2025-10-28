@@ -352,6 +352,9 @@ export class EditCourseUnitsComponent implements OnInit {
             const matchingIndex = this.previousData.findIndex((unit) => unit.unitid === data.unitid);
             if (matchingIndex !== -1) {
               data.statuscheck = true;
+              data.unitorderby = this.previousData[matchingIndex].unitorderby
+              data.unitdurationtype = this.previousData[matchingIndex].unitdurationtype
+              data.unitduration = this.previousData[matchingIndex].unitduration
             }
             else {
               data.statuscheck = false;
@@ -377,7 +380,7 @@ export class EditCourseUnitsComponent implements OnInit {
             });
             (this.HFormGroup1.get('UnitRows') as FormArray).push(rowData1)
           }
-          // console.log('flag',this.UnitRows.value)
+          console.log('flag',this.UnitRows.value)
           this.dataSource1 = new MatTableDataSource() // create new object
           this.dataSource1.data = this.UnitRows.value
           console.log('check', this.dataSource1.data)

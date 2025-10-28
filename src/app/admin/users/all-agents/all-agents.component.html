@@ -94,6 +94,10 @@
                     <button mat-icon-button class="btn-tbl-edit" title="Edit Info" (click)="editAgent(row.agentid)">
                       <mat-icon aria-label="Edit" class="col-white">edit</mat-icon>
                     </button>
+                    <button mat-icon-button class="btn-tbl-edit" title="Exclude the student from enrollment"
+                      (click)="deleteAgent(row)">
+                      <mat-icon aria-label="Delete" style="color: red;">delete</mat-icon>
+                    </button>
                   </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

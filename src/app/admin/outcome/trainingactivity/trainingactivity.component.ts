@@ -116,15 +116,17 @@ export class TrainingactivityComponent implements OnInit {
     this.apiService.getAPI(`gettrainingactivity?id=${this.enrolemntID}`).subscribe((data) => {
       let trainingArray
       trainingArray = data['data']
-      trainingArray.sort((a, b) => {
-        if (a.unitorderby < b.unitorderby) {
-          return -1;
-        }
-        if (a.unitorderby > b.unitorderby) {
-          return 1;
-        }
-        return 0;
-      });
+      if (Array.isArray(trainingArray)) {
+        trainingArray.sort((a, b) => {
+          if (a.unitorderby < b.unitorderby) {
+            return -1;
+          }
+          if (a.unitorderby > b.unitorderby) {
+            return 1;
+          }
+          return 0;
+        });
+      }
       if (!data['data'].msg) {
         for (let i = 0; i < trainingArray.length; i++) {
           trainingArray[i].startdate = moment(trainingArray[i].startdate)

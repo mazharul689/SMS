@@ -40,6 +40,7 @@ import { EditEmailComponent } from './edit-email/edit-email.component';
 import { AllOrganizationComponent } from './all-organization/all-organization.component';
 import { NewOrganizationComponent } from './new-organization/new-organization.component';
 import { EditOrganizationComponent } from './edit-organization/edit-organization.component';
+import { DeleteAgentComponent } from './all-agents/delete-agent/delete-agent.component';
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import { EditOrganizationComponent } from './edit-organization/edit-organization
     EditEmailComponent,
     AllOrganizationComponent,
     NewOrganizationComponent,
-    EditOrganizationComponent
+    EditOrganizationComponent,
+    DeleteAgentComponent
   ],
   imports: [
     UsersRoutingModule,

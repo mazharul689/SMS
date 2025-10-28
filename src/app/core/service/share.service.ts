@@ -1,39 +1,3 @@
-// import { Injectable } from '@angular/core';
-// import { BehaviorSubject } from 'rxjs'
-// @Injectable({
-//   providedIn: 'root'
-// })
-// export class ShareService {
-//   // cliLogo = 'assets/images/banner/HMILogo.png'
-//   cliLogo = 'assets/images/banner/wonsmsLogo6.png'
-//   // cliLogo = 'assets/images/banner/pacificBigLogo.png'
-//   // cliLogo = 'assets/images/banner/ALITBigLogo.png'
-//   // cliLogo = 'assets/images/banner/PICBigLogo.png'
-//   // cliLogo = 'assets/images/banner/ETCBigLogo.png'
-//   // cliLogo = 'assets/images/banner/bibeBigLogo.png'
-//   // cliLogo = 'assets/images/banner/ftiBigLogo.png'
-
-//   // cliLogo = 'assets/images/banner/aits.png'
-//   logoSrc = 'assets/images/banner/wonsmsLogo.png'
-//   // logoSrc1 = 'assets/images/banner/pacificLogo.png'
-//   // logoSrc1 = 'assets/images/banner/PICSmallLogo.png'
-//   // logoSrc1 = 'assets/images/banner/ETCSmallLogo.png'
-//   logoSrc1 = 'assets/images/banner/ALITSmallLogo.png'
-//   // logoSrc1 = 'assets/images/banner/bibeSmallLogo.png'
-//   // logoSrc1 = 'assets/images/banner/ftiSmallLogo.png'
-
-
-//   // logoSrc1 = 'assets/images/banner/HMISmallLogo.png'
-//   // logoSrc1 = 'assets/images/banner/aitslogo.png'
-//   // logoSrc1 = 'assets/images/banner/mainLand.png'
-//   public messageSource = new BehaviorSubject<string>('Student Management System')
-//   public clientLogo = new BehaviorSubject<any>(this.cliLogo)
-//   public logoSouce = new BehaviorSubject<any>(this.logoSrc)
-//   public logoSouce1 = new BehaviorSubject<any>(this.logoSrc1)
-//   constructor() { }
-// }
-
-
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -42,18 +6,18 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class ShareService {
-  test = environment.testURL;
+  magicNumber = environment.magicNumber;
 
   private logoMappings: { [key: string]: { cliLogo: string, logoSrc1: string } } = {
-    '5000': { cliLogo: 'assets/images/banner/wonsmsLogo6.png', logoSrc1: 'assets/images/banner/wonsmsLogo.png' },
-    '5011': { cliLogo: 'assets/images/banner/pacificBigLogo.png', logoSrc1: 'assets/images/banner/pacificLogo.png' },
-    '5013': { cliLogo: 'assets/images/banner/PICBigLogo.png', logoSrc1: 'assets/images/banner/PICSmallLogo.png' },
-    '5014': { cliLogo: 'assets/images/banner/ETCBigLogo.png', logoSrc1: 'assets/images/banner/ETCSmallLogo.png' },
-    '5023': { cliLogo: 'assets/images/banner/ALITBigLogo.png', logoSrc1: 'assets/images/banner/ALITSmallLogo.png' },
-    '5029': { cliLogo: 'assets/images/banner/bibeBigLogo.png', logoSrc1: 'assets/images/banner/bibeSmallLogo.png' },
-    '5033': { cliLogo: 'assets/images/banner/ftiBigLogo.png', logoSrc1: 'assets/images/banner/ftiSmallLogo.png' },
-    '5035': { cliLogo: 'assets/images/banner/gcmBigLogo.png', logoSrc1: 'assets/images/banner/gcmSmallLogo.png' },
-    '5038': { cliLogo: 'assets/images/banner/nisBigLogo.png', logoSrc1: 'assets/images/banner/nisSmallLogo.png' },
+    '01': { cliLogo: 'assets/images/banner/wonsmsLogo6.png', logoSrc1: 'assets/images/banner/wonsmsLogo.png' },
+    '11': { cliLogo: 'assets/images/banner/pacificBigLogo.png', logoSrc1: 'assets/images/banner/pacificLogo.png' },
+    '13': { cliLogo: 'assets/images/banner/PICBigLogo.png', logoSrc1: 'assets/images/banner/PICSmallLogo.png' },
+    '14': { cliLogo: 'assets/images/banner/ETCBigLogo.png', logoSrc1: 'assets/images/banner/ETCSmallLogo.png' },
+    '23': { cliLogo: 'assets/images/banner/ALITBigLogo.png', logoSrc1: 'assets/images/banner/ALITSmallLogo.png' },
+    '29': { cliLogo: 'assets/images/banner/bibeBigLogo.png', logoSrc1: 'assets/images/banner/bibeSmallLogo.png' },
+    '33': { cliLogo: 'assets/images/banner/ftiBigLogo.png', logoSrc1: 'assets/images/banner/ftiSmallLogo.png' },
+    '35': { cliLogo: 'assets/images/banner/gcmBigLogo.png', logoSrc1: 'assets/images/banner/gcmSmallLogo.png' },
+    '38': { cliLogo: 'assets/images/banner/nisBigLogo.png', logoSrc1: 'assets/images/banner/nisSmallLogo.png' },
   };
 
   private defaultLogos = {
@@ -76,8 +40,8 @@ export class ShareService {
   }
 
   private initializeLogos() {
-    const port = this.getPortNumber(this.test);
-    const logos = this.getLogos(port);
+    // const port = this.getPortNumber(this.test);
+    const logos = this.getLogos(this.magicNumber);
     this.cliLogo = logos.cliLogo;
     this.logoSrc1 = logos.logoSrc1;
   }

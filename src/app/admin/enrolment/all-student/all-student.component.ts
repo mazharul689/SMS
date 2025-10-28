@@ -16,6 +16,7 @@ import * as ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import * as _moment from "moment";
 import { default as _rollupMoment } from "moment";
+import { map, finalize } from 'rxjs/operators';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
@@ -64,6 +65,7 @@ export interface EnrolledCourses {
 export class AllStudentComponent implements OnInit {
   mode = new FormControl("side");
   students;
+  isLoading = true;
   displayedColumns: string[] = [
     "clientId",
     "fullName",
@@ -247,43 +249,65 @@ export class AllStudentComponent implements OnInit {
     );
   }
   getStudents() {
-    this.apiService.getAPI("getstudent").subscribe((data) => {
-      //console.log(data);
-      this.students = data["data"];
-      for (var i in this.students) {
-        this.students[i].startDate = this.datePipe.transform(
-          this.students[i].startdate,
-          "dd/MM/yyyy"
-        );
-        this.students[i].endDate = this.datePipe.transform(
-          this.students[i].enddate,
-          "dd/MM/yyyy"
-        );
-        if (this.students[i].coursecode == null) {
-          this.students[i].coursename = "";
-        } 
-        // else {
-        //   this.students[i].coursename =
-        //     this.students[i].coursecode;
-        // }
-        this.students[i].fullname =
-          this.students[i].firstname + " " + this.students[i].lastname;
+    // 2. Set loading to TRUE right before the call
+    this.isLoading = true;
+
+    const dateLocale = 'en-GB';
+    let sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email"];
+
+    this.apiService.getAPI(`getstudent?sqlquery=${sqlquery}`).pipe(
+
+      // Your existing map operator (unchanged)
+      map(data => {
+        const students = data["data"];
+        const processedStudents = students.map(student => {
+          // ... (all your date formatting and fullname logic)
+          // ... (Bug Fix: Use student.commencementdate, not student.startdate)
+          let formattedStartDate = '';
+          let formattedEndDate = '';
+
+          if (student.commencementdate) {
+            formattedStartDate = new Date(student.commencementdate).toLocaleDateString(dateLocale);
+          }
+          if (student.expectedcompletiondate) {
+            formattedEndDate = new Date(student.expectedcompletiondate).toLocaleDateString(dateLocale);
+          }
+
+          return {
+            ...student,
+            startDate: formattedStartDate,
+            endDate: formattedEndDate,
+            fullname: `${student.firstname} ${student.lastname}`,
+            coursename: student.coursecode == null ? "" : student.coursecode // (Bug Fix: Use coursecode)
+          };
+        });
+
+        // ... (your sort logic)
+        processedStudents.sort((a, b) => {
+          if (a.clientid > b.clientid) return -1;
+          if (a.clientid < b.clientid) return 1;
+          const dateA = a.commencementdate ? new Date(a.commencementdate).getTime() : 0;
+          const dateB = b.commencementdate ? new Date(b.commencementdate).getTime() : 0;
+          return (dateA || 0) - (dateB || 0);
+        });
+
+        return processedStudents;
+      }),
+
+      // 3. Add finalize() to set loading to FALSE when done
+      finalize(() => {
+        this.isLoading = false;
+      })
+
+    ).subscribe({
+      next: (processedStudents) => {
+        this.students = processedStudents;
+        this.dataSource.data = this.students;
+      },
+      error: (err) => {
+        console.error("Failed to get students:", err);
+        // No need to set isLoading = false here, finalize() handles it!
       }
-      this.students = this.students.sort((a, b) => {
-        if (a.clientid < b.clientid) {
-          return 1;
-        } else if (a.clientid > b.clientid) {
-          return -1;
-        } else {
-          // If clientid is the same, sort by commencementdate
-          let dateA = new Date(a.commencementdate).getTime();
-          let dateB = new Date(b.commencementdate).getTime();
-          return dateA - dateB;
-        }
-      });
-      this.dataSource.data = this.students; // on data receive populate dataSource.data array
-      // console.log('check',this.dataSource.data)
-      return data;
     });
   }
   createFilter(): (data: any, filter: string) => boolean {
@@ -322,8 +346,9 @@ export class AllStudentComponent implements OnInit {
   }
   search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, email: any, classname: any) {
     let queryParams = [];
+    let sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email"];
 
-    // Build query string based on available parameters
+    // Build query string... (all your 'if' blocks remain the same)
     if (cid && cid != 100) {
       queryParams.push(`courseid=${cid}`);
     }
@@ -342,41 +367,64 @@ export class AllStudentComponent implements OnInit {
     if (name) {
       queryParams.push(`studentname=${name}`);
     }
-    if(email){
+    if (email) {
       queryParams.push(`email=${email}`);
     }
-    if(classname){
+    if (classname) {
       queryParams.push(`classname=${classname}`);
     }
-    console.log(queryParams)
+    queryParams.push(`sqlquery=${sqlquery}`);
+    console.log(queryParams);
+
     // If there are any query parameters, make the API call
     if (queryParams.length > 0) {
       const queryString = queryParams.join('&');
-      this.apiService.getAPI(`getstudent?${queryString}`).subscribe((data) => {
-        // console.log(data);
-        // if (this.HFormGroup1.valid) {
-        if (data['data'].msg) {
-          // window.scroll(0, 0);
-          var show = document.getElementById('closebtn')
-          this.errorsReq = { isError: true, errorMessage: data['data'].msg }
-          this.dataSource.data = []
-        }
-        else {
-          let students = data['data']
-          for (let i in students) {
-            students[i].fullname = students[i].firstname + " " + students[i].lastname;
+
+      // <-- 1. Set loading to TRUE -->
+      this.isLoading = true;
+
+      this.apiService.getAPI(`getstudent?${queryString}`).pipe(
+        // <-- 2. Add finalize to set loading to FALSE when done -->
+        finalize(() => {
+          this.isLoading = false;
+        })
+      ).subscribe({ // <-- 3. Use object-based subscribe -->
+        next: (data) => {
+          // I moved this declaration up to fix a scope issue
+          var show = document.getElementById('closebtn');
+
+          if (data['data'].msg) {
+            this.errorsReq = { isError: true, errorMessage: data['data'].msg };
+            this.dataSource.data = [];
           }
-          this.dataSource.data = students; // on data receive populate dataSource.data array
-          this.students = students;
+          else {
+            let students = data['data'];
+
+            // Your existing logic (a .map() would be more modern here)
+            for (let i in students) {
+              students[i].fullname = students[i].firstname + " " + students[i].lastname;
+            }
+
+            this.dataSource.data = students;
+            this.students = students;
+          }
+
+          if (show) {
+            show.style.display = 'block';
+          }
+          // 'return data' is not needed inside a subscribe block
+        },
+        // <-- 4. Add error handling -->
+        error: (err) => {
+          console.error("Search failed:", err);
+          this.errorsReq = { isError: true, errorMessage: "An error occurred during the search." };
+          this.dataSource.data = []; // Clear data on error
         }
-        if (show) {
-          show.style.display = 'block'
-        }
-        return data;
-      })
+      });
     }
     else {
-      this.getStudents()
+      // This function already handles its own loading state!
+      this.getStudents();
     }
   }
   searchByAgent() {

@@ -6,6 +6,9 @@ import { MatPaginator } from '@angular/material/paginator'
 import { MatSort } from '@angular/material/sort'
 import { fromEvent } from 'rxjs';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms'
+import { identifierModuleUrl } from '@angular/compiler'
+import { MatDialog } from '@angular/material/dialog'
+import { DeleteAgentComponent } from './delete-agent/delete-agent.component'
 
 export interface users {
   agencyname
@@ -44,6 +47,8 @@ export class AllAgentsComponent implements OnInit {
     private apiService: ApiService,
     private router: Router,
     private fb: FormBuilder,
+    public dialog: MatDialog,
+
   ) {
     this.getAgents()
   }
@@ -87,17 +92,18 @@ export class AllAgentsComponent implements OnInit {
     return filterFunction
   }
 
-  getAgents(){
+  getAgents() {
     this.apiService.getAPI('getagent').subscribe((data) => {
       this.allAgents = data['data']
+      window.localStorage.setItem("agents", JSON.stringify(this.allAgents))
       this.dataSource.data = this.allAgents
       return data
     })
   }
-  addNew(){
+  addNew() {
     this.router.navigate(['/admin/users/new-agent']);
   }
-  refresh(){
+  refresh() {
     this.loadData()
   }
   public loadData() {
@@ -112,8 +118,16 @@ export class AllAgentsComponent implements OnInit {
       this.dataSource.filter = this.filter.nativeElement.value;
     });
   }
-  editAgent(id){
+  editAgent(id) {
     this.router.navigate([`/admin/users/edit-agent/${id}`]);
+  }
+  deleteAgent(AgentData) {
+    const dialogRef = this.dialog.open(DeleteAgentComponent, {
+      data: AgentData,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.refresh();
+    });
   }
 
 }

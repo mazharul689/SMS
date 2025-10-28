@@ -19,7 +19,7 @@
                     </mat-header-cell>
                     <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i=index" [formGroupName]="i">
                       <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
-                        [checked]="selection.isSelected(row) || row.unitType == 'C'" [disabled]="row.unitType == 'C'"
+                        [checked]="selection.isSelected(row)"
                         (click)="onUnitSubmit()">
                       </mat-checkbox>
                     </mat-cell>
@@ -110,7 +110,7 @@
               </div>
               <div class="row">
                 <span style="font-size: 20px; font-weight:500; padding-left: 17px;"><i class='fas fa-bars'></i>Selected
-                  Units</span>
+                  Units ({{ selection.selected.length }})</span>
               </div>
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
