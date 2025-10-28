@@ -10,7 +10,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 // import { StudentDialogComponent } from './dialogs/student-dialog/student-dialog.component'
 import { Router } from '@angular/router'
 import { CourseDialogComponent } from '../dialogs/course-dialog/course-dialog.component'
-
+import { finalize } from 'rxjs/operators';
 export interface Courses {
   courseCode: string,
   courseName: string,
@@ -30,6 +30,7 @@ export interface courseUnits {
 export class AllCoursesComponent implements OnInit {
   mode = new FormControl('side')
   courses
+  isLoading = false
   displayedColumns: string[] = ['courseCode', 'courseName', 'actions']
   dataSource: MatTableDataSource<Courses>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator
@@ -172,15 +173,40 @@ export class AllCoursesComponent implements OnInit {
     this.highlighter = -1
     console.log(this.highlighter)
   }
-  addCourseFromTrainingGov(){
-    this.apiService.getAPI1(`Training/${this.getCourseCode}?cid=${this.userInfo.college_id}`).subscribe((data)=>{
-      console.log('training.gov.au',data)
-      alert('Successfully loaded all data')
-      // this.getCourses()
-      this.refresh()
-      // this.router.navigate([`/admin/courses/all-courses`])
-      // window.location.reload();
-    })
+  // addCourseFromTrainingGov(){
+  //   this.apiService.getAPI1(`Training/${this.getCourseCode}?cid=${this.userInfo.college_id}`).subscribe((data)=>{
+  //     console.log('training.gov.au',data)
+  //     alert('Successfully loaded all data')
+  //     // this.getCourses()
+  //     this.refresh()
+  //     // this.router.navigate([`/admin/courses/all-courses`])
+  //     // window.location.reload();
+  //   })
+  // }
+  addCourseFromTrainingGov() {
+    
+    // 2. Set loading to TRUE
+    this.isLoading = true; 
+
+    this.apiService.getAPI1(`Training/${this.getCourseCode}?cid=${this.userInfo.college_id}`).pipe(
+      
+      // 3. Add finalize to set loading to FALSE when done
+      finalize(() => {
+        this.isLoading = false;
+      })
+
+    ).subscribe({
+      next: (data) => {
+        // console.log('training.gov.au', data);
+        alert('Successfully loaded all data');
+        this.refresh();
+      },
+      error: (err) => {
+        // 4. Always add error handling
+        console.error("Failed to fetch from training.gov.au:", err);
+        alert("Error: Could not load data."); // Show an error to the user
+      }
+    });
   }
   editCourrse(id) {
     this.router.navigate([`/admin/courses/edit-course/${id}`]);

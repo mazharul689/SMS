@@ -99,8 +99,16 @@
                   </div>
                   <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2 text-center">
                     <button type='button' mat-raised-button color="primary"
-                      style="padding-top: 10px; padding-bottom: 10px;" (click)="addCourseFromTrainingGov()">Course from
-                      training.gov.au</button>
+                      style="padding-top: 10px; padding-bottom: 10px;" (click)="addCourseFromTrainingGov()"
+                      [disabled]="isLoading"> <span *ngIf="!isLoading">
+                        Course from training.gov.au
+                      </span>
+
+                      <span *ngIf="isLoading">
+                        <mat-spinner diameter="20" style="margin: 0 auto;"></mat-spinner>
+                      </span>
+
+                    </button>
                   </div>
                 </div>
                 <div class="table-responsive courses">
@@ -114,8 +122,8 @@
                           </mat-form-field>
                         </div>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
-                        data-placement="right" >{{row.coursecode}}</mat-cell>
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip"
+                        data-placement="right">{{row.coursecode}}</mat-cell>
                     </ng-container>
                     <ng-container matColumnDef="courseName">
                       <mat-header-cell *matHeaderCellDef>
@@ -124,8 +132,7 @@
                           <input matInput [formControl]="courseNameFilter" class="white-cursor">
                         </mat-form-field>
                       </mat-header-cell>
-                      <mat-cell *matCellDef="let row"  data-toggle="tooltip"
-                        data-placement="right" > {{row.coursename}}
+                      <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right"> {{row.coursename}}
                       </mat-cell>
                     </ng-container>
 

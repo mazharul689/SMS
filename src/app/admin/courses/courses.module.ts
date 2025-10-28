@@ -48,6 +48,7 @@ import { AllClassTimeTableComponent } from './all-class-time-table/all-class-tim
 import { NewClassTimeTableComponent } from './new-class-time-table/new-class-time-table.component';
 import { EditClassTimeTableComponent } from './edit-class-time-table/edit-class-time-table.component';
 import { DeleteCourseIntakeDateComponent } from './dialogs/delete-course-intake-date/delete-course-intake-date.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 
 @NgModule({
@@ -87,6 +88,7 @@ import { DeleteCourseIntakeDateComponent } from './dialogs/delete-course-intake-
     ProgressBarModule,
     MatToolbarModule,
     MatSelectModule,
+    MatProgressSpinnerModule,
     MatDatepickerModule,
     MatCheckboxModule,
     MaterialFileInputModule,
