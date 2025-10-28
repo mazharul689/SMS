@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from 'src/app/api/api.service';
-
+import { finalize } from 'rxjs/operators';
 @Component({
   selector: 'app-new-unit',
   templateUrl: './new-unit.component.html',
@@ -14,6 +14,7 @@ export class NewUnitComponent implements OnInit {
   requiredError = { isError: false, errorMessage: '' }
   duplicateUniterr = false
   duplicateUnitErrMsg
+  isSubmitting = false
   userInfo: any;
   getAll: any;
   constructor(
@@ -78,39 +79,52 @@ export class NewUnitComponent implements OnInit {
       show.style.display = 'block'
     } 
   }
-  onUnitSubmit(){
-
-    //alert('test');
-    this.duplicateUniterr = false
-    console.log('Form Value', this.HFormGroup1.value)
-    var show = document.getElementById('closebtn')
-   // console.log(this.HFormGroup1.valid)
+  onUnitSubmit() {
+    console.log('Form Value', this.HFormGroup1.value);
+    
     if (this.HFormGroup1.valid) {
-      this.requiredError = { isError: false, errorMessage: '' }
-      this.apiService.postAPI('addunit', this.HFormGroup1.value).subscribe((data) => {
-        //alert('test');
-        console.log(data['data'])
-        let err
-        if (data['data'][0] && data['data'][0]['error']) {
-          err = data[0]['error']
-          if (err == 'true') {
-            this.duplicateUniterr = true
-            this.duplicateUnitErrMsg = data['data'][0]['error_msg']
-            window.scroll(0, 0)
-          }
+      // Form is valid, clear old errors and start submitting
+      this.requiredError = { isError: false, errorMessage: '' };
+      this.isSubmitting = true; // <-- Show loader
+
+      this.apiService.postAPI('addunit', this.HFormGroup1.value).pipe(
+        // 2. Use finalize to stop loader on success OR error
+        finalize(() => {
+          this.isSubmitting = false; // <-- Hide loader
+        })
+      ).subscribe({
+        next: (data) => {
+          // 3. Simplified and safer error checking
+          const responseArray = data['data'];
+          
+          if (responseArray && responseArray[0] && responseArray[0].error === 'true') {
+            // --- API Error Case ---
+            this.duplicateUniterr = true;
+            this.duplicateUnitErrMsg = responseArray[0].error_msg;
+            window.scroll(0, 0);
+          } 
           else {
-            this.duplicateUniterr = false
+            // --- Success Case ---
+            this.duplicateUniterr = false;
+            this.router.navigate(['/admin/units/all-units']);
           }
+        },
+        error: (err) => {
+          // 4. Handle HTTP-level errors (e.g., 500, 404)
+          console.error("API call failed:", err);
+          this.requiredError = { isError: true, errorMessage: "An unexpected error occurred. Please try again." };
+          window.scroll(0, 0);
         }
-        else{
-          this.router.navigate(['/admin/units/all-units'])
-        }
-      })
+      });
     }
     else {
-      window.scroll(0, 0)
-      this.requiredError = { isError: true, errorMessage: "Please Fill up all required fields with proper value!" }
-      show.style.display = 'block'
-    } 
+      // Form is invalid
+      var show = document.getElementById('closebtn');
+      window.scroll(0, 0);
+      this.requiredError = { isError: true, errorMessage: "Please Fill up all required fields with proper value!" };
+      if (show) {
+        show.style.display = 'block';
+      }
+    }
   }
 }
