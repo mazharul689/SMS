@@ -73,7 +73,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Start Date</mat-label>
-                            <input matInput [matDatepicker]="basicDatepicker" formControlName="startDate" >
+                            <input matInput [matDatepicker]="basicDatepicker" formControlName="startDate" required>
                             <mat-datepicker-toggle matSuffix [for]="basicDatepicker">
                             </mat-datepicker-toggle>
                             <mat-datepicker #basicDatepicker></mat-datepicker>
@@ -82,7 +82,7 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>End Date</mat-label>
-                            <input matInput [matDatepicker]="basicDatepicker1" formControlName="endDate" >
+                            <input matInput [matDatepicker]="basicDatepicker1" formControlName="endDate" required>
                             <mat-datepicker-toggle matSuffix [for]="basicDatepicker1">
                             </mat-datepicker-toggle>
                             <mat-datepicker #basicDatepicker1></mat-datepicker>

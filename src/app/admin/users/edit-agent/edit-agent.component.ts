@@ -75,8 +75,8 @@ export class EditAgentComponent implements OnInit {
       agentCommission: ['', [Validators.required]],
       gst: ['Y'],
       webURL: [''],
-      startDate: [''],
-      endDate: [''],
+      startDate: ['', [Validators.required]],
+      endDate: ['', [Validators.required]],
       isActive: ['Y', [Validators.required, Validators.maxLength(100)]],
       userId: [this.userInfo.userid]
     })
