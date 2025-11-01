@@ -101,24 +101,24 @@ export class EditAgentComponent implements OnInit {
         accountsEmail: this.agentData.accountsemail,
         ABN: this.agentData.abn,
         webURL: this.agentData.weburl,
-        
+
         isActive: this.agentData.isactive,
         userId: this.userInfo.userid,
         amountTypeId: this.agentData.amounttypeid,
         agentCommission: this.agentData.agentcommission,
         gst: this.agentData.gst
       })
-      if(this.agentData.startdate != null){
+      if (this.agentData.startdate != null) {
         this.HFormGroup1.patchValue({
           startDate: moment(this.agentData.startdate),
         })
       }
-      if(this.agentData.enddate != null){
+      if (this.agentData.enddate != null) {
         this.HFormGroup1.patchValue({
           endDate: moment(this.agentData.enddate),
         })
       }
-      console.log('check',this.HFormGroup1.value)
+      console.log('check', this.HFormGroup1.value)
     })
     this.apiService.getAPI(`getagentdocument?id=${this.agentId}`).subscribe((data) => {
       this.agentsDocuments = data['data']
@@ -185,7 +185,11 @@ export class EditAgentComponent implements OnInit {
     }
     this.apiService.postAPI(`editagent?id=${this.agentId}`, body).subscribe((data) => {
       console.log(data)
-      // this.router.navigate(['/admin/users/all-agents'])
+      this.apiService.getAPI(`getagent`).subscribe((data) => {
+        let agents = data['data']
+        window.localStorage.setItem("agents", JSON.stringify(agents))
+        // this.router.navigate(['/admin/users/all-agents'])
+      })
       this.stepLabel++
     })
   }
