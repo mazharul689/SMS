@@ -253,7 +253,7 @@ export class AllStudentComponent implements OnInit {
     this.isLoading = true;
 
     const dateLocale = 'en-GB';
-    let sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email"];
+    let sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.coursename, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email, a.altemail"];
 
     this.apiService.getAPI(`getstudent?sqlquery=${sqlquery}`).pipe(
 
@@ -278,7 +278,7 @@ export class AllStudentComponent implements OnInit {
             startDate: formattedStartDate,
             endDate: formattedEndDate,
             fullname: `${student.firstname} ${student.lastname}`,
-            coursename: student.coursecode == null ? "" : student.coursecode // (Bug Fix: Use coursecode)
+            coursename: student.coursename == null ? "" : student.coursename // (Bug Fix: Use coursecode)
           };
         });
 
@@ -346,7 +346,7 @@ export class AllStudentComponent implements OnInit {
   }
   search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, email: any, classname: any) {
     let queryParams = [];
-    let sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email"];
+    let sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.coursename, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email,a.altemail"];
 
     // Build query string... (all your 'if' blocks remain the same)
     if (cid && cid != 100) {
@@ -589,6 +589,7 @@ export class AllStudentComponent implements OnInit {
     this.router.navigate([`/admin/enrolment/assign-units/${id}`]);
   }
   testByMazhar() {
+    console.log('test', this.students)
     const title = 'Students List';
     const headers = [
       "Client Id",
@@ -604,7 +605,7 @@ export class AllStudentComponent implements OnInit {
     ];
     const data = this.students.map(student => [
       student.clientid,
-      student.studentname,
+      student.fullname,
       student.coursecode,
       student.coursename,
       student.classname,
