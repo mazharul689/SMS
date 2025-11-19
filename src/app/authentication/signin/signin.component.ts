@@ -85,6 +85,7 @@ export class SigninComponent implements OnInit {
         'assets/images/banner/ALITBigLogo.png',
         'assets/images/banner/ftiBigLogo.png',
         'assets/images/banner/nisBigLogo.png',
+        'assets/images/banner/ATTCBigLogo.png',
       ];
       this.isSpecialLogo = specialLogos.includes(image);
     });

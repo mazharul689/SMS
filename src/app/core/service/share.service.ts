@@ -18,6 +18,7 @@ export class ShareService {
     '33': { cliLogo: 'assets/images/banner/ftiBigLogo.png', logoSrc1: 'assets/images/banner/ftiSmallLogo.png' },
     '35': { cliLogo: 'assets/images/banner/gcmBigLogo.png', logoSrc1: 'assets/images/banner/gcmSmallLogo.png' },
     '38': { cliLogo: 'assets/images/banner/nisBigLogo.png', logoSrc1: 'assets/images/banner/nisSmallLogo.png' },
+    '42': { cliLogo: 'assets/images/banner/ATTCBigLogo.png', logoSrc1: 'assets/images/banner/ATTCSmallLogo.png' },
   };
 
   private defaultLogos = {
