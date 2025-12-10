@@ -1,0 +1,34 @@
+<div class="container-fluid p-0">
+    <h2 mat-dialog-title class="dialog-title text-center">Delete Unit Confirmation</h2>
+
+    <div *ngIf="errorsReq.isError" class="alert alert-danger mb-4 mx-auto text-center p-3 rounded shadow-sm" role="alert">
+        <div class="d-flex align-items-center justify-content-center">
+            <span class="material-icons-outlined me-2 fs-4">warning</span>
+            <div>
+                <strong class="d-block">Warning!</strong>
+                <p class="mb-0">{{ errorsReq.errorMessage }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div mat-dialog-content class="dialog-content px-3">
+        <h4 class="text-center mb-4 text-dark">Are you sure you want to delete this Unit?</h4>
+
+        <div class="card p-3 mb-4 bg-light">
+            <p class="mb-0">
+                <span class="font-weight-bold text-muted d-block text-center">{{data.unitcode}} {{data.unitname}}</span>
+                <!-- <span class="h5 mb-0 text-primary">{{ data.agencyname }}</span> -->
+            </p>
+        </div>
+    </div>
+
+    <div mat-dialog-actions class="d-flex justify-content-center pt-3 border-top">
+        <button mat-flat-button color="warn" (click)="confirmDelete()" class="me-3 px-4">
+            <span class="material-icons-outlined me-1">delete_outline</span>
+            Delete Unit
+        </button>
+        <button mat-stroked-button (click)="onNoClick()" tabindex="-1" class="px-4">
+            Cancel
+        </button>
+    </div>
+</div>

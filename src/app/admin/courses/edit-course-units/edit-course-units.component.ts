@@ -212,7 +212,7 @@ export class EditCourseUnitsComponent implements OnInit {
     else {
       this.selection.clear()
       this.dataSource1.data.forEach(row => {
-        if (this.dataSource1.data[row.rowID].unitType == 'C' || this.dataSource1.data[row.rowID].statusCheck == true) {
+        if (this.dataSource1.data[row.rowID].statusCheck == true) {
           this.selection.select(row)
         }
       });
@@ -380,10 +380,10 @@ export class EditCourseUnitsComponent implements OnInit {
             });
             (this.HFormGroup1.get('UnitRows') as FormArray).push(rowData1)
           }
-          console.log('flag',this.UnitRows.value)
+          // console.log('flag',this.UnitRows.value)
           this.dataSource1 = new MatTableDataSource() // create new object
           this.dataSource1.data = this.UnitRows.value
-          console.log('check', this.dataSource1.data)
+          // console.log('check', this.dataSource1.data)
           this.dataSource1.paginator = this.tableTwoPaginator
           this.dataSource1.sort = this.tableTwoSort
           this.dataSource1.filterPredicate = this.createFilter();
@@ -417,7 +417,7 @@ export class EditCourseUnitsComponent implements OnInit {
           // console.log('flag',this.UnitRows.value)
           this.dataSource1 = new MatTableDataSource() // create new object
           this.dataSource1.data = this.UnitRows.value
-          console.log('check', this.dataSource1.data)
+          // console.log('check', this.dataSource1.data)
           this.dataSource1.paginator = this.tableTwoPaginator
           this.dataSource1.sort = this.tableTwoSort
           this.dataSource1.filterPredicate = this.createFilter();

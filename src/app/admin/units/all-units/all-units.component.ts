@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort'
 import { fromEvent } from 'rxjs';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog'
+import { DeleteUnitComponent } from '../dialog/delete-unit/delete-unit.component'
 // import { CourseIntakeDialogComponent } from '../dialogs/course-intake-dialog/course-intake-dialog.component'
 
 export interface units {
@@ -92,5 +93,13 @@ export class AllUnitsComponent implements OnInit {
   }
   editUnit(id) {
     this.router.navigate([`/admin/units/edit-unit/${id}`]);
+  }
+  deleteUnit(unitData) {
+    const dialogRef = this.dialog.open(DeleteUnitComponent, {
+      data: unitData,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.refresh();
+    });
   }
 }

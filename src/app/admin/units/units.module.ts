@@ -28,12 +28,14 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { NgxMaskModule, IConfig } from 'ngx-mask';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { EditUnitComponent } from './edit-unit/edit-unit.component';
+import { DeleteUnitComponent } from './dialog/delete-unit/delete-unit.component';
 
 @NgModule({
   declarations: [
     NewUnitComponent,
     AllUnitsComponent,
-    EditUnitComponent
+    EditUnitComponent,
+    DeleteUnitComponent
   ],
   imports: [
     CommonModule,
