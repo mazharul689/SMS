@@ -87,10 +87,20 @@
               <div *ngIf="!this.errorsEncounter.isError">
                 <div class="row" style="padding-bottom: 20px">
                   <!-- <div class="row" style="padding-bottom: 20px" *ngIf="enableSaveButton == 'N'"> -->
-                  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 text-end">
+                  <div class="col-10">
+
+                  </div>
+                  <div class="col-1">
                     <div class="example-button-row">
                       <button class="btn-space" mat-raised-button color="primary" (click)="addItem()">
                         Add More
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-1">
+                    <div class="example-button-row">
+                      <button mat-mini-fab color="primary" matTooltip="Download Report" (click)="StatementofAccount()">
+                        <mat-icon class="col-white">receipt</mat-icon>
                       </button>
                     </div>
                   </div>

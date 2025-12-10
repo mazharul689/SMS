@@ -352,6 +352,9 @@ export class InvoiceComponent implements OnInit {
       })
     })
   }
+  StatementofAccount(){
+    window.open(`https://api.wonderit.com.au:8000/album/invoicelist/?inst_id=${this.userInfo.college_id}&type=invoicelist&sid=${this.studentEnrolementId}`)
+  }
 
   dynamicValues() {
     return this.fb.group({

@@ -379,7 +379,7 @@
                             <mat-label style="color: white; font-size:15px;">Start
                               Date</mat-label></mat-header-cell>
                           <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                            {{row.startdate| date:'MM/dd/yyyy' | date:'dd/MM/yyyy'}}
+                            {{row.commencementdate| date:'MM/dd/yyyy' | date:'dd/MM/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="dashboardEND">
@@ -387,7 +387,7 @@
                             <mat-label style="color: white; font-size:15px;">End
                               Date</mat-label></mat-header-cell>
                           <mat-cell *matCellDef="let row; let i=index;" data-toggle="tooltip" data-placement="right">
-                            {{row.enddate | date:'MM/dd/yyyy' | date:'dd/MM/yyyy'}}
+                            {{row.expectedcompletiondate | date:'MM/dd/yyyy' | date:'dd/MM/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

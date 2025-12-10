@@ -19,7 +19,8 @@
                                 <span><strong>Client ID</strong></span>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                                <span>:&emsp;{{ studentDetails?.clientid ? studentDetails.clientid : 'loading...'}}</span>
+                                <span>:&emsp;{{ studentDetails?.clientid ? studentDetails.clientid :
+                                    'loading...'}}</span>
                             </div>
                             <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
                                 <span><strong>Email</strong></span>
@@ -33,9 +34,10 @@
                                 <span><strong>Student's Name</strong></span>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                                <span>:&emsp;{{ studentDetails?.fullname ? studentDetails.fullname : 'loading...'}}</span>
+                                <span>:&emsp;{{ studentDetails?.fullname ? studentDetails.fullname :
+                                    'loading...'}}</span>
                             </div>
-                            
+
                             <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
                                 <span><strong>Phone</strong></span>
                             </div>
@@ -48,14 +50,16 @@
                                 <span><strong>Course Code</strong></span>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                                <span>:&emsp;{{ studentDetails?.coursecode ? studentDetails.coursecode : 'loading...'}}</span>
+                                <span>:&emsp;{{ studentDetails?.coursecode ? studentDetails.coursecode :
+                                    'loading...'}}</span>
                             </div>
-                            
+
                             <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 mb-2">
                                 <span><strong>Course Name</strong></span>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                                <span>:&emsp;{{ studentDetails?.coursename ? studentDetails.coursename : 'Not Found' }}</span>
+                                <span>:&emsp;{{ studentDetails?.coursename ? studentDetails.coursename : 'Not Found'
+                                    }}</span>
                             </div>
                         </div>
                         <div class="row">
@@ -70,7 +74,8 @@
                                 <span><strong>USI Status</strong></span>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 mb-2">
-                                <span>:&emsp;{{ studentDetails?.usiverificationstatus === 'Valid Match Match Match' ? 'Valid' : 'Not Verified'
+                                <span>:&emsp;{{ studentDetails?.usiverificationstatus === 'Valid Match Match Match' ?
+                                    'Valid' : 'Not Verified'
                                     }}</span>
                             </div>
                         </div>
@@ -83,20 +88,19 @@
                                     'loading...' }}</span>
                             </div>
                         </div>
-                        <!-- <div class="row">
-                                    <div *ngIf="errorAll.isAllerror"
-                                        class="col-6 alert alert-danger m-auto text-center">
-                                        <span class="closebtn"
-                                            onclick="this.parentElement.style.display='none';">&times;</span>
-                                        <strong>Warning!</strong> {{errorAll.errorMsg}}
-                                    </div>
-                                </div> -->
+
                         <form [formGroup]="HFormGroup1">
                             <ng-template matStepLabel>Training Activity</ng-template>
                             <div class="mt-4">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="card">
                                         <div class="body table-responsive trainingAct">
+                                            <div class="row">
+                                                <div *ngIf="this.userInfo.college_id === 13" class="col-12 text-end" style="font-size: 12 !important; color: red;">
+                                                    <small>[NB: Outcome's lowest Start Date will act as certificate
+                                                        start date]</small>
+                                                </div>
+                                            </div>
                                             <div class="table table-striped">
                                                 <div class="table-head row">
                                                     <div class="head-col-unit">
@@ -204,7 +208,7 @@
                                                                     <mat-datepicker #eDpicker>
                                                                     </mat-datepicker>
                                                                     <mat-error *ngIf="error.isError"></mat-error>
-                                                                        <!-- <mat-error *ngIf="error.isError">{{
+                                                                    <!-- <mat-error *ngIf="error.isError">{{
                                                                         error.errorMessage }}</mat-error> -->
                                                                 </mat-form-field>
                                                                 <!-- <span *ngIf="error.isError">{{ error.errorMessage }}</span> -->

@@ -87,7 +87,8 @@ export class CertificateComponent implements OnInit {
     certificatetype: '',
     issuedflag: '',
     rtotype: '',
-    trainerstatenameshort: ''
+    trainerstatenameshort: '',
+    staffid: ''
   }
   dateValidate1 = { isError: false, errorMessage: '' }
   loading: boolean
@@ -123,6 +124,7 @@ export class CertificateComponent implements OnInit {
   err_msg
   show_msg = false
   show_msg2 = false
+  allStaff
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -161,7 +163,8 @@ export class CertificateComponent implements OnInit {
       rtoType: ['L'],
       trainingActivityId: [''],
       Issuedflag: ['Y', [Validators.maxLength(10)]],
-      trainerStateNameShort: 'VLC'
+      trainerStateNameShort: 'VLC',
+      staffId: 0
     })
     // this.apiService.getAPI(`getstudentenrolmentbystudentid?id=${this.studentID}`).subscribe((data) => {
     //   this.editEnrolment = data['data'][0]
@@ -180,7 +183,8 @@ export class CertificateComponent implements OnInit {
             certificateType: this.editCertificate.certificatetype,
             Issuedflag: this.editCertificate.issuedflag,
             rtoType: this.editCertificate.rtotype,
-            trainerStateNameShort: this.editCertificate.trainerstatenameshort
+            trainerStateNameShort: this.editCertificate.trainerstatenameshort,
+            staffId: this.editCertificate.staffid
           })
         }
         else {
@@ -207,6 +211,9 @@ export class CertificateComponent implements OnInit {
         })
       })
     }
+    this.apiService.getAPI('getstaff').subscribe((data) => {
+      this.allStaff = data['data']
+    })
 
 
     this.apiService.getAPI(`verifyoutcomeforcertificate?id=${this.enrolemntID}`).subscribe((data) => {
@@ -328,88 +335,6 @@ export class CertificateComponent implements OnInit {
       }
     })
   }
-  // getCertificate() {
-  //   this.disabled = true
-  //   this.error.isError = false
-  //   this.error.errorMessage = ''
-  //   // //console.log(this.error.isError)
-  //   let rows = this.sendSelectedNumbers();
-  //   var nums: number[] = []
-  //   const certificateBody = this.HFormGroup1.value
-  //   certificateBody.Issuedflag = 'Y'
-  //   certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd')
-  //   certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd')
-  //   if (certificateBody.certificateType == 'C' || certificateBody.certificateType == 'R') {
-  //     for (let i = 0; i < this.trainingActId.length; i++) {
-  //       nums[i] = this.trainingActId[i].trainingactivityid;
-  //     }
-  //   }
-  //   else {
-  //     for (let i = 0; i < rows.length; i++) {
-  //       nums[i] = this.trainingActId[rows[i]].trainingactivityid;
-  //     }
-  //   }
-
-  //   certificateBody.trainingActivityId = nums
-  //   certificateBody.studentEnrolmentId = parseInt(this.enrolemntID, 10)
-  //   certificateBody.userId = this.userInfo.userid
-  //   var show = document.getElementById('closebtn')
-  //   this.errorsReqEn = { isError: false, errorMessage: '' };
-  //   this.errorsReq = { isError: false, errorMessage: '' }
-  //   if (this.outcomeCheck.msg || certificateBody.certificateType == 'S') {
-  //     this.apiService.postAPI('addcertificate', certificateBody).subscribe((data) => {
-  //       this.disabled = false
-  //       if (data['data'] && data['data'].msg) {
-  //         this.errorsReqEn = { isError: true, errorMessage: data['data'].msg }
-  //         window.scroll(0, 0)
-  //         if (show) {
-  //           show.style.display = 'block'
-  //         }
-  //       }
-  //       else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "VLC" && this.userInfo.college_id == 23) {
-  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
-  //         this.router.navigate(['/admin/certificate/all-student'])
-  //       }
-  //       else if (certificateBody.certificateType == 'C' && certificateBody.trainerStateNameShort == "NSW" && this.userInfo.college_id == 23) {
-  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw&sid=${data}&_token=${this.userInfo.refresh_token}`)
-  //         this.router.navigate(['/admin/certificate/all-student'])
-  //       }
-  //       else if (certificateBody.certificateType == 'C' && this.userInfo.college_id != 23) {
-  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${data}&_token=${this.userInfo.refresh_token}`)
-  //         this.router.navigate(['/admin/certificate/all-student'])
-  //       }
-  //       else if (certificateBody.certificateType == 'S') {
-  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=attainment&sid=${data}&_token=${this.userInfo.refresh_token}`)
-  //         this.router.navigate(['/admin/certificate/all-student'])
-  //       }
-  //       else if (certificateBody.certificateType == 'O') {
-  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=qualification_attainment&sid=${data}&_token=${this.userInfo.refresh_token}`)
-  //         this.router.navigate(['/admin/certificate/all-student'])
-  //       }
-  //       else if (certificateBody.certificateType == 'R' && certificateBody.trainerStateNameShort == "VLC" && this.userInfo.college_id == 23) {
-  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${data}&_token=${this.userInfo.refresh_token}`)
-  //         this.router.navigate(['/admin/certificate/all-student'])
-  //       }
-  //       else if (certificateBody.certificateType == 'R' && certificateBody.trainerStateNameShort == "NSW" && this.userInfo.college_id == 23) {
-  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor_nsw&sid=${data}&_token=${this.userInfo.refresh_token}`)
-  //         this.router.navigate(['/admin/certificate/all-student'])
-  //       }
-  //       else if (certificateBody.certificateType == 'R' && this.userInfo.college_id !== 23) {
-  //         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=sor&sid=${data}&_token=${this.userInfo.refresh_token}`)
-  //         this.router.navigate(['/admin/certificate/all-student'])
-  //       }
-  //     })
-  //   }
-  //   else {
-  //     this.errorsReq = { isError: true, errorMessage: this.outcomeCheck[0].error_msg }
-  //     //console.log('errorreq', this.outcomeCheck[0].error_msg)
-  //     window.scroll(0, 0)
-  //     if (show) {
-  //       show.style.display = 'block'
-  //     }
-  //   }
-
-  // }
   getCertificate() {
     // 1. Reset state
     this.disabled = true;
@@ -474,9 +399,7 @@ export class CertificateComponent implements OnInit {
     );
   }
 
-  /**
-   * Helper function to determine the report type string.
-   */
+  
   private _getCertificateReportType(certificateBody: any): string | null {
     const { certificateType, trainerStateNameShort } = certificateBody;
     const { college_id } = this.userInfo;
@@ -484,8 +407,13 @@ export class CertificateComponent implements OnInit {
     const isNSW = (trainerStateNameShort === 'NSW');
     switch (certificateType) {
       case 'C':
-        if (isCollege23 && isNSW) return 'certificate_nsw';
-        return 'certificate'; // Default for VLC, other states, and other colleges
+        if (isCollege23 && isNSW) {
+          return `certificate_nsw_${this.HFormGroup1.value.staffId}`;
+        }
+        else{
+          return `certificate`; 
+        }
+        
 
       case 'S':
         return 'attainment';
@@ -495,16 +423,14 @@ export class CertificateComponent implements OnInit {
 
       case 'R':
         if (isCollege23 && isNSW) return 'sor_nsw';
-        return 'sor'; // Default for VLC, other states, and other colleges
+        return 'sor'; 
 
       default:
-        return null; // No report for other types
+        return null; 
     }
   }
 
-  /**
-   * Helper function to handle the successful API response.
-   */
+  
   private _handleCertificateSuccess(certificateBody: any, data: any) {
     const reportType = this._getCertificateReportType(certificateBody);
 

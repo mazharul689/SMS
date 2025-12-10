@@ -53,6 +53,7 @@
                 <strong>Warning!</strong> {{ dateValidate1.errorMessage }}
               </div>
             </div>
+
             <form [formGroup]="HFormGroup1">
               <ng-template matStepLabel>Certificate</ng-template>
               <div class="container">
@@ -76,8 +77,9 @@
                 </div>
                 <div class="section-content">
                   <div class="row">
-                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
-                      <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Template</label>
+                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+                      style="padding-top: 15px;">
+                      <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Certificate Template</label>
                       <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="trainerStateNameShort">
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
@@ -87,28 +89,21 @@
                           value="NSW">NSW</mat-radio-button>
                       </mat-radio-group>
                     </div>
-                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
-                      <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Certificate
-                        Type</label>
-                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="certificateType">
-                        <mat-radio-button
-                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                          value="C">Certificate</mat-radio-button>
-                        <mat-radio-button *ngIf="this.userInfo.college_id == 23"
-                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                          value="O">SOA Qualification</mat-radio-button>
-                        <mat-radio-button *ngIf="this.userInfo.college_id == 23"
-                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                          value="S">SOA First AID</mat-radio-button>
-                          <mat-radio-button *ngIf="this.userInfo.college_id != 23"
-                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                          value="S">Statement of Attainment</mat-radio-button>
-                          <mat-radio-button
-                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                          value="R">Statement of Result</mat-radio-button>
-                      </mat-radio-group>
+                    <div
+                      *ngIf="this.userInfo.college_id === 23 && this.HFormGroup1.value.trainerStateNameShort == 'NSW'"
+                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Trainer</mat-label>
+                        <mat-select formControlName="staffId">
+                          <mat-option *ngFor="let staff of allStaff" [value]="staff.staffid">
+                            {{ staff.firstname }} {{ staff.lastname }}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
                     </div>
-                    <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2" style="padding-top: 15px;">
+
+                    <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2"
+                      style="padding-top: 15px;">
                       <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Certificate
                         Type</label>
                       <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="certificateType">
@@ -118,7 +113,7 @@
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="S">Statement of Attainment</mat-radio-button>
-                          <mat-radio-button
+                        <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="R">Statement of Result</mat-radio-button>
                       </mat-radio-group>
@@ -134,6 +129,28 @@
                     </div>
                   </div>
                   <div class="row">
+                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2"
+                      style="padding-top: 15px;">
+                      <label class="example col-lg-2 col-md-2 col-sm-3; asterisk">Certificate
+                        Type</label>
+                      <mat-radio-group class="col-lg-10 col-md-10 col-sm-10" formControlName="certificateType">
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="C">Certificate</mat-radio-button>
+                        <mat-radio-button *ngIf="this.userInfo.college_id == 23"
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="O">SOA Qualification</mat-radio-button>
+                        <mat-radio-button *ngIf="this.userInfo.college_id == 23"
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="S">SOA First AID</mat-radio-button>
+                        <mat-radio-button *ngIf="this.userInfo.college_id != 23"
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="S">Statement of Attainment</mat-radio-button>
+                        <mat-radio-button
+                          class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                          value="R">Statement of Result</mat-radio-button>
+                      </mat-radio-group>
+                    </div>
                     <div *ngIf="this.userInfo.college_id === 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Issue Number</mat-label>
@@ -143,7 +160,10 @@
                         </mat-error>
                       </mat-form-field>
                     </div>
-                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                  </div>
+                  <div class="row">
+
+                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Completion Date</mat-label>
                         <input matInput [matDatepicker]="basicDatepicker1" formControlName="completionDate"
@@ -154,9 +174,11 @@
                         <mat-error *ngIf="HFormGroup1.get('completionDate').hasError('required')">
                           Please select completion date
                         </mat-error>
+                        
                       </mat-form-field>
+                      
                     </div>
-                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Issue Date</mat-label>
                         <input matInput [matDatepicker]="basicDatepicker2" formControlName="certificateIssueDate"
@@ -180,6 +202,9 @@
                           Please select completion date
                         </mat-error>
                       </mat-form-field>
+                      <div *ngIf="this.userInfo.college_id === 13" class="text" style="margin-top: -15px; margin-bottom: 10px; color: red;">
+                          <small>[NB: Completion date will act as end date in certificate]</small>
+                        </div>
                     </div>
                     <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
@@ -195,7 +220,8 @@
                     </div>
                   </div>
                 </div>
-                <div [ngClass]="HFormGroup1.get('certificateType').value == 'S' || HFormGroup1.get('certificateType').value == 'O' ? 'd-block' : 'd-none'">
+                <div
+                  [ngClass]="HFormGroup1.get('certificateType').value == 'S' || HFormGroup1.get('certificateType').value == 'O' ? 'd-block' : 'd-none'">
                   <div class="row">
                     <span class="section-heading"><i class='fas fa-bars'></i>Outcome</span>
                   </div>
@@ -235,14 +261,16 @@
                           <mat-header-cell *matHeaderCellDef>
                             <mat-label>Start Date</mat-label>
                           </mat-header-cell>
-                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.startdate| date:'MM/dd/yyyy'}}
+                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.startdate|
+                            date:'MM/dd/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="enDate">
                           <mat-header-cell *matHeaderCellDef>
                             <mat-label>End Date</mat-label>
                           </mat-header-cell>
-                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.enddate | date:'MM/dd/yyyy'}}
+                          <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">{{row.enddate |
+                            date:'MM/dd/yyyy'}}
                           </mat-cell>
                         </ng-container>
                         <ng-container matColumnDef="hours">

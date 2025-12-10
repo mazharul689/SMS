@@ -420,10 +420,15 @@ export class AllStudentComponent implements OnInit {
   addEnrCourse(id) {
     this.router.navigate([`/admin/enrolment/new-student/enrol-course/${id}`]);
   }
-  downloadCertificate(id, temp) {
+  downloadCertificate(id, temp, staffid) {
     if (this.userInfo.college_id == '23') {
       if (temp == "NSW") {
-        window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw&sid=${id}&_token=${this.userInfo.refresh_token}`)
+        if (staffid == null) {
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw&sid=${id}&_token=${this.userInfo.refresh_token}`)
+        }
+        else{
+          window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate_nsw_${staffid}&sid=${id}&_token=${this.userInfo.refresh_token}`)
+        }
       }
       else {
         window.open(`https://api.wonderit.com.au:8000/album/report/?inst_id=${this.userInfo.college_id}&type=certificate&sid=${id}&_token=${this.userInfo.refresh_token}`)
