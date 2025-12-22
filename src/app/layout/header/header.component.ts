@@ -135,6 +135,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         'assets/images/banner/ALITSmallLogo.png',
         'assets/images/banner/nisSmallLogo.png',
         'assets/images/banner/ATTCSmallLogo.png',
+        'assets/images/banner/RCNSmallLogo.png',
       ];
       this.isSpecialLogo = specialLogos.includes(this.bigimg);
     });
