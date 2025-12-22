@@ -20,6 +20,7 @@ export interface courseUnits {
   courseName: string,
   startDate: string,
   endDate: string,
+  unitid: number,
   actions
 }
 @Component({
@@ -213,6 +214,9 @@ export class AllCoursesComponent implements OnInit {
   }
   editCourseUnit(id) {
     this.router.navigate([`/admin/courses/edit-course-units/${id}`]);
+  }
+  editUnit(id) {
+    this.router.navigate([`/admin/units/edit-unit/${id}`]);
   }
   addCourseUnit(id) {
     // console.log(id)
