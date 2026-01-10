@@ -796,20 +796,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
         external: true, // ✅ add
       },
-      {
-        path: 'https://avs.ncver.edu.au/avs/',
-        title: 'Verify Avetmiss 2',
-        moduleName: 'reports',
-        iconType: '',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        badge: '',
-        badgeClass: '',
-        role: [''],
-        submenu: [],
-        external: true, // ✅ add
-      },
+      
       {
         path: '/admin/reports/asqa',
         title: 'ASQA',
