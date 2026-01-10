@@ -16,14 +16,16 @@ import { IssuanceRegisterComponent } from './issuance-register/issuance-register
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { SledReportComponent } from './sled-report/sled-report.component'
+import { SledReportComponent } from './sled-report/sled-report.component';
+import { VerifyAvetmissComponent } from './verify-avetmiss/verify-avetmiss.component'
 @NgModule({
   declarations: [
     AvetmissComponent,
     AsqaComponent,
     StudentsPaymentsComponent,
     IssuanceRegisterComponent,
-    SledReportComponent
+    SledReportComponent,
+    VerifyAvetmissComponent
   ],
   imports: [
     CommonModule,

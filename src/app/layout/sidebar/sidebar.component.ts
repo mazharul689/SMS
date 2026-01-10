@@ -171,4 +171,26 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     });
   }
+  isExternal(path: string): boolean {
+    return /^https?:\/\//i.test(path || '');
+  }
+
+  openMenu(item: any, event: MouseEvent) {
+    const url = item?.path || '';
+
+    if (this.isExternal(url)) {
+      event.preventDefault();
+      event.stopPropagation();
+      window.open(url, '_blank', 'noopener,noreferrer');
+
+      // mobile overlay close
+      this.renderer.removeClass(this.document.body, 'overlay-open');
+      return;
+    }
+
+    // internal route
+    this.router.navigate([url]);
+    this.renderer.removeClass(this.document.body, 'overlay-open');
+  }
+
 }

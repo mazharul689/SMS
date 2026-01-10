@@ -11,4 +11,6 @@ export interface RouteInfo {
   badgeClass: string;
   role: string[];
   submenu: RouteInfo[];
+  // ✅ add this
+  external?: boolean;
 }

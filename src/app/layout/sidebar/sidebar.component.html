@@ -32,10 +32,26 @@
             <li [ngClass]="level2Menu === sidebarSubItem.moduleName? 'activeSub':''"
               *ngFor="let sidebarSubItem of sidebarItem.submenu"
               [routerLinkActive]="sidebarSubItem.submenu.length > 0 ? '' : 'active'">
-              <a [routerLink]="sidebarSubItem.submenu.length > 0 ? null : [sidebarSubItem.path]"
-                (click)="callLevel2Toggle($event,sidebarSubItem.moduleName)" [ngClass]="[sidebarSubItem.class]">
-                {{sidebarSubItem.title | translate}}
-              </a>
+                <!-- ✅ EXTERNAL: no routerLinkActive at all -->
+                <a *ngIf="isExternal(sidebarSubItem.path)"
+                  [href]="sidebarSubItem.path"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  [ngClass]="sidebarSubItem.class"
+                  (click)="$event.stopPropagation(); renderer.removeClass(document.body,'overlay-open')">
+                  {{ sidebarSubItem.title | translate }}
+                </a>
+
+                <!-- ✅ INTERNAL: routerLink + routerLinkActive works normally -->
+                <a *ngIf="!isExternal(sidebarSubItem.path)"
+                  [routerLink]="sidebarSubItem.submenu.length > 0 ? null : [sidebarSubItem.path]"
+                  [routerLinkActive]="sidebarSubItem.submenu.length > 0 ? '' : 'active'"
+                  [ngClass]="sidebarSubItem.class"
+                  (click)="callLevel2Toggle($event, sidebarSubItem.moduleName)">
+                  {{ sidebarSubItem.title | translate }}
+                </a>
+
+
               <!-- Second level menu -->
               <ul class="ml-menu-2" *ngIf="sidebarSubItem.submenu.length > 0">
                 <li *ngFor="let sidebarSubsubItem of sidebarSubItem.submenu"
