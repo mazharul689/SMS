@@ -74,4 +74,21 @@ export class PaymentPlanInstalmentsComponent implements OnInit {
     this.router.navigate([`/admin/finance/add-payment-plan-instalment-rule/${ppid}/${id}`])
   }
 
+  getSortedRuleRows(row: any): any[] {
+    const rows = row?.rulearray?.Rows;
+
+    if (!Array.isArray(rows)) {
+      return [];
+    }
+
+    // clone + sort by paymentPlanInstalmentRuleOrder
+    return [...rows].sort((a, b) => {
+      
+      const ao = Number(a?.paymentPlanInstalmentRuleOrder) || 0;
+      const bo = Number(b?.paymentPlanInstalmentRuleOrder) || 0;
+      return ao - bo; // ASC order
+    });
+  }
+
+
 }

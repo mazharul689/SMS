@@ -59,6 +59,8 @@ export class AssignUnitsComponent implements OnInit {
   HFormGroup1
   HFormGroup2
   enrolmentID: any
+  defaultStartDate:any
+  defaultEndDate:any
   userInfo: any
   courseIntakeDateId: any
   courseId: any
@@ -134,6 +136,10 @@ export class AssignUnitsComponent implements OnInit {
     this.apiService.getAPI(`getstudentenrolmentbystudentenrolmentid?id=${id}`).subscribe((data) => {
       this.studentData = data['data'][0]
       this.courseId = data['data'][0].courseid
+      this.defaultStartDate = data['data'][0].commencementdate
+      this.defaultEndDate = data['data'][0].expectedcompletiondate
+      this.stDate = this.defaultStartDate ? moment(new Date(this.defaultStartDate)) : null;
+      this.enDate = this.defaultEndDate ? moment(new Date(this.defaultEndDate)) : null;
       this.courseIntakeDateId = data['data'][0].courseintakedateid
       this.apiService.getAPI(`getcourseunitbycourseid?id=${this.courseId}`).subscribe((data) => {
         this.apiService.getAPI(`gettrainingactivity?id=${id}`).subscribe((data1) => {
@@ -171,8 +177,10 @@ export class AssignUnitsComponent implements OnInit {
                 classSetupId: matchingTraining.classsetupid || null,
                 outcomeNationalId: matchingTraining.outcomenationalid || 9,
                 outcomeTrainingOrgId: matchingTraining.outcomenationalid || 9,
-                startDate: this.datePipe.transform(matchingTraining.startdate || null, 'yyyy-MM-dd'),
-                endDate: this.datePipe.transform(matchingTraining.enddate, 'yyyy-MM-dd'),
+                startDate: matchingTraining.startdate ? moment(matchingTraining.startdate) : this.stDate,
+                endDate: matchingTraining.enddate ? moment(matchingTraining.enddate) : this.enDate,
+                // startDate: this.datePipe.transform(matchingTraining.startdate || null, 'yyyy-MM-dd'),
+                // endDate: this.datePipe.transform(matchingTraining.enddate, 'yyyy-MM-dd'),
                 hoursAttended: matchingTraining.hoursattended || unit.schedulednominalhours
               });
 
@@ -218,6 +226,8 @@ export class AssignUnitsComponent implements OnInit {
                 outcomeTrainingOrgId: 9,
                 startDate: this.datePipe.transform(this.studentData.commencementdate, 'yyyy-MM-dd'),
                 endDate: this.datePipe.transform(this.studentData.expectedcompletiondate, 'yyyy-MM-dd'),
+                // startDate: this.datePipe.transform(this.studentData.commencementdate, 'yyyy-MM-dd'),
+                // endDate: this.datePipe.transform(this.studentData.expectedcompletiondate, 'yyyy-MM-dd'),
                 hoursAttended: unit.schedulednominalhours
               });
 

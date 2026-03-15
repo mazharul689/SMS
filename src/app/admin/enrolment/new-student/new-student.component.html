@@ -958,14 +958,24 @@
                             <input matInput formControlName="province">
                           </mat-form-field>
                         </div>
+                     
+
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Suburb</mat-label>
-                            <input matInput list="suburb" formControlName="suburb" [readonly]="suburbDisable" required>
-                            <datalist id="suburb">
-                              <option *ngFor="let suburb of suburbs">{{suburb.name}} </option>
+                            <input
+                              matInput
+                              list="suburbList"
+                              formControlName="suburb"
+                              [readonly]="suburbDisable"
+                              required
+                            />
+
+                            <datalist id="suburbList">
+                              <option *ngFor="let suburb of suburbs" [value]="suburb.name"></option>
                             </datalist>
-                            <mat-error *ngIf="HFormGroup1.get('suburb').hasError('required')">
+
+                            <mat-error *ngIf="HFormGroup1.get('suburb')?.hasError('required')">
                               Suburb is required
                             </mat-error>
                           </mat-form-field>
@@ -1128,9 +1138,14 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Suburb</mat-label>
-                            <input matInput list="suburb" formControlName="suburb_postal" [readonly]="difSuburbDisable">
-                            <datalist id="suburb">
-                              <option *ngFor="let suburb of difSuburbs">{{suburb.name}} </option>
+                            <input
+                              matInput
+                              list="suburb"
+                              formControlName="suburb_postal"
+                              [readonly]="difSuburbDisable"
+                            />
+                            <datalist id="postalSuburbList">
+                              <option *ngFor="let suburb of difSuburbs" [value]="suburb.name"></option>
                             </datalist>
                           </mat-form-field>
                         </div>

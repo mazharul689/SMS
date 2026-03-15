@@ -29,6 +29,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import * as _moment from 'moment';
 import { default as _rollupMoment } from 'moment';
+import { Console } from 'console'
 const moment = _rollupMoment || _moment;
 export interface CourseData {
   courseCode: string
@@ -360,10 +361,15 @@ export class NewStudentComponent implements OnInit {
   }
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue
+    console.log("post code change function called")
+    console.log("newValue",newValue)
+    console.log("postCodeChanges",this.postCodeChanges)
     if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC' && this.HFormGroup1.value.birthcountryId == 1) {
       this.suburbDisable = false
+      console.log("testing api search function ")
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
         this.suburbs = data
+        console.log("suburbs",this.suburbs);
         this.apiTest = true
         this.states = data[0].state.name
         this.stateAbbr = this.suburbs[0].state.abbreviation

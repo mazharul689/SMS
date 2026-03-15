@@ -1,0 +1,56 @@
+<section class="content">
+  <div class="container-fluid">
+    <div class="row clearfix newStudent">
+      <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+        <div class="card">
+          <div class="header">
+            <h2>Find USI</h2>
+          </div>
+          <div class="body">
+            <form [formGroup]="HFormGroup1">
+              <div class="StudentInfo">
+                <!-- <div class="section-content"> -->
+                  <div class="row">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>First Name</mat-label>
+                        <input matInput type="text" formControlName="FirstName" required>
+                        <mat-error *ngIf="HFormGroup1.get('FirstName').hasError('required')">
+                          First Name is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Last Name</mat-label>
+                        <input matInput type="text" formControlName="FamilyName" required>
+                        <mat-error *ngIf="HFormGroup1.get('FamilyName').hasError('required')">
+                          Last Name is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                      <mat-form-field class="example-full-width mb-3">
+                        <mat-label>Date of Birth</mat-label>
+                        <input matInput [matDatepicker]="db" formControlName="dob" required>
+                        <mat-datepicker-toggle matSuffix [for]="db">
+                        </mat-datepicker-toggle>
+                        <mat-datepicker #db></mat-datepicker>
+                        <mat-error *ngIf="HFormGroup1.get('dob').hasError('required')">
+                          Date of Birth is required
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
+                <!-- </div> -->
+                <div>
+                  <button mat-raised-button color="primary" (click)="searchUsi()">Search</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

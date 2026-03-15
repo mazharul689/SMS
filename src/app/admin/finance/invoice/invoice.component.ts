@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from 'src/app/api/api.service';
+
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -11,6 +12,8 @@ import { Observable } from 'rxjs';
 import { map, startWith } from "rxjs/operators";
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+
+
 // import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter'
 import * as _moment from 'moment';
@@ -51,7 +54,9 @@ const ELEMENT_DATA: PaymentPlanWithRules[] = []
 })
 export class InvoiceComponent implements OnInit {
   // displayedColumns: string[] = ['rowId', 'paymentRule', 'itemQty', 'unitPrice', 'GST', 'amount', 'dueDate']
-  displayedColumns: string[] = ['paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'dueamount', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'actions']
+  
+  // = ['select', 'paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'dueamount', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'actions']
+ 
   dataSource: MatTableDataSource<PaymentPlanWithRules>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator
   @ViewChild(MatSort, { static: true }) sort: MatSort
@@ -73,6 +78,8 @@ export class InvoiceComponent implements OnInit {
   allFinanceItem: any;
   allAmounts: any;
   invNo: any;
+  magicNumber:any ; 
+  displayedColumns: string[] 
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -84,7 +91,7 @@ export class InvoiceComponent implements OnInit {
     this.studentEnrolementId = this.actRoute.snapshot.params.id
     this.getStudent(this.studentEnrolementId)
   }
-
+  
   studentPaymentScheduleCheck(val) {
     var show = document.getElementById('closebtn')
     if (val.studentenrolmentid && val.studentpaymentscheduleid == null) {
@@ -114,7 +121,13 @@ export class InvoiceComponent implements OnInit {
       AdditionalItem: this.fb.array([this.dynamicValues()]),
     })
     this.assignInitialData();
+    this.magicNumber = this.userInfo?.college_id
 
+    if (this.magicNumber === 13) {
+    this.displayedColumns = ['select', 'paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'dueamount', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'actions'];
+  } else {
+    this.displayedColumns = ['paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'dueamount', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'actions'];
+  }
     this.HFormGroup2 = this.fb.group({
       Rows: [],
       userId: this.userInfo.userid,
@@ -621,4 +634,74 @@ export class InvoiceComponent implements OnInit {
       this.getStudent(this.studentEnrolementId)
     });
   }
+
+
+  // partial invoice code 
+  areAllRowsSelected(): boolean {
+    const selectedCount = this.selection.selected.length;
+    const totalRows = this.dataSource.data.length;
+    return selectedCount === totalRows;
+  }
+
+  toggleSelectAllRows(): void {
+    this.areAllRowsSelected()
+      ? this.selection.clear()
+      : this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  selectedInvoice:any[] = []
+  handleSelection(id:string){
+    console.log("invoice id", id);
+      this.selectedInvoice.push(id)
+    
+  }
+  handleSelection1(row:any){
+    console.log("row", row);
+      // this.selectedInvoice.push(id)
+    
+  }
+  getCheckboxAriaLabel(row?: any): string {
+    if (!row) {
+      return `${this.areAllRowsSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} invoice ${row.studentInvoiceId}`;
+  }
+
+  /** ✅ returns selected invoice IDs */
+  getSelectedStudentInvoiceIds(): number[] {
+    return this.selectedInvoice
+    // return this.selection.selected || []
+      // .map(r => Number(r.invoiceNo))
+      // .filter(id => !Number.isNaN(id));
+  }
+
+  /** ✅ button action */
+  generateInvoicesForSelectedRows(): void {
+    const invoiceIds = this.getSelectedStudentInvoiceIds();
+    console.log("invoiceIds", invoiceIds);
+
+
+    
+    if (!invoiceIds.length) {
+      this.errorsReq = { isError: true, errorMessage: 'Please select at least one invoice.' };
+      window.scroll(0, 0);
+      const closeBtn = document.getElementById('closebtn');
+      if (closeBtn) closeBtn.style.display = 'block';
+      return;
+    }
+    
+    // const payload = {
+    //   userId: this.userInfo.userid,
+    //   studentEnrolmentId: Number(this.studentEnrolementId),
+    //   listnumber:invoiceIds.join(","),
+    //   inst_id: this.magicNumber,
+    // };
+    // console.log("payload", payload);
+    const listnumbers = invoiceIds.join(",")
+    window.open(`https://api.wonderit.com.au:8000/album/invoicelist/?inst_id=${this.userInfo.college_id}&type=invoicelist&sid=${this.studentEnrolementId}&listnumber=${listnumbers}`)
+
+    
+    
+  }
+
 }

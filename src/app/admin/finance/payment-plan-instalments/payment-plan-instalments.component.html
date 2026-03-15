@@ -33,12 +33,22 @@
                     {{row.itemname}}
                   </mat-cell> -->
                   <mat-cell *matCellDef="let row; let i=index" class="pr-0">
-                    <table *ngIf="row.rulearray.Rows[0].amount != null">
+                    <table *ngIf="row?.rulearray?.Rows?.length && row.rulearray.Rows[0]?.amount != null">
+                      <tr *ngFor="let item of getSortedRuleRows(row); let j = index">
+                        <td *ngIf="item?.paymentPlanInstalmentRuleCondition?.length > 0">
+                          {{ item.ruletype }} ({{ item.paymentPlanInstalmentRuleCondition }})
+                        </td>
+                        <td *ngIf="!item?.paymentPlanInstalmentRuleCondition || item.paymentPlanInstalmentRuleCondition.length == 0">
+                          {{ item.ruletype }}
+                        </td>
+                      </tr>
+                    </table>
+                    <!-- <table *ngIf="row.rulearray.Rows[0].amount != null">
                       <tr *ngFor="let item of row.rulearray.Rows; let j = index; let last = last">
                         <td *ngIf="item.paymentPlanInstalmentRuleCondition.length > 0">{{ item.ruletype }} ({{ item.paymentPlanInstalmentRuleCondition }})</td>
                         <td *ngIf="item.paymentPlanInstalmentRuleCondition.length == 0">{{ item.ruletype }}</td>
                       </tr>
-                    </table>
+                    </table> -->
                     <!-- <span *ngIf="row.rulearray.Rows[0].amount == null">No rule is set yet!</span> -->
                   </mat-cell>
                 </ng-container>
@@ -47,11 +57,17 @@
                     <mat-label style="color: white; font-size: 15px;">Amount</mat-label>
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row; let i=index" class="pr-0">
-                    <table *ngIf="row.rulearray.Rows[0].amount != null">
-                      <tr *ngFor="let item of row.rulearray.Rows; let j = index; let last = last">
+                    <table *ngIf="row?.rulearray?.Rows?.length && row.rulearray.Rows[0]?.amount != null">
+                      <tr *ngFor="let item of getSortedRuleRows(row); let j = index">
                         <td>${{ item.amount }}</td>
                       </tr>
                     </table>
+
+                    <!-- <table *ngIf="row.rulearray.Rows[0].amount != null">
+                      <tr *ngFor="let item of row.rulearray.Rows; let j = index; let last = last">
+                        <td>${{ item.amount }}</td>
+                      </tr>
+                    </table> -->
                     <!-- <span *ngIf="row.rulearray.Rows[0].amount == null">$000</span> -->
                   </mat-cell>
                 </ng-container>

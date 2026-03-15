@@ -6,48 +6,129 @@
           <div class="header">
             <h2>Find USI</h2>
           </div>
+
           <div class="body">
             <form [formGroup]="HFormGroup1">
               <div class="StudentInfo">
-                <!-- <div class="section-content"> -->
-                  <div class="row">
-                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                      <mat-form-field class="example-full-width mb-3">
-                        <mat-label>First Name</mat-label>
-                        <input matInput type="text" formControlName="FirstName" required>
-                        <mat-error *ngIf="HFormGroup1.get('FirstName').hasError('required')">
-                          First Name is required
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                      <mat-form-field class="example-full-width mb-3">
-                        <mat-label>Last Name</mat-label>
-                        <input matInput type="text" formControlName="FamilyName" required>
-                        <mat-error *ngIf="HFormGroup1.get('FamilyName').hasError('required')">
-                          Last Name is required
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                      <mat-form-field class="example-full-width mb-3">
-                        <mat-label>Date of Birth</mat-label>
-                        <input matInput [matDatepicker]="db" formControlName="dob" required>
-                        <mat-datepicker-toggle matSuffix [for]="db">
-                        </mat-datepicker-toggle>
-                        <mat-datepicker #db></mat-datepicker>
-                        <mat-error *ngIf="HFormGroup1.get('dob').hasError('required')">
-                          Date of Birth is required
-                        </mat-error>
-                      </mat-form-field>
-                    </div>
+                <div class="row">
+                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>First Name</mat-label>
+                      <input matInput type="text" formControlName="FirstName" required>
+                      <mat-error *ngIf="HFormGroup1.get('FirstName')?.hasError('required')">
+                        First Name is required
+                      </mat-error>
+                    </mat-form-field>
                   </div>
-                <!-- </div> -->
+
+                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Last Name</mat-label>
+                      <input matInput type="text" formControlName="FamilyName" required>
+                      <mat-error *ngIf="HFormGroup1.get('FamilyName')?.hasError('required')">
+                        Last Name is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Date of Birth</mat-label>
+                      <input matInput [matDatepicker]="db" formControlName="dob" required>
+                      <mat-datepicker-toggle matSuffix [for]="db"></mat-datepicker-toggle>
+                      <mat-datepicker #db></mat-datepicker>
+                      <mat-error *ngIf="HFormGroup1.get('dob')?.hasError('required')">
+                        Date of Birth is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+
+                  <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                      <mat-label>Gender</mat-label>
+                      <mat-select formControlName="Gender" required>
+                        <mat-option value="M">Male</mat-option>
+                        <mat-option value="F">Female</mat-option>
+                        <mat-option value="X">Others</mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="HFormGroup1.get('Gender')?.hasError('required')">
+                        Gender is required
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </div>
+
                 <div>
-                  <button mat-raised-button color="primary" (click)="searchUsi()">Search</button>
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    type="button"
+                    (click)="searchUsi()"
+                    [disabled]="HFormGroup1.invalid || isLoading">
+                    {{ isLoading ? 'Searching...' : 'Search' }}
+                  </button>
                 </div>
               </div>
             </form>
+
+            <!-- Error Section -->
+            <div class="mt-4" *ngIf="errorMessage">
+              <div class="alert alert-danger">
+                {{ errorMessage }}
+              </div>
+            </div>
+
+            <!-- Response Section -->
+            <div class="mt-4" *ngIf="usiResponse">
+              <div class="card shadow-sm">
+                <div class="card-header">
+                  <h4 class="mb-0">USI Search Result</h4>
+                </div>
+                <div class="card-body">
+                  <div>
+                    <div style="font-size: 24px; font-weight: bold; margin-bottom:1rem;">
+                      <strong>USI:</strong> {{ usiResponse?.USI ? usiResponse.USI : 'Not Found' }}
+                    </div>
+                  </div>
+                  <div class="row">
+                    
+
+                    <div class="col-md-6 mb-2" *ngIf="usiResponse.FirstName">
+                      <strong>First Name:</strong> {{ usiResponse.FirstName }}
+                    </div>
+
+                    <div class="col-md-6 mb-2" *ngIf="usiResponse.FamilyName">
+                      <strong>Family Name:</strong> {{ usiResponse.FamilyName }}
+                    </div>
+
+                    <div class="col-md-6 mb-2" *ngIf="usiResponse.SingleName">
+                      <strong>Single Name:</strong> {{ usiResponse.SingleName }}
+                    </div>
+
+                    <div class="col-md-6 mb-2" *ngIf="usiResponse.Gender">
+                      <strong>Gender:</strong> {{ usiResponse.Gender }}
+                    </div>
+                    <div class="col-md-6 mb-2" *ngIf="usiResponse.DateOfBirth">
+                      
+                        <strong>Date of Birth:</strong> {{ usiResponse.DateOfBirth | date:'dd/MM/yyyy' }}
+                      </div>
+                      
+
+                    <div class="col-md-6 mb-2" *ngIf="usiResponse.Message">
+                      <strong>Message:</strong> {{ usiResponse.Message }}
+                    </div>
+                  </div>
+
+                  <!-- Full response -->
+                  <div class="mt-3 d-none " *ngIf="usiResponse">
+                    <strong>Full Response:</strong>
+                    <pre class="bg-light p-3 mt-2" style="white-space: pre-wrap;">{{ usiResponse | json }}</pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /Response Section -->
+
           </div>
         </div>
       </div>
