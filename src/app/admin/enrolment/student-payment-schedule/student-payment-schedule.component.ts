@@ -315,10 +315,10 @@ export class StudentPaymentScheduleComponent implements OnInit {
       let formData = this.HFormGroup2.value
       formData.paymentPlanInstalmentCondition = this.HFormGroup1.value.paymentPlanInstalmentCondition
       console.log(formData)
-      // this.apiService.postAPI('editstudentpaymentplaninstalment', formData).subscribe((data) => {
-      //   console.log(data)
-      //   this.route.navigate(['/admin/enrolment/all-student'])
-      // })
+      this.apiService.postAPI('editstudentpaymentplaninstalment', formData).subscribe((data) => {
+        console.log(data)
+        this.route.navigate(['/admin/enrolment/all-student'])
+      })
     }
   }
 }

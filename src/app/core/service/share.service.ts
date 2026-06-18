@@ -20,6 +20,7 @@ export class ShareService {
     '38': { cliLogo: 'assets/images/banner/nisBigLogo.png', logoSrc1: 'assets/images/banner/nisSmallLogo.png' },
     '42': { cliLogo: 'assets/images/banner/ATTCBigLogo.png', logoSrc1: 'assets/images/banner/ATTCSmallLogo.png' },
     '46': { cliLogo: 'assets/images/banner/RCNBigLogo.png', logoSrc1: 'assets/images/banner/RCNSmallLogo.png' },
+    '51': { cliLogo: 'assets/images/banner/FrontierBigLogo.png', logoSrc1: 'assets/images/banner/FrontierSmallLogo.png' },
   };
 
   private defaultLogos = {

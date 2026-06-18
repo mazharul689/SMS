@@ -240,6 +240,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     countryid_postal: '',
     mobile1: '',
     australianpr: '',
+    domesticstudent: '',
+    is_domestic_student: '',
     visano: '',
     visastatusid: '',
     visaexpdate: '',
@@ -426,7 +428,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
   }
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue
-    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC' && this.HFormGroup1.value.birthcountryId == 1) {
+    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC' && this.HFormGroup1.value.countryId == 1) {
       this.suburbDisable = false
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
         this.suburbs = data
@@ -555,6 +557,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       mobile: [''],
       mobile1: [''],
       australianPr: ['Y'],
+      is_domestic_student: ['no', [Validators.required]],
       visaNo: [null, [Validators.maxLength(100)]],
       visaStatusId: [null],
       visaExpdate: [''],
@@ -864,6 +867,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           mobile: this.editStudent.mobile,
           mobile1: this.editStudent.mobile1,
           australianPr: this.editStudent.australianpr,
+          is_domestic_student: this.editStudent.domesticstudent || this.editStudent.is_domestic_student || 'no',
           visaNo: this.editStudent.visano,
           visaStatusId: this.editStudent.visastatusid,
           visaExpdate: null,
@@ -995,6 +999,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           mobile: this.editStudent.mobile,
           mobile1: this.editStudent.mobile1,
           australianPr: this.editStudent.australianpr,
+          is_domestic_student: this.editStudent.domesticstudent || this.editStudent.is_domestic_student || 'no',
           visaNo: this.editStudent.visano,
           visaStatusId: this.editStudent.visastatusid,
           visaExpdate: null,

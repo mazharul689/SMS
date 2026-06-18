@@ -1,6 +1,6 @@
-import { Component, ElementRef, OnInit, ViewChild, OnDestroy } from '@angular/core'
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter'
+import { Component, ElementRef, OnInit, ViewChild, AfterViewInit } from '@angular/core'
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
+import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, } from '@angular/material-moment-adapter'
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core'
 import { DatePipe } from '@angular/common'
 import { ApiService } from '../../../api/api.service'
@@ -17,11 +17,11 @@ import { MatPaginator } from '@angular/material/paginator'
 import { MatSort } from '@angular/material/sort'
 import { SelectionModel } from '@angular/cdk/collections'
 import { MatCheckboxChange } from '@angular/material/checkbox'
+const moment = _rollupMoment || _moment;
 import { finalize } from 'rxjs/operators';
 
-const moment = _rollupMoment || _moment;
-
 export interface outcome {
+  // highlighted?: boolean
   rowID
   units: string
   outcomeNational: string
@@ -45,7 +45,7 @@ export interface outcome {
     DatePipe
   ],
 })
-export class CertificateComponent implements OnInit, OnDestroy {
+export class CertificateComponent implements OnInit {
   @ViewChild('stepper') stepper: MatStepper
   displayedColumns: string[] = ['rowID', 'units', 'outcomeNational', 'stDate', 'enDate', 'hours']
   dataSource: MatTableDataSource<outcome>
@@ -58,7 +58,6 @@ export class CertificateComponent implements OnInit, OnDestroy {
   HFormGroup1: FormGroup
   HFormGroup2: FormGroup
   subscription: Subscription
-  certificateTypeChangeSubscription: Subscription
 
   studentID
   step
@@ -68,6 +67,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   courseName = "loading..."
   disabled
 
+  //certificate
   certificateissuenumber
   certificate
   issueNumber
@@ -75,7 +75,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   link
   trainingActId
   outcomeCheck
-  selected: any = []
+  selected: any;
   outcome
   student
   course
@@ -90,11 +90,30 @@ export class CertificateComponent implements OnInit, OnDestroy {
     trainerstatenameshort: '',
     staffid: ''
   }
-
   dateValidate1 = { isError: false, errorMessage: '' }
   loading: boolean
   userInfo: any
   certificateId: any
+
+  public issuedFlagChange(newValue) {
+    if (newValue == 'Y') {
+      this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
+        this.issueNumber = data['data']
+        this.issueNumber = this.issueNumber.split(" ")
+        this.issueNumber = this.issueNumber[1]
+        this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
+        this.HFormGroup1.patchValue({
+          certificateIssueNumber: this.issueNumber
+        })
+        // this.HFormGroup8.value.certificateIssueNumber = this.certificateissuenumber
+      })
+    }
+    else {
+      this.HFormGroup1.patchValue({
+        certificateIssueNumber: null
+      })
+    }
+  }
 
   error = { isError: false, errorMessage: '' }
   usiError = { isError: false, errorMessage: '' }
@@ -106,7 +125,6 @@ export class CertificateComponent implements OnInit, OnDestroy {
   show_msg = false
   show_msg2 = false
   allStaff
-
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
@@ -120,7 +138,8 @@ export class CertificateComponent implements OnInit, OnDestroy {
     this.step = this.actRoute.snapshot.params.step;
     if (this.step === 'E') {
       this.enrolemntID = this.actRoute.snapshot.params.id;
-    } else {
+    }
+    else {
       this.certificateId = this.actRoute.snapshot.params.id;
       this.enrolemntID = this.actRoute.snapshot.params.eid;
     }
@@ -132,7 +151,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
     this.disabled = false
     this.loading = false
-    this.dataSource = new MatTableDataSource()
+    this.dataSource = new MatTableDataSource() // create new object
     this.dataSource.paginator = this.paginator
     this.dataSource.sort = this.sort
 
@@ -147,17 +166,16 @@ export class CertificateComponent implements OnInit, OnDestroy {
       trainerStateNameShort: 'VLC',
       staffId: 0
     })
-
-    this.certificateTypeChangeSubscription = this.HFormGroup1.get('certificateType')?.valueChanges.subscribe((value) => {
-      if (this.HFormGroup1.get('Issuedflag')?.value === 'Y') {
-        this.getCertificateIssueNumber(value)
-      }
-    })
-
+    // this.apiService.getAPI(`getstudentenrolmentbystudentid?id=${this.studentID}`).subscribe((data) => {
+    //   this.editEnrolment = data['data'][0]
+    //   this.enrolemntID = data['data'][0]['studentEnrolmentId']
+    // //console.log(this.enrolemntID)
     if (this.step === 'C') {
       this.apiService.getAPI(`getcertificate?id=${this.certificateId}`).subscribe((data) => {
+        // //console.log(data['data'])
         if (!data['data'].msg) {
           this.editCertificate = data['data'][0]
+          //console.log('data', this.editCertificate)
           this.HFormGroup1.patchValue({
             completionDate: moment(this.editCertificate.completiondate),
             certificateIssueDate: moment(this.editCertificate.certificateissuedate),
@@ -168,31 +186,39 @@ export class CertificateComponent implements OnInit, OnDestroy {
             trainerStateNameShort: this.editCertificate.trainerstatenameshort,
             staffId: this.editCertificate.staffid
           })
-
-          if (
-            this.HFormGroup1.get('Issuedflag')?.value === 'Y' &&
-            (!this.editCertificate.certificateissuenumber || this.editCertificate.certificateissuenumber === '')
-          ) {
-            this.getCertificateIssueNumber(this.HFormGroup1.get('certificateType')?.value)
-          }
-        } else {
-          if (this.HFormGroup1.get('Issuedflag')?.value === 'Y') {
-            this.getCertificateIssueNumber(this.HFormGroup1.get('certificateType')?.value)
-          }
+        }
+        else {
+          this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
+            this.issueNumber = data['data']
+            this.issueNumber = this.issueNumber.split(" ")
+            this.issueNumber = this.issueNumber[1]
+            this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
+            this.HFormGroup1.patchValue({
+              certificateIssueNumber: this.issueNumber
+            })
+          })
         }
       })
-    } else {
-      if (this.HFormGroup1.get('Issuedflag')?.value === 'Y') {
-        this.getCertificateIssueNumber(this.HFormGroup1.get('certificateType')?.value)
-      }
     }
-
+    else {
+      this.apiService.getAPI('getcertificateissuenumber').subscribe((data) => {
+        this.issueNumber = data['data']
+        this.issueNumber = this.issueNumber.split(" ")
+        this.issueNumber = this.issueNumber[1]
+        this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
+        this.HFormGroup1.patchValue({
+          certificateIssueNumber: this.issueNumber
+        })
+      })
+    }
     this.apiService.getAPI('getstaff').subscribe((data) => {
       this.allStaff = data['data']
     })
 
+
     this.apiService.getAPI(`verifyoutcomeforcertificate?id=${this.enrolemntID}`).subscribe((data) => {
       this.outcomeCheck = data['data']
+      //console.log('outcomecheck', this.outcomeCheck)
       var show = document.getElementById('closebtn')
       this.error = { isError: false, errorMessage: '' }
       if (!this.outcomeCheck.msg) {
@@ -203,50 +229,13 @@ export class CertificateComponent implements OnInit, OnDestroy {
         }
       }
     })
-  }
 
-  ngOnDestroy(): void {
-    if (this.subscription) {
-      this.subscription.unsubscribe()
-    }
-    if (this.certificateTypeChangeSubscription) {
-      this.certificateTypeChangeSubscription.unsubscribe()
-    }
-  }
+    // this.apiService.getAPI(`gettrainingactivity?id=${this.enrolemntID}`).subscribe((data) => {
+    //   // this.trainingActId = data['data'][0].trainingActivityId
+    //   this.trainingActId = data['data']
+    // })
+    // })
 
-  public issuedFlagChange(newValue) {
-    if (newValue == 'Y') {
-      this.getCertificateIssueNumber(this.HFormGroup1.get('certificateType')?.value)
-    } else {
-      this.HFormGroup1.patchValue({
-        certificateIssueNumber: null
-      })
-    }
-  }
-
-  getCertificateIssueNumber(type: string) {
-    if (!type) {
-      this.HFormGroup1.patchValue({
-        certificateIssueNumber: null
-      })
-      return
-    }
-
-    this.apiService
-      .getAPI(`getcertificateissuenumber?certificateType=${encodeURIComponent(type)}`)
-      .subscribe((data) => {
-        this.issueNumber = data['data']
-
-        if (this.issueNumber) {
-          this.issueNumber = this.issueNumber.split(" ")
-          this.issueNumber = this.issueNumber[1]
-          this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
-
-          this.HFormGroup1.patchValue({
-            certificateIssueNumber: this.issueNumber
-          })
-        }
-      })
   }
 
   compareTwoDates1() {
@@ -264,7 +253,6 @@ export class CertificateComponent implements OnInit, OnDestroy {
       }
     }, 0);
   }
-
   isAllSelected() {
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
@@ -275,16 +263,16 @@ export class CertificateComponent implements OnInit, OnDestroy {
     this.isAllSelected() ?
       this.selection.clear() :
       this.dataSource.data.forEach(row => this.selection.select(row));
+    // //console.log('form2value', this.HFormGroup2.value.unitArray)
   }
-
   sendSelectedNumbers() {
     let selectedNumbers: number[] = [];
     for (let item of this.selection.selected) {
       selectedNumbers.push(item.rowID)
     }
+    // //console.log('hits', selectedNumbers);
     return selectedNumbers;
   }
-
   toggle(item, event: MatCheckboxChange) {
     if (event.checked) {
       this.selected.push(item);
@@ -295,7 +283,6 @@ export class CertificateComponent implements OnInit, OnDestroy {
       }
     }
   }
-
   getOutcome() {
     this.apiService.getAPI(`gettrainingactivity?id=${this.enrolemntID}`).subscribe((data) => {
       this.trainingActId = data['data']
@@ -312,22 +299,31 @@ export class CertificateComponent implements OnInit, OnDestroy {
       trainingArray = data['data']
       for (var i in trainingArray) {
         trainingArray[i].rowID = i
+        // if (trainingArray[i].startdate) {
+        //   trainingArray[i].startdate = this.datePipe.transform(trainingArray[i].startdate, 'dd/MM/yyyy')
+        // }
+        // if (trainingArray[i].enddate) {
+        //   trainingArray[i].enddate = this.datePipe.transform(trainingArray[i].enddate, 'dd/MM/yyyy')
+        // }
       }
-      this.dataSource.data = trainingArray
+      this.dataSource.data = trainingArray // on data receive populate dataSource.data array
       return data
     })
   }
-
   getStudentInfo() {
     this.apiService.getAPI(`getstudentenrolmentbystudentenrolmentid?id=${this.enrolemntID}`).subscribe((data) => {
       this.student = data['data'][0]
       this.name = this.student.firstname + " " + this.student.lastname
       this.courseName = this.student.coursename
+      //console.log('students', this.student)
+      //console.log('usi', this.student.usi)
       if (this.student.usiverificationstatus == null || this.student.usiverificationstatus == "") {
+        //console.log('im here')
         this.usiError.isError = true
         this.usiError.errorMessage = "USI is not verified"
       }
       else if (this.student.usiverificationstatus) {
+        //console.log('verificationstatus', this.student.usiVerificationStatus)
         if (this.student.usiverificationstatus.includes('Invalid')) {
           this.usiError.isError = true
           this.usiError.errorMessage = "USI is not verified"
@@ -339,20 +335,23 @@ export class CertificateComponent implements OnInit, OnDestroy {
       }
     })
   }
-
   getCertificate() {
+    // 1. Reset state
     this.disabled = true;
     this.error.isError = false;
     this.error.errorMessage = '';
     this.errorsReqEn = { isError: false, errorMessage: '' };
     this.errorsReq = { isError: false, errorMessage: '' };
 
+    // 2. Prepare the payload
+    // Create a copy instead of mutating the form value directly
     const certificateBody = { ...this.HFormGroup1.value };
 
     certificateBody.Issuedflag = 'Y';
     certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd');
     certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd');
 
+    // Use .map() for cleaner array creation
     const rows = this.sendSelectedNumbers();
     let nums: number[] = [];
     if (certificateBody.certificateType === 'C' || certificateBody.certificateType === 'R') {
@@ -365,27 +364,33 @@ export class CertificateComponent implements OnInit, OnDestroy {
     certificateBody.studentEnrolmentId = parseInt(this.enrolemntID, 10);
     certificateBody.userId = this.userInfo.userid;
 
+    // 3. Check pre-condition
     if (!this.outcomeCheck.msg && certificateBody.certificateType !== 'S') {
       this.errorsReq = { isError: true, errorMessage: this.outcomeCheck[0].error_msg };
       window.scroll(0, 0);
       this._showErrorUI();
-      this.disabled = false;
-      return;
+      this.disabled = false; // Manually re-enable
+      return; // Stop execution
     }
 
+    // 4. Call the API
     this.apiService.postAPI('addcertificate', certificateBody).pipe(
+      // finalize() ensures this runs on success OR error
       finalize(() => this.disabled = false)
     ).subscribe(
       (data: any) => {
+        // API call succeeded, check for application error message
         if (data?.data?.msg) {
           this.errorsReqEn = { isError: true, errorMessage: data.data.msg };
           window.scroll(0, 0);
           this._showErrorUI();
         } else {
+          // Handle success: open report and navigate
           this._handleCertificateSuccess(certificateBody, data);
         }
       },
       (apiError) => {
+        // API call failed (e.g., 500 server error)
         console.error('API Error:', apiError);
         this.errorsReqEn = { isError: true, errorMessage: 'An unexpected error occurred. Please try again.' };
         window.scroll(0, 0);
@@ -394,20 +399,21 @@ export class CertificateComponent implements OnInit, OnDestroy {
     );
   }
 
+  
   private _getCertificateReportType(certificateBody: any): string | null {
     const { certificateType, trainerStateNameShort } = certificateBody;
     const { college_id } = this.userInfo;
     const isCollege23 = (college_id === 23);
     const isNSW = (trainerStateNameShort === 'NSW');
-
     switch (certificateType) {
       case 'C':
         if (isCollege23 && isNSW) {
           return `certificate_nsw_${this.HFormGroup1.value.staffId}`;
         }
-        else {
-          return `certificate`;
+        else{
+          return `certificate`; 
         }
+        
 
       case 'S':
         return 'attainment';
@@ -417,13 +423,14 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
       case 'R':
         if (isCollege23 && isNSW) return 'sor_nsw';
-        return 'sor';
+        return 'sor'; 
 
       default:
-        return null;
+        return null; 
     }
   }
 
+  
   private _handleCertificateSuccess(certificateBody: any, data: any) {
     const reportType = this._getCertificateReportType(certificateBody);
 
@@ -436,13 +443,18 @@ export class CertificateComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/certificate/all-student']);
   }
 
+  /**
+   * Helper function to abstract DOM manipulation.
+   */
   private _showErrorUI() {
+    // Best Practice: Avoid document.getElementById in Angular.
+    // This should be handled with a boolean property and *ngIf in your template.
+    // Example: <div *ngIf="errorsReq.isError || errorsReqEn.isError" id="closebtn">...</div>
     const show = document.getElementById('closebtn');
     if (show) {
       show.style.display = 'block';
     }
   }
-
   getCurrentDate(): string {
     const today = new Date();
     const year = today.getFullYear();
@@ -450,7 +462,6 @@ export class CertificateComponent implements OnInit, OnDestroy {
     const day = today.getDate();
     return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
   }
-
   onCertificateUpdate() {
     this.show_msg = false
     this.show_msg2 = false
@@ -460,12 +471,13 @@ export class CertificateComponent implements OnInit, OnDestroy {
     certificateBody.trainingActivityId = this.trainingActId
     certificateBody.studentEnrolmentId = this.enrolemntID
     certificateBody.userId = this.userInfo.userid
-
+    //console.log('check', certificateBody)
     var show = document.getElementById('closebtn')
     this.errorsReqEn = { isError: false, errorMessage: '' };
     this.errorsReq = { isError: false, errorMessage: '' }
     if (this.outcomeCheck.msg) {
       this.apiService.postAPI('addcertificate', certificateBody).subscribe((data) => {
+        //console.log('passed', data['data'])
         if (data['data'].msg != undefined) {
           this.errorsReqEn = { isError: true, errorMessage: data['data'].msg }
           window.scroll(0, 0)
@@ -480,14 +492,71 @@ export class CertificateComponent implements OnInit, OnDestroy {
     }
     else {
       this.errorsReq = { isError: true, errorMessage: this.outcomeCheck[0].error_msg }
+      //console.log('errorreq', this.outcomeCheck[0].error_msg)
       window.scroll(0, 0)
       if (show) {
         show.style.display = 'block'
       }
     }
   }
-
   previewCertificate() {
     window.open(`https://api.wonderit.com.au:8000/report/edit?inst_id=${this.userInfo.college_id}`)
+
+    // this.router.navigate([`/admin/certificate/editor-view`]);
+    // this.disabled = true
+    // this.error.isError = false
+    // this.error.errorMessage = ''
+    // // //console.log(this.error.isError)
+    // let rows = this.sendSelectedNumbers();
+    // var nums: number[] = []
+    // const certificateBody = this.HFormGroup1.value
+    // certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd')
+    // certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd')
+    // certificateBody.Issuedflag = 'P'
+    // if (certificateBody.certificateType == 'C') {
+    //   for (let i = 0; i < this.trainingActId.length; i++) {
+    //     nums[i] = this.trainingActId[i].trainingactivityid;
+    //   }
+    // }
+    // else {
+    //   for (let i = 0; i < rows.length; i++) {
+    //     nums[i] = this.trainingActId[rows[i]].trainingActivityId;
+    //   }
+    // }
+
+    // certificateBody.trainingActivityId = nums
+    // certificateBody.studentEnrolmentId = parseInt(this.enrolemntID, 10)
+    // certificateBody.userId = this.userInfo.userid
+    // //console.log('certificatebody', certificateBody)
+    // var show = document.getElementById('closebtn')
+    // this.errorsReqEn = { isError: false, errorMessage: '' };
+    // this.errorsReq = { isError: false, errorMessage: '' }
+    // //console.log('row', rows)
+    // if (this.outcomeCheck.msg) {
+    //   this.apiService.postAPI('addcertificate', certificateBody).subscribe((data) => {
+    //     this.disabled = false
+    //     // console.log('data')
+    //     //console.log('passed',data['data'])
+    //     if (data['data'] && data['data'].msg) {
+    //       this.errorsReqEn = { isError: true, errorMessage: data['data'].msg }
+    //       window.scroll(0, 0)
+    //       if (show) {
+    //         show.style.display = 'block'
+    //       }
+    //     }
+    //     else {
+    //       this.baseApi = "https://api.wonderit.com.au:5000/"
+    //       window.open(this.baseApi + data)
+    //     }
+    //   })
   }
+  // else {
+  //   this.errorsReq = { isError: true, errorMessage: this.outcomeCheck[0].error_msg }
+  //   //console.log('errorreq', this.outcomeCheck[0].error_msg)
+  //   window.scroll(0, 0)
+  //   if (show) {
+  //     show.style.display = 'block'
+  //   }
+  // }
+  // }
 }

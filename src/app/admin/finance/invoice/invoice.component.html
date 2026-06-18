@@ -426,9 +426,9 @@
                 <div class="row" *ngIf="showRows == true">
                   <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <div class="example-button-row">
-                      <button class="btn-space" [disabled]="!HFormGroup1.valid" mat-raised-button color="primary"
+                      <button  type="button" class="btn-space" [disabled]="!canSaveAdditionalInvoice()" mat-raised-button color="primary"
                         (click)="addStudentInvoice()">
-                        Save
+                        Save Invoice
                       </button>
                     </div>
                   </div>

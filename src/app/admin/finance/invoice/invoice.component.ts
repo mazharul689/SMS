@@ -593,6 +593,48 @@ export class InvoiceComponent implements OnInit {
     this.router.navigate([`/admin/enrolment/student-payment-schedule/${this.studentEnrolementId}`]);
   }
 
+  canSaveAdditionalInvoice(): boolean {
+    const additionalArray = this.HFormGroup1.get('AdditionalItem') as FormArray;
+
+    if (!additionalArray || additionalArray.length === 0) {
+      return false;
+    }
+
+    const row = additionalArray.at(0) as FormGroup;
+
+    const financeItemId = row.get('financeItemId')?.value;
+    const dueDate = row.get('paymentPlanInstalmentDueDate')?.value;
+    const paymentDesc = row.get('paymentDesc')?.value;
+    const amountTypeId = row.get('amountTypeId')?.value;
+    const gst = row.get('gst')?.value;
+    const invoiceNumber = row.get('invoiceNumber')?.value;
+
+    const rowsRules = row.get('Rowsrules') as FormArray;
+
+    if (!financeItemId) return false;
+    if (!dueDate) return false;
+    if (!paymentDesc) return false;
+    if (!amountTypeId) return false;
+    if (!gst) return false;
+    if (!invoiceNumber) return false;
+
+    if (!rowsRules || rowsRules.length === 0) {
+      return false;
+    }
+
+    for (let i = 0; i < rowsRules.length; i++) {
+      const rule = rowsRules.at(i) as FormGroup;
+
+      const itemName = rule.get('itemName')?.value;
+      const amount = Number(rule.get('amount')?.value || 0);
+
+      if (!itemName) return false;
+      if (amount <= 0) return false;
+    }
+
+    return true;
+  }
+
   invoice(data) {
     let tempDirection;
     if (localStorage.getItem('isRtl') === 'true') {

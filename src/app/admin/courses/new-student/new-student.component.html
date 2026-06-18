@@ -297,6 +297,37 @@
                           </div>
                         </div>
                       </div>
+                      <div class="row">
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2" style="padding-top: 10px">
+                          <section class="example-full-width mb-3">
+                            <label class="example col-lg-5 col-md-5 col-sm-4 asterisk">
+                              Domestic Student
+                            </label>
+
+                            <mat-radio-group
+                              class="col-lg-7 col-md-7 col-sm-8"
+                              formControlName="is_domestic_student">
+
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="yes">
+                                Yes
+                              </mat-radio-button>
+
+                              <mat-radio-button
+                                class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                                value="no">
+                                No
+                              </mat-radio-button>
+
+                            </mat-radio-group>
+
+                            <mat-error *ngIf="HFormGroup1.get('is_domestic_student')?.hasError('required')">
+                              Domestic Student is required
+                            </mat-error>
+                          </section>
+                        </div>
+                      </div>
 
                       <!-- <div class="row">
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">

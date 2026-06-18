@@ -17,6 +17,7 @@ import { saveAs } from 'file-saver';
 import * as _moment from "moment";
 import { default as _rollupMoment } from "moment";
 import { map, finalize } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 import {
   DateAdapter,
   MAT_DATE_FORMATS,
@@ -101,7 +102,9 @@ export class AllStudentComponent implements OnInit {
   enrolmentDateFilter = new FormControl("");
   classNameFilter = new FormControl("");
   expectedCompletionDateFilter = new FormControl("");
-
+  Did = environment.magicNumber
+  showDomesticBadge = false;
+  
   filteredValues = {
     courseIntakeDateId: "",
     clientid: "",
@@ -171,6 +174,7 @@ export class AllStudentComponent implements OnInit {
   ngOnInit() {
     this.userInfo = JSON.parse(localStorage.getItem("currentUser"));
     this.getAll = JSON.parse(window.localStorage.getItem('getAll'))
+    this.showDomesticBadge = Number(this.Did) === 13;
     this.allApplicationStatus = this.getAll[0].ApplicationStatus
     this.allApplicationStatus.push({
       applicationstatusname: "All",
@@ -248,12 +252,48 @@ export class AllStudentComponent implements OnInit {
       }
     );
   }
+  private addDomesticBadge(student: any): any {
+    if (!this.showDomesticBadge) {
+      return {
+        ...student,
+        studentTypeBadge: '',
+        studentTypeTitle: '',
+        studentTypeClass: ''
+      };
+    }
+
+    const domesticValue = (student.domesticstudent ?? '').toString().trim().toLowerCase();
+
+    if (!domesticValue) {
+      return {
+        ...student,
+        studentTypeBadge: '',
+        studentTypeTitle: '',
+        studentTypeClass: ''
+      };
+    }
+
+    const isDomestic = domesticValue === 'yes';
+
+    return {
+      ...student,
+      studentTypeBadge: isDomestic ? 'D' : 'I',
+      studentTypeTitle: isDomestic ? 'Domestic Student' : 'International Student',
+      studentTypeClass: isDomestic ? 'domestic-badge' : 'international-badge'
+    };
+  }
   getStudents() {
     // 2. Set loading to TRUE right before the call
     this.isLoading = true;
 
     const dateLocale = 'en-GB';
     let sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.coursename, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email, a.altemail"];
+    
+    // console.log("did", this.Did, 'type', typeof(this.Did))
+    if (this.Did == '13'){
+      sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.coursename, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email,a.altemail,a.domesticstudent"];
+
+    }
 
     this.apiService.getAPI(`getstudent?sqlquery=${sqlquery}`).pipe(
 
@@ -273,13 +313,13 @@ export class AllStudentComponent implements OnInit {
             formattedEndDate = new Date(student.expectedcompletiondate).toLocaleDateString(dateLocale);
           }
 
-          return {
+          return this.addDomesticBadge({
             ...student,
             startDate: formattedStartDate,
             endDate: formattedEndDate,
             fullname: `${student.firstname} ${student.lastname}`,
-            coursename: student.coursename == null ? "" : student.coursename // (Bug Fix: Use coursecode)
-          };
+            coursename: student.coursename == null ? "" : student.coursename
+          });
         });
 
         // ... (your sort logic)
@@ -347,7 +387,10 @@ export class AllStudentComponent implements OnInit {
   search(cid: any, aid: any, asid: any, clid: any, uid: any, name: any, email: any, classname: any) {
     let queryParams = [];
     let sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.coursename, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email,a.altemail"];
+    if (this.Did == '13'){
+      sqlquery = ["a.studentid,a.clientid,a.firstname, a.lastname, a.coursecode, a.coursename, a.classname,a.commencementdate,a.expectedcompletiondate,a.applicationstatusname,a.studentenrolmentid,a.email,a.altemail,a.domesticstudent"];
 
+    }
     // Build query string... (all your 'if' blocks remain the same)
     if (cid && cid != 100) {
       queryParams.push(`courseid=${cid}`);
@@ -402,7 +445,10 @@ export class AllStudentComponent implements OnInit {
 
             // Your existing logic (a .map() would be more modern here)
             for (let i in students) {
-              students[i].fullname = students[i].firstname + " " + students[i].lastname;
+              students[i] = this.addDomesticBadge({
+                ...students[i],
+                fullname: students[i].firstname + " " + students[i].lastname
+              });
             }
 
             this.dataSource.data = students;

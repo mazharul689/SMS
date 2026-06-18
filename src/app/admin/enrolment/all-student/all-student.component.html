@@ -149,14 +149,26 @@
                   <ng-container matColumnDef="fullName">
                     <mat-header-cell *matHeaderCellDef style="font-size: 13px !important;">
                       <mat-form-field class="filter" floatLabel="never" style="width: 105px;">
-                        <mat-label style="color: white; font-size: 15px;">Full
-                          Name</mat-label>
+                        <mat-label style="color: white; font-size: 15px;">Full Name</mat-label>
                         <input matInput [formControl]="firstNameFilter" class="white-cursor">
                       </mat-form-field>
                     </mat-header-cell>
+
                     <mat-cell *matCellDef="let row" data-toggle="tooltip" data-placement="right">
-                      <span
-                        style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{row.fullname}}</span>
+                      <div class="student-name-wrapper">
+                        <span
+                          *ngIf="showDomesticBadge && row.studentTypeBadge"
+                          class="student-type-badge"
+                          [ngClass]="row.studentTypeClass"
+                          [matTooltip]="row.studentTypeTitle">
+                          {{ row.studentTypeBadge }}
+                        </span>
+                        <span class="student-name-text">
+                          {{ row.fullname }}
+                        </span>
+
+                       
+                      </div>
                     </mat-cell>
                   </ng-container>
                   <ng-container matColumnDef="courseName">

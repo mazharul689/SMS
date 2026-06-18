@@ -364,7 +364,8 @@ export class NewStudentComponent implements OnInit {
     console.log("post code change function called")
     console.log("newValue",newValue)
     console.log("postCodeChanges",this.postCodeChanges)
-    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC' && this.HFormGroup1.value.birthcountryId == 1) {
+    console.log("this.HFormGroup1.value.countryId",this.HFormGroup1.value.countryId )
+    if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC' && this.HFormGroup1.value.countryId == 1) {
       this.suburbDisable = false
       console.log("testing api search function ")
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
@@ -542,6 +543,7 @@ export class NewStudentComponent implements OnInit {
       telWork: ['', [Validators.maxLength(20)]],
       mobile: [''],
       mobile1: [''],
+      is_domestic_student: ['no', [Validators.required]],
       australianPr: ['Y'],
       visaNo: [null, [Validators.maxLength(100)]],
       visaStatusId: [null],
