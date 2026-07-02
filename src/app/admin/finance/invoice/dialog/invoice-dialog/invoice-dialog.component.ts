@@ -94,6 +94,7 @@ export class InvoiceDialogComponent implements OnInit {
       studentInvoiceId: this.data.studentInvoiceId,
       financeItemId: this.data.financeItemId,
       invoiceItemDetailsId: 0,
+      upfrontFee: this.data.upfrontFeeAmount || 0,
       // paidAmount: 0
     });
     console.log(this.HFormGroup1.value)
@@ -117,6 +118,7 @@ export class InvoiceDialogComponent implements OnInit {
       studentInvoiceId: null,
       financeItemId: null,
       invoiceItemDetailsId: 0,
+      upfrontamount: 0,
       // paidAmount: 0
     });
     (this.HFormGroup1.get('tempData') as FormArray).removeAt(0);
@@ -280,6 +282,7 @@ export class InvoiceDialogComponent implements OnInit {
       totalgst: formData.totalGST,
       studentInvoiceId: formData.studentInvoiceId,
       financeItemId: formData.financeItemId,
+      upfrontamount: formData.upfrontFee,
       // paidAmount: formData.paidAmount
     })
     this.HFormGroup2.setControl('ItemArray', this.fb.array(formData.tempData.map(item => this.fb.group(item))));

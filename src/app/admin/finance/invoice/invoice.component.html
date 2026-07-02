@@ -255,6 +255,17 @@
                           <mat-label>{{ row.paymentDesc }}</mat-label>
                         </mat-cell>
                       </ng-container>
+                      <ng-container matColumnDef="upfrontFee">
+                        <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
+                          <mat-label style="color: white; font-size: 15px">Upfront Fee</mat-label>
+                        </mat-header-cell>
+                        <mat-cell class="pr-0 mw-10" *matCellDef="let row; let i = index" [formGroupName]="i"
+                          style="justify-content: center">
+                          <mat-checkbox [checked]="row.upfrontFee"
+                            (change)="toggleUpfrontFee(row, $event.checked)">
+                          </mat-checkbox>
+                        </mat-cell>
+                      </ng-container>
                       <ng-container matColumnDef="actions">
                         <mat-header-cell class="pr-0 mw-10" *matHeaderCellDef>
                           <mat-label style="color: white; font-size: 15px">Action</mat-label>

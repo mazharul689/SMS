@@ -34,6 +34,7 @@ export interface PaymentPlanWithRules {
   commission,
   paymentPlanInstalmentDueDate,
   isPaid,
+  upfrontFee: boolean,
   actions
 }
 const ELEMENT_DATA: PaymentPlanWithRules[] = []
@@ -124,9 +125,9 @@ export class InvoiceComponent implements OnInit {
     this.magicNumber = this.userInfo?.college_id
 
     if (this.magicNumber === 13) {
-    this.displayedColumns = ['select', 'paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'dueamount', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'actions'];
+    this.displayedColumns = ['select', 'paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'dueamount', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'upfrontFee', 'actions'];
   } else {
-    this.displayedColumns = ['paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'dueamount', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'actions'];
+    this.displayedColumns = ['paymentPlanInstalmentOrder', 'invoiceNo', 'financeItemId', 'ruleType', 'spsamount', 'commission', 'dueamount', 'paymentPlanInstalmentDueDate', 'paymentDesc', 'upfrontFee', 'actions'];
   }
     this.HFormGroup2 = this.fb.group({
       Rows: [],
@@ -353,7 +354,9 @@ export class InvoiceComponent implements OnInit {
               Rowsrules: [allPaymentPlansWithRules[i].rulearray.Rows],
               financeItemId: allPaymentPlansWithRules[i].financeitemid,
               studentEnrolmentId: [parseInt(this.studentEnrolementId)],
-              studentInvoiceId: allPaymentPlansWithRules[i].studentinvoiceid
+              studentInvoiceId: allPaymentPlansWithRules[i].studentinvoiceid,
+              upfrontFee: !!allPaymentPlansWithRules[i].upfrontfee,
+              upfrontFeeAmount: allPaymentPlansWithRules[i].upfrontamount || 0
             });
             (this.HFormGroup1.get('inputItemArray') as FormArray).push(rowData)
           }
@@ -718,6 +721,14 @@ export class InvoiceComponent implements OnInit {
   }
 
   /** ✅ button action */
+  toggleUpfrontFee(row: any, checked: boolean) {
+    this.apiService.postAPI('updateinvoiceupfrontfee', {
+      studentInvoiceId: row.studentInvoiceId,
+      upfrontFee: checked,
+      upfrontamount: checked ? row.totalAmount : 0
+    }).subscribe();
+  }
+
   generateInvoicesForSelectedRows(): void {
     const invoiceIds = this.getSelectedStudentInvoiceIds();
     console.log("invoiceIds", invoiceIds);
