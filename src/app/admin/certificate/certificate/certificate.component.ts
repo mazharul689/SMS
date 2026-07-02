@@ -410,6 +410,9 @@ export class CertificateComponent implements OnInit, OnDestroy {
         }
 
       case 'S':
+        if(isCollege23 && this.trainingActId.length <= 3) {
+          return 'soa_short';
+        }
         return 'attainment';
 
       case 'O':
