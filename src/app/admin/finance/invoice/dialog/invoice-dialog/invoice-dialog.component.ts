@@ -94,7 +94,7 @@ export class InvoiceDialogComponent implements OnInit {
       studentInvoiceId: this.data.studentInvoiceId,
       financeItemId: this.data.financeItemId,
       invoiceItemDetailsId: 0,
-      upfrontFee: this.data.upfrontFeeAmount || 0,
+      upfrontFee: [{ value: this.data.upfrontFeeAmount || 0, disabled: !this.data.upfrontFee }],
       // paidAmount: 0
     });
     console.log(this.HFormGroup1.value)
@@ -257,7 +257,7 @@ export class InvoiceDialogComponent implements OnInit {
     }
   }
   saveInstalment() {
-    let formData = this.HFormGroup1.value
+    let formData = this.HFormGroup1.getRawValue()
     formData.invoiceDate = this.datePipe.transform(formData.invoiceDate, 'yyyy-MM-dd')
     formData.paymentDueDate = this.datePipe.transform(formData.paymentDueDate, 'yyyy-MM-dd')
     console.log(formData)

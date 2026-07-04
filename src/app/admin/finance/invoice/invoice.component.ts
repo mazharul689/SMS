@@ -726,7 +726,9 @@ export class InvoiceComponent implements OnInit {
       studentInvoiceId: row.studentInvoiceId,
       upfrontFee: checked,
       upfrontamount: checked ? row.totalAmount : 0
-    }).subscribe();
+    }).subscribe(() => {
+      this.getStudent(this.studentEnrolementId);
+    });
   }
 
   generateInvoicesForSelectedRows(): void {
