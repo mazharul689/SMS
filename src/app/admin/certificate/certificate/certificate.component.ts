@@ -141,6 +141,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
       certificateIssueDate: ['', Validators.required],
       certificateIssueNumber: ['', [Validators.maxLength(25)]],
       certificateType: ['C'],
+        certificateReportType: ['certificate'],
       rtoType: ['L'],
       trainingActivityId: [''],
       Issuedflag: ['Y', [Validators.maxLength(10)]],
@@ -402,9 +403,13 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
     switch (certificateType) {
       case 'C':
-        if (isCollege23 && isNSW) {
-          return `certificate_nsw_${this.HFormGroup1.value.staffId}`;
-        }
+        if (this.HFormGroup1.value.certificateReportType === 'certificate_complete') {
+        return 'certificate_complete';
+    }
+
+    if (isCollege23 && isNSW) {
+        return `certificate_nsw_${this.HFormGroup1.value.staffId}`;
+    }
         else {
           return `certificate`;
         }
@@ -485,7 +490,45 @@ export class CertificateComponent implements OnInit, OnDestroy {
         show.style.display = 'block'
       }
     }
+
+
+    
   }
+
+
+  onCertificateSelection(value: string) {
+
+    if (value === 'certificate') {
+
+        this.HFormGroup1.patchValue({
+            certificateType: 'C',
+            certificateReportType: 'certificate'
+        });
+
+    }
+    else if (value === 'completion') {
+
+        this.HFormGroup1.patchValue({
+            certificateType: 'C',
+            certificateReportType: 'certificate_complete'
+        });
+
+    }
+    else {
+
+        this.HFormGroup1.patchValue({
+            certificateType: value,
+            certificateReportType: ''
+        });
+
+    }
+
+    console.log(this.HFormGroup1.value);
+console.log(this.HFormGroup1.value.certificateReportType);
+
+}
+
+
 
   previewCertificate() {
     window.open(`https://api.wonderit.com.au:8000/report/edit?inst_id=${this.userInfo.college_id}`)

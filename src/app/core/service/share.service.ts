@@ -21,6 +21,7 @@ export class ShareService {
     '42': { cliLogo: 'assets/images/banner/ATTCBigLogo.png', logoSrc1: 'assets/images/banner/ATTCSmallLogo.png' },
     '46': { cliLogo: 'assets/images/banner/RCNBigLogo.png', logoSrc1: 'assets/images/banner/RCNSmallLogo.png' },
     '51': { cliLogo: 'assets/images/banner/FrontierBigLogo.png', logoSrc1: 'assets/images/banner/FrontierSmallLogo.png' },
+    '62': { cliLogo: 'assets/images/banner/VIITEBigLogo.png', logoSrc1: 'assets/images/banner/VIITESmallLogo.png' },
     '61': { cliLogo: 'assets/images/banner/nexgenBigLogo.png', logoSrc1: 'assets/images/banner/nexgenSmallLogo.png' },
   };
 
