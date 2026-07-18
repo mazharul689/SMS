@@ -71,6 +71,7 @@
                     </div>
                   </div>
                 </div>
+                
                 <div class="row">
                   <span class="section-heading"><i class='fas fa-bars'></i> Certificate
                     Type</span>
@@ -106,18 +107,21 @@
                       style="padding-top: 15px;">
                       <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Certificate
                         Type</label>
-                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9"  (change)="onCertificateSelection($event.value)">
+<<<<<<< Updated upstream
+                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="certificateType">
+=======
+                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9"
+                        (change)="onCertificateSelection($event.value)">
+>>>>>>> Stashed changes
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                          value="certificate">Certificate</mat-radio-button>
+                          value="C">Certificate</mat-radio-button>
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="S">Statement of Attainment</mat-radio-button>
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                          value="completion">
-                          Completion Certificate
-                        </mat-radio-button>
+                          value="R">Statement of Result</mat-radio-button>
                       </mat-radio-group>
                     </div>
                     <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
@@ -130,12 +134,41 @@
                       </mat-form-field>
                     </div>
                   </div>
+
+
+                  <div class="row">
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3">
+                      <label class="example col-lg-2 col-md-2 col-sm-3; asterisk">Authority</label>
+
+                      <mat-select formControlName="authority" (selectionChange)="ceo_type = $event.value">
+
+                        <mat-option value="A">
+                          Adil Abdullah Chowdhury
+                        </mat-option>
+
+                        <mat-option value="K">
+                          Mohammad Kamrul Hasan
+                        </mat-option>
+
+                      </mat-select>
+                    </mat-form-field>
+                  </div>
+
+                  <!-- Empty column so it aligns with Completion Date / Issue Date -->
+                  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"></div>
+                </div>
                   <div class="row">
                     <div *ngIf="this.userInfo.college_id === 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2"
                       style="padding-top: 15px;">
                       <label class="example col-lg-2 col-md-2 col-sm-3; asterisk">Certificate
                         Type</label>
-                      <mat-radio-group class="col-lg-10 col-md-10 col-sm-10" formControlName="certificateType" (change)="onCertificateSelection($event.value)"> >
+<<<<<<< Updated upstream
+                      <mat-radio-group class="col-lg-10 col-md-10 col-sm-10" formControlName="certificateType">
+=======
+                      <mat-radio-group class="col-lg-10 col-md-10 col-sm-10" formControlName="certificateType"
+                        (change)="onCertificateSelection($event.value)"> >
+>>>>>>> Stashed changes
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="C">Certificate</mat-radio-button>
@@ -176,9 +209,9 @@
                         <mat-error *ngIf="HFormGroup1.get('completionDate').hasError('required')">
                           Please select completion date
                         </mat-error>
-
+                        
                       </mat-form-field>
-
+                      
                     </div>
                     <div *ngIf="this.userInfo.college_id === 23" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
@@ -204,10 +237,9 @@
                           Please select completion date
                         </mat-error>
                       </mat-form-field>
-                      <div *ngIf="this.userInfo.college_id === 13" class="text"
-                        style="margin-top: -15px; margin-bottom: 10px; color: red;">
-                        <small>[NB: Completion date will act as end date in certificate]</small>
-                      </div>
+                      <div *ngIf="this.userInfo.college_id === 13" class="text" style="margin-top: -15px; margin-bottom: 10px; color: red;">
+                          <small>[NB: Completion date will act as end date in certificate]</small>
+                        </div>
                     </div>
                     <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">

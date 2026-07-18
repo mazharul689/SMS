@@ -79,6 +79,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   outcome
   student
   course
+  ceo_type: string = 'A';
 
   editCertificate = {
     completiondate: '',
@@ -141,9 +142,13 @@ export class CertificateComponent implements OnInit, OnDestroy {
       certificateIssueDate: ['', Validators.required],
       certificateIssueNumber: ['', [Validators.maxLength(25)]],
       certificateType: ['C'],
-        certificateReportType: ['certificate'],
+<<<<<<< Updated upstream
+=======
+      certificateReportType: ['certificate'],
+>>>>>>> Stashed changes
       rtoType: ['L'],
       trainingActivityId: [''],
+      authority: ['A'],
       Issuedflag: ['Y', [Validators.maxLength(10)]],
       trainerStateNameShort: 'VLC',
       staffId: 0
@@ -403,18 +408,28 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
     switch (certificateType) {
       case 'C':
+<<<<<<< Updated upstream
+=======
+        console.log(this.trainingActId.length, "training activitytotal value");
         if (this.HFormGroup1.value.certificateReportType === 'certificate_complete') {
-        return 'certificate_complete';
-    }
+          return 'certificate_complete';
+        }
 
-    if (isCollege23 && isNSW) {
-        return `certificate_nsw_${this.HFormGroup1.value.staffId}`;
-    }
+>>>>>>> Stashed changes
+        if (isCollege23 && isNSW) {
+          return `certificate_nsw_${this.HFormGroup1.value.staffId}`;
+        }
         else {
+          if (this.trainingActId.length > 25) {
+            return 'extcertificate';
+          }
           return `certificate`;
         }
 
       case 'S':
+        if (this.trainingActId.length > 25) {
+          return 'soa_ext';
+        }
         return 'attainment';
 
       case 'O':
@@ -429,18 +444,29 @@ export class CertificateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _handleCertificateSuccess(certificateBody: any, data: any) {
-    const reportType = this._getCertificateReportType(certificateBody);
+ private _handleCertificateSuccess(certificateBody: any, data: any) {
+  const reportType = this._getCertificateReportType(certificateBody);
 
-    if (reportType) {
-      const { college_id, refresh_token } = this.userInfo;
-      const url = `https://api.wonderit.com.au:8000/album/report/?inst_id=${college_id}&type=${reportType}&sid=${data}&_token=${refresh_token}`;
-      window.open(url, '_blank');
+  if (reportType) {
+
+    const { college_id, refresh_token } = this.userInfo;
+
+    const authority = this.HFormGroup1.value.authority;
+
+    let reportName = reportType;
+
+    if (authority === 'K') {
+      reportName += '_2';
     }
 
-    this.router.navigate(['/admin/certificate/all-student']);
+    const url =
+      `https://api.wonderit.com.au:8000/album/report/?inst_id=${college_id}&type=${reportName}&sid=${data}&_token=${refresh_token}`;
+
+    window.open(url, '_blank');
   }
 
+  this.router.navigate(['/admin/certificate/all-student']);
+}
   private _showErrorUI() {
     const show = document.getElementById('closebtn');
     if (show) {
@@ -490,47 +516,59 @@ export class CertificateComponent implements OnInit, OnDestroy {
         show.style.display = 'block'
       }
     }
-
-
-    
+<<<<<<< Updated upstream
   }
+
+=======
+
+
+
+  }
+
+  onAuthorityChange(value: string) {
+    this.ceo_type = value;
+  }
+
+
 
 
   onCertificateSelection(value: string) {
 
     if (value === 'certificate') {
 
-        this.HFormGroup1.patchValue({
-            certificateType: 'C',
-            certificateReportType: 'certificate'
-        });
+      this.HFormGroup1.patchValue({
+        certificateType: 'C',
+        certificateReportType: 'certificate'
+      });
 
     }
     else if (value === 'completion') {
 
-        this.HFormGroup1.patchValue({
-            certificateType: 'C',
-            certificateReportType: 'certificate_complete'
-        });
+      this.HFormGroup1.patchValue({
+        certificateType: 'C',
+        certificateReportType: 'certificate_complete'
+      });
 
     }
     else {
 
-        this.HFormGroup1.patchValue({
-            certificateType: value,
-            certificateReportType: ''
-        });
+      this.HFormGroup1.patchValue({
+        certificateType: value,
+        certificateReportType: ''
+      });
 
     }
 
     console.log(this.HFormGroup1.value);
-console.log(this.HFormGroup1.value.certificateReportType);
+    console.log(this.HFormGroup1.value.certificateReportType);
 
-}
+  }
 
 
 
+>>>>>>> Stashed changes
   previewCertificate() {
     window.open(`https://api.wonderit.com.au:8000/report/edit?inst_id=${this.userInfo.college_id}`)
   }
 }
+
