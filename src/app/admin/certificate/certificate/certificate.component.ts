@@ -142,10 +142,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
       certificateIssueDate: ['', Validators.required],
       certificateIssueNumber: ['', [Validators.maxLength(25)]],
       certificateType: ['C'],
-<<<<<<< Updated upstream
-=======
       certificateReportType: ['certificate'],
->>>>>>> Stashed changes
       rtoType: ['L'],
       trainingActivityId: [''],
       authority: ['A'],
@@ -408,14 +405,11 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
     switch (certificateType) {
       case 'C':
-<<<<<<< Updated upstream
-=======
         console.log(this.trainingActId.length, "training activitytotal value");
         if (this.HFormGroup1.value.certificateReportType === 'certificate_complete') {
           return 'certificate_complete';
         }
 
->>>>>>> Stashed changes
         if (isCollege23 && isNSW) {
           return `certificate_nsw_${this.HFormGroup1.value.staffId}`;
         }
@@ -516,10 +510,6 @@ export class CertificateComponent implements OnInit, OnDestroy {
         show.style.display = 'block'
       }
     }
-<<<<<<< Updated upstream
-  }
-
-=======
 
 
 
@@ -566,7 +556,6 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
 
 
->>>>>>> Stashed changes
   previewCertificate() {
     window.open(`https://api.wonderit.com.au:8000/report/edit?inst_id=${this.userInfo.college_id}`)
   }
