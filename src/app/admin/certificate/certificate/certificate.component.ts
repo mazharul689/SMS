@@ -79,6 +79,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   outcome
   student
   course
+  authority_type = 'C';
 
   editCertificate = {
     completiondate: '',
@@ -142,6 +143,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
       certificateIssueNumber: ['', [Validators.maxLength(25)]],
       certificateType: ['C'],
         certificateReportType: ['certificate'],
+        authority: ['C'],
       rtoType: ['L'],
       trainingActivityId: [''],
       Issuedflag: ['Y', [Validators.maxLength(10)]],
@@ -429,17 +431,28 @@ export class CertificateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _handleCertificateSuccess(certificateBody: any, data: any) {
-    const reportType = this._getCertificateReportType(certificateBody);
+ private _handleCertificateSuccess(certificateBody: any, data: any) {
+  const reportType = this._getCertificateReportType(certificateBody);
 
-    if (reportType) {
-      const { college_id, refresh_token } = this.userInfo;
-      const url = `https://api.wonderit.com.au:8000/album/report/?inst_id=${college_id}&type=${reportType}&sid=${data}&_token=${refresh_token}`;
-      window.open(url, '_blank');
+  if (reportType) {
+    const { college_id, refresh_token } = this.userInfo;
+
+    const authority = this.HFormGroup1.value.authority; // C or D
+
+    let reportName = reportType;
+
+    if (authority === 'D') {
+      reportName += '_2';
     }
 
-    this.router.navigate(['/admin/certificate/all-student']);
+    const url =
+      `https://api.wonderit.com.au:8000/album/report/?inst_id=${college_id}&type=${reportName}&sid=${data}&_token=${refresh_token}`;
+
+    window.open(url, '_blank');
   }
+
+  this.router.navigate(['/admin/certificate/all-student']);
+}
 
   private _showErrorUI() {
     const show = document.getElementById('closebtn');

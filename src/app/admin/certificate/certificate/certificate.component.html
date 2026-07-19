@@ -106,7 +106,8 @@
                       style="padding-top: 15px;">
                       <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Certificate
                         Type</label>
-                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9"  (change)="onCertificateSelection($event.value)">
+                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9"
+                        (change)="onCertificateSelection($event.value)">
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="certificate">Certificate</mat-radio-button>
@@ -120,6 +121,33 @@
                         </mat-radio-button>
                       </mat-radio-group>
                     </div>
+                    <div class="row">
+                      <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2"
+                        style="padding-top: 15px;">
+
+                        <label class="example col-lg-3 col-md-3 col-sm-3 asterisk">
+                          Authority
+                        </label>
+
+                        <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="authority">
+
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="C">
+                            CEO
+                          </mat-radio-button>
+
+                          <mat-radio-button
+                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+                            value="D">
+                            Director
+                          </mat-radio-button>
+
+                        </mat-radio-group>
+
+                      </div>
+                    </div>
+
                     <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
                         <mat-label>Issue Number</mat-label>
@@ -135,7 +163,8 @@
                       style="padding-top: 15px;">
                       <label class="example col-lg-2 col-md-2 col-sm-3; asterisk">Certificate
                         Type</label>
-                      <mat-radio-group class="col-lg-10 col-md-10 col-sm-10" formControlName="certificateType" (change)="onCertificateSelection($event.value)"> >
+                      <mat-radio-group class="col-lg-10 col-md-10 col-sm-10" formControlName="certificateType"
+                        (change)="onCertificateSelection($event.value)"> >
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="C">Certificate</mat-radio-button>
