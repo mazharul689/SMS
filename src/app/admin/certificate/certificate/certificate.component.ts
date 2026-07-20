@@ -80,6 +80,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
   student
   course
   ceo_type: string = 'A';
+  location_type: string = 'M';
 
   editCertificate = {
     completiondate: '',
@@ -145,6 +146,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
       certificateReportType: ['certificate'],
       rtoType: ['L'],
       trainingActivityId: [''],
+      location_type: ['M'],
       authority: ['A'],
       Issuedflag: ['Y', [Validators.maxLength(10)]],
       trainerStateNameShort: 'VLC',
@@ -447,16 +449,24 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
     const authority = this.HFormGroup1.value.authority;
 
-    let reportName = reportType;
+   let reportName = reportType;
 
-    if (authority === 'K') {
-      reportName += '_2';
-    }
+if (authority === 'K') {
+  reportName += '_2';
+}
 
-    const url =
-      `https://api.wonderit.com.au:8000/album/report/?inst_id=${college_id}&type=${reportName}&sid=${data}&_token=${refresh_token}`;
+// NEW
+if (
+    this.HFormGroup1.value.certificateReportType === 'certificate_complete' &&
+    this.HFormGroup1.value.location_type === 'S'
+) {
+    reportName += '_Syd';
+}
 
-    window.open(url, '_blank');
+const url =
+`https://api.wonderit.com.au:8000/album/report/?inst_id=${college_id}&type=${reportName}&sid=${data}&_token=${refresh_token}`;
+
+window.open(url, '_blank');
   }
 
   this.router.navigate(['/admin/certificate/all-student']);
