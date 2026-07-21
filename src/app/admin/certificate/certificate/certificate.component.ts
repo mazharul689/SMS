@@ -237,8 +237,10 @@ export class CertificateComponent implements OnInit, OnDestroy {
       return
     }
 
+    let url = `getcertificateissuenumber?certificateType=${encodeURIComponent(type)}&studentEnrolmentId=${encodeURIComponent(this.enrolemntID)}` 
+
     this.apiService
-      .getAPI(`getcertificateissuenumber?certificateType=${encodeURIComponent(type)}`)
+      .getAPI(url)
       .subscribe((data) => {
         this.issueNumber = data['data']
 
