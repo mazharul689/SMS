@@ -144,6 +144,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
       certificateType: ['C'],
         certificateReportType: ['certificate'],
         authority: ['C'],
+         location_type: ['M'],
       rtoType: ['L'],
       trainingActivityId: [''],
       Issuedflag: ['Y', [Validators.maxLength(10)]],

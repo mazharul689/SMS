@@ -121,32 +121,67 @@
                         </mat-radio-button>
                       </mat-radio-group>
                     </div>
-                    <div class="row">
-                      <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2"
-                        style="padding-top: 15px;">
+                    <div class="row" *ngIf="this.userInfo.college_id !== 23">
 
-                        <label class="example col-lg-3 col-md-3 col-sm-3 asterisk">
-                          Authority
-                        </label>
+  <!-- Authority -->
+  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+       style="padding-top: 15px;">
 
-                        <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="authority">
+    <label class="example col-lg-3 col-md-3 col-sm-3 asterisk">
+      Authority
+    </label>
 
-                          <mat-radio-button
-                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                            value="C">
-                            CEO
-                          </mat-radio-button>
+    <mat-radio-group
+      class="col-lg-9 col-md-9 col-sm-9"
+      formControlName="authority">
 
-                          <mat-radio-button
-                            class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
-                            value="D">
-                            Director
-                          </mat-radio-button>
+      <mat-radio-button
+        class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+        value="C">
+        CEO
+      </mat-radio-button>
 
-                        </mat-radio-group>
+      <mat-radio-button
+        class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
+        value="D">
+        Director
+      </mat-radio-button>
 
-                      </div>
-                    </div>
+    </mat-radio-group>
+
+  </div>
+
+  <!-- Location -->
+  <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
+       *ngIf="HFormGroup1.value.certificateReportType === 'certificate_complete'">
+
+    <mat-form-field class="example-full-width mb-3">
+
+      <label class="example col-lg-2 col-md-2 col-sm-3 asterisk">
+        Location
+      </label>
+
+      <mat-select formControlName="location_type">
+
+        <mat-option value="M">
+          Melbourne
+        </mat-option>
+
+        <mat-option value="S">
+          Sydney
+        </mat-option>
+
+        <mat-option value="G">
+          Gold Coast
+        </mat-option>
+
+      </mat-select>
+
+    </mat-form-field>
+
+  </div>
+
+</div>
 
                     <div *ngIf="this.userInfo.college_id !== 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                       <mat-form-field class="example-full-width mb-3">
