@@ -236,15 +236,16 @@ export class CertificateComponent implements OnInit, OnDestroy {
       return
     }
 
+    let url = `getcertificateissuenumber?certificateType=${encodeURIComponent(type)}&studentEnrolmentId=${encodeURIComponent(this.enrolemntID)}`
+
     this.apiService
-      .getAPI(`getcertificateissuenumber?certificateType=${encodeURIComponent(type)}`)
+      .getAPI(url)
       .subscribe((data) => {
         this.issueNumber = data['data']
 
         if (this.issueNumber) {
-          this.issueNumber = this.issueNumber.split(" ")
-          this.issueNumber = this.issueNumber[1]
-          this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
+          this.issueNumber = this.issueNumber.split(":")[1].trim();
+         
 
           this.HFormGroup1.patchValue({
             certificateIssueNumber: this.issueNumber
@@ -445,6 +446,18 @@ export class CertificateComponent implements OnInit, OnDestroy {
     if (authority === 'D') {
       reportName += '_2';
     }
+
+    if (reportType === 'certificate_complete') {
+
+    const location = this.HFormGroup1.value.location_type;
+
+    if (location === 'S') {
+        reportName += '_Syd';
+    }
+    else if (location === 'G') {
+        reportName += '_Gold';
+    }
+}
 
     const url =
       `https://api.wonderit.com.au:8000/album/report/?inst_id=${college_id}&type=${reportName}&sid=${data}&_token=${refresh_token}`;
