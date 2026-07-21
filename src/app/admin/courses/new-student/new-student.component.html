@@ -167,6 +167,12 @@
                           </mat-form-field>
                         </div>
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+  <mat-form-field class="example-full-width mb-3">
+    <mat-label>Place of Birth</mat-label>
+    <input matInput formControlName="birthPlace">
+  </mat-form-field>
+</div>
+                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Country of Birth</mat-label>
                             <mat-select formControlName="birthcountryId">
@@ -277,7 +283,7 @@
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                               <mat-form-field class="example-full-width mb-3">
-                                <mat-label>Visa Status</mat-label>
+                                <mat-label>Residency Status</mat-label>
                                 <mat-select formControlName="visaStatusId">
                                   <mat-option *ngFor="let visas of getVisa" [value]="visas.visastatusid">
                                     {{visas.visastatusname}}

@@ -245,9 +245,8 @@ export class CertificateComponent implements OnInit, OnDestroy {
         this.issueNumber = data['data']
 
         if (this.issueNumber) {
-          this.issueNumber = this.issueNumber.split(" ")
-          this.issueNumber = this.issueNumber[1]
-          this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
+          this.issueNumber = this.issueNumber.split(" ")[1]
+         
 
           this.HFormGroup1.patchValue({
             certificateIssueNumber: this.issueNumber

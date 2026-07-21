@@ -85,7 +85,7 @@ export class NewVenueComponent implements OnInit {
       venueCode: ['', [Validators.required, Validators.maxLength(10)]],
       venueName: ['', [Validators.required, Validators.maxLength(100)]],
       trainingOrgId: [1, [Validators.required]],
-      address1: ['', [Validators.required, Validators.maxLength(30)]],
+      address1: ['', [Validators.required, Validators.maxLength(50)]],
       suburb: ['', [Validators.maxLength(20)]],
       stateId: ['', [Validators.required]],
       postCode: ['', [Validators.required, Validators.max(9999)]],

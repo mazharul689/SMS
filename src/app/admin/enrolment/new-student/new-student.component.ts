@@ -259,6 +259,7 @@ export class NewStudentComponent implements OnInit {
     email: '',
     altEmail: '',
     dob: '',
+    birthPlace: '',
     birthcountryId: '',
     nationalityId: '',
     gender: '',
@@ -362,15 +363,15 @@ export class NewStudentComponent implements OnInit {
   public postCodeChange(newValue) {
     this.postCodeChanges = newValue
     console.log("post code change function called")
-    console.log("newValue",newValue)
-    console.log("postCodeChanges",this.postCodeChanges)
-    console.log("this.HFormGroup1.value.countryId",this.HFormGroup1.value.countryId )
+    console.log("newValue", newValue)
+    console.log("postCodeChanges", this.postCodeChanges)
+    console.log("this.HFormGroup1.value.countryId", this.HFormGroup1.value.countryId)
     if (this.postCodeChanges.length == 4 && this.postCodeChanges != '0000' && this.postCodeChanges != '@@@@' && this.postCodeChanges != 'OSPC' && this.HFormGroup1.value.countryId == 1) {
       this.suburbDisable = false
       console.log("testing api search function ")
       this.apiService.getAPI(`getpostcodeapi?id=${this.postCodeChanges}`).subscribe((data) => {
         this.suburbs = data
-        console.log("suburbs",this.suburbs);
+        console.log("suburbs", this.suburbs);
         this.apiTest = true
         this.states = data[0].state.name
         this.stateAbbr = this.suburbs[0].state.abbreviation
@@ -391,27 +392,27 @@ export class NewStudentComponent implements OnInit {
       // this.suburbDisable = true
     }
   }
-  public countryChange(value){
-    if(value != 1){
+  public countryChange(value) {
+    if (value != 1) {
       this.HFormGroup1.patchValue({
         stateId: 99,
         postCode: '0000'
       })
     }
-    else if(value == 1){
+    else if (value == 1) {
       this.HFormGroup1.patchValue({
         stateId: null
       })
     }
   }
-  public difCountryChange(value){
-    if(value != 1){
+  public difCountryChange(value) {
+    if (value != 1) {
       this.HFormGroup1.patchValue({
         stateId_postal: 99,
         postCode_postal: '0000'
       })
     }
-    else if(value == 1){
+    else if (value == 1) {
       this.HFormGroup1.patchValue({
         stateId_postal: null
       })
@@ -535,6 +536,7 @@ export class NewStudentComponent implements OnInit {
       email: ['', [Validators.required, Validators.email, Validators.minLength(5), Validators.maxLength(80)]],
       altEmail: ['', [Validators.maxLength(80)]],
       dob: ['', [Validators.required]],
+      birthPlace: [''],
       birthcountryId: [2],
       countryId: [1],
       nationalityId: [null],
@@ -583,7 +585,7 @@ export class NewStudentComponent implements OnInit {
       zipCode: null,
       zipCode_postal: null,
       province_postal: '',
-      postCode: ['', [Validators.required,Validators.minLength(4)]],
+      postCode: ['', [Validators.required, Validators.minLength(4)]],
       differentPostalAddress: ['N'],
       flatUnitDetails_postal: ['', [Validators.maxLength(30)]],
       streetNumber_postal: ['', [Validators.maxLength(15)]],
@@ -859,6 +861,7 @@ export class NewStudentComponent implements OnInit {
           email: this.editStudent.email,
           altEmail: this.editStudent.altEmail,
           dob: this.editStudent.dob,
+          birthPlace: this.editStudent.birthPlace,
           birthcountryId: this.editStudent.birthcountryId,
           nationalityId: this.editStudent.nationalityId,
           gender: this.editStudent.gender,
@@ -1560,8 +1563,8 @@ export class NewStudentComponent implements OnInit {
   onDocumentSubmit(stepper: MatStepper) {
     this.HFormGroup5.get('studentId').setValue(this.studentID);
 
-    if (!this.selectedFiles.length){
-        this.router.navigate(['/admin/enrolment/all-student']);
+    if (!this.selectedFiles.length) {
+      this.router.navigate(['/admin/enrolment/all-student']);
     }
 
     const docRowsArray = this.HFormGroup5.get('docRows') as FormArray;
