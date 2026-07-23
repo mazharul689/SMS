@@ -224,35 +224,37 @@ export class CertificateComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCertificateIssueNumber(type: string) {
-    if (!type) {
-      this.HFormGroup1.patchValue({
-        certificateIssueNumber: null
-      })
-      return
-    }
-
-    let url = `getcertificateissuenumber?certificateType=${encodeURIComponent(type)}`
-    if (type === 'R' || type === 'C') {
-      url += `&studentEnrolmentId=${encodeURIComponent(this.enrolemntID)}`
-    }
-
-    this.apiService
-      .getAPI(url)
-      .subscribe((data) => {
-        this.issueNumber = data['data']
-
-        if (this.issueNumber) {
-          this.issueNumber = this.issueNumber.split(" ")
-          this.issueNumber = this.issueNumber[1]
-          this.issueNumber = this.issueNumber.substring(1, this.issueNumber.length - 1)
-
-          this.HFormGroup1.patchValue({
-            certificateIssueNumber: this.issueNumber
-          })
-        }
-      })
+ getCertificateIssueNumber(type: string) {
+  if (!type) {
+    this.HFormGroup1.patchValue({
+      certificateIssueNumber: null
+    });
+    return;
   }
+
+  let url =
+    `getcertificateissuenumber?certificateType=${encodeURIComponent(type)}`;
+
+  if (type === 'R' || type === 'C') {
+    url +=
+      `&studentEnrolmentId=${encodeURIComponent(this.enrolemntID)}`;
+  }
+
+  this.apiService
+    .getAPI(url)
+    .subscribe((data:any) => {
+      const responseValue = String(data?.data || '');
+
+      this.issueNumber = responseValue
+        .replace(/^certificateIssueNumber:\s*/i, '')
+        .replace(/^"(.*)"$/, '$1')
+        .trim();
+
+      this.HFormGroup1.patchValue({
+        certificateIssueNumber: this.issueNumber
+      });
+    });
+}
 
   compareTwoDates1() {
     setTimeout(() => {
