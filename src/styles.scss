@@ -1,0 +1,16 @@
+.cdk-overlay-pane .mat-select-panel .mat-option {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  height: auto !important;
+  min-height: 48px !important;
+  line-height: 20px !important;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.cdk-overlay-pane .mat-select-panel .mat-option-text {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+}
