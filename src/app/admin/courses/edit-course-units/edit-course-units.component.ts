@@ -75,6 +75,7 @@ export class EditCourseUnitsComponent implements OnInit {
   bulkUnitType
   bulkVetFlag
   bulkAVETMISS
+  bulkDurationType = '';
   units
   courseId
   flag = 0
@@ -477,6 +478,16 @@ export class EditCourseUnitsComponent implements OnInit {
 
 
   }
+
+setBulkDurationType(type: string): void {
+
+  this.bulkDurationType = type;
+
+  this.UnitRows.controls.forEach(control => {
+    control.get('unitDurationType')?.setValue(type);
+  });
+
+}
 
   onUnitSubmit() {
     let rows = this.sendSelectedNumbers();
