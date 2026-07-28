@@ -143,9 +143,32 @@
                         <div class="head-col-unitType">
                           <span style="color: #fff; font-size: 15px;">Unit Type</span>
                         </div>
-                        <div class="head-col-durationType">
+                        <!-- <div class="head-col-durationType">
                           <span style="color: #fff; font-size: 15px;">Duration Type</span>
+                        </div> -->
+
+                        <div class="head-col-durationType">
+
+                          <span style="color:#fff;font-size:15px;">
+                            Duration Type
+                          </span>
+
+                          <mat-form-field appearance="fill"
+                            style="width:90px; margin-left:10px; margin-bottom:-1.25em;">
+
+                            <mat-select placeholder="Type" [(value)]="bulkDurationType"
+                              (selectionChange)="setBulkDurationType($event.value)" panelClass="bulk-duration-panel">
+
+                              <mat-option value="D">Day</mat-option>
+                              <mat-option value="W">Week</mat-option>
+
+                            </mat-select>
+
+                          </mat-form-field>
+
                         </div>
+
+
                         <div class="head-col-duration">
                           <span style="color: #fff; font-size: 15px;">Duration</span>
                         </div>
