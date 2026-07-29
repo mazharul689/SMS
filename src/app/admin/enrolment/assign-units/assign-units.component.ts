@@ -156,6 +156,7 @@ export class AssignUnitsComponent implements OnInit {
               }
               return 0;
             });
+            const calculatedUnitDates = this.getUnitDatesByDuration(unitBody);
             const rows = this.HFormGroup1.get('Rows') as FormArray;
             while (rows.length) {
               rows.removeAt(0);
@@ -163,6 +164,7 @@ export class AssignUnitsComponent implements OnInit {
 
             unitBody.forEach((unit, index) => {
               let matchingTraining = this.trainingData.find(t => t.unitid === unit.unitid) || {};
+              let calculatedDates = calculatedUnitDates[unit.unitid];
 
               let rowData = this.fb.group({
                 rowID: index,
@@ -177,8 +179,8 @@ export class AssignUnitsComponent implements OnInit {
                 classSetupId: matchingTraining.classsetupid || null,
                 outcomeNationalId: matchingTraining.outcomenationalid || 9,
                 outcomeTrainingOrgId: matchingTraining.outcomenationalid || 9,
-                startDate: matchingTraining.startdate ? moment(matchingTraining.startdate) : this.stDate,
-                endDate: matchingTraining.enddate ? moment(matchingTraining.enddate) : this.enDate,
+                startDate: calculatedDates ? calculatedDates.startDate : (matchingTraining.startdate ? moment(matchingTraining.startdate) : this.stDate),
+                endDate: calculatedDates ? calculatedDates.endDate : (matchingTraining.enddate ? moment(matchingTraining.enddate) : this.enDate),
                 // startDate: this.datePipe.transform(matchingTraining.startdate || null, 'yyyy-MM-dd'),
                 // endDate: this.datePipe.transform(matchingTraining.enddate, 'yyyy-MM-dd'),
                 hoursAttended: matchingTraining.hoursattended || unit.schedulednominalhours
@@ -204,12 +206,14 @@ export class AssignUnitsComponent implements OnInit {
               }
               return 0;
             });
+            const calculatedUnitDates = this.getUnitDatesByDuration(unitBody);
             const rows = this.HFormGroup1.get('Rows') as FormArray;
             while (rows.length) {
               rows.removeAt(0);
             }
 
             unitBody.forEach((unit, index) => {
+              let calculatedDates = calculatedUnitDates[unit.unitid];
 
               let rowData = this.fb.group({
                 rowID: index,
@@ -224,8 +228,8 @@ export class AssignUnitsComponent implements OnInit {
                 classSetupId: null,
                 outcomeNationalId: 9,
                 outcomeTrainingOrgId: 9,
-                startDate: this.datePipe.transform(this.studentData.commencementdate, 'yyyy-MM-dd'),
-                endDate: this.datePipe.transform(this.studentData.expectedcompletiondate, 'yyyy-MM-dd'),
+                startDate: calculatedDates ? calculatedDates.startDate : this.datePipe.transform(this.studentData.commencementdate, 'yyyy-MM-dd'),
+                endDate: calculatedDates ? calculatedDates.endDate : this.datePipe.transform(this.studentData.expectedcompletiondate, 'yyyy-MM-dd'),
                 // startDate: this.datePipe.transform(this.studentData.commencementdate, 'yyyy-MM-dd'),
                 // endDate: this.datePipe.transform(this.studentData.expectedcompletiondate, 'yyyy-MM-dd'),
                 hoursAttended: unit.schedulednominalhours
@@ -243,6 +247,25 @@ export class AssignUnitsComponent implements OnInit {
         })
       })
     })
+  }
+  private getUnitDatesByDuration(units) {
+    const calculatedUnitDates = {};
+    let previousEndDate = null;
+
+    units.forEach(unit => {
+      const unitDuration = Number(unit.unitduration);
+
+      if (unitDuration > 0 && this.stDate) {
+        const startDate = previousEndDate ? previousEndDate.clone().add(1, 'day') : this.stDate.clone();
+        const durationInDays = unit.unitdurationtype === 'W' ? unitDuration * 7 : unitDuration;
+        const endDate = startDate.clone().add(durationInDays - 1, 'day');
+
+        calculatedUnitDates[unit.unitid] = { startDate, endDate };
+        previousEndDate = endDate;
+      }
+    });
+
+    return calculatedUnitDates;
   }
   outComeChange(val) {
     console.log(val)
