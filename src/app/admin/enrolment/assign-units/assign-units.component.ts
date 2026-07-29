@@ -161,8 +161,11 @@ export class AssignUnitsComponent implements OnInit {
               rows.removeAt(0);
             }
 
+            const calculatedUnitDates = this.getCalculatedUnitDates(unitBody);
+
             unitBody.forEach((unit, index) => {
               let matchingTraining = this.trainingData.find(t => t.unitid === unit.unitid) || {};
+              const calculatedDates = calculatedUnitDates.get(unit.unitid);
 
               let rowData = this.fb.group({
                 rowID: index,
@@ -177,8 +180,8 @@ export class AssignUnitsComponent implements OnInit {
                 classSetupId: matchingTraining.classsetupid || null,
                 outcomeNationalId: matchingTraining.outcomenationalid || 9,
                 outcomeTrainingOrgId: matchingTraining.outcomenationalid || 9,
-                startDate: matchingTraining.startdate ? moment(matchingTraining.startdate) : this.stDate,
-                endDate: matchingTraining.enddate ? moment(matchingTraining.enddate) : this.enDate,
+                startDate: matchingTraining.startdate ? moment(matchingTraining.startdate) : (calculatedDates ? calculatedDates.startDate : this.stDate),
+                endDate: matchingTraining.enddate ? moment(matchingTraining.enddate) : (calculatedDates ? calculatedDates.endDate : this.enDate),
                 // startDate: this.datePipe.transform(matchingTraining.startdate || null, 'yyyy-MM-dd'),
                 // endDate: this.datePipe.transform(matchingTraining.enddate, 'yyyy-MM-dd'),
                 hoursAttended: matchingTraining.hoursattended || unit.schedulednominalhours
@@ -263,6 +266,28 @@ export class AssignUnitsComponent implements OnInit {
   }
   get Rows(): FormArray {
     return this.HFormGroup1.get("Rows") as FormArray
+  }
+  getCalculatedUnitDates(units) {
+    const calculatedDates = new Map();
+    let previousEndDate = null;
+
+    units.forEach((unit) => {
+      const unitDuration = Number(unit.unitduration);
+
+      // Units without a duration retain the existing enrolment-wide date logic.
+      if (!(unitDuration > 0) || !this.stDate) {
+        return;
+      }
+
+      const durationInDays = unit.unitdurationtype === 'W' ? unitDuration * 7 : unitDuration;
+      const startDate = previousEndDate ? previousEndDate.clone().add(1, 'day') : this.stDate.clone();
+      const endDate = startDate.clone().add(durationInDays - 1, 'day');
+
+      calculatedDates.set(unit.unitid, { startDate, endDate });
+      previousEndDate = endDate;
+    });
+
+    return calculatedDates;
   }
   newTAarrays() {
     return this.fb.group({
