@@ -147,6 +147,9 @@ export class NewStudentComponent implements OnInit {
   studentOrigins
   clientID
   getcountry
+  // Country search uses a separate list so the original country data remains intact.
+  filteredCountries = []
+  countrySearchCtrl = new FormControl('')
   getnationality
   getVisa
   getHomeLang
@@ -404,6 +407,36 @@ export class NewStudentComponent implements OnInit {
       })
     }
   }
+
+  // Filter countries in memory for every Country dropdown.
+  private filterCountries(value): void {
+    const searchTerm = String(value || '').toLowerCase().trim()
+    this.filteredCountries = searchTerm
+      ? this.getcountry.filter(country => country.countryname && country.countryname.toLowerCase().indexOf(searchTerm) !== -1)
+      : this.getcountry
+  }
+
+  // Clear the shared search when a Country panel closes and focus it when opened.
+  public countryDropdownOpened(isOpen: boolean): void {
+    if (isOpen) {
+      setTimeout(() => {
+        const searchInput = document.querySelector('.mat-select-panel .country-search-input') as HTMLInputElement
+        if (searchInput) {
+          searchInput.focus()
+        }
+      })
+    } else {
+      this.countrySearchCtrl.setValue('')
+    }
+  }
+
+  // Keep Material select arrow-key navigation available while typing.
+  public countrySearchKeydown(event: KeyboardEvent): void {
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End', 'Escape'].indexOf(event.key) === -1) {
+      event.stopPropagation()
+    }
+  }
+
   public difCountryChange(value){
     if(value != 1){
       this.HFormGroup1.patchValue({
@@ -498,6 +531,8 @@ export class NewStudentComponent implements OnInit {
         return 0;
       }
     });
+    this.filteredCountries = this.getcountry
+    this.countrySearchCtrl.valueChanges.subscribe(value => this.filterCountries(value))
     this.getnationality = this.getAll[0].Nationality
     this.getHomeLang = this.getAll[0].Language
     this.getHomeLang = this.getHomeLang.sort((a, b) => a.languagename.localeCompare(b.languagename));

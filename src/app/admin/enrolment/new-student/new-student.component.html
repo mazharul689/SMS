@@ -171,8 +171,12 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Country</mat-label>
-                            <mat-select formControlName="birthcountryId">
-                              <mat-option *ngFor="let countries of getcountry" [value]="countries.countryid">
+                            <mat-select formControlName="birthcountryId" (openedChange)="countryDropdownOpened($event)">
+                              <!-- Search is kept inside the select panel for fast country lookup. -->
+                              <mat-option disabled>
+                                <input matInput class="country-search-input" placeholder="Search country" aria-label="Search country" [formControl]="countrySearchCtrl" (click)="$event.stopPropagation()" (keydown)="countrySearchKeydown($event)">
+                              </mat-option>
+                              <mat-option *ngFor="let countries of filteredCountries" [value]="countries.countryid">
                                 {{ countries.countryname }}
                               </mat-option>
                             </mat-select>
@@ -910,8 +914,12 @@
                         <div class="col-xl-3 col-lg-3 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Country</mat-label>
-                            <mat-select formControlName="countryId" (ngModelChange)="countryChange($event)">
-                              <mat-option *ngFor="let countries of getcountry" [value]="countries.countryid">
+                            <mat-select formControlName="countryId" (ngModelChange)="countryChange($event)" (openedChange)="countryDropdownOpened($event)">
+                              <!-- Search is kept inside the select panel for fast country lookup. -->
+                              <mat-option disabled>
+                                <input matInput class="country-search-input" placeholder="Search country" aria-label="Search country" [formControl]="countrySearchCtrl" (click)="$event.stopPropagation()" (keydown)="countrySearchKeydown($event)">
+                              </mat-option>
+                              <mat-option *ngFor="let countries of filteredCountries" [value]="countries.countryid">
                                 {{ countries.countryname }}
                               </mat-option>
                             </mat-select>
@@ -1092,8 +1100,12 @@
                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Country</mat-label>
-                            <mat-select formControlName="countryId_postal" (ngModelChange)="difCountryChange($event)">
-                              <mat-option *ngFor="let countries of getcountry" [value]="countries.countryid">
+                            <mat-select formControlName="countryId_postal" (ngModelChange)="difCountryChange($event)" (openedChange)="countryDropdownOpened($event)">
+                              <!-- Search is kept inside the select panel for fast country lookup. -->
+                              <mat-option disabled>
+                                <input matInput class="country-search-input" placeholder="Search country" aria-label="Search country" [formControl]="countrySearchCtrl" (click)="$event.stopPropagation()" (keydown)="countrySearchKeydown($event)">
+                              </mat-option>
+                              <mat-option *ngFor="let countries of filteredCountries" [value]="countries.countryid">
                                 {{ countries.countryname }}
                               </mat-option>
                             </mat-select>
