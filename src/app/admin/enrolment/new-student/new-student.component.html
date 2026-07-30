@@ -706,13 +706,13 @@
                         <div formGroupName="usiDetails" class="col-xl-7 col-lg-7 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>USI Number</mat-label>
-                            <input matInput formControlName="usi" (ngModelChange)="usiChange($event)"
-                              oninput="this.value = this.value.toUpperCase()">
-                            <mat-error *ngIf="HFormGroup1.get('usiDetails.usi').hasError('minlength')">
-                              Minimum length is 10 character
+                            <input matInput formControlName="usi" maxlength="10" (ngModelChange)="usiChange($event)"
+                              oninput="this.value = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10)">
+                            <mat-error *ngIf="HFormGroup1.get('usiDetails.usi').value && HFormGroup1.get('usiDetails.usi').hasError('pattern') && !HFormGroup1.get('usiDetails.usi').value.match('[^A-Za-z0-9]')">
+                              USI Number must be exactly 10 characters.
                             </mat-error>
-                            <mat-error *ngIf="HFormGroup1.get('usiDetails.usi').hasError('maxlength')">
-                              Maximum length is 10 character
+                            <mat-error *ngIf="HFormGroup1.get('usiDetails.usi').value && HFormGroup1.get('usiDetails.usi').hasError('pattern') && HFormGroup1.get('usiDetails.usi').value.match('[^A-Za-z0-9]')">
+                              Only letters and numbers are allowed.
                             </mat-error>
                           </mat-form-field>
                           <div class="row">

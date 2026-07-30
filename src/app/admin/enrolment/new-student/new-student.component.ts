@@ -351,7 +351,12 @@ export class NewStudentComponent implements OnInit {
     this.lname = newValue;
   }
   public usiChange(newValue) {
-    this.usiNo = newValue
+    const sanitizedValue = (newValue || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10)
+    this.usiNo = sanitizedValue
+    const usiControl = this.HFormGroup1 && this.HFormGroup1.get('usiDetails.usi')
+    if (usiControl && usiControl.value !== sanitizedValue) {
+      usiControl.setValue(sanitizedValue, { emitEvent: false })
+    }
   }
   public mobileChange(newValue) {
     this.mobile1 = newValue
@@ -603,7 +608,7 @@ export class NewStudentComponent implements OnInit {
         QualificationId: ['']
       }),
       usiDetails: this.fb.group({
-        usi: [null, [Validators.maxLength(10)]],
+        usi: [null, [Validators.pattern(/^$|^[A-Za-z0-9]{10}$/)]],
         firstName: ['', [Validators.pattern('[a-zA-Z ]*'), Validators.maxLength(20)]],
         lastName: ['', [Validators.maxLength(20)]],
         dobyyyy: ['', [Validators.maxLength(4)]],
@@ -923,6 +928,7 @@ export class NewStudentComponent implements OnInit {
         // usidata.dobdd = this.d
         // console.log('usidetails',usidata)
         this.editUsi = usidata
+        this.usiNo = (this.editUsi.usi || this.editStudent.usiNo || '').toUpperCase()
         var obj1 = {}
         for (let i = 0; i < this.editUsi[i].usi; i++) {
           obj1 = this.editUsi[i].usi
@@ -931,7 +937,7 @@ export class NewStudentComponent implements OnInit {
         }
         this.HFormGroup1.get('usiDetails').patchValue({
           userId: this.userInfo.userid,
-          usi: this.editUsi.usi,
+          usi: this.usiNo,
           firstName: this.fname,
           lastName: this.lname,
           dobyyyy: this.y,
@@ -1264,12 +1270,11 @@ export class NewStudentComponent implements OnInit {
     }
     console.log('bodydata', body)
 
+    body.usiNo = body.usiDetails.usi || ''
     if (this.usiStatusCheck.UsiStatus == 'Valid' || this.usiStatusCheckForSingleName.UsiStatus == 'Valid') {
-      body.usiNo = this.usiNo
       body.usiVerificationStatus = this.verifyStatus
     }
     else {
-      body.usiNo = ''
       body.usiVerificationStatus = ''
     }
 
