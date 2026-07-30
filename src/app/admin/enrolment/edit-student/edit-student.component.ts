@@ -421,7 +421,12 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     this.lname = newValue;
   }
   public usiChange(newValue) {
-    this.usiNo = newValue
+    const sanitizedValue = (newValue || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10)
+    this.usiNo = sanitizedValue
+    const usiControl = this.HFormGroup1 && this.HFormGroup1.get('usiNo')
+    if (usiControl && usiControl.value !== sanitizedValue) {
+      usiControl.setValue(sanitizedValue, { emitEvent: false })
+    }
   }
   public mobileChange(newValue) {
     this.mobile1 = newValue
@@ -583,7 +588,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       statisticalAreaLevel1Id: ['', [Validators.maxLength(11)]],
       statisticalAreaLevel2Id: ['', [Validators.maxLength(9)]],
       signatoryText: ['', [Validators.maxLength(200)]],
-      usiNo: [null, [Validators.maxLength(10)]],
+      usiNo: [null, [Validators.pattern(/^$|^[A-Za-z0-9]{10}$/)]],
       usiVerificationStatus: ['', [Validators.maxLength(100)]],
       // usi: ['', [Validators.maxLength(10)]],
       // dobyyyy: ['', [Validators.maxLength(4)]],
@@ -829,6 +834,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       this.apiService.getAPI(`getstudentbystudentid?id=${this.studentID}`).subscribe((data) => {
         //studentinfo part
         this.editStudent = data['data'][0]
+        this.usiNo = (this.editStudent.usino || '').toUpperCase()
         console.log('editstudent', this.editStudent.countryid_postal)
         this.temp = this.editStudent.usiverificationstatus
         if (this.temp != null) {
@@ -895,7 +901,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           statisticalAreaLevel2Id: this.editStudent.statisticalarealevel2id,
           signatoryText: this.editStudent.signatorytext,
           usi: this.editStudent.usi,
-          usiNo: this.editStudent.usino,
+          usiNo: this.usiNo,
           usiVerificationStatus: this.editStudent.usiverificationstatus,
           // countryId: this.editStudent.countryid,
           countryId_postal: this.editStudent.countryid_postal,
@@ -961,6 +967,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
 
         //studentinfo part
         this.editStudent = data['data'][0]
+        this.usiNo = (this.editStudent.usino || '').toUpperCase()
         //console.log('editstudent', this.editStudent)
         this.temp = this.editStudent.usiverificationstatus
         if (this.temp != null) {
@@ -1026,7 +1033,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           statisticalAreaLevel2Id: this.editStudent.statisticalarealevel2id,
           signatoryText: this.editStudent.signatorytext,
           usi: this.editStudent.usi,
-          usiNo: this.editStudent.usino,
+          usiNo: this.usiNo,
           usiVerificationStatus: this.editStudent.usiverificationstatus,
           flatUnitDetails: this.editStudent.flatunitdetails,
           streetNumber: this.editStudent.streetnumber,
@@ -1660,16 +1667,15 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     this.show_msg2 = false
     const body = this.HFormGroup1.value
     body.clientId = this.clientID
+    body.usiNo = body.usiNo || ''
     // body.stateId = this.stateName
     if (this.verifyFlag == true) {
       if (this.usiStatusCheck.UsiStatus == 'Valid' || this.usiStatusCheckForSingleName.UsiStatus == 'Valid') {
 
-        body.usiNo = this.usiNo
         body.usiVerificationStatus = this.verifyStatus
 
       }
       else {
-        body.usiNo = ''
         body.usiVerificationStatus = ''
       }
     }
