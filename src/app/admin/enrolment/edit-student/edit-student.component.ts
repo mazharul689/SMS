@@ -836,22 +836,55 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         this.editStudent = data['data'][0]
         this.usiNo = (this.editStudent.usino || '').toUpperCase()
         console.log('editstudent', this.editStudent.countryid_postal)
-        this.temp = this.editStudent.usiverificationstatus
-        if (this.temp != null) {
-          this.temp = this.temp.split(" ")
-          // console.log('temp', this.editStudent)
-          if (this.temp[0] == 'Valid' && this.editStudent.lastname != '.') {
-            this.usiStatusCheck.UsiStatus = this.temp[0]
-            this.usiStatusCheck.FirstName = this.temp[1]
-            this.usiStatusCheck.FamilyName = this.temp[2]
-            this.usiStatusCheck.DateOfBirth = this.temp[3]
-          }
-          if (this.temp[0] == 'Valid' && this.editStudent.lastname == '.') {
-            this.usiStatusCheckForSingleName.UsiStatus = this.temp[0]
-            this.usiStatusCheckForSingleName.SingleName = this.temp[1]
-            this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2]
-          }
-        }
+        // this.temp = this.editStudent.usiverificationstatus
+        // if (this.temp != null) {
+        //   this.temp = this.temp.split(" ")
+        //   // console.log('temp', this.editStudent)
+        //   if (this.temp[0] == 'Valid' && this.editStudent.lastname != '.') {
+        //     this.usiStatusCheck.UsiStatus = this.temp[0]
+        //     this.usiStatusCheck.FirstName = this.temp[1]
+        //     this.usiStatusCheck.FamilyName = this.temp[2]
+        //     this.usiStatusCheck.DateOfBirth = this.temp[3]
+        //   }
+        //   if (this.temp[0] == 'Valid' && this.editStudent.lastname == '.') {
+        //     this.usiStatusCheckForSingleName.UsiStatus = this.temp[0]
+        //     this.usiStatusCheckForSingleName.SingleName = this.temp[1]
+        //     this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2]
+        //   }
+        // }
+
+
+
+
+
+
+        this.temp = this.editStudent.usiverificationstatus;
+//         console.log('Last Name:', this.editStudent.lastname);
+// console.log('USI Status:', this.editStudent.usiverificationstatus);
+        
+
+if (this.temp != null) {
+  this.temp = this.temp.split(" ");
+
+  const isSingleName =
+    this.editStudent.lastname == '.' ||
+    this.editStudent.lastname == '' ||
+    this.editStudent.lastname == null;
+
+  if (this.temp[0] == 'Valid' && !isSingleName) {
+    this.usiStatusCheck.UsiStatus = this.temp[0];
+    this.usiStatusCheck.FirstName = this.temp[1];
+    this.usiStatusCheck.FamilyName = this.temp[2];
+    this.usiStatusCheck.DateOfBirth = this.temp[3];
+  }
+
+  if (this.temp[0] == 'Valid' && isSingleName) {
+    console.log('Single Name Block');
+    this.usiStatusCheckForSingleName.UsiStatus = this.temp[0];
+    this.usiStatusCheckForSingleName.SingleName = this.temp[1];
+    this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2];
+  }
+}
         this.HFormGroup1.patchValue({
           userId: this.editStudent.userid,
           clientId: this.editStudent.clientid,
@@ -969,22 +1002,61 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         this.editStudent = data['data'][0]
         this.usiNo = (this.editStudent.usino || '').toUpperCase()
         //console.log('editstudent', this.editStudent)
-        this.temp = this.editStudent.usiverificationstatus
-        if (this.temp != null) {
-          this.temp = this.temp.split(" ")
-          // console.log('temp', this.editStudent)
-          if (this.temp[0] == 'Valid' && this.editStudent.lastname != '.') {
-            this.usiStatusCheck.UsiStatus = this.temp[0]
-            this.usiStatusCheck.FirstName = this.temp[1]
-            this.usiStatusCheck.FamilyName = this.temp[2]
-            this.usiStatusCheck.DateOfBirth = this.temp[3]
-          }
-          if (this.temp[0] == 'Valid' && this.editStudent.lastname == '.') {
-            this.usiStatusCheckForSingleName.UsiStatus = this.temp[0]
-            this.usiStatusCheckForSingleName.SingleName = this.temp[1]
-            this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2]
-          }
-        }
+//         this.temp = this.editStudent.usiverificationstatus
+// console.log('Last Name:', this.editStudent.lastname);
+// console.log('USI Status:', this.editStudent.usiverificationstatus);
+
+
+
+//         if (this.temp != null) {
+//           this.temp = this.temp.split(" ")
+//           // console.log('temp', this.editStudent)
+//           if (this.temp[0] == 'Valid' && this.editStudent.lastname != '.') {
+//             this.usiStatusCheck.UsiStatus = this.temp[0]
+//             this.usiStatusCheck.FirstName = this.temp[1]
+//             this.usiStatusCheck.FamilyName = this.temp[2]
+//             this.usiStatusCheck.DateOfBirth = this.temp[3]
+//           }
+//           if (this.temp[0] == 'Valid' && this.editStudent.lastname == '.') {
+//             this.usiStatusCheckForSingleName.UsiStatus = this.temp[0]
+//             this.usiStatusCheckForSingleName.SingleName = this.temp[1]
+//             this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2]
+//           }
+//         }
+
+
+
+
+
+
+this.temp = this.editStudent.usiverificationstatus;
+// console.log('Last Name:', this.editStudent.lastname);
+// console.log('USI Status:', this.editStudent.usiverificationstatus);
+
+if (this.temp != null) {
+  this.temp = this.temp.split(" ");
+
+  const isSingleName =
+    this.editStudent.lastname == '.' ||
+    this.editStudent.lastname == '' ||
+    this.editStudent.lastname == null;
+
+  if (this.temp[0] == 'Valid' && !isSingleName) {
+    this.usiStatusCheck.UsiStatus = this.temp[0];
+    this.usiStatusCheck.FirstName = this.temp[1];
+    this.usiStatusCheck.FamilyName = this.temp[2];
+    this.usiStatusCheck.DateOfBirth = this.temp[3];
+  }
+
+  if (this.temp[0] == 'Valid' && isSingleName) {
+    console.log('Single Name Block');
+    this.usiStatusCheckForSingleName.UsiStatus = this.temp[0];
+    this.usiStatusCheckForSingleName.SingleName = this.temp[1];
+    this.usiStatusCheckForSingleName.DateOfBirth = this.temp[2];
+
+    console.log(this.usiStatusCheckForSingleName);
+  }
+}
         this.HFormGroup1.patchValue({
           userId: this.editStudent.userid,
           clientId: this.editStudent.clientid,
@@ -1233,6 +1305,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         // })
       })
     }
+    console.log(this.editStudent.lastname);
+console.log(this.editStudent.usiverificationstatus);
     this.dataSource.paginator = this.paginator
     this.dataSource.sort = this.sort
 
