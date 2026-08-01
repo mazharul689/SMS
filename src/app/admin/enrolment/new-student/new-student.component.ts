@@ -149,7 +149,7 @@ export class NewStudentComponent implements OnInit {
   getcountry
   // Country search uses a separate list so the original country data remains intact.
   filteredCountries = []
-  countrySearchCtrl = new FormControl('')
+  countrySearchCtrl = new FormControl('') 
   getnationality
   getVisa
   getHomeLang
@@ -262,6 +262,7 @@ export class NewStudentComponent implements OnInit {
     email: '',
     altEmail: '',
     dob: '',
+    birthPlace: '',
     birthcountryId: '',
     nationalityId: '',
     gender: '',
@@ -570,6 +571,7 @@ export class NewStudentComponent implements OnInit {
       email: ['', [Validators.required, Validators.email, Validators.minLength(5), Validators.maxLength(80)]],
       altEmail: ['', [Validators.maxLength(80)]],
       dob: ['', [Validators.required]],
+      birthPlace: [''],
       birthcountryId: [2],
       countryId: [1],
       nationalityId: [null],
@@ -894,6 +896,7 @@ export class NewStudentComponent implements OnInit {
           email: this.editStudent.email,
           altEmail: this.editStudent.altEmail,
           dob: this.editStudent.dob,
+          birthPlace: this.editStudent.birthPlace,
           birthcountryId: this.editStudent.birthcountryId,
           nationalityId: this.editStudent.nationalityId,
           gender: this.editStudent.gender,
