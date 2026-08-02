@@ -113,6 +113,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
   studentOrigins
   clientID
   getcountry
+  filteredCountries = []
+  countrySearchCtrl = new FormControl('') 
   getnationality
   getVisa
   getHomeLang
@@ -229,6 +231,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     oldemail: '',
     altemail: '',
     dob: '',
+    birthPlace: '',
     birthcountryid: '',
     countryid: '',
     nationalityid: '',
@@ -503,6 +506,40 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       })
     }
   }
+
+
+  // Filter countries in memory for every Country dropdown.
+  private filterCountries(value): void {
+    const searchTerm = String(value || '').toLowerCase().trim()
+    this.filteredCountries = searchTerm
+      ? this.getcountry.filter(country => country.countryname && country.countryname.toLowerCase().indexOf(searchTerm) !== -1)
+      : this.getcountry
+  }
+
+  
+
+  // Clear the shared search when a Country panel closes and focus it when opened.
+  public countryDropdownOpened(isOpen: boolean): void {
+    if (isOpen) {
+      setTimeout(() => {
+        const searchInput = document.querySelector('.mat-select-panel .country-search-input') as HTMLInputElement
+        if (searchInput) {
+          searchInput.focus()
+        }
+      })
+    } else {
+      this.countrySearchCtrl.setValue('')
+    }
+  }
+
+  // Keep Material select arrow-key navigation available while typing.
+  public countrySearchKeydown(event: KeyboardEvent): void {
+    if (['ArrowDown', 'ArrowUp', 'Home', 'End', 'Escape'].indexOf(event.key) === -1) {
+      event.stopPropagation()
+    }
+  }
+
+
   error: any = { isError: false, errorMessage: '' };
   errorAll: any = { isAllerror: false, errorMsg: '' };
   errorsReqEn: any = { isError: false, errorMessage: '' };
@@ -550,6 +587,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
       dob: ['', [Validators.required]],
       birthcountryId: [1],
       countryId: [2],
+       birthPlace: [''],
       nationalityId: [null],
       gender: ['@', [Validators.required]],
       telHome: ['', [Validators.maxLength(20)]],
@@ -693,6 +731,12 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         return 0;
       }
     });
+this.filteredCountries = [...this.getcountry];
+    console.log('getcountry', this.getcountry.length);
+console.log('filteredCountries', this.filteredCountries.length);
+
+    
+    
     this.getnationality = this.getAll[0].Nationality
     this.getHomeLang = this.getAll[0].Language
     this.getHomeLang = this.getHomeLang.sort((a, b) => a.languagename.localeCompare(b.languagename));
@@ -717,6 +761,10 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     this.allStates = this.getAll[0].State
     this.DocumentType = this.getAll[0].DocumentType
 
+
+    this.countrySearchCtrl.valueChanges.subscribe(value => {
+  this.filterCountries(value);
+});
 
     if (!window.localStorage.getItem('studentOrigins')) {
       this.apiService.getAPI(`getstudentorigin`).subscribe((data) => {
@@ -858,6 +906,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           email: this.editStudent.email,
           altEmail: this.editStudent.altemail,
           dob: moment(this.editStudent.dob),
+          birthPlace: this.editStudent.birthPlace,
           birthcountryId: this.editStudent.birthcountryid,
           countryId: this.editStudent.countryid,
           nationalityId: this.editStudent.nationalityid,
@@ -920,6 +969,8 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           postCode_postal: this.editStudent.postcode_postal,
           pobox_postal: this.editStudent.pobox_postal
         })
+        console.log('birthPlace Control =', this.HFormGroup1.get('birthPlace')?.value);
+        console.log('countryId =', this.HFormGroup1.get('countryId')?.value);
         console.log('hformgroup1 check', this.HFormGroup1.value)
         if (this.editStudent.passportexpdate != null) {
           this.HFormGroup1.patchValue({
@@ -990,6 +1041,7 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           email: this.editStudent.email,
           altEmail: this.editStudent.altemail,
           dob: moment(this.editStudent.dob),
+          birthPlace: this.editStudent.birthPlace,
           birthcountryId: this.editStudent.birthcountryid,
           countryId: this.editStudent.countryid,
           nationalityId: this.editStudent.nationalityid,
@@ -1050,6 +1102,15 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
           postCode_postal: this.editStudent.postcode_postal,
           pobox_postal: this.editStudent.pobox_postal
         })
+
+        console.log('birthPlace Control =', this.HFormGroup1.get('birthPlace')?.value);
+       console.log('birthcountryId =', this.HFormGroup1.get('birthcountryId')?.value);
+    console.log('filteredCountries', this.filteredCountries.length);
+console.log(
+  this.filteredCountries.find(
+    x => x.countryid === this.HFormGroup1.get('birthcountryId')?.value
+  )
+);
         if (this.editStudent.passportexpdate != null) {
           this.HFormGroup1.patchValue({
             passportExpdate: moment(this.editStudent.passportexpdate)

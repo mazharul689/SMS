@@ -170,12 +170,24 @@
                             </mat-error>
                           </mat-form-field>
                         </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+
+                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
+                          <mat-form-field class="example-full-width mb-3">
+                            <mat-label>Place of Birth</mat-label>
+                            <input matInput formControlName="birthPlace" [readonly]="editable">
+                          </mat-form-field>
+                        </div>
+                         <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
                           <mat-form-field class="example-full-width mb-3">
                             <mat-label>Country</mat-label>
-                            <mat-select formControlName="birthcountryId">
-                              <mat-option *ngFor="let countries of getcountry" [value]="countries.countryid"
-                                [disabled]="editable">
+                            <mat-select formControlName="birthcountryId" (openedChange)="countryDropdownOpened($event)">
+                              <!-- Search is kept inside the select panel for fast country lookup. -->
+                              <mat-option disabled>
+                                <input matInput class="country-search-input" placeholder="Search country"
+                                  aria-label="Search country" [formControl]="countrySearchCtrl"
+                                  (click)="$event.stopPropagation()" (keydown)="countrySearchKeydown($event)" [readonly]="editable">
+                              </mat-option>
+                              <mat-option *ngFor="let countries of filteredCountries" [value]="countries.countryid">
                                 {{ countries.countryname }}
                               </mat-option>
                             </mat-select>
