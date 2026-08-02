@@ -147,6 +147,8 @@ export class NewStudentComponent implements OnInit {
   studentOrigins
   clientID
   getcountry
+  countrySearchCtrl = new FormControl('');
+filteredCountries: any[] = [];
   getnationality
   getVisa
   getHomeLang
@@ -392,6 +394,48 @@ export class NewStudentComponent implements OnInit {
       // this.suburbDisable = true
     }
   }
+
+  private filterCountries(value: string): void {
+  const searchTerm = (value || '').toLowerCase().trim();
+
+  this.filteredCountries = !searchTerm
+    ? [...this.getcountry]
+    : this.getcountry.filter(country =>
+        country.countryname &&
+        country.countryname.toLowerCase().includes(searchTerm)
+      );
+}
+
+  countryDropdownOpened(opened: boolean): void {
+  if (opened) {
+
+    this.countrySearchCtrl.setValue('', { emitEvent: false });
+    this.filteredCountries = [...this.getcountry];
+
+    // Dropdown render হওয়ার পর top-এ নিয়ে যাও
+    setTimeout(() => {
+      const panel = document.querySelector('.mat-select-panel') as HTMLElement;
+
+      if (panel) {
+        panel.scrollTop = 0;
+
+        // Search input-এ focus
+        const input = panel.querySelector('.country-search-input') as HTMLInputElement;
+        input?.focus();
+      }
+    }, 50);
+
+  } else {
+    this.countrySearchCtrl.setValue('', { emitEvent: false });
+  }
+}
+
+countrySearchKeydown(event: KeyboardEvent): void {
+  event.stopPropagation();
+}
+
+
+
   public countryChange(value) {
     if (value != 1) {
       this.HFormGroup1.patchValue({
@@ -480,6 +524,13 @@ export class NewStudentComponent implements OnInit {
   ngOnInit() {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser')!)
     this.getAll = JSON.parse(window.localStorage.getItem('getAll')!)
+    this.countrySearchCtrl.valueChanges.subscribe(value => {
+  const search = (value || '').toLowerCase();
+
+  this.filteredCountries = this.getcountry.filter(x =>
+    x.countryname.toLowerCase().includes(search)
+  );
+});
 
     this.dataSource1 = new MatTableDataSource() // create new object
     this.dataSource1.paginator = this.tableTwoPaginator
@@ -499,6 +550,11 @@ export class NewStudentComponent implements OnInit {
         return 0;
       }
     });
+   this.filteredCountries = [...this.getcountry];
+
+this.countrySearchCtrl.valueChanges.subscribe(value => {
+  this.filterCountries(value);
+});
     this.getnationality = this.getAll[0].Nationality
     this.getHomeLang = this.getAll[0].Language
     this.getHomeLang = this.getHomeLang.sort((a, b) => a.languagename.localeCompare(b.languagename));
@@ -788,6 +844,8 @@ export class NewStudentComponent implements OnInit {
       this.HFormGroup1.controls['usiDetails'].get('dobmm')!.updateValueAndValidity()
       this.HFormGroup1.controls['usiDetails'].get('dobdd')!.updateValueAndValidity()
     })
+
+    
 
   }
 

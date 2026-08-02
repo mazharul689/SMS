@@ -112,6 +112,9 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
 
   studentOrigins
   clientID
+  countrySearchCtrl = new FormControl('');
+
+filteredCountries: any[] = [];
   getcountry
   getnationality
   getVisa
@@ -478,6 +481,60 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
     }
 
   }
+private filterCountries(value: string): void {
+
+  const filterValue = (value || '').toLowerCase().trim();
+
+  this.filteredCountries = filterValue
+    ? this.getcountry.filter(country =>
+        country.countryname &&
+        country.countryname.toLowerCase().includes(filterValue)
+      )
+    : [...this.getcountry];
+
+}
+
+countryDropdownOpened(opened: boolean): void {
+
+  if (opened) {
+
+    this.countrySearchCtrl.setValue('', { emitEvent: false });
+
+    this.filteredCountries = [...this.getcountry];
+
+    setTimeout(() => {
+
+      const panel = document.querySelector('.mat-select-panel') as HTMLElement;
+
+      if (panel) {
+        panel.scrollTop = 0;
+      }
+
+      const input = panel.querySelector('.country-search-input') as HTMLInputElement;
+
+      input?.focus();
+
+    }, 50);
+
+  } else {
+
+    this.countrySearchCtrl.setValue('', { emitEvent: false });
+
+  }
+
+}
+
+countrySearchKeydown(event: KeyboardEvent): void {
+
+  if (!['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
+    event.stopPropagation();
+  }
+
+}
+
+
+
+
   public countryChange(value){
     if(value != 1){
       this.HFormGroup1.patchValue({
@@ -695,6 +752,13 @@ export class EditStudentComponent implements OnInit, AfterViewInit {
         return 0;
       }
     });
+
+
+    this.filteredCountries = [...this.getcountry];
+
+this.countrySearchCtrl.valueChanges.subscribe(value => {
+  this.filterCountries(value);
+});
     this.getnationality = this.getAll[0].Nationality
     this.getHomeLang = this.getAll[0].Language
     this.getHomeLang = this.getHomeLang.sort((a, b) => a.languagename.localeCompare(b.languagename));
