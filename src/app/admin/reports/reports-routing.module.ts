@@ -33,7 +33,7 @@ const routes: Routes = [
     path: 'certificate-user-report',
     component: CertificateUserReportComponent,
     canActivate: [AuthGuard],
-    data: { role: ['Super Admin'] }
+    data: { role: ['Super Admin', 'Admin'] }
   }
 ];
 
