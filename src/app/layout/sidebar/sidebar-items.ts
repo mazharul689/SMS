@@ -849,7 +849,7 @@ export const ROUTES: RouteInfo[] = [
         role: [''],
         submenu: [],
       },
-      ...(userRole === 'Super Admin' ? [{
+      ...(userRole === 'Super Admin' || userRole === 'Admin' ? [{
         path: '/admin/reports/certificate-user-report',
         title: 'User Report',
         moduleName: 'reports',

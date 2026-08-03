@@ -2,6 +2,8 @@ import { DatePipe } from '@angular/common'
 import { Component, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { ApiService } from 'src/app/api/api.service'
+import { AuthService } from 'src/app/core/service/auth.service'
+import { Role } from 'src/app/core/models/role'
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS, } from '@angular/material-moment-adapter'
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core'
 import { MatProgressButtonOptions } from 'mat-progress-buttons'
@@ -46,6 +48,7 @@ export class CertificateUserReportComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private apiService: ApiService,
+    private authService: AuthService,
     private datePipe: DatePipe
   ) { }
 
@@ -80,7 +83,8 @@ export class CertificateUserReportComponent implements OnInit {
     reportBody.certificateIssueDateTo = this.datePipe.transform(reportBody.certificateIssueDateTo, 'yyyy-MM-dd')
     var show = document.getElementById('closebtn')
     if (this.dateValidate1.isError == false) {
-      this.apiService.getAPI(`getcertificateuserreport?startdate=${reportBody.certificateIssueDateFrom}&enddate=${reportBody.certificateIssueDateTo}`).subscribe({
+      const userType = this.authService.currentUserValue?.role === Role.SuperAdmin ? 's' : 'a'
+      this.apiService.getAPI(`getcertificateuserreport?startdate=${reportBody.certificateIssueDateFrom}&enddate=${reportBody.certificateIssueDateTo}&type=${userType}`).subscribe({
         next: (data) => {
           this.isLoading = false
           this.spinnerButtonOptions.active = false
