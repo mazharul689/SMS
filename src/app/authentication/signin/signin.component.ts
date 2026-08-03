@@ -176,8 +176,8 @@ export class SigninComponent implements OnInit {
 
               let token = data.access_token;
               this.authService.storeUserData(token);
-              // Navigate only after both API calls complete
-              if (data.role == 'Admin') {
+              // Navigate only after both API calls complete??
+              if (data.role == 'Admin' || data.role == 'Super Admin') {
                 // alert(data.role)
                 this.router.navigate(['/admin/dashboard/main']);
               }
