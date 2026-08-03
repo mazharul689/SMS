@@ -108,9 +108,11 @@ export class SidebarComponent implements OnInit, OnDestroy {
       this.userImg = this.authService.currentUserValue.img;
 
       this.sidebarItems = ROUTES.filter(
-        (x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
+        (x) => userRole === Role.SuperAdmin || x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
       );
-      if (userRole === Role.Admin) {
+      if (userRole === Role.SuperAdmin) {
+        this.userType = Role.SuperAdmin;
+      } else if (userRole === Role.Admin) {
         this.userType = Role.Admin;
       } else if (userRole === Role.Teacher) {
         this.userType = Role.Teacher;

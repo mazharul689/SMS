@@ -5,6 +5,8 @@ import { AsqaComponent} from './asqa/asqa.component'
 import { StudentsPaymentsComponent } from './students-payments/students-payments.component';
 import { IssuanceRegisterComponent } from './issuance-register/issuance-register.component';
 import { SledReportComponent } from './sled-report/sled-report.component';
+import { CertificateUserReportComponent } from './certificate-user-report/certificate-user-report.component';
+import { AuthGuard } from 'src/app/core/guard/auth.guard';
 const routes: Routes = [
   {
     path: 'avetmiss',
@@ -26,6 +28,12 @@ const routes: Routes = [
   {
     path: 'sled-report',
     component: SledReportComponent
+  },
+  {
+    path: 'certificate-user-report',
+    component: CertificateUserReportComponent,
+    canActivate: [AuthGuard],
+    data: { role: ['Super Admin'] }
   }
 ];
 
