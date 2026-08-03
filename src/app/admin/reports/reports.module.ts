@@ -18,6 +18,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { SledReportComponent } from './sled-report/sled-report.component';
 import { VerifyAvetmissComponent } from './verify-avetmiss/verify-avetmiss.component'
+import { CertificateUserReportComponent } from './certificate-user-report/certificate-user-report.component'
 @NgModule({
   declarations: [
     AvetmissComponent,
@@ -25,7 +26,8 @@ import { VerifyAvetmissComponent } from './verify-avetmiss/verify-avetmiss.compo
     StudentsPaymentsComponent,
     IssuanceRegisterComponent,
     SledReportComponent,
-    VerifyAvetmissComponent
+    VerifyAvetmissComponent,
+    CertificateUserReportComponent
   ],
   imports: [
     CommonModule,

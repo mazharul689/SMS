@@ -95,7 +95,7 @@ export class SigninComponent implements OnInit {
 
       this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
       // alert('checked')
-      if(this.userInfo.role == 'Admin'){
+      if(this.userInfo.role == 'Admin' || this.userInfo.role == 'Super Admin'){
         this.router.navigate(['/admin/dashboard/main'])
       }
       this.authService.storeUserData(this.userInfo.token)
@@ -179,9 +179,12 @@ export class SigninComponent implements OnInit {
               // Navigate only after both API calls complete??
               if (data.role == 'Admin' || data.role == 'Super Admin') {
                 // alert(data.role)
-                this.router.navigate(['/admin/dashboard/main']);
+                this.router.navigate(['/admin/dashboard/main']).then(() => {
+                  window.location.reload();
+                });
+              } else {
+                window.location.reload();
               }
-              window.location.reload();
             });
           } else {
             this.error = data.message;
