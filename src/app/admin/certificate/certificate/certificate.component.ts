@@ -232,10 +232,12 @@ export class CertificateComponent implements OnInit, OnDestroy {
     return;
   }
 
-  let url =
-    `getcertificateissuenumber?certificateType=${encodeURIComponent(type)}`;
+  const certificateType = type === 'SF' ? 'S' : type;
 
-  if (type === 'R' || type === 'C') {
+  let url =
+    `getcertificateissuenumber?certificateType=${encodeURIComponent(certificateType)}`;
+
+  if (certificateType === 'R' || certificateType === 'C') {
     url +=
       `&studentEnrolmentId=${encodeURIComponent(this.enrolemntID)}`;
   }
@@ -355,6 +357,11 @@ export class CertificateComponent implements OnInit, OnDestroy {
     this.errorsReq = { isError: false, errorMessage: '' };
 
     const certificateBody = { ...this.HFormGroup1.value };
+    const selectedCertificateType = certificateBody.certificateType;
+
+    if (selectedCertificateType === 'SF') {
+      certificateBody.certificateType = 'S';
+    }
 
     certificateBody.Issuedflag = 'Y';
     certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd');
@@ -389,7 +396,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
           window.scroll(0, 0);
           this._showErrorUI();
         } else {
-          this._handleCertificateSuccess(certificateBody, data);
+          this._handleCertificateSuccess(certificateBody, data, selectedCertificateType);
         }
       },
       (apiError) => {
@@ -401,8 +408,9 @@ export class CertificateComponent implements OnInit, OnDestroy {
     );
   }
 
-  private _getCertificateReportType(certificateBody: any): string | null {
-    const { certificateType, trainerStateNameShort } = certificateBody;
+  private _getCertificateReportType(certificateBody: any, selectedCertificateType?: string): string | null {
+    const { trainerStateNameShort } = certificateBody;
+    const certificateType = selectedCertificateType || certificateBody.certificateType;
     const { college_id } = this.userInfo;
     const isCollege23 = (college_id === 23);
     const isNSW = (trainerStateNameShort === 'NSW');
@@ -420,6 +428,9 @@ export class CertificateComponent implements OnInit, OnDestroy {
         
         return 'attainment';
 
+      case 'SF':
+        return 'soa_fa_new';
+
       case 'O':
         if(isCollege23 && this.trainingActId.length <= 3) {
           return 'soa_short';
@@ -435,8 +446,8 @@ export class CertificateComponent implements OnInit, OnDestroy {
     }
   }
 
-  private _handleCertificateSuccess(certificateBody: any, data: any) {
-    const reportType = this._getCertificateReportType(certificateBody);
+  private _handleCertificateSuccess(certificateBody: any, data: any, selectedCertificateType?: string) {
+    const reportType = this._getCertificateReportType(certificateBody, selectedCertificateType);
 
     if (reportType) {
       const { college_id, refresh_token } = this.userInfo;
