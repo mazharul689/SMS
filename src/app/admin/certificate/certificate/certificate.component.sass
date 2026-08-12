@@ -1,0 +1,60 @@
+.certificate-choice-row
+  display: flex
+  align-items: center
+  gap: 36px
+  padding-top: 18px
+  padding-bottom: 18px
+
+.certificate-choice-label
+  flex: 0 0 170px
+  margin: 0
+  line-height: 24px
+
+.certificate-choice-options
+  display: flex
+  flex: 1 1 auto
+  flex-wrap: wrap
+  align-items: center
+  gap: 20px 42px
+  min-width: 0
+
+  .mat-radio-button
+    margin: 0 !important
+    white-space: nowrap
+
+.certificate-type-row
+  margin-top: 10px
+  margin-bottom: 10px !important
+
+.certificate-issue-row
+  margin-top: 8px
+  margin-bottom: 12px
+
+.certificate-issue-field
+  max-width: 360px
+
+@media (max-width: 991.98px)
+  .certificate-choice-row
+    align-items: flex-start
+    flex-direction: column
+    gap: 12px
+    padding-top: 14px
+    padding-bottom: 14px
+
+  .certificate-choice-label
+    flex-basis: auto
+    margin-top: 0
+
+  .certificate-issue-field
+    margin-left: 0
+    max-width: none
+
+  .certificate-issue-row
+    margin-top: 4px
+    margin-bottom: 8px
+
+@media (max-width: 575.98px)
+  .certificate-choice-options
+    align-items: flex-start
+    flex-direction: column
+    gap: 14px

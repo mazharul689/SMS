@@ -77,10 +77,10 @@
                 </div>
                 <div class="section-content">
                   <div class="row">
-                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2"
-                      style="padding-top: 15px;">
-                      <label class="example col-lg-3 col-md-3 col-sm-3; asterisk">Certificate Template</label>
-                      <mat-radio-group class="col-lg-9 col-md-9 col-sm-9" formControlName="trainerStateNameShort">
+                    <div *ngIf="this.userInfo.college_id === 23"
+                      class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2 certificate-choice-row">
+                      <label class="asterisk certificate-choice-label">Certificate Template</label>
+                      <mat-radio-group class="certificate-choice-options" formControlName="trainerStateNameShort">
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="VLC">Victoria</mat-radio-button>
@@ -128,12 +128,23 @@
                       </mat-form-field>
                     </div>
                   </div>
+                  <div *ngIf="this.userInfo.college_id === 23" class="row certificate-issue-row">
+                    <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 certificate-issue-field">
+                      <mat-form-field class="example-full-width">
+                        <mat-label>Issue Number</mat-label>
+                        <input matInput formControlName="certificateIssueNumber" required>
+                        <mat-error *ngIf="HFormGroup1.get('certificateIssueNumber').hasError('maxlength')">
+                          Maximum length is 25 characters
+                        </mat-error>
+                      </mat-form-field>
+                    </div>
+                  </div>
                   <div class="row">
-                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-8 col-lg-8 col-md-12 col-sm-12 mb-2"
-                      style="padding-top: 15px;">
-                      <label class="example col-lg-2 col-md-2 col-sm-3; asterisk">Certificate
-                        Type</label>
-                      <mat-radio-group class="col-lg-10 col-md-10 col-sm-10" formControlName="certificateType">
+                    <div *ngIf="this.userInfo.college_id === 23"
+                      class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2 certificate-choice-row certificate-type-row">
+                      <label class="asterisk certificate-choice-label">Certificate Type</label>
+                      <mat-radio-group class="certificate-choice-options certificate-type-options"
+                        formControlName="certificateType">
                         <mat-radio-button
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="C">Certificate</mat-radio-button>
@@ -153,15 +164,6 @@
                           class="example-margin d-xs-inline-block d-sm-inline-block d-md-inline-block d-lg-inline-block"
                           value="R">Statement of Result</mat-radio-button>
                       </mat-radio-group>
-                    </div>
-                    <div *ngIf="this.userInfo.college_id === 23" class="col-xl-4 col-lg-4 col-md-12 col-sm-12 mb-2">
-                      <mat-form-field class="example-full-width mb-3">
-                        <mat-label>Issue Number</mat-label>
-                        <input matInput formControlName="certificateIssueNumber" required>
-                        <mat-error *ngIf="HFormGroup1.get('certificateIssueNumber').hasError('maxlength')">
-                          Maximum length is 25 characters
-                        </mat-error>
-                      </mat-form-field>
                     </div>
                   </div>
                   <div class="row">
