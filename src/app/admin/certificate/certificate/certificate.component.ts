@@ -354,6 +354,7 @@ export class CertificateComponent implements OnInit, OnDestroy {
 
     const certificateBody = { ...this.HFormGroup1.value };
 
+
     certificateBody.Issuedflag = 'Y';
     certificateBody.completionDate = this.datePipe.transform(certificateBody.completionDate, 'yyyy-MM-dd');
     certificateBody.certificateIssueDate = this.datePipe.transform(certificateBody.certificateIssueDate, 'yyyy-MM-dd');
