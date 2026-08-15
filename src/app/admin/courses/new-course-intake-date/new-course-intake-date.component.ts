@@ -379,7 +379,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
         for (let i = 0; i < this.units.length; i++) {
           let rowData1 = this.fb.group({
             rowID: i,
-            statusCheck: 0,
+            statusCheck: this.units[i].unittype === 'C' ? 1 : 0,
             courseId: this.units[i].courseid,
             unitId: this.units[i].unitid,
             unitCode: this.units[i].unitcode,
@@ -408,7 +408,14 @@ export class NewCourseIntakeDateComponent implements OnInit {
         //   this.filteredValues1.unitCode = unitCode
         //   this.dataSource.filter = JSON.stringify(this.filteredValues1)
         // })
-        this.masterToggle();
+        // this.masterToggle();
+        this.selection.clear();
+
+this.unitRows.controls.forEach((control, index) => {
+  if (control.get('unitType').value === 'C') {
+    this.selection.select(this.dataSource1.data[index]);
+  }
+});
 
         (this.HFormGroup4.get('classArray') as FormArray).removeAt(0);
         for (let i = 0; i < this.unitByCourse.length; i++) {
