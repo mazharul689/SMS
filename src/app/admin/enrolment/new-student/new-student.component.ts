@@ -626,12 +626,12 @@ export class NewStudentComponent implements OnInit {
     else {
       this.studentOrigins = JSON.parse(window.localStorage.getItem('studentOrigins')!)
     }
-    this.apiService.getAPI('getclientid').subscribe((data) => {
-      // console.log(data);
-      this.clientID = data['data']
-      this.clientID = this.clientID.replace('clientId: \"', '')
-      this.clientID = this.clientID.slice(0, -1)
-    })
+    // this.apiService.getAPI('getclientid').subscribe((data) => {
+    //   // console.log(data);
+    //   this.clientID = data['data']
+    //   this.clientID = this.clientID.replace('clientId: \"', '')
+    //   this.clientID = this.clientID.slice(0, -1)
+    // })
 
     //Course
     this.HFormGroup2 = this.fb.group({
@@ -1260,87 +1260,358 @@ export class NewStudentComponent implements OnInit {
     this.stepLabel = event.selectedStep.label
     // console.log(this.stepLabel)
   }
+  // onStudentSubmmit(stepper: MatStepper) {
+  //   this.show_msg = false
+  //   this.show_msg2 = false
+  //   const body = this.HFormGroup1.value
+  //   body.clientId = this.clientID
+  //   if (body.lastName == null) {
+  //     body.lastName = '.'
+  //   }
+  //   console.log('bodydata', body)
+
+  //   body.usiNo = body.usiDetails.usi || ''
+  //   if (this.usiStatusCheck.UsiStatus == 'Valid' || this.usiStatusCheckForSingleName.UsiStatus == 'Valid') {
+  //     body.usiVerificationStatus = this.verifyStatus
+  //   }
+  //   else {
+  //     body.usiVerificationStatus = ''
+  //   }
+
+
+  //   if (this.HFormGroup1.value.differentPostalAddress === 'N') {
+  //     body.stateId_postal = null
+  //   }
+  //   body.dob = this.datePipe.transform(body.dob, 'yyyy-MM-dd')
+  //   body.passportExpdate = this.datePipe.transform(body.passportExpdate, 'yyyy-MM-dd')
+  //   body.visaExpdate = this.datePipe.transform(body.visaExpdate, 'yyyy-MM-dd')
+  //   // console.log('Form Value', this.HFormGroup1.value)
+  //   var show = document.getElementById('closebtn')
+  //   // if (this.HFormGroup1.valid) {
+  //   this.errorsReq = { isError: false, errorMessage: '' }
+  //   // console.log(this.HFormGroup1.valid)
+  //   // alert('test');
+  //   if (this.HFormGroup1.valid) {
+  //     this.apiService.postAPI('addstudent', body).subscribe((data) => {
+
+  //       let err = false; // Initialize error flag
+  //       if (data && data['data'] && data['data'][0] && data['data'][0]['error']) {
+  //         err = true;
+  //         this.err_msg = data['data'][0]['error_msg'];
+  //         console.log(this.err_msg);
+  //         window.scroll(0, 0);
+  //         this.errors = { isError: true, errorMessage: this.err_msg };
+  //       }
+
+  //       if (!err) {
+  //         this.studentID = data;
+  //         console.log(this.studentID)
+  //         if (this.studentID < 1) {
+  //           err = true;
+  //           this.err_msg = "Student Id did not generate, please refresh the page and submit again";
+  //           console.log(this.err_msg);
+  //           window.scroll(0, 0);
+  //           this.errors = { isError: true, errorMessage: this.err_msg };
+  //         }
+  //         // console.log('prior ea', this.HFormGroup1.value.priorDetail)
+  //         if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
+  //           const tempData = this.HFormGroup1.value.priorDetail
+  //           const priorEABody = {
+  //             userId: this.userInfo.userid,
+  //             studentId: this.studentID,
+  //             QualificationRows: tempData.QualificationId.map(id => ({ QualificationId: id }))
+  //           }
+  //           this.apiService.postAPI('addprioreducationalachievement', priorEABody).subscribe((data1) => {
+  //             console.log('submission status', data1)
+  //           })
+  //         }
+
+  //       }
+
+  //       if (!err) {
+  //         this.stepLabel++
+  //         stepper.next();
+  //       }
+  //     })
+  //   }
+  //   else {
+  //     this.errorsReq = { isError: true, errorMessage: 'Please, fill up all required fields with proper value!' }
+  //     window.scroll(0, 0)
+  //     if (show) {
+  //       show.style.display = 'block'
+  //     }
+  //   }
+  // }
+
   onStudentSubmmit(stepper: MatStepper) {
+
     this.show_msg = false
     this.show_msg2 = false
-    const body = this.HFormGroup1.value
-    body.clientId = this.clientID
-    if (body.lastName == null) {
-      body.lastName = '.'
-    }
-    console.log('bodydata', body)
 
-    body.usiNo = body.usiDetails.usi || ''
-    if (this.usiStatusCheck.UsiStatus == 'Valid' || this.usiStatusCheckForSingleName.UsiStatus == 'Valid') {
-      body.usiVerificationStatus = this.verifyStatus
-    }
-    else {
-      body.usiVerificationStatus = ''
-    }
-
-
-    if (this.HFormGroup1.value.differentPostalAddress === 'N') {
-      body.stateId_postal = null
-    }
-    body.dob = this.datePipe.transform(body.dob, 'yyyy-MM-dd')
-    body.passportExpdate = this.datePipe.transform(body.passportExpdate, 'yyyy-MM-dd')
-    body.visaExpdate = this.datePipe.transform(body.visaExpdate, 'yyyy-MM-dd')
-    // console.log('Form Value', this.HFormGroup1.value)
     var show = document.getElementById('closebtn')
-    // if (this.HFormGroup1.valid) {
-    this.errorsReq = { isError: false, errorMessage: '' }
-    // console.log(this.HFormGroup1.valid)
-    // alert('test');
-    if (this.HFormGroup1.valid) {
-      this.apiService.postAPI('addstudent', body).subscribe((data) => {
 
-        let err = false; // Initialize error flag
-        if (data && data['data'] && data['data'][0] && data['data'][0]['error']) {
-          err = true;
-          this.err_msg = data['data'][0]['error_msg'];
-          console.log(this.err_msg);
-          window.scroll(0, 0);
-          this.errors = { isError: true, errorMessage: this.err_msg };
-        }
-
-        if (!err) {
-          this.studentID = data;
-          console.log(this.studentID)
-          if (this.studentID < 1) {
-            err = true;
-            this.err_msg = "Student Id did not generate, please refresh the page and submit again";
-            console.log(this.err_msg);
-            window.scroll(0, 0);
-            this.errors = { isError: true, errorMessage: this.err_msg };
-          }
-          // console.log('prior ea', this.HFormGroup1.value.priorDetail)
-          if (this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y') {
-            const tempData = this.HFormGroup1.value.priorDetail
-            const priorEABody = {
-              userId: this.userInfo.userid,
-              studentId: this.studentID,
-              QualificationRows: tempData.QualificationId.map(id => ({ QualificationId: id }))
-            }
-            this.apiService.postAPI('addprioreducationalachievement', priorEABody).subscribe((data1) => {
-              console.log('submission status', data1)
-            })
-          }
-
-        }
-
-        if (!err) {
-          this.stepLabel++
-          stepper.next();
-        }
-      })
+    this.errorsReq = {
+      isError: false,
+      errorMessage: ''
     }
-    else {
-      this.errorsReq = { isError: true, errorMessage: 'Please, fill up all required fields with proper value!' }
+
+    /*
+    |--------------------------------------------------------------------------
+    | First validate Student Information form
+    |--------------------------------------------------------------------------
+    */
+    if (!this.HFormGroup1.valid) {
+
+      this.errorsReq = {
+        isError: true,
+        errorMessage: 'Please, fill up all required fields with proper value!'
+      }
+
       window.scroll(0, 0)
+
       if (show) {
         show.style.display = 'block'
       }
+
+      return
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Get fresh Client ID immediately before adding student
+    |--------------------------------------------------------------------------
+    */
+    this.apiService.getAPI('getclientid').subscribe(
+      (clientData) => {
+
+        let clientID = clientData['data']
+
+        clientID = clientID.replace('clientId: \"', '')
+        clientID = clientID.slice(0, -1)
+
+        this.clientID = clientID
+
+        console.log('Fresh Client ID:', this.clientID)
+
+        /*
+        |--------------------------------------------------------------------------
+        | Build Add Student request
+        |--------------------------------------------------------------------------
+        */
+        const body = this.HFormGroup1.value
+
+        // IMPORTANT:
+        // Use the Client ID that was just returned by getclientid
+        body.clientId = this.clientID
+
+        if (body.lastName == null) {
+          body.lastName = '.'
+        }
+
+        body.usiNo = body.usiDetails.usi || ''
+
+        if (
+          this.usiStatusCheck.UsiStatus == 'Valid' ||
+          this.usiStatusCheckForSingleName.UsiStatus == 'Valid'
+        ) {
+          body.usiVerificationStatus = this.verifyStatus
+        }
+        else {
+          body.usiVerificationStatus = ''
+        }
+
+        if (this.HFormGroup1.value.differentPostalAddress === 'N') {
+          body.stateId_postal = null
+        }
+
+        body.dob = this.datePipe.transform(
+          body.dob,
+          'yyyy-MM-dd'
+        )
+
+        body.passportExpdate = this.datePipe.transform(
+          body.passportExpdate,
+          'yyyy-MM-dd'
+        )
+
+        body.visaExpdate = this.datePipe.transform(
+          body.visaExpdate,
+          'yyyy-MM-dd'
+        )
+
+        console.log('Add Student Body:', body)
+
+        /*
+        |--------------------------------------------------------------------------
+        | Only NOW call addstudent
+        |--------------------------------------------------------------------------
+        */
+        this.apiService.postAPI('addstudent', body).subscribe(
+          (data) => {
+
+            let err = false
+
+            /*
+            |--------------------------------------------------------------------------
+            | API returned an error
+            |--------------------------------------------------------------------------
+            */
+            if (
+              data &&
+              data['data'] &&
+              data['data'][0] &&
+              data['data'][0]['error']
+            ) {
+
+              err = true
+
+              this.err_msg =
+                data['data'][0]['error_msg']
+
+              console.log(this.err_msg)
+
+              window.scroll(0, 0)
+
+              this.errors = {
+                isError: true,
+                errorMessage: this.err_msg
+              }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Student successfully created
+            |--------------------------------------------------------------------------
+            */
+            if (!err) {
+
+              this.studentID = data
+
+              console.log(
+                'Generated Student ID:',
+                this.studentID
+              )
+
+              if (this.studentID < 1) {
+
+                err = true
+
+                this.err_msg =
+                  'Student Id did not generate, please refresh the page and submit again'
+
+                console.log(this.err_msg)
+
+                window.scroll(0, 0)
+
+                this.errors = {
+                  isError: true,
+                  errorMessage: this.err_msg
+                }
+              }
+
+              /*
+              |--------------------------------------------------------------------------
+              | Prior Educational Achievement
+              |--------------------------------------------------------------------------
+              */
+              if (
+                !err &&
+                this.HFormGroup1.value.PriorEducationalAchievementFlag === 'Y'
+              ) {
+
+                const tempData =
+                  this.HFormGroup1.value.priorDetail
+
+                const priorEABody = {
+
+                  userId:
+                    this.userInfo.userid,
+
+                  studentId:
+                    this.studentID,
+
+                  QualificationRows:
+                    tempData.QualificationId.map(
+                      id => ({
+                        QualificationId: id
+                      })
+                    )
+                }
+
+                this.apiService
+                  .postAPI(
+                    'addprioreducationalachievement',
+                    priorEABody
+                  )
+                  .subscribe((data1) => {
+
+                    console.log(
+                      'submission status',
+                      data1
+                    )
+
+                  })
+              }
+            }
+
+            /*
+            |--------------------------------------------------------------------------
+            | Go to Course step
+            |--------------------------------------------------------------------------
+            */
+            if (!err) {
+
+              this.stepLabel++
+
+              stepper.next()
+            }
+
+          },
+
+          /*
+          |--------------------------------------------------------------------------
+          | addstudent failed
+          |--------------------------------------------------------------------------
+          */
+          (error) => {
+
+            console.error(
+              'Add student API failed:',
+              error
+            )
+
+            this.errors = {
+              isError: true,
+              errorMessage:
+                'Unable to add student. Please try again.'
+            }
+
+            window.scroll(0, 0)
+          }
+        )
+      },
+
+      /*
+      |--------------------------------------------------------------------------
+      | getclientid failed
+      |--------------------------------------------------------------------------
+      */
+      (error) => {
+
+        console.error(
+          'Get Client ID API failed:',
+          error
+        )
+
+        this.errors = {
+          isError: true,
+          errorMessage:
+            'Unable to generate Client ID. Please try again.'
+        }
+
+        window.scroll(0, 0)
+      }
+    )
   }
 
   move() {
