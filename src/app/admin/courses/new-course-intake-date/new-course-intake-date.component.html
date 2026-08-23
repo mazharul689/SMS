@@ -281,6 +281,37 @@
                         </mat-cell>
                       </ng-container>
 
+
+                      <ng-container matColumnDef="deliveryMode">
+  <mat-header-cell class="pr-0" *matHeaderCellDef>
+    <label>Delivery Mode</label>
+  </mat-header-cell>
+
+  <mat-cell
+    *matCellDef="let row; let i=index"
+    [formGroupName]="i"
+    class="pr-0">
+
+    <mat-form-field class="example-full-width mb-0">
+      <mat-select formControlName="deliveryModeId">
+
+        <mat-option
+          *ngFor="let delmode of deliveryMode"
+          [value]="delmode.deliverymodeid">
+
+          {{ delmode.deliverymodecode }} -
+          {{ delmode.deliverymodename }}
+
+        </mat-option>
+
+      </mat-select>
+    </mat-form-field>
+
+  </mat-cell>
+</ng-container>
+
+
+
                       <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
                       <mat-row class="table-row" *matRowDef="let row;let i=index; columns: displayedColumns1;"
                         [style.cursor]="'pointer'" matRipple>

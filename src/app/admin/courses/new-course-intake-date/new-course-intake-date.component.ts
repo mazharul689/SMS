@@ -22,7 +22,8 @@ export interface allUnits {
   unitName,
   unitType,
   vetFlag,
-  AVETMISS
+  AVETMISS,
+  deliveryModeId
 }
 const ELEMENT_DATA: allUnits[] = []
 
@@ -42,7 +43,7 @@ const ELEMENT_DATA: allUnits[] = []
   ],
 })
 export class NewCourseIntakeDateComponent implements OnInit {
-  displayedColumns1: string[] = ['rowID', 'unitCode', 'unitName', 'unitType', 'vetFlag', 'AVETMISS']
+  displayedColumns1: string[] = ['rowID', 'unitCode', 'unitName', 'unitType', 'vetFlag', 'AVETMISS', 'deliveryMode']
   dataSource1: MatTableDataSource<allUnits>
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator
   @ViewChild(MatSort, { static: true }) sort: MatSort
@@ -60,6 +61,8 @@ export class NewCourseIntakeDateComponent implements OnInit {
   daysOfWeek
   unitByCourse
   selectedCourseID
+  getAll
+  deliveryMode
   isCheckedAll = false
   courseIntakeDateID
   selected = []
@@ -116,6 +119,13 @@ export class NewCourseIntakeDateComponent implements OnInit {
   ) { }
   ngOnInit(): void {
     this.userInfo = JSON.parse(localStorage.getItem('currentUser'))
+
+    this.getAll = JSON.parse(localStorage.getItem('getAll'))
+
+    if (this.getAll && this.getAll.length > 0) {
+      this.deliveryMode = this.getAll[0].DeliveryMode
+    }
+
     this.dataSource1 = new MatTableDataSource() // create new object
     this.dataSource1.paginator = this.tableTwoPaginator
     this.dataSource1.sort = this.tableTwoSort
@@ -352,6 +362,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
       classSetupId: '',
       vetFlag: '',
       AVETMISS: '',
+      deliveryModeId: 1,
       dayOfWeekId: '',
       assessorId: '',
       teacherId: '',
@@ -387,6 +398,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
             unitType: this.units[i].unittype,
             vetFlag: this.units[i].vetflag,
             AVETMISS: this.units[i].avetmiss,
+            deliveryModeId: 1,
             unitOrderBy: this.units[i].unitorderby,
             startDate: this.dfStartDate,
             endDate: this.dfEndDate,
@@ -597,7 +609,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
   //     this.dataSource.paginator.firstPage();
   //   }
   // }
-  courseName(val){
+  courseName(val) {
     const selectedCourse = this.courses.find(course => course.courseid === val);
     console.log(selectedCourse.coursename)
     this.HFormGroup1.patchValue({
