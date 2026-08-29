@@ -341,6 +341,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
       vetFlag: '',
       AVETMISS: '',
       deliveryModeId: 1,
+      deliveryMode: 'YNN',
       startDate: '',
       endDate: '',
       dayOfWeekId: '',
@@ -364,6 +365,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
       vetFlag: '',
       AVETMISS: '',
       deliveryModeId: 1,
+       deliveryMode: 'YNN',
       dayOfWeekId: '',
       assessorId: '',
       teacherId: '',
@@ -400,6 +402,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
             vetFlag: this.units[i].vetflag,
             AVETMISS: this.units[i].avetmiss,
             deliveryModeId: 1,
+            deliveryMode: 'YNN',
             unitOrderBy: this.units[i].unitorderby,
             startDate: this.dfStartDate,
             endDate: this.dfEndDate,
@@ -433,6 +436,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
             vetFlag: this.unitByCourse[i].vetflag,
             AVETMISS: this.units[i].avetmiss,
               deliveryModeId: 1,
+               deliveryMode: 'YNN',
             unitOrderBy: this.unitByCourse[i].unitorderby,
             unitDurationType: this.unitByCourse[i].unitdurationtype,
             unitDuration: this.unitByCourse[i].unitduration,
@@ -513,6 +517,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
       teacherId: '',
       AVETMISS: '',
        deliveryModeId: 1,
+       deliveryMode: 'YNN',
       unitOrderBy: '',
       unitDurationType: '',
       unitDuration: 0
@@ -612,6 +617,22 @@ export class NewCourseIntakeDateComponent implements OnInit {
   //     this.dataSource.paginator.firstPage();
   //   }
   // }
+
+ deliveryModeChange(event: any, index: number) {
+
+  const selectedDeliveryMode = this.deliveryMode.find(
+    x => x.deliverymodeid == event.value
+  );
+
+  if (selectedDeliveryMode) {
+
+    this.HFormGroup2.get('unitRows')['at'](index).patchValue({
+      deliveryModeId: selectedDeliveryMode.deliverymodeid,
+      deliveryMode: selectedDeliveryMode.deliverymodecode
+    });
+
+  }
+}
   courseName(val) {
     const selectedCourse = this.courses.find(course => course.courseid === val);
     console.log(selectedCourse.coursename)
@@ -695,6 +716,8 @@ export class NewCourseIntakeDateComponent implements OnInit {
           vetFlag: unitBody[i].vetFlag,
           AVETMISS: unitBody[i].AVETMISS,
            deliveryModeId: unitBody[i].deliveryModeId,
+             deliveryMode: unitBody[i].deliveryMode,
+             
           unitOrderBy: unitBody[i].unitOrderBy,
           startDate: unitBody[i].startDate,
           endDate: unitBody[i].endDate,
@@ -729,7 +752,7 @@ export class NewCourseIntakeDateComponent implements OnInit {
         unitType: confirmationBody[i].unitType,
         vetFlag: confirmationBody[i].vetFlag,
         AVETMISS: confirmationBody[i].AVETMISS,
-          deliveryModeId: confirmationBody[i].deliveryModeId,
+          unitDeliveryMode: confirmationBody[i].deliveryMode,
         startDate: confirmationBody[i].startDate,
         endDate: confirmationBody[i].endDate,
         unitOrderBy: confirmationBody[i].unitOrderBy,

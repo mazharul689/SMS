@@ -293,7 +293,8 @@
                         <mat-cell *matCellDef="let row; let i=index" [formGroupName]="i" class="pr-0">
 
                           <mat-form-field class="example-full-width mb-0">
-                            <mat-select formControlName="deliveryModeId">
+                            <mat-select formControlName="deliveryModeId"
+                              (selectionChange)="deliveryModeChange($event, i)">
 
                               <mat-option *ngFor="let delmode of deliveryMode" [value]="delmode.deliverymodeid">
 
@@ -367,6 +368,9 @@
                               <div class="head-col-AVETMISS">
                                 <span style="color: #fff">Avetmiss</span>
                               </div>
+                              <!-- <div class="head-col-deliveryMode">
+                                <span style="color: #fff">Delivery Mode</span>
+                              </div> -->
 
                             </div>
                             <div formArrayName="Rows">
@@ -406,6 +410,11 @@
                                     <span>&nbsp;&nbsp;</span>
                                     <span>No</span>
                                   </div>
+                                  <!-- <div class="body-col-deliveryMode">
+                                    <span>
+                                      {{ row.get('unitDeliveryMode').value }}
+                                    </span>
+                                  </div> -->
 
 
                                 </div>
