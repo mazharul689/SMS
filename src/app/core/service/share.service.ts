@@ -22,6 +22,8 @@ export class ShareService {
     '46': { cliLogo: 'assets/images/banner/RCNBigLogo.png', logoSrc1: 'assets/images/banner/RCNSmallLogo.png' },
     '51': { cliLogo: 'assets/images/banner/FrontierBigLogo.png', logoSrc1: 'assets/images/banner/FrontierSmallLogo.png' },
     '61': { cliLogo: 'assets/images/banner/nexgenBigLogo.png', logoSrc1: 'assets/images/banner/nexgenSmallLogo.png' },
+    '64': { cliLogo: 'assets/images/banner/aahmBigLogo.png', logoSrc1: 'assets/images/banner/aahmSmallLogo.png' },
+
   };
 
   private defaultLogos = {
